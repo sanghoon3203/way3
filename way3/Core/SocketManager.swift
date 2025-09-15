@@ -142,7 +142,7 @@ class SocketManager: ObservableObject {
     }
     
     private func setupSocket() {
-        guard let url = URL(string: "http://localhost:3000") else {
+        guard let url = URL(string: NetworkConfiguration.baseURL) else {
             print("Invalid socket URL")
             return
         }

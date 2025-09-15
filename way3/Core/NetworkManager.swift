@@ -5,9 +5,41 @@ import Combine
 struct NetworkConfiguration {
     static let maxRetryCount = 3
     static let retryDelay: TimeInterval = 1.0
-    static let baseURL = "http://localhost:3000"
     static let requestTimeout: TimeInterval = 30.0
     static let resourceTimeout: TimeInterval = 60.0
+
+    // 환경별 동적 Base URL 설정
+    static let baseURL: String = {
+        // 환경 변수 또는 Info.plist에서 우선 확인
+        if let envURL = ProcessInfo.processInfo.environment["API_BASE_URL"] {
+            return envURL
+        }
+
+        // Bundle의 Configuration 설정 확인
+        if let plistURL = Bundle.main.object(forInfoDictionaryKey: "API_BASE_URL") as? String {
+            return plistURL
+        }
+
+        // 빌드 설정에 따른 기본값
+        #if DEBUG
+            return "http://localhost:3000"  // 개발 환경
+        #elseif STAGING
+            return "https://staging-api.waygame.com"  // 스테이징 환경
+        #else
+            return "https://api.waygame.com"  // 프로덕션 환경
+        #endif
+    }()
+
+    // 현재 환경 표시 (디버깅용)
+    static let currentEnvironment: String = {
+        #if DEBUG
+            return "Development"
+        #elseif STAGING
+            return "Staging"
+        #else
+            return "Production"
+        #endif
+    }()
 }
 
 class NetworkManager: ObservableObject {
@@ -52,7 +84,7 @@ class NetworkManager: ObservableObject {
     private let cacheTimeout: TimeInterval = 300 // 5 minutes
 
     // MARK: - Configuration
-    private let baseURL = "http://localhost:3000/api"
+    private let baseURL = "\(NetworkConfiguration.baseURL)/api"
     
     // MARK: - Network Errors
     enum NetworkError: Error, LocalizedError {
@@ -116,14 +148,22 @@ class NetworkManager: ObservableObject {
         config.timeoutIntervalForResource = NetworkConfiguration.resourceTimeout
         config.requestCachePolicy = .useProtocolCachePolicy
         config.urlCache = URLCache(memoryCapacity: 10 * 1024 * 1024, diskCapacity: 50 * 1024 * 1024)
-        
+
         self.session = URLSession(configuration: config)
-        
+
+        // 환경 정보 로깅 (디버그 모드에서만)
+        #if DEBUG
+        print("🌐 NetworkManager initialized")
+        print("📡 Environment: \(NetworkConfiguration.currentEnvironment)")
+        print("🔗 Base URL: \(NetworkConfiguration.baseURL)")
+        print("⏱️ Request Timeout: \(NetworkConfiguration.requestTimeout)s")
+        #endif
+
         // 저장된 토큰 복원
         if let token = UserDefaults.standard.string(forKey: "auth_token") {
             self.authToken = token
         }
-        
+
         // ✅ 주기적 캐시 정리
         setupCacheCleanup()
     }

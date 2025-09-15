@@ -56,7 +56,7 @@ class AuthManager: ObservableObject {
     
     private var authToken: String?
     private var refreshToken: String?
-    private let baseURL = "http://localhost:3000/api/auth"
+    private let baseURL = "\(NetworkConfiguration.baseURL)/api/auth"
     
     // UserDefaults 키
     private enum Keys {
