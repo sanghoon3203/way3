@@ -18,23 +18,27 @@ app.use(helmet({
     crossOriginEmbedderPolicy: false
 }));
 
-// CORS 설정
+// CORS 설정 (모바일 앱 및 로컬 네트워크 지원)
 app.use(cors({
     origin: function(origin, callback) {
         const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'];
-        
+
         // 모바일 앱에서의 요청 허용 (origin이 없는 경우)
         if (!origin) return callback(null, true);
-        
-        if (allowedOrigins.indexOf(origin) !== -1) {
+
+        // 로컬 네트워크 IP 패턴 허용 (Socket.IO와 동일한 패턴)
+        const localNetworkPattern = /^http:\/\/(192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+):3000$/;
+
+        if (allowedOrigins.includes(origin) || localNetworkPattern.test(origin)) {
             callback(null, true);
         } else {
+            logger.warn(`API CORS 차단된 origin: ${origin}`);
             callback(new Error('CORS 정책에 의해 차단됨'), false);
         }
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 }));
 
 // Rate Limiting (API 남용 방지)

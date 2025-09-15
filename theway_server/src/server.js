@@ -12,15 +12,33 @@ const PORT = process.env.PORT || 3000;
 // HTTP 서버 생성
 const server = http.createServer(app);
 
-// Socket.IO 서버 설정
+// Socket.IO 서버 설정 (모바일 앱 지원 강화)
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ["http://localhost:3000"];
+
 const io = new Server(server, {
     cors: {
-        origin: process.env.ALLOWED_ORIGINS?.split(',') || ["http://localhost:3000"],
+        origin: function(origin, callback) {
+            // 모바일 앱에서는 origin이 없을 수 있음
+            if (!origin) return callback(null, true);
+
+            // 로컬 네트워크 IP 패턴 허용 (192.168.x.x, 10.x.x.x)
+            const localNetworkPattern = /^http:\/\/(192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+):3000$/;
+
+            if (allowedOrigins.includes(origin) || localNetworkPattern.test(origin)) {
+                callback(null, true);
+            } else {
+                logger.warn(`CORS 차단된 origin: ${origin}`);
+                callback(new Error('CORS 정책에 의해 차단됨'), false);
+            }
+        },
         methods: ["GET", "POST"],
         credentials: true
     },
     pingTimeout: 60000,
-    pingInterval: 25000
+    pingInterval: 25000,
+    // 모바일 앱 지원을 위한 추가 설정
+    allowEIO3: true,
+    transports: ['websocket', 'polling']
 });
 
 // Socket.IO 핸들러 등록
