@@ -56,7 +56,7 @@ enum LicenseLevel: Int, CaseIterable, Codable {
     case advanced = 2
     case expert = 3
     case master = 4
-    
+
     var displayName: String {
         switch self {
         case .beginner: return "초급상인"
@@ -66,7 +66,7 @@ enum LicenseLevel: Int, CaseIterable, Codable {
         case .master: return "마스터상인"
         }
     }
-    
+
     var requiredLevel: Int {
         switch self {
         case .beginner: return 1
@@ -94,6 +94,26 @@ enum LicenseLevel: Int, CaseIterable, Codable {
         case .advanced: return 50000
         case .expert: return 200000
         case .master: return 1000000
+        }
+    }
+
+    var maxInventoryBonus: Int {
+        switch self {
+        case .beginner: return 0
+        case .intermediate: return 5
+        case .advanced: return 10
+        case .expert: return 20
+        case .master: return 30
+        }
+    }
+
+    var trustPointsRequired: Int {
+        switch self {
+        case .beginner: return 0
+        case .intermediate: return 100
+        case .advanced: return 300
+        case .expert: return 700
+        case .master: return 1500
         }
     }
     
