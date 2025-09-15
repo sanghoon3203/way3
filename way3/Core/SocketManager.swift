@@ -18,10 +18,45 @@ class SocketManager: ObservableObject {
     @Published var recentTradeActivity: [TradeActivity] = []
     @Published var marketPriceUpdates: [PriceUpdate] = []
     @Published var tradeOffers: [TradeOffer] = []
-    
+    @Published var connectionStatus: ConnectionStatus = .disconnected
+
     // MARK: - Private Properties
     private var manager: SocketIO.SocketManager?
     private var socket: SocketIOClient?
+
+    // MARK: - Reconnection Properties
+    private var reconnectionTimer: Timer?
+    private var reconnectionAttempts = 0
+    private let maxReconnectionAttempts = 5
+    private let reconnectionDelay: TimeInterval = 5.0
+    private var isReconnecting = false
+
+    // MARK: - Connection Status
+    enum ConnectionStatus {
+        case disconnected
+        case connecting
+        case connected
+        case reconnecting
+        case failed
+
+        var description: String {
+            switch self {
+            case .disconnected: return "연결 끊김"
+            case .connecting: return "연결 중..."
+            case .connected: return "연결됨"
+            case .reconnecting: return "재연결 중..."
+            case .failed: return "연결 실패"
+            }
+        }
+
+        var color: Color {
+            switch self {
+            case .disconnected, .failed: return .red
+            case .connecting, .reconnecting: return .orange
+            case .connected: return .green
+            }
+        }
+    }
     
     // MARK: - Data Models
     struct NearbyPlayer: Identifiable {
@@ -165,14 +200,48 @@ class SocketManager: ObservableObject {
         socket?.on(clientEvent: .connect) { [weak self] data, ack in
             DispatchQueue.main.async {
                 self?.isConnected = true
-                print("Socket connected")
+                self?.connectionStatus = .connected
+                self?.resetReconnectionAttempts()
+                #if DEBUG
+                print("✅ Socket 연결 성공")
+                #endif
             }
         }
-        
+
         socket?.on(clientEvent: .disconnect) { [weak self] data, ack in
             DispatchQueue.main.async {
                 self?.isConnected = false
-                print("Socket disconnected")
+                self?.connectionStatus = .disconnected
+                #if DEBUG
+                print("❌ Socket 연결 끊김")
+                #endif
+
+                // 자동 재연결 시작 (의도적 disconnect가 아닌 경우)
+                if self?.connectionStatus != .disconnected {
+                    self?.startReconnection()
+                }
+            }
+        }
+
+        socket?.on(clientEvent: .error) { [weak self] data, ack in
+            DispatchQueue.main.async {
+                self?.connectionStatus = .failed
+                #if DEBUG
+                if let errorData = data.first {
+                    print("❌ Socket 오류: \(errorData)")
+                }
+                #endif
+
+                // 오류 발생 시 재연결 시도
+                self?.startReconnection()
+            }
+        }
+
+        socket?.on(clientEvent: .reconnect) { [weak self] data, ack in
+            DispatchQueue.main.async {
+                #if DEBUG
+                print("🔄 Socket 재연결됨")
+                #endif
             }
         }
         
@@ -333,7 +402,66 @@ class SocketManager: ObservableObject {
     }
     
     func disconnect() {
+        #if DEBUG
+        print("🔌 Socket 연결 해제")
+        #endif
+
+        stopReconnectionTimer()
+        connectionStatus = .disconnected
         socket?.disconnect()
+    }
+
+    func forceReconnect() {
+        #if DEBUG
+        print("🔄 Socket 강제 재연결")
+        #endif
+
+        disconnect()
+        reconnectionAttempts = 0
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.connect()
+        }
+    }
+
+    // MARK: - Reconnection Logic
+    private func startReconnection() {
+        guard !isReconnecting && reconnectionAttempts < maxReconnectionAttempts else {
+            if reconnectionAttempts >= maxReconnectionAttempts {
+                connectionStatus = .failed
+                #if DEBUG
+                print("❌ Socket 재연결 포기 (최대 시도 횟수 초과)")
+                #endif
+            }
+            return
+        }
+
+        isReconnecting = true
+        connectionStatus = .reconnecting
+        reconnectionAttempts += 1
+
+        #if DEBUG
+        print("🔄 Socket 재연결 시도 \(reconnectionAttempts)/\(maxReconnectionAttempts)")
+        #endif
+
+        reconnectionTimer = Timer.scheduledTimer(withTimeInterval: reconnectionDelay, repeats: false) { [weak self] _ in
+            self?.attemptReconnection()
+        }
+    }
+
+    private func attemptReconnection() {
+        isReconnecting = false
+        connect()
+    }
+
+    private func stopReconnectionTimer() {
+        reconnectionTimer?.invalidate()
+        reconnectionTimer = nil
+        isReconnecting = false
+    }
+
+    private func resetReconnectionAttempts() {
+        reconnectionAttempts = 0
+        stopReconnectionTimer()
     }
     
     func updatePlayerLocation(coordinate: CLLocationCoordinate2D, playerId: String) {
@@ -408,5 +536,16 @@ class SocketManager: ObservableObject {
             "isProfit": isProfit,
             "timestamp": Date().timeIntervalSince1970
         ])
+    }
+
+    // MARK: - Cleanup
+    deinit {
+        #if DEBUG
+        print("🧹 SocketManager 정리 중...")
+        #endif
+
+        stopReconnectionTimer()
+        socket?.disconnect()
+        socket?.removeAllHandlers()
     }
 }
