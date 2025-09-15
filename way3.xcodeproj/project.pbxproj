@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6A6773E82E745F9100D0C5FB /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 6A6773E72E745F9100D0C5FB /* MapboxMaps */; };
+		6A6773EB2E745FA800D0C5FB /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 6A6773EA2E745FA800D0C5FB /* SocketIO */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		6A6773BB2E7458F800D0C5FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,9 +34,22 @@
 		6A6773C42E7458F800D0C5FB /* way3UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = way3UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6A6773E52E745E9B00D0C5FB /* Exceptions for "way3" folder in "way3" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6A6773AB2E7458F600D0C5FB /* way3 */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6A6773AE2E7458F600D0C5FB /* way3 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6A6773E52E745E9B00D0C5FB /* Exceptions for "way3" folder in "way3" target */,
+			);
 			path = way3;
 			sourceTree = "<group>";
 		};
@@ -52,6 +70,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A6773E82E745F9100D0C5FB /* MapboxMaps in Frameworks */,
+				6A6773EB2E745FA800D0C5FB /* SocketIO in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +132,8 @@
 			);
 			name = way3;
 			packageProductDependencies = (
+				6A6773E72E745F9100D0C5FB /* MapboxMaps */,
+				6A6773EA2E745FA800D0C5FB /* SocketIO */,
 			);
 			productName = way3;
 			productReference = 6A6773AC2E7458F600D0C5FB /* way3.app */;
@@ -195,6 +217,10 @@
 			);
 			mainGroup = 6A6773A32E7458F600D0C5FB;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6A6773E62E745F9100D0C5FB /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */,
+				6A6773E92E745FA800D0C5FB /* XCRemoteSwiftPackageReference "socket" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6A6773AD2E7458F600D0C5FB /* Products */;
 			projectDirPath = "";
@@ -393,6 +419,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = way3/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -430,6 +457,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = way3/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -583,6 +611,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6A6773E62E745F9100D0C5FB /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mapbox/mapbox-maps-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.13.4;
+			};
+		};
+		6A6773E92E745FA800D0C5FB /* XCRemoteSwiftPackageReference "socket" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/socketio/socket.io-client-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6A6773E72E745F9100D0C5FB /* MapboxMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A6773E62E745F9100D0C5FB /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */;
+			productName = MapboxMaps;
+		};
+		6A6773EA2E745FA800D0C5FB /* SocketIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A6773E92E745FA800D0C5FB /* XCRemoteSwiftPackageReference "socket" */;
+			productName = SocketIO;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6A6773A42E7458F600D0C5FB /* Project object */;
 }
