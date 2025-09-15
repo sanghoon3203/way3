@@ -39,7 +39,8 @@ fi
 
 echo "✅ 준비 완료!"
 echo "🎯 서버 시작 중... (Ctrl+C로 종료)"
-echo "📱 iOS 앱에서 http://localhost:3000 으로 연결하세요"
+echo "📱 iOS 앱: http://localhost:3000"
+echo "🎛️  관리자 패널: http://localhost:3000/admin"
 echo "=============================================="
 
 # 서버 시작
