@@ -53,9 +53,14 @@ class AuthManager: ObservableObject {
     @Published var currentPlayer: PlayerData?
     @Published var isLoading = false
     @Published var errorMessage = ""
-    
+
     private var authToken: String?
     private var refreshToken: String?
+
+    // Socket.IO 호환성을 위한 currentToken 프로퍼티
+    var currentToken: String? {
+        return authToken
+    }
     private let baseURL = "\(NetworkConfiguration.baseURL)/api/auth"
     
     // UserDefaults 키
