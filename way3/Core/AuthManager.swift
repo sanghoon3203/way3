@@ -74,54 +74,187 @@ class AuthManager: ObservableObject {
         loadStoredCredentials()
     }
     
-    // MARK: - 저장된 인증 정보 로드
+    // MARK: - 저장된 인증 정보 로드 (SecureStorage 사용)
     func loadStoredCredentials() {
+        do {
+            // SecureStorage에서 토큰 로드
+            let token = try SecureStorage.shared.loadAuthToken()
+            let userId = try SecureStorage.shared.loadUserId()
+            let playerId = try SecureStorage.shared.loadPlayerId()
+
+            // UserDefaults에서 플레이어 데이터 로드 (민감하지 않은 정보)
+            if let token = token,
+               let playerData = UserDefaults.standard.data(forKey: Keys.playerData) {
+
+                self.authToken = token
+
+                do {
+                    self.currentPlayer = try JSONDecoder().decode(PlayerData.self, from: playerData)
+                    self.isAuthenticated = true
+
+                    print("🔐 AuthManager: SecureStorage에서 인증 정보 복원됨")
+                } catch {
+                    print("❌ AuthManager: 플레이어 데이터 로드 실패 - \(error)")
+                    clearStoredCredentials()
+                }
+            }
+        } catch {
+            print("❌ AuthManager: SecureStorage 로드 실패 - \(error)")
+            // 기존 UserDefaults 방식으로 폴백
+            loadLegacyCredentials()
+        }
+    }
+
+    // 기존 UserDefaults 방식 (폴백용)
+    private func loadLegacyCredentials() {
         if let token = UserDefaults.standard.string(forKey: Keys.authToken),
-           let refresh = UserDefaults.standard.string(forKey: Keys.refreshToken),
            let playerData = UserDefaults.standard.data(forKey: Keys.playerData) {
-            
+
             self.authToken = token
-            self.refreshToken = refresh
-            
+
             do {
                 self.currentPlayer = try JSONDecoder().decode(PlayerData.self, from: playerData)
                 self.isAuthenticated = true
+
+                // 기존 데이터를 SecureStorage로 마이그레이션
+                migrateToSecureStorage()
+
             } catch {
-                print("플레이어 데이터 로드 실패: \(error)")
+                print("❌ AuthManager: 레거시 플레이어 데이터 로드 실패 - \(error)")
                 clearStoredCredentials()
             }
         }
     }
     
-    // MARK: - 인증 정보 저장
+    // MARK: - 인증 정보 저장 (SecureStorage 사용)
     private func saveCredentials(authData: AuthData) {
+        do {
+            // SecureStorage에 보안 정보 저장
+            try SecureStorage.shared.storeAuthToken(authData.token)
+            try SecureStorage.shared.storeRefreshToken(authData.refreshToken)
+            try SecureStorage.shared.storeUserId(authData.userId)
+            try SecureStorage.shared.storePlayerId(authData.playerId)
+
+            // UserDefaults에 민감하지 않은 플레이어 데이터 저장
+            if let playerData = authData.player {
+                do {
+                    let encoded = try JSONEncoder().encode(playerData)
+                    UserDefaults.standard.set(encoded, forKey: Keys.playerData)
+                } catch {
+                    print("❌ AuthManager: 플레이어 데이터 저장 실패 - \(error)")
+                }
+            }
+
+            self.authToken = authData.token
+            self.refreshToken = authData.refreshToken
+            self.currentPlayer = authData.player
+
+            print("🔐 AuthManager: 인증 정보가 SecureStorage에 저장됨")
+
+        } catch {
+            print("❌ AuthManager: SecureStorage 저장 실패 - \(error)")
+            // 폴백: UserDefaults 사용
+            saveLegacyCredentials(authData: authData)
+        }
+    }
+
+    // 기존 UserDefaults 방식 (폴백용)
+    private func saveLegacyCredentials(authData: AuthData) {
         UserDefaults.standard.set(authData.token, forKey: Keys.authToken)
         UserDefaults.standard.set(authData.refreshToken, forKey: Keys.refreshToken)
-        
+
         if let playerData = authData.player {
             do {
                 let encoded = try JSONEncoder().encode(playerData)
                 UserDefaults.standard.set(encoded, forKey: Keys.playerData)
             } catch {
-                print("플레이어 데이터 저장 실패: \(error)")
+                print("❌ AuthManager: 레거시 플레이어 데이터 저장 실패 - \(error)")
             }
         }
-        
+
         self.authToken = authData.token
         self.refreshToken = authData.refreshToken
         self.currentPlayer = authData.player
+
+        print("⚠️ AuthManager: 레거시 방식으로 인증 정보 저장됨")
     }
     
-    // MARK: - 인증 정보 삭제
+    // MARK: - 인증 정보 삭제 (SecureStorage 사용)
     private func clearStoredCredentials() {
+        do {
+            // SecureStorage에서 모든 인증 정보 삭제
+            try SecureStorage.shared.clearAllAuthData()
+        } catch {
+            print("❌ AuthManager: SecureStorage 삭제 실패 - \(error)")
+        }
+
+        // UserDefaults에서 플레이어 데이터 삭제
         UserDefaults.standard.removeObject(forKey: Keys.authToken)
         UserDefaults.standard.removeObject(forKey: Keys.refreshToken)
         UserDefaults.standard.removeObject(forKey: Keys.playerData)
-        
+
         self.authToken = nil
         self.refreshToken = nil
         self.currentPlayer = nil
         self.isAuthenticated = false
+
+        print("🗑️ AuthManager: 모든 인증 정보 삭제됨")
+    }
+
+    // MARK: - 데이터 마이그레이션
+
+    /**
+     * 기존 UserDefaults 데이터를 SecureStorage로 마이그레이션
+     */
+    private func migrateToSecureStorage() {
+        guard let token = authToken else { return }
+
+        do {
+            // 현재 토큰을 SecureStorage에 저장
+            try SecureStorage.shared.storeAuthToken(token)
+
+            // 리프레시 토큰이 있으면 저장
+            if let refreshToken = UserDefaults.standard.string(forKey: Keys.refreshToken) {
+                try SecureStorage.shared.storeRefreshToken(refreshToken)
+            }
+
+            // 기존 UserDefaults의 토큰 정보 삭제
+            UserDefaults.standard.removeObject(forKey: Keys.authToken)
+            UserDefaults.standard.removeObject(forKey: Keys.refreshToken)
+
+            print("🔄 AuthManager: SecureStorage로 마이그레이션 완료")
+
+        } catch {
+            print("❌ AuthManager: SecureStorage 마이그레이션 실패 - \(error)")
+        }
+    }
+
+    /**
+     * 토큰 자동 갱신 (SecureStorage 사용)
+     */
+    func refreshTokenIfNeeded() async {
+        do {
+            let refreshed = try await SecureStorage.shared.refreshTokenIfNeeded()
+            if refreshed {
+                print("🔄 AuthManager: 토큰 자동 갱신 완료")
+                // 갱신된 토큰으로 플레이어 데이터 다시 로드
+                await refreshPlayerData()
+            }
+        } catch {
+            print("❌ AuthManager: 토큰 자동 갱신 실패 - \(error)")
+            // 갱신 실패 시 로그아웃
+            await MainActor.run {
+                logout()
+            }
+        }
+    }
+
+    /**
+     * 플레이어 데이터 새로고침
+     */
+    private func refreshPlayerData() async {
+        // NetworkManager를 통해 최신 플레이어 데이터 로드
+        // 실제 구현에서는 NetworkManager.shared.getPlayerData() 호출
     }
     
     // MARK: - 로그인
