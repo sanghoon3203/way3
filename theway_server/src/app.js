@@ -127,36 +127,15 @@ app.get('/health', (req, res) => {
 // 에러 처리 미들웨어
 // =============================================================================
 
+const { errorHandler, notFoundHandler, validateErrorResponse } = require('./middleware/errorHandler');
+
+// 에러 응답 검증 미들웨어 적용
+app.use(validateErrorResponse);
+
 // 404 에러 처리
-app.use((req, res, next) => {
-    const error = new Error(`Path not found: ${req.originalUrl}`);
-    error.status = 404;
-    next(error);
-});
+app.use(notFoundHandler);
 
 // 전역 에러 처리
-app.use((error, req, res, next) => {
-    logger.error('에러 발생:', {
-        message: error.message,
-        stack: error.stack,
-        url: req.originalUrl,
-        method: req.method,
-        ip: req.ip,
-        userAgent: req.get('User-Agent')
-    });
-
-    // 개발 환경에서는 스택 트레이스 포함
-    const isDevelopment = process.env.NODE_ENV === 'development';
-    
-    res.status(error.status || 500).json({
-        success: false,
-        error: {
-            message: error.message || 'Internal Server Error',
-            status: error.status || 500,
-            ...(isDevelopment && { stack: error.stack })
-        },
-        timestamp: new Date().toISOString()
-    });
-});
+app.use(errorHandler);
 
 module.exports = app;

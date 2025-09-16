@@ -6,6 +6,9 @@ const { body, validationResult } = require('express-validator');
 const { v4: uuidv4 } = require('uuid');
 const DatabaseManager = require('../../database/DatabaseManager');
 const logger = require('../../config/logger');
+const StandardResponse = require('../../utils/StandardResponse');
+const { ConflictError, ValidationError, InvalidCredentialsError } = require('../../errors/CustomErrors');
+const { asyncHandler } = require('../../middleware/errorHandler');
 
 const router = express.Router();
 
@@ -25,15 +28,13 @@ router.post('/register', [
         .trim()
         .isLength({ min: 2, max: 20 })
         .withMessage('플레이어 이름은 2-20자 사이여야 합니다')
-], async (req, res) => {
-    try {
+], asyncHandler(async (req, res) => {
         // 유효성 검사
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({
-                success: false,
-                error: '입력 데이터가 유효하지 않습니다',
-                details: errors.array()
+            return StandardResponse.validationFailed(res, {
+                validationErrors: errors.array(),
+                error: '입력 데이터가 유효하지 않습니다'
             });
         }
 
@@ -46,10 +47,7 @@ router.post('/register', [
         );
 
         if (existingUser) {
-            return res.status(409).json({
-                success: false,
-                error: '이미 존재하는 이메일입니다'
-            });
+            throw new ConflictError('이미 존재하는 이메일입니다', 'EMAIL_ALREADY_EXISTS');
         }
 
         // 비밀번호 해시화
@@ -87,25 +85,16 @@ router.post('/register', [
 
         logger.info('새 사용자 등록:', { userId, email, playerName });
 
-        res.status(201).json({
-            success: true,
-            message: '회원가입이 완료되었습니다',
+        return StandardResponse.created(res, {
             data: {
                 userId,
                 playerId,
                 token,
                 refreshToken
-            }
+            },
+            message: '회원가입이 완료되었습니다'
         });
-
-    } catch (error) {
-        logger.error('회원가입 실패:', error);
-        res.status(500).json({
-            success: false,
-            error: '서버 오류가 발생했습니다'
-        });
-    }
-});
+}));
 
 /**
  * 로그인

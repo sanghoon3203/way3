@@ -92,11 +92,12 @@ class NetworkManager: ObservableObject {
         case invalidRequest
         case unauthorized
         case invalidResponse
-        case clientError(Int)
-        case serverError
+        case clientError(Int, String? = nil)
+        case serverError(String? = nil)
         case networkError(Error)
         case timeout
         case noInternetConnection
+        case businessLogicError(String, String? = nil) // 게임 비즈니스 로직 에러
 
         var errorDescription: String? {
             switch self {
@@ -108,16 +109,18 @@ class NetworkManager: ObservableObject {
                 return "인증이 필요합니다. 다시 로그인해주세요"
             case .invalidResponse:
                 return "서버 응답을 해석할 수 없습니다"
-            case .clientError(let code):
-                return "클라이언트 오류 (코드: \(code))"
-            case .serverError:
-                return "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요"
+            case .clientError(let code, let message):
+                return message ?? "클라이언트 오류 (코드: \(code))"
+            case .serverError(let message):
+                return message ?? "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요"
             case .networkError(let error):
                 return "네트워크 오류: \(error.localizedDescription)"
             case .timeout:
                 return "요청 시간이 초과되었습니다"
             case .noInternetConnection:
                 return "인터넷 연결을 확인해주세요"
+            case .businessLogicError(let message, _):
+                return message
             }
         }
 
@@ -129,8 +132,46 @@ class NetworkManager: ObservableObject {
                 return "잠시 후 다시 시도해주세요"
             case .noInternetConnection:
                 return "네트워크 연결을 확인하고 다시 시도해주세요"
+            case .businessLogicError(_, let suggestion):
+                return suggestion
             default:
                 return nil
+            }
+        }
+
+        // 에러 타입별 사용자 친화적 메시지 매핑
+        static func fromAPIError(_ apiError: APIError) -> NetworkError {
+            switch apiError.code {
+            case "INSUFFICIENT_FUNDS":
+                return .businessLogicError("💰 자금이 부족합니다", "돈을 더 벌거나 더 저렴한 상품을 선택해보세요")
+            case "INVENTORY_FULL":
+                return .businessLogicError("🎒 인벤토리가 가득 찼습니다", "일부 아이템을 판매하거나 사용해보세요")
+            case "ITEM_OUT_OF_STOCK":
+                return .businessLogicError("📦 상품이 품절되었습니다", "다른 상인을 찾아보거나 시간을 두고 다시 시도해보세요")
+            case "INSUFFICIENT_LICENSE":
+                return .businessLogicError("📜 라이선스가 부족합니다", "상위 라이선스를 획득한 후 다시 시도해보세요")
+            case "INVALID_MERCHANT":
+                return .businessLogicError("🏪 유효하지 않은 상인입니다", "다른 상인을 선택해보세요")
+            case "TRADE_COOLDOWN":
+                return .businessLogicError("⏰ 거래 대기시간입니다", "잠시 후 다시 시도해보세요")
+            case "VALIDATION_ERROR":
+                return .clientError(400, apiError.message)
+            case "AUTHENTICATION_ERROR":
+                return .unauthorized
+            case "AUTHORIZATION_ERROR":
+                return .clientError(403, "접근 권한이 없습니다")
+            case "NOT_FOUND":
+                return .clientError(404, "요청한 리소스를 찾을 수 없습니다")
+            case "RATE_LIMIT_EXCEEDED":
+                return .clientError(429, "요청이 너무 많습니다. 잠시 후 다시 시도해보세요")
+            case "INTERNAL_SERVER_ERROR":
+                return .serverError("서버 내부 오류가 발생했습니다")
+            case "DATABASE_ERROR":
+                return .serverError("데이터베이스 오류가 발생했습니다")
+            case "EXTERNAL_SERVICE_ERROR":
+                return .serverError("외부 서비스 연동 오류가 발생했습니다")
+            default:
+                return .serverError(apiError.message)
             }
         }
     }
@@ -332,7 +373,13 @@ extension NetworkManager {
                 }
                 throw NetworkError.unauthorized
             case 400...499:
-                throw NetworkError.clientError(httpResponse.statusCode)
+                // 클라이언트 오류는 응답 본문에서 상세 정보 추출 시도
+                if let errorData = try? JSONDecoder().decode(APIResponse<EmptyData>.self, from: data),
+                   let apiError = errorData.error {
+                    throw NetworkError.fromAPIError(apiError)
+                } else {
+                    throw NetworkError.clientError(httpResponse.statusCode)
+                }
             case 500...599:
                 // ✅ 서버 오류 시 재시도
                 if retryCount < maxRetryCount {
@@ -348,25 +395,58 @@ extension NetworkManager {
                         retryCount: retryCount + 1
                     )
                 }
-                throw NetworkError.serverError
+
+                // 서버 오류도 응답 본문에서 상세 정보 추출 시도
+                if let errorData = try? JSONDecoder().decode(APIResponse<EmptyData>.self, from: data),
+                   let apiError = errorData.error {
+                    throw NetworkError.fromAPIError(apiError)
+                } else {
+                    throw NetworkError.serverError()
+                }
             default:
                 throw NetworkError.invalidResponse
             }
             
-            // ✅ JSON 파싱
+            // ✅ JSON 파싱 - 표준화된 API 응답 처리
             do {
-                let response = try JSONDecoder().decode(T.self, from: data)
-                
-                // ✅ 성공적인 GET 요청은 캐시에 저장
-                if method == .GET && useCache {
-                    setCachedResponse(data, for: requestKey)
+                // 먼저 표준 APIResponse로 파싱 시도
+                if let apiResponse = try? JSONDecoder().decode(APIResponse<T>.self, from: data) {
+                    // 표준화된 응답 처리
+                    if apiResponse.success {
+                        guard let responseData = apiResponse.data else {
+                            throw NetworkError.invalidResponse
+                        }
+
+                        // ✅ 성공적인 GET 요청은 캐시에 저장
+                        if method == .GET && useCache {
+                            setCachedResponse(data, for: requestKey)
+                        }
+
+                        await MainActor.run { self.lastError = nil }
+                        return responseData
+                    } else {
+                        // 서버에서 반환된 에러 처리
+                        let errorMessage = apiResponse.error?.message ?? "알 수 없는 오류가 발생했습니다"
+                        let userError = NetworkError.serverError(errorMessage)
+                        await MainActor.run { self.lastError = userError }
+                        throw userError
+                    }
+                } else {
+                    // 기존 형식 호환성 유지
+                    let response = try JSONDecoder().decode(T.self, from: data)
+
+                    // ✅ 성공적인 GET 요청은 캐시에 저장
+                    if method == .GET && useCache {
+                        setCachedResponse(data, for: requestKey)
+                    }
+
+                    await MainActor.run { self.lastError = nil }
+                    return response
                 }
-                
-                await MainActor.run { self.lastError = nil }
-                return response
-                
-            } catch {
-                print("❌ JSON 파싱 오류: \(error)")
+
+            } catch let decodingError {
+                print("❌ JSON 파싱 오류: \(decodingError)")
+                print("❌ 응답 데이터: \(String(data: data, encoding: .utf8) ?? "Invalid UTF-8")")
                 throw NetworkError.invalidResponse
             }
             
@@ -632,6 +712,9 @@ struct BaseResponse: Codable {
     let message: String?
     let error: String?
 }
+
+// 빈 데이터 타입 (에러 응답 파싱용)
+struct EmptyData: Codable {}
 
 // AuthResponse는 AuthManager.swift에 정의됨
 
