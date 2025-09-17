@@ -1,394 +1,406 @@
+//
+//  InventoryView.swift
+//  way3
+//
+//  Created by Claude on 17/09/2025.
+//  새로운 인벤토리 뷰 - 무역품과 인벤토리 섹션 분리
+//
 
-// 📁 Views/Inventory/InventoryView.swift - 수묵화 스타일 인벤토리 화면
 import SwiftUI
+
+// MARK: - Trade Goods Model
+struct TradeGood: Identifiable, Codable {
+    let id = UUID()
+    let name: String
+    let category: String
+    let grade: ItemGrade
+    let basePrice: Int
+    let quantity: Int
+    let imageName: String
+
+    enum ItemGrade: String, CaseIterable, Codable {
+        case common = "일반"
+        case uncommon = "고급"
+        case rare = "희귀"
+        case epic = "영웅"
+        case legendary = "전설"
+
+        var color: Color {
+            switch self {
+            case .common: return .gray
+            case .uncommon: return .green
+            case .rare: return .blue
+            case .epic: return .purple
+            case .legendary: return .orange
+            }
+        }
+    }
+}
+
+// MARK: - Inventory Item Model
+struct InventoryItem: Identifiable, Codable {
+    let id = UUID()
+    let name: String
+    let grade: TradeGood.ItemGrade
+    let effect: String
+    let imageName: String
+}
 
 struct InventoryView: View {
     @EnvironmentObject var authManager: AuthManager
     @State private var showingSellSheet = false
-    @State private var selectedItem: TradeItem?
-    @State private var sampleItems: [TradeItem] = [
-        TradeItem(itemId: "i1", name: "스마트폰", category: "전자제품", grade: .rare, requiredLicense: .intermediate, basePrice: 800000, description: "최신 스마트폰"),
-        TradeItem(itemId: "i2", name: "노트북", category: "전자제품", grade: .legendary, requiredLicense: .advanced, basePrice: 1500000, description: "게이밍 노트북"),
-        TradeItem(itemId: "i3", name: "한우", category: "식품", grade: .rare, requiredLicense: .intermediate, basePrice: 50000, description: "1등급 한우")
+    @State private var selectedItem: TradeGood?
+
+    // Sample Trade Goods
+    @State private var tradeGoods: [TradeGood] = [
+        TradeGood(name: "고급 차잎", category: "농산물", grade: .rare, basePrice: 45000, quantity: 5, imageName: "leaf.fill"),
+        TradeGood(name: "스마트폰", category: "전자제품", grade: .epic, basePrice: 800000, quantity: 2, imageName: "iphone"),
+        TradeGood(name: "한우", category: "축산물", grade: .legendary, basePrice: 120000, quantity: 3, imageName: "heart.fill"),
+        TradeGood(name: "전통 도자기", category: "공예품", grade: .rare, basePrice: 200000, quantity: 1, imageName: "cup.and.saucer.fill")
     ]
-    
+
+    // Sample Inventory Items
+    @State private var inventoryItems: [InventoryItem] = [
+        InventoryItem(name: "체력 물약", grade: .common, effect: "체력 +50", imageName: "heart.circle.fill"),
+        InventoryItem(name: "행운의 부적", grade: .rare, effect: "거래 성공률 +10%", imageName: "sparkles"),
+        InventoryItem(name: "상인의 인장", grade: .epic, effect: "가격 협상 +15%", imageName: "seal.fill")
+    ]
+
     var body: some View {
         NavigationView {
-            ZStack {
-                // 기본 배경
-                LinearGradient(colors: [Color.gray.opacity(0.1), Color.white], startPoint: .top, endPoint: .bottom)
-                    .ignoresSafeArea()
-                
-                VStack(spacing: 20) {
-                    // 상단 정보
-                    VStack {
-                        Text("인벤토리 (\(sampleItems.count)/50)")
-                            .font(.custom("ChosunCentennial", size: 18))
-                            .fontWeight(.semibold)
-                        Text("총 가치: ₩\(calculateTotalValue())")
-                            .font(.custom("ChosunCentennial", size: 16))
-                            .foregroundColor(.secondary)
-                    }
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(12)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 30) {
+                    // MARK: - 무역품 섹션
+                    VStack(alignment: .leading, spacing: 16) {
+                        // Section Header
+                        HStack {
+                            Text("무역품")
+                                .font(.chosunH1)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary)
 
-                    if sampleItems.isEmpty {
-                        // 빈 상태
-                        VStack(spacing: 20) {
-                            Image(systemName: "backpack")
-                                .font(.system(size: 60))
-                                .foregroundColor(.gray)
-                            Text("인벤토리가 비어있습니다")
-                                .font(.custom("ChosunCentennial", size: 18))
+                            Spacer()
+
+                            Text("₩\(calculateTradeGoodsValue())")
+                                .font(.chosunSubhead)
                                 .fontWeight(.semibold)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.green)
                         }
-                        .padding(40)
-                    } else {
-                        // 아이템 그리드
-                        LazyVGrid(columns: [
-                            GridItem(.adaptive(minimum: 150))
-                        ], spacing: 16) {
-                            ForEach(sampleItems) { item in
-                                VStack(spacing: 8) {
-                                    // 아이템 아이콘
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .fill(item.grade.color.opacity(0.2))
-                                            .frame(height: 80)
+                        .padding(.horizontal, 20)
 
-                                        Image(systemName: getItemIcon(for: item.category))
-                                            .font(.system(size: 30))
-                                            .foregroundColor(item.grade.color)
-                                    }
-
-                                    Text(item.name)
-                                        .font(.custom("ChosunCentennial", size: 16))
-                                        .fontWeight(.semibold)
-                                        .lineLimit(1)
-
-                                    Text("₩\(item.currentPrice)")
-                                        .font(.custom("ChosunCentennial", size: 14))
-                                        .foregroundColor(.blue)
-                                        .fontWeight(.medium)
-
-                                    Text(item.grade.displayName)
-                                        .font(.custom("ChosunCentennial", size: 12))
-                                        .foregroundColor(item.grade.color)
-                                        .fontWeight(.medium)
-                                }
-                                .padding()
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(Color(.systemBackground))
-                                        .shadow(radius: 2)
-                                )
-                                .onTapGesture {
-                                    selectedItem = item
+                        // Trade Goods List
+                        LazyVStack(spacing: 12) {
+                            ForEach(tradeGoods) { good in
+                                TradeGoodBoxView(tradeGood: good) {
+                                    selectedItem = good
                                     showingSellSheet = true
                                 }
                             }
                         }
-                    }
-                    
-                    Spacer()
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 10)
-            }
-            .navigationTitle("무역품")
-            .navigationBarTitleDisplayMode(.large)
-        }
-        .sheet(item: $selectedItem) { item in
-            NavigationView {
-                VStack(spacing: 20) {
-                    // 아이템 이미지
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(item.grade.color.opacity(0.2))
-                            .frame(width: 120, height: 120)
-
-                        Image(systemName: getItemIcon(for: item.category))
-                            .font(.system(size: 50))
-                            .foregroundColor(item.grade.color)
+                        .padding(.horizontal, 20)
                     }
 
-                    VStack(spacing: 12) {
-                        Text(item.name)
-                            .font(.custom("ChosunCentennial", size: 24))
-                            .fontWeight(.bold)
+                    // Section Divider
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(height: 1)
+                        .padding(.horizontal, 20)
 
-                        Text(item.grade.displayName)
-                            .font(.custom("ChosunCentennial", size: 16))
-                            .foregroundColor(item.grade.color)
-                            .fontWeight(.semibold)
+                    // MARK: - 인벤토리 섹션
+                    VStack(alignment: .leading, spacing: 16) {
+                        // Section Header
+                        HStack {
+                            Text("인벤토리")
+                                .font(.chosunH1)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary)
 
-                        Text("₩\(item.currentPrice)")
-                            .font(.custom("ChosunCentennial", size: 20))
-                            .foregroundColor(.blue)
-                            .fontWeight(.bold)
+                            Spacer()
 
-                        Text(item.description)
-                            .font(.custom("ChosunCentennial", size: 14))
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-
-                    Spacer()
-
-                    Button("판매하기") {
-                        // 판매 로직
-                        selectedItem = nil
-                    }
-                    .font(.custom("ChosunCentennial", size: 18))
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 50)
-                    .background(Color.orange)
-                    .cornerRadius(12)
-                }
-                .padding()
-                .navigationTitle("아이템 정보")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("닫기") {
-                            selectedItem = nil
+                            Text("\(inventoryItems.count)개 아이템")
+                                .font(.chosunSubhead)
+                                .foregroundColor(.secondary)
                         }
-                        .font(.custom("ChosunCentennial", size: 16))
+                        .padding(.horizontal, 20)
+
+                        // Inventory Items List
+                        LazyVStack(spacing: 12) {
+                            ForEach(inventoryItems) { item in
+                                InventoryItemBoxView(inventoryItem: item)
+                            }
+                        }
+                        .padding(.horizontal, 20)
                     }
+
+                    Spacer(minLength: 100) // Tab bar spacing
                 }
+                .padding(.vertical, 20)
+            }
+            .navigationTitle("")
+            .navigationBarHidden(true)
+        }
+        .sheet(isPresented: $showingSellSheet) {
+            if let item = selectedItem {
+                TradeGoodDetailSheet(tradeGood: item)
             }
         }
     }
 
-    private func calculateTotalValue() -> Int {
-        sampleItems.reduce(0) { $0 + $1.currentPrice }
-    }
-
-    private func getItemIcon(for category: String) -> String {
-        switch category.lowercased() {
-        case "전자제품": return "laptopcomputer"
-        case "식품": return "leaf.fill"
-        case "의류": return "tshirt.fill"
-        case "보석": return "gem"
-        case "도구": return "wrench.fill"
-        case "차량": return "car.fill"
-        default: return "cube.fill"
+    // MARK: - Helper Functions
+    private func calculateTradeGoodsValue() -> Int {
+        return tradeGoods.reduce(0) { total, good in
+            total + (good.basePrice * good.quantity)
         }
     }
 }
 
-// MARK: - 수묵화 스타일 인벤토리 헤더 카드
-/*
-// 커스텀 UI 컴포넌트들은 임시로 주석 처리
-struct InkInventoryHeaderCard: View {
-    let itemCount: Int
-    let maxItems: Int
-    let totalValue: Int
-    
-    var body: some View {
-        VStack(spacing: 16) {
-            // 제목
-            HStack {
-                Text("무역품 현황")
-                    .font(.brushStroke)
-                    .foregroundColor(.brushText)
-                
-                Spacer()
-                
-                Text("\(itemCount) / \(maxItems)")
-                    .font(.inkText)
-                    .foregroundColor(.fadeText)
-            }
-            
-            // 용량 표시 바
-            GeometryReader { geometry in
-                ZStack(alignment: .leading) {
-                    // 배경
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.inkMist.opacity(0.3))
-                        .frame(height: 12)
-                    
-                    // 진행률
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(
-                            LinearGradient(
-                                colors: itemCount >= maxItems ? 
-                                [Color.compass.opacity(0.7), Color.compass] : 
-                                [Color.brushText.opacity(0.6), Color.brushText],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
-                        .frame(
-                            width: geometry.size.width * min(Double(itemCount) / Double(maxItems), 1.0),
-                            height: 12
-                        )
-                        .animation(.easeInOut(duration: 0.3), value: itemCount)
-                }
-            }
-            .frame(height: 12)
-            
-            // 총 가치
-            HStack {
-                HStack(spacing: 8) {
-                    Circle()
-                        .fill(Color.brushText.opacity(0.6))
-                        .frame(width: 6, height: 6)
-                    Text("총 가치")
-                        .font(.inkText)
-                        .foregroundColor(.brushText)
-                }
-                
-                Spacer()
-                
-                Text("\(totalValue) 전")
-                    .font(.brushStroke)
-                    .fontWeight(.medium)
-                    .foregroundColor(.brushText)
-            }
-        }
-        .inkCard()
-    }
-}
-
-// MARK: - 수묵화 스타일 빈 인벤토리 뷰
-struct InkEmptyInventoryView: View {
-    var body: some View {
-        VStack(spacing: 24) {
-            // 빈 상태 아이콘
-            ZStack {
-                Circle()
-                    .fill(Color.softWhite)
-                    .frame(width: 120, height: 120)
-                    .overlay(
-                        Circle()
-                            .stroke(Color.inkBlack.opacity(0.2), lineWidth: 2)
-                    )
-                
-                Image(systemName: "bag")
-                    .font(.system(size: 60))
-                    .foregroundColor(.brushText.opacity(0.5))
-            }
-            .shadow(color: Color.inkMist.opacity(0.3), radius: 8, x: 0, y: 4)
-            
-            VStack(spacing: 12) {
-                Text("무역품이 없습니다")
-                    .font(.brushStroke)
-                    .foregroundColor(.brushText)
-                
-                Text("상인들과 거래하여 무역품을 수집해보세요")
-                    .font(.inkText)
-                    .foregroundColor(.fadeText)
-                    .multilineTextAlignment(.center)
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .inkCard()
-    }
-}
-
-// MARK: - 수묵화 스타일 인벤토리 그리드 뷰
-struct InkInventoryGridView: View {
-    let items: [TradeItem]
-    let onItemTap: (TradeItem) -> Void
-    
-    private let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
-    
-    var body: some View {
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: 16) {
-                ForEach(items, id: \.id) { item in
-                    InkInventoryItemCard(
-                        item: item,
-                        onTap: { onItemTap(item) }
-                    )
-                }
-            }
-            .padding(.vertical, 8)
-        }
-    }
-}
-
-// MARK: - 수묵화 스타일 인벤토리 아이템 카드
-struct InkInventoryItemCard: View {
-    let item: TradeItem
+// MARK: - Trade Good Box Component (320x160)
+struct TradeGoodBoxView: View {
+    let tradeGood: TradeGood
     let onTap: () -> Void
-    
+
     var body: some View {
         Button(action: onTap) {
-            VStack(spacing: 12) {
-                // 아이템 아이콘 영역
-                ZStack {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.softWhite)
-                        .frame(height: 80)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.inkBlack.opacity(0.1), lineWidth: 1)
-                        )
-                    
-                    // 임시 아이콘 (실제로는 아이템 이미지)
-                    Image(systemName: itemIcon(for: item.category))
-                        .font(.system(size: 32))
-                        .foregroundColor(.brushText.opacity(0.7))
-                }
-                
-                // 아이템 정보
-                VStack(spacing: 4) {
-                    Text(item.name)
-                        .font(.inkText)
-                        .fontWeight(.medium)
-                        .foregroundColor(.brushText)
-                        .lineLimit(1)
-                    
-                    Text("\(item.currentPrice) 전")
-                        .font(.whisperText)
-                        .foregroundColor(.fadeText)
-                    
-                    // 수량 (여러 개인 경우)
-                    if item.quantity > 1 {
-                        Text("x\(item.quantity)")
-                            .font(.whisperText)
-                            .foregroundColor(.brushText.opacity(0.6))
+            VStack(spacing: 0) {
+                // Top Row: Image, Name, Price
+                HStack(spacing: 30) {
+                    // Image
+                    Image(systemName: tradeGood.imageName)
+                        .font(.system(size: 40))
+                        .foregroundColor(tradeGood.grade.color)
+                        .frame(width: 50, height: 50)
+
+                    // Name
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(tradeGood.name)
+                            .font(.chosunH3)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.primary)
+                            .multilineTextAlignment(.leading)
+
+                        Text(tradeGood.category)
+                            .font(.chosunCaption)
+                            .foregroundColor(.secondary)
                     }
+
+                    Spacer()
+
+                    // Price
+                    Text("₩\(tradeGood.basePrice)")
+                        .font(.chosunSubhead)
+                        .fontWeight(.bold)
+                        .foregroundColor(.green)
                 }
+                .padding(.horizontal, 16)
+                .padding(.top, 16)
+
+                Spacer()
+                    .frame(height: 50)
+
+                // Bottom Row: Grade, Quantity
+                HStack(spacing: 110) {
+                    // Grade Badge
+                    Text(tradeGood.grade.rawValue)
+                        .font(.chosunSmall)
+                        .fontWeight(.medium)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(
+                            RoundedRectangle(cornerRadius: 30)
+                                .fill(tradeGood.grade.color)
+                        )
+
+                    Spacer()
+
+                    // Quantity
+                    Text("\(tradeGood.quantity)개")
+                        .font(.chosunSubhead)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 16)
             }
-            .padding(12)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.softWhite.opacity(0.8))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color.inkBlack.opacity(0.15), lineWidth: 1)
-                    )
-                    .shadow(color: Color.inkMist.opacity(0.3), radius: 4, x: 0, y: 2)
-            )
         }
+        .frame(width: 320, height: 160)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color(.systemBackground))
+                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+        )
         .buttonStyle(PlainButtonStyle())
-    }
-    
-    private func itemIcon(for category: String) -> String {
-        switch category.lowercased() {
-        case "it부품", "전자제품": return "laptopcomputer"
-        case "명품", "luxury": return "crown.fill"
-        case "의류", "clothing": return "tshirt.fill"
-        case "음식", "food": return "leaf.fill"
-        case "도구", "tools": return "wrench.fill"
-        case "의약품", "medicine": return "pills.fill"
-        case "차량", "vehicle": return "car.fill"
-        case "부동산", "property": return "house.fill"
-        default: return "shippingbox.fill"
-        }
     }
 }
 
-// =====================================
-*/
+// MARK: - Inventory Item Box Component
+struct InventoryItemBoxView: View {
+    let inventoryItem: InventoryItem
+
+    var body: some View {
+        HStack(spacing: 0) {
+            // Image
+            Image(systemName: inventoryItem.imageName)
+                .font(.system(size: 30))
+                .foregroundColor(inventoryItem.grade.color)
+                .frame(width: 60, height: 60)
+
+            Spacer()
+                .frame(width: 110)
+
+            // Name and Details
+            VStack(alignment: .leading, spacing: 8) {
+                Text(inventoryItem.name)
+                    .font(.chosunH3)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.primary)
+
+                // Grade Badge
+                Text(inventoryItem.grade.rawValue)
+                    .font(.chosunSmall)
+                    .fontWeight(.medium)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(inventoryItem.grade.color)
+                    )
+
+                // Effect
+                Text(inventoryItem.effect)
+                    .font(.chosunCaption)
+                    .foregroundColor(.blue)
+                    .fontWeight(.medium)
+            }
+
+            Spacer()
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity)
+        .frame(height: 100)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.systemBackground))
+                .shadow(color: .black.opacity(0.08), radius: 6, x: 0, y: 3)
+        )
+    }
+}
+
+// MARK: - Trade Good Detail Sheet
+struct TradeGoodDetailSheet: View {
+    let tradeGood: TradeGood
+    @Environment(\.presentationMode) var presentationMode
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 24) {
+                // Item Image
+                Image(systemName: tradeGood.imageName)
+                    .font(.system(size: 80))
+                    .foregroundColor(tradeGood.grade.color)
+                    .frame(width: 120, height: 120)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(tradeGood.grade.color.opacity(0.1))
+                    )
+
+                // Item Details
+                VStack(spacing: 16) {
+                    Text(tradeGood.name)
+                        .font(.chosunTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
+
+                    HStack(spacing: 40) {
+                        VStack {
+                            Text("등급")
+                                .font(.chosunCaption)
+                                .foregroundColor(.secondary)
+                            Text(tradeGood.grade.rawValue)
+                                .font(.chosunSubhead)
+                                .fontWeight(.semibold)
+                                .foregroundColor(tradeGood.grade.color)
+                        }
+
+                        VStack {
+                            Text("수량")
+                                .font(.chosunCaption)
+                                .foregroundColor(.secondary)
+                            Text("\(tradeGood.quantity)개")
+                                .font(.chosunSubhead)
+                                .fontWeight(.semibold)
+                        }
+
+                        VStack {
+                            Text("가격")
+                                .font(.chosunCaption)
+                                .foregroundColor(.secondary)
+                            Text("₩\(tradeGood.basePrice)")
+                                .font(.chosunSubhead)
+                                .fontWeight(.bold)
+                                .foregroundColor(.green)
+                        }
+                    }
+
+                    Divider()
+
+                    HStack {
+                        Text("총 가치:")
+                            .font(.chosunBody)
+                        Spacer()
+                        Text("₩\(tradeGood.basePrice * tradeGood.quantity)")
+                            .font(.chosunH2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.green)
+                    }
+                }
+
+                Spacer()
+
+                // Action Buttons
+                VStack(spacing: 12) {
+                    Button(action: {
+                        // Sell action
+                    }) {
+                        Text("전체 판매")
+                            .font(.chosunButton)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color.green)
+                            )
+                    }
+
+                    Button(action: {
+                        // Partial sell action
+                    }) {
+                        Text("부분 판매")
+                            .font(.chosunButton)
+                            .fontWeight(.medium)
+                            .foregroundColor(.green)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.green, lineWidth: 2)
+                            )
+                    }
+                }
+            }
+            .padding(20)
+            .navigationTitle("상품 상세")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("닫기") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
+        }
+    }
+}

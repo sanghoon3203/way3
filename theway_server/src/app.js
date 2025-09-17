@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
+const session = require('express-session');
 const logger = require('./config/logger');
 
 const app = express();
@@ -55,6 +56,21 @@ const limiter = rateLimit({
 
 app.use('/api/', limiter);
 
+// 세션 설정 (어드민 인증용)
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'way3-admin-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 24 * 60 * 60 * 1000 // 24시간
+    }
+}));
+
+// EJS 템플릿 엔진 설정
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 // JSON 파싱 설정
 app.use(express.json({ 
     limit: '10mb',
@@ -69,18 +85,28 @@ app.use(express.urlencoded({
 // 정적 파일 서빙
 app.use('/public', express.static(path.join(__dirname, '../public')));
 
+// 어드민 정적 파일 서빙
+app.use('/admin', express.static(path.join(__dirname, '../public/admin')));
+
 // 📌 상인 미디어 파일 서빙 (로컬 업로드된 이미지/GIF)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+// 데이터베이스 연결을 요청 객체에 추가
+app.use(async (req, res, next) => {
+    const DatabaseManager = require('./database/DatabaseManager');
+    req.app.set('db', DatabaseManager.db);
+    next();
+});
 
 // 요청 로깅 미들웨어
 app.use((req, res, next) => {
     const startTime = Date.now();
-    
+
     res.on('finish', () => {
         const duration = Date.now() - startTime;
         logger.info(`${req.method} ${req.originalUrl} - ${res.statusCode} [${duration}ms]`);
     });
-    
+
     next();
 });
 

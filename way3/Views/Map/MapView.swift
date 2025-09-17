@@ -129,44 +129,15 @@ struct MapView: View {
         }
     }
     
-    // MARK: - 🎮 Pokemon GO Style Overlay
+    // MARK: - 🎮 Simplified Map Overlay
     private var pokemonGOStyleOverlay: some View {
         VStack {
-            // 📱 Top Status Bar (Pokemon GO Style)
-            topStatusBar
-
+            // 상단 영역은 비어있음 (플레이어 정보와 설정 아이콘 제거)
             Spacer()
 
-            // 🎯 Bottom Action Panel (Pokemon GO Style)
+            // 🎯 Bottom Action Panel with proper margin
             bottomActionPanel
         }
-    }
-
-    // MARK: - 📱 Top Status Bar
-    private var topStatusBar: some View {
-        HStack {
-            // 👤 Enhanced Player Info Panel
-            playerInfoPanel
-
-            Spacer()
-
-            // ⚙️ Settings & Menu Button
-            Button(action: {
-                // Settings menu action
-            }) {
-                Image(systemName: "gearshape.fill")
-                    .font(.system(size: 20))
-                    .foregroundColor(.white)
-                    .frame(width: 40, height: 40)
-                    .background(
-                        Circle()
-                            .fill(Color.black.opacity(0.4))
-                    )
-                    .shadow(radius: 4)
-            }
-        }
-        .padding(.horizontal)
-        .padding(.top, 8)
     }
 
     // MARK: - 👤 Enhanced Player Info Panel
@@ -292,7 +263,7 @@ struct MapView: View {
                 )
         )
         .padding(.horizontal)
-        .padding(.bottom, 36)
+        .padding(.bottom, 50)
         .shadow(radius: 12)
     }
 
@@ -365,12 +336,23 @@ struct MapView: View {
         // 플레이어 상태에 따른 3D 모델 선택
         let modelName = getPlayerModelName()
 
-        // 로컬 3D 모델 파일 확인
+        // 🔍 로컬 3D 모델 파일 확인 및 개선된 오류 처리
         if let modelURL = Bundle.main.url(forResource: modelName, withExtension: "glb") {
-            return Model(uri: modelURL, orientation: [0, 0, 180])
+            print("✅ 로컬 glb 모델 발견: \(modelName).glb")
+            return Model(
+                uri: modelURL,
+                orientation: [0, 0, 180],
+                scale: [1.8, 1.8, 1.8]  // 로컬 모델도 크기 증가
+            )
         } else if let modelURL = Bundle.main.url(forResource: modelName, withExtension: "gltf") {
-            return Model(uri: modelURL, orientation: [0, 0, 180])
+            print("✅ 로컬 gltf 모델 발견: \(modelName).gltf")
+            return Model(
+                uri: modelURL,
+                orientation: [0, 0, 180],
+                scale: [1.8, 1.8, 1.8]
+            )
         } else {
+            print("⚠️ 로컬 모델 없음. 기본 온라인 모델 사용: \(modelName)")
             // 기본 3D 플레이어 표현 사용
             return createDefaultPlayerModel()
         }
@@ -393,25 +375,31 @@ struct MapView: View {
     }
 
     private func createDefaultPlayerModel() -> Model {
-        // 게임 캐릭터를 대표할 수 있는 3D 모델 사용
-        // Pokemon GO 스타일의 캐릭터를 위해 상인/트레이더 테마의 모델 선택
+        // 💫 Enhanced 3D Player Model with Better Visibility
+        // 신뢰성 높은 glTF 2.0 샘플 모델 사용 (안정적인 호스팅)
         let modelURLs = [
-            "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/CesiumMan/glTF/CesiumMan.gltf",
-            "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/RiggedSimple/glTF/RiggedSimple.gltf",
-            "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/BrainStem/glTF/BrainStem.gltf"
+            "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Duck/glTF-Binary/Duck.glb",
+            "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Avocado/glTF-Binary/Avocado.glb",
+            "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
         ]
 
         // 플레이어 레벨에 따라 다른 모델 선택
         let modelIndex = min((gameManager.currentPlayer?.level ?? 1) / 5, modelURLs.count - 1)
+        let selectedURL = modelURLs[modelIndex]
 
-        guard let url = URL(string: modelURLs[modelIndex]) else {
-            // 기본 모델 URL 사용
-            return Model(uri: URL(string: modelURLs[0])!, orientation: [0, 0, 0])
+        guard let url = URL(string: selectedURL) else {
+            // Fallback to most reliable model
+            return Model(
+                uri: URL(string: modelURLs[0])!,
+                orientation: [0, 0, 0],
+                scale: [1.5, 1.5, 1.5]
+            )
         }
 
         return Model(
             uri: url,
-            orientation: [0, 0, 0]
+            orientation: [0, 0, 0],
+            scale: [1.5, 1.5, 1.5]  // 1.5배 크기로 가시성 향상
         )
     }
 

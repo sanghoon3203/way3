@@ -14,84 +14,90 @@ struct MainTabView: View {
     @EnvironmentObject var authManager: AuthManager
     @State private var showProfile = false
     @State private var showSettings = false
-    
+
     var body: some View {
-        TabView(selection: $selectedTab) {
-            // 메인 맵
-            MapView()
-                .tabItem {
-                    Image(systemName: "map.fill")
-                    Text("맵")
-                        .font(.custom("ChosunCentennial", size: 12))
-                }
-                .tag(0)
-            
-            // 인벤토리
-            InventoryView()
-                .tabItem {
-                    Image(systemName: "backpack.fill")
-                    Text("인벤토리")
-                        .font(.custom("ChosunCentennial", size: 12))
-                }
-                .tag(1)
-            
-            // 경매장
-            AuctionHallView()
-                .tabItem {
-                    Image(systemName: "hammer.fill")
-                    Text("경매장")
-                        .font(.custom("ChosunCentennial", size: 12))
-                }
-                .tag(2)
-            
-            // 상점
-            ShopView()
-                .tabItem {
-                    Image(systemName: "storefront.fill")
-                    Text("상점")
-                        .font(.custom("ChosunCentennial", size: 12))
-                }
-                .tag(3)
-            
-            // 프로필
-            ProfileView()
-                .tabItem {
-                    Image(systemName: "person.fill")
-                    Text("프로필")
-                        .font(.custom("ChosunCentennial", size: 12))
-                }
-                .tag(4)
+        VStack(spacing: 0) {
+            // Main Content Area
+            TabView(selection: $selectedTab) {
+                // 📍 맵 (첫 번째 탭)
+                MapView()
+                    .tabItem {
+                        Image(systemName: "map.fill")
+                        Text("맵")
+                    }
+                    .tag(0)
+
+                // 🎒 인벤토리 (두 번째 탭)
+                InventoryView()
+                    .tabItem {
+                        Image(systemName: "backpack.fill")
+                        Text("인벤토리")
+                    }
+                    .tag(1)
+
+                // ⚔️ 퀘스트 (세 번째 탭)
+                QuestView()
+                    .tabItem {
+                        Image(systemName: "flag.fill")
+                        Text("퀘스트")
+                    }
+                    .tag(2)
+
+                // 🏪 상점 (네 번째 탭) - 경매장과 상점 통합
+                ShopView()
+                    .tabItem {
+                        Image(systemName: "storefront.fill")
+                        Text("상점")
+                    }
+                    .tag(3)
+
+                // 👤 프로필 (다섯 번째 탭)
+                ProfileView()
+                    .tabItem {
+                        Image(systemName: "person.fill")
+                        Text("프로필")
+                    }
+                    .tag(4)
+            }
         }
-        .accentColor(.blue)
+        .background(Color(.systemBackground))
         .onAppear {
-            setupTabBarAppearance()
+            setupEnhancedTabBarAppearance()
+            FontSystemManager.setupAppFonts()
         }
     }
     
-    private func setupTabBarAppearance() {
+    private func setupEnhancedTabBarAppearance() {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = UIColor.systemBackground
-        
-        // 선택된 탭 스타일
-        appearance.selectionIndicatorTintColor = UIColor.systemBlue
-        
-        // 일반 탭 스타일
-        appearance.stackedLayoutAppearance.normal.iconColor = UIColor.systemGray
+
+        // Shadow and border for modern look
+        appearance.shadowColor = UIColor.black.withAlphaComponent(0.1)
+        appearance.shadowImage = UIImage()
+
+        // Normal tab styling with Chosun font
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor.systemGray2
         appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
-            .foregroundColor: UIColor.systemGray,
-            .font: UIFont(name: "ChosunCentennial", size: 12) ?? UIFont.systemFont(ofSize: 12)
+            .foregroundColor: UIColor.systemGray2,
+            .font: UIFont.chosunSmall
         ]
-        
-        // 선택된 탭 스타일
+
+        // Selected tab styling with enhanced colors
         appearance.stackedLayoutAppearance.selected.iconColor = UIColor.systemBlue
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
             .foregroundColor: UIColor.systemBlue,
-            .font: UIFont(name: "ChosunCentennial", size: 12) ?? UIFont.systemFont(ofSize: 12)
+            .font: UIFont(name: "ChosunCentennial", size: 12) ?? UIFont.systemFont(ofSize: 12, weight: .medium)
         ]
-        
+
+        // Apply appearance with top margin consideration
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance
+
+        // Additional tab bar configuration for spacing
+        if let tabBar = UIApplication.shared.windows.first?.rootViewController?.tabBarController?.tabBar {
+            tabBar.frame.origin.y -= 25  // Top margin: 25pt as requested
+        }
     }
 }
 
@@ -247,77 +253,6 @@ struct QuestView: View {
     }
 }
 
-struct ShopView: View {
-    var body: some View {
-        NavigationView {
-            VStack {
-                Text("글로벌 상점")
-                    .font(.custom("ChosunCentennial", size: 24))
-                    .fontWeight(.bold)
-                Text("곧 구현 예정입니다!")
-                    .font(.custom("ChosunCentennial", size: 16))
-                    .foregroundColor(.secondary)
-            }
-            .navigationTitle("상점")
-        }
-    }
-}
+// ShopView는 별도 파일로 이동됩니다
 
-struct ProfileView: View {
-    @EnvironmentObject var authManager: AuthManager
-    
-    var body: some View {
-        NavigationView {
-            VStack(spacing: 20) {
-                // 프로필 이미지
-                ZStack {
-                    Circle()
-                        .fill(Color.blue)
-                        .frame(width: 100, height: 100)
-                    
-                    Image(systemName: "person.fill")
-                        .font(.system(size: 50))
-                        .foregroundColor(.white)
-                }
-                
-                if let player = authManager.currentPlayer {
-                    VStack(spacing: 8) {
-                        Text(player.name)
-                            .font(.custom("ChosunCentennial", size: 24))
-                            .fontWeight(.bold)
-                        
-                        Text("Lv. \(player.level)")
-                            .font(.custom("ChosunCentennial", size: 18))
-                            .foregroundColor(.blue)
-                            .fontWeight(.semibold)
-                        
-                        Text("₩\(Int(player.money))")
-                            .font(.custom("ChosunCentennial", size: 20))
-                            .foregroundColor(.green)
-                            .fontWeight(.semibold)
-                    }
-                }
-                
-                Spacer()
-                
-                Button(action: {
-                    Task {
-                        await authManager.logout()
-                    }
-                }) {
-                    Text("로그아웃")
-                        .font(.custom("ChosunCentennial", size: 18))
-                        .foregroundColor(.red)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                        .background(
-                            RoundedRectangle(cornerRadius: 25)
-                                .stroke(Color.red, lineWidth: 2)
-                        )
-                }
-            }
-            .padding()
-            .navigationTitle("프로필")
-        }
-    }
-}
+// ProfileView는 별도 파일로 이동됩니다

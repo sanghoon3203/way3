@@ -199,7 +199,7 @@ class OfflineDataGenerator {
                 requiredLicense: .beginner,
                 inventory: []
             )
-        ]#imageLiteral(resourceName: "simulator_screenshot_95FE342A-AAF2-47C9-A86E-4D599F5DD726.png")
+        ]
         
         let items: [TradeItem] = [
             TradeItem(

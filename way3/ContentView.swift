@@ -13,7 +13,7 @@ struct ContentView: View {
     @StateObject private var authManager = AuthManager.shared
     @StateObject private var player = Player.createDefault()
     @State private var selectedTab = 0
-    
+
     var body: some View {
         Group {
             if !authManager.isAuthenticated {
@@ -26,9 +26,15 @@ struct ContentView: View {
                     .environmentObject(player)
             }
         }
+        .defaultChosunFont()
         .onAppear {
-            // 앱 시작시 저장된 인증 정보 자동 로드
-            authManager.loadStoredCredentials()
+            // ⚠️ 자동 로그인 금지 - 항상 로그인 화면부터 시작
+            // FontSystemManager.setupAppFonts() // 폰트 시스템 설정
+
+            // Chosun 폰트 사용 가능 여부 확인
+            if !FontSystemManager.validateChosunFont() {
+                print("⚠️ Chosun 폰트가 번들에 없습니다. Info.plist에 폰트를 추가해주세요.")
+            }
         }
     }
 }
