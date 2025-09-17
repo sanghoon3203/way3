@@ -151,7 +151,7 @@ extension PlayerRelationships {
 
     // 길드 초대 수락
     func acceptGuildInvitation(_ invitationId: String) -> Bool {
-        guard let invitation = guildInvitations.first(where: { $0.id == invitationId }),
+        guard let invitation = guildInvitations.first(where: { $0.id.uuidString == invitationId }),
               !invitation.isExpired else { return false }
 
         let membership = GuildMembership(
@@ -167,7 +167,7 @@ extension PlayerRelationships {
 
     // 길드 초대 거절
     func declineGuildInvitation(_ invitationId: String) {
-        guildInvitations.removeAll { $0.id == invitationId }
+        guildInvitations.removeAll { $0.id.uuidString == invitationId }
     }
 
     // 길드 혜택 확인
@@ -191,7 +191,7 @@ extension PlayerRelationships {
 
     // 친구 요청 수락
     func acceptFriendRequest(_ requestId: String) -> Bool {
-        guard let index = friendRequests.firstIndex(where: { $0.id == requestId }),
+        guard let index = friendRequests.firstIndex(where: { $0.id.uuidString == requestId }),
               friendRequests[index].status == .received else { return false }
 
         let request = friendRequests[index]
@@ -209,7 +209,7 @@ extension PlayerRelationships {
 
     // 친구 요청 거절
     func declineFriendRequest(_ requestId: String) {
-        friendRequests.removeAll { $0.id == requestId }
+        friendRequests.removeAll { $0.id.uuidString == requestId }
     }
 
     // 친구 삭제
@@ -418,17 +418,7 @@ struct TradeRecord: Identifiable, Codable {
     }
 }
 
-enum TradeType: String, Codable {
-    case buy, sell, exchange
-
-    var displayName: String {
-        switch self {
-        case .buy: return "구매"
-        case .sell: return "판매"
-        case .exchange: return "교환"
-        }
-    }
-}
+// TradeType은 TradeManager.swift에 정의됨
 
 enum TrustLevel: String, Codable, CaseIterable {
     case unknown, novice, reliable, trusted, expert, master

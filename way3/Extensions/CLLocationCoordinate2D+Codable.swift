@@ -150,13 +150,7 @@ extension CLLocationCoordinate2D {
     static let invalid = CLLocationCoordinate2D(latitude: 0, longitude: 0)
 }
 
-// MARK: - Equatable 지원
-extension CLLocationCoordinate2D: Equatable {
-    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
-        return abs(lhs.latitude - rhs.latitude) < 0.000001 &&
-               abs(lhs.longitude - rhs.longitude) < 0.000001
-    }
-}
+// MARK: - Equatable은 이미 다른 곳에서 지원됨 (Turf framework)
 
 // MARK: - Hashable 지원
 extension CLLocationCoordinate2D: Hashable {

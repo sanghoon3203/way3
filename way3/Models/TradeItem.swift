@@ -121,6 +121,7 @@ struct TradeItem: Identifiable, Codable, Equatable {
     }
     
     // MARK: - 메서드
+    @MainActor
     func canUse(by player: Player) -> Bool {
         return player.currentLicense.rawValue >= requiredLicense.rawValue
     }

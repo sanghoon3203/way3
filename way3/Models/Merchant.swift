@@ -146,16 +146,16 @@ struct Merchant: Identifiable {
     
     
     // MARK: - 메서드들
-    func canTrade(with player: Player) -> Bool {
+    @MainActor func canTrade(with player: Player) -> Bool {
         // 라이센스 체크
         guard player.currentLicense.rawValue >= requiredLicense.rawValue else { return false }
-        
+
         // 평판 체크
         guard player.reputation >= reputationRequirement else { return false }
-        
+
         // 활성 상태 체크
         guard isActive else { return false }
-        
+
         return true
     }
     

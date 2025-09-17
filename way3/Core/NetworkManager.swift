@@ -445,7 +445,7 @@ extension NetworkManager {
                 }
 
             } catch let decodingError {
-                GameLogger.shared.logError("JSON 파싱 오류", error: decodingError, category: .network)
+                GameLogger.shared.logError("JSON 파싱 오류: \(decodingError.localizedDescription)", category: .network)
                 GameLogger.shared.logDebug("응답 데이터: \(String(data: data, encoding: .utf8) ?? "Invalid UTF-8")", category: .network)
                 throw NetworkError.invalidResponse
             }

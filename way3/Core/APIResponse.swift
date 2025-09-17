@@ -209,6 +209,35 @@ struct EmptyData: Codable {
     // 빈 응답 데이터용
 }
 
+// MARK: - Network Error Definition
+enum NetworkError: Error {
+    case noNetwork
+    case unauthorized
+    case serverError(String)
+    case invalidRequest
+    case notFound
+    case badRequest
+    case rateLimited
+    case timeout
+    case custom(String)
+    case unknown(String)
+
+    var code: String {
+        switch self {
+        case .noNetwork: return "NO_NETWORK"
+        case .unauthorized: return "UNAUTHORIZED"
+        case .serverError: return "SERVER_ERROR"
+        case .invalidRequest: return "INVALID_REQUEST"
+        case .notFound: return "NOT_FOUND"
+        case .badRequest: return "BAD_REQUEST"
+        case .rateLimited: return "RATE_LIMITED"
+        case .timeout: return "TIMEOUT"
+        case .custom(let code): return code
+        case .unknown: return "UNKNOWN"
+        }
+    }
+}
+
 // MARK: - Network Error Extension
 extension NetworkError {
     // API 응답에서 NetworkError 생성
@@ -219,8 +248,7 @@ extension NetworkError {
         case "NOT_FOUND":
             return .notFound
         case "VALIDATION_ERROR":
-            let message = apiError.validationErrors?.first?.message ?? apiError.message
-            return .badRequest(message)
+            return .badRequest
         case "RATE_LIMITED":
             return .rateLimited
         case "DATABASE_ERROR", "INTERNAL_ERROR":

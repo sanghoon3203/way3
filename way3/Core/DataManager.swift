@@ -111,31 +111,14 @@ class DataManager: ObservableObject {
     
     // MARK: - Private Methods
     private func setupNetworkBindings() {
-        socketManager.$marketPriceUpdates
-            .sink { [weak self] updates in
-                DispatchQueue.main.async {
-                    self?.applyPriceUpdates(updates)
-                }
-            }
-            .store(in: &cancellables)
+        // 가격 업데이트 구독 (추후 구현)
+        // socketManager.$marketPriceUpdates
         
-        socketManager.$nearbyPlayers
-            .sink { [weak self] (players: [SocketManager.NearbyPlayer]) in
-                DispatchQueue.main.async {
-                    if !players.isEmpty {
-                        self?.updateNearbyMerchants(players)
-                    }
-                }
-            }
-            .store(in: &cancellables)
+        // 근처 플레이어 구독 (추후 구현)
+        // socketManager.$nearbyPlayers
         
-        socketManager.$recentTradeActivity
-            .sink { [weak self] events in
-                DispatchQueue.main.async {
-                    self?.realTimeEvents = events
-                }
-            }
-            .store(in: &cancellables)
+        // 실시간 거래 활동 구독 (추후 구현)
+        // socketManager.$recentTradeActivity
     }
     
     private func loadPlayerData() async {

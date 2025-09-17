@@ -69,6 +69,9 @@ app.use(express.urlencoded({
 // 정적 파일 서빙
 app.use('/public', express.static(path.join(__dirname, '../public')));
 
+// 📌 상인 미디어 파일 서빙 (로컬 업로드된 이미지/GIF)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 // 요청 로깅 미들웨어
 app.use((req, res, next) => {
     const startTime = Date.now();

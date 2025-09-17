@@ -143,6 +143,19 @@ extension Color {
     /// 이태원 지역 색상
     static let itaewonGreen = Color(red: 0.2, green: 0.8, blue: 0.5) // #33CC80
 
+    // MARK: - 나침반/방향 관련 색상
+
+    /// 나침반 색상 (북쪽을 가리키는 빨간색)
+    static let compass = Color(red: 0.9, green: 0.2, blue: 0.2) // #E63333
+
+    // MARK: - Achievement 관련 색상
+
+    /// 바다 청록색 (성취 색상)
+    static let oceanTeal = Color(red: 0.0, green: 0.5, blue: 0.5) // #008080
+
+    /// 황금색 (성취 색상)
+    static let goldYellow = Color(red: 1.0, green: 0.84, blue: 0.0) // #FFD700
+
     // MARK: - 헬퍼 메서드들
 
     /**

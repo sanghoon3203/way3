@@ -1,6 +1,7 @@
 // 📁 Core/GameLogger.swift - 게임 전용 로깅 및 모니터링 시스템
 import Foundation
 import OSLog
+import UIKit
 
 /**
  * GameLogger
@@ -50,6 +51,63 @@ class GameLogger {
         }
     }
 
+    enum LogCategory {
+        case system
+        case authentication
+        case network
+        case gameplay
+        case performance
+        case security
+        case error
+        case socket
+
+        var logger: Logger {
+            switch self {
+            case .system:
+                return Logger(subsystem: "com.way3.game", category: "system")
+            case .authentication:
+                return Logger(subsystem: "com.way3.game", category: "authentication")
+            case .network:
+                return Logger(subsystem: "com.way3.game", category: "network")
+            case .gameplay:
+                return Logger(subsystem: "com.way3.game", category: "gameplay")
+            case .performance:
+                return Logger(subsystem: "com.way3.game", category: "performance")
+            case .security:
+                return Logger(subsystem: "com.way3.game", category: "security")
+            case .error:
+                return Logger(subsystem: "com.way3.game", category: "error")
+            case .socket:
+                return Logger(subsystem: "com.way3.game", category: "socket")
+            }
+        }
+    }
+
+    // MARK: - 편의 로깅 메서드
+
+    /**
+     * 간편한 로깅 메서드 (LogCategory 사용)
+     */
+    func logError(_ message: String, category: LogCategory) {
+        guard shouldLog(.error) else { return }
+        category.logger.error("\(message)")
+    }
+
+    func logWarning(_ message: String, category: LogCategory) {
+        guard shouldLog(.warning) else { return }
+        category.logger.warning("\(message)")
+    }
+
+    func logInfo(_ message: String, category: LogCategory) {
+        guard shouldLog(.info) else { return }
+        category.logger.info("\(message)")
+    }
+
+    func logDebug(_ message: String, category: LogCategory) {
+        guard shouldLog(.debug) else { return }
+        category.logger.debug("\(message)")
+    }
+
     // MARK: - 게임 이벤트 로깅
 
     /**
@@ -63,7 +121,7 @@ class GameLogger {
 
         // 중요한 사용자 행동은 원격 분석에도 전송
         if action.isImportant {
-            sendToAnalytics(event: "user_action", data: logData)
+            sendToAnalytics(event: "user_action", data: parameters)
         }
     }
 
@@ -445,7 +503,7 @@ class GameLogger {
 
     private func getCurrentMemoryUsage() -> Int {
         // 현재 메모리 사용량 (MB)
-        let info = mach_task_basic_info()
+        var info = mach_task_basic_info()
         var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
 
         let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) {

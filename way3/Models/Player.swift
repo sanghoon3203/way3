@@ -11,6 +11,7 @@ import SwiftUI
 import CoreLocation
 
 // MARK: - Main Player Class (Unified Interface)
+@MainActor
 class Player: ObservableObject, Codable {
     // MARK: - Component References
     @Published var core: PlayerCore
@@ -41,7 +42,7 @@ class Player: ObservableObject, Codable {
         self.stats = PlayerStats()
         self.inventory = PlayerInventory()
         self.relationships = PlayerRelationships()
-        self.achievements = PlayerAchievements()
+        self.achievements = PlayerAchievements() // @MainActor 초기화
     }
 
     // MARK: - Codable Implementation
@@ -62,7 +63,7 @@ class Player: ObservableObject, Codable {
         // Location handling
         if let locationData = try container.decodeIfPresent(Data.self, forKey: .currentLocation) {
             let location = try JSONDecoder().decode(LocationData.self, from: locationData)
-            currentLocation = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
+            currentLocation = CLLocationCoordinate2D(latitude: location.lat, longitude: location.lng)
         }
 
         currentDistrict = try container.decode(String.self, forKey: .currentDistrict)
@@ -86,7 +87,7 @@ class Player: ObservableObject, Codable {
 
         // Location handling
         if let location = currentLocation {
-            let locationData = LocationData(latitude: location.latitude, longitude: location.longitude)
+            let locationData = LocationData(lat: location.latitude, lng: location.longitude)
             let data = try JSONEncoder().encode(locationData)
             try container.encode(data, forKey: .currentLocation)
         }
@@ -101,7 +102,7 @@ class Player: ObservableObject, Codable {
 // MARK: - Unified Player Actions (High-level operations that coordinate between components)
 extension Player {
     // MARK: - Trading Operations
-    func performTrade(with merchantId: String, item: TradeItem, tradeType: TradeType, finalPrice: Int) -> TradeResult {
+    func performTrade(with merchantId: String, item: TradeItem, tradeType: TradeType, finalPrice: Int) -> PlayerTradeResult {
         // 1. 자금 확인 (매수인 경우)
         if tradeType == .buy && !core.canAfford(finalPrice) {
             return .failure(.insufficientFunds)
@@ -155,7 +156,7 @@ extension Player {
 
         // 업적 진행도 업데이트
         achievements.updateTradingMilestone(tradeCount: 1, profit: tradeType == .sell ? amount - item.basePrice : 0)
-        achievements.updateProgress(for: "first_trade")
+        achievements.updateProgress("first_trade", progress: 1)
 
         if relationships.tradeHistory.count >= 100 {
             achievements.checkAchievement("hundred_trades")
@@ -197,7 +198,7 @@ extension Player {
         achievements.updateExplorationMilestone(locationsVisited: 1, distance: 0.0)
 
         // 위치 기반 업적 체크
-        achievements.updateProgress(for: "explorer")
+        achievements.updateProgress("explorer", progress: 1)
     }
 
     func changeGameMode(_ newMode: GameMode) {
@@ -308,7 +309,7 @@ extension Player {
 
         if inventory.removeItem(item) {
             // 실제로는 서버를 통해 친구에게 전송
-            achievements.updateProgress(for: "generous_trader")
+            achievements.updateProgress("generous_trader", progress: 1)
             return true
         }
 
@@ -352,10 +353,7 @@ extension Player {
 }
 
 // MARK: - Support Structures
-struct LocationData: Codable {
-    let latitude: Double
-    let longitude: Double
-}
+// LocationData는 APIResponse.swift에 정의됨
 
 enum GameMode: String, Codable {
     case exploration = "exploration"
@@ -371,8 +369,8 @@ enum GameMode: String, Codable {
     }
 }
 
-enum TradeResult {
-    case success(Int) // 거래된 금액
+enum PlayerTradeResult {
+    case success(Int)
     case failure(TradeError)
 }
 

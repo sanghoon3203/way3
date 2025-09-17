@@ -281,7 +281,7 @@ struct FeaturedItemsGrid: View {
     
     private func canInteractWith(_ item: TradeItem) -> Bool {
         // 라이센스 체크
-        let licenseCheck = gameManager.player.currentLicense.rawValue >= item.requiredLicense.rawValue
+        let licenseCheck = gameManager.currentPlayer?.core.currentLicense.rawValue ?? 0 >= item.requiredLicense.rawValue
         
         switch mode {
         case .buy, .browse:

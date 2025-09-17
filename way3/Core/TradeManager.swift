@@ -8,12 +8,14 @@
 
 import Foundation
 import SwiftUI
+import UIKit
 import Combine
 
 // MARK: - 거래 관련 모델
 enum TradeType: String, Codable {
     case buy = "buy"
     case sell = "sell"
+    case exchange = "exchange"
 }
 
 // TradeItem is defined in Models/TradeItem.swift
@@ -236,8 +238,6 @@ class TradeManager: ObservableObject {
 }
 
 // MARK: - 거래 확인 뷰
-import SwiftUI
-
 struct TradeConfirmationView: View {
     let merchant: Merchant
     @ObservedObject var tradeManager: TradeManager

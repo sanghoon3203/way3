@@ -156,7 +156,7 @@ class SecureStorage {
             return hoursSinceRefresh >= 1.0
 
         } catch {
-            GameLogger.shared.logError("토큰 갱신 시간 확인 실패", error: error, category: .security)
+            GameLogger.shared.logError("토큰 갱신 시간 확인 실패: \(error.localizedDescription)", category: .security)
             return true
         }
     }

@@ -68,7 +68,7 @@ final class AuthManagerTests: XCTestCase {
         // Then: 인증 상태 확인
         XCTAssertTrue(authManager.isAuthenticated)
         XCTAssertNotNil(authManager.currentPlayer)
-        XCTAssertEqual(authManager.currentPlayer?.name, expectedAuthData.player?.name)
+        XCTAssertEqual(authManager.currentPlayer?.core.name, expectedAuthData.player?.name)
         XCTAssertFalse(authManager.isLoading)
         XCTAssertTrue(authManager.errorMessage.isEmpty)
     }
@@ -117,7 +117,7 @@ final class AuthManagerTests: XCTestCase {
         // Then: 성공 상태 확인
         XCTAssertTrue(authManager.isAuthenticated)
         XCTAssertNotNil(authManager.currentPlayer)
-        XCTAssertEqual(authManager.currentPlayer?.name, playerName)
+        XCTAssertEqual(authManager.currentPlayer?.core.name, playerName)
     }
 
     // MARK: - 토큰 관리 테스트

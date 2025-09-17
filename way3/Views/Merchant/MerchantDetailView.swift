@@ -100,7 +100,7 @@ struct MerchantHeaderView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 
-                Text(merchant.description)
+                Text("\(merchant.type.displayName) 상인 • \(merchant.district.displayName)")
                     .font(.custom("ChosunCentennial", size: 16))
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -123,7 +123,7 @@ struct MerchantHeaderView: View {
                     }
                     
                     // 카테고리
-                    Text(merchant.category.displayName)
+                    Text(merchant.type.displayName)
                         .font(.custom("ChosunCentennial", size: 12))
                         .padding(.horizontal, 10)
                         .padding(.vertical, 4)
@@ -387,7 +387,7 @@ struct TradeItemCard: View {
                         .fontWeight(.semibold)
                         .lineLimit(1)
                     
-                    Text("₩\(item.price)")
+                    Text("₩\(item.currentPrice)")
                         .font(.custom("ChosunCentennial", size: 14))
                         .foregroundColor(.blue)
                         .fontWeight(.medium)

@@ -59,7 +59,7 @@ class GameManager: ObservableObject {
      */
     func startGame() {
         guard let player = currentPlayer else {
-            GameLogger.shared.logError("플레이어 정보 없음", category: .game)
+            GameLogger.shared.logError("플레이어 정보 없음", category: .gameplay)
             return
         }
 
@@ -79,7 +79,7 @@ class GameManager: ObservableObject {
             type: .info
         )
 
-        GameLogger.shared.logInfo("게임 시작됨", category: .game)
+        GameLogger.shared.logInfo("게임 시작됨", category: .gameplay)
     }
 
     /**
@@ -90,7 +90,7 @@ class GameManager: ObservableObject {
         stopGameLoop()
         locationManager.stopLocationUpdates()
 
-        GameLogger.shared.logInfo("게임 일시정지됨", category: .game)
+        GameLogger.shared.logInfo("게임 일시정지됨", category: .gameplay)
     }
 
     /**
@@ -103,7 +103,7 @@ class GameManager: ObservableObject {
         locationManager.startLocationUpdates()
         startGameLoop()
 
-        GameLogger.shared.logInfo("게임 재개됨", category: .game)
+        GameLogger.shared.logInfo("게임 재개됨", category: .gameplay)
     }
 
     /**
@@ -119,7 +119,7 @@ class GameManager: ObservableObject {
         // 게임 데이터 저장
         saveGameData()
 
-        GameLogger.shared.logInfo("게임 종료됨", category: .game)
+        GameLogger.shared.logInfo("게임 종료됨", category: .gameplay)
     }
 
     // MARK: - Player Management
@@ -131,7 +131,7 @@ class GameManager: ObservableObject {
         self.currentPlayer = player
         updateGameStatistics()
 
-        GameLogger.shared.logInfo("플레이어 설정됨 - \(player.core.name)", category: .game)
+        GameLogger.shared.logInfo("플레이어 설정됨 - \(player.core.name)", category: .gameplay)
     }
 
     /**
@@ -145,7 +145,7 @@ class GameManager: ObservableObject {
                 updatePlayerFromDetail(playerDetail)
             }
         } catch {
-            GameLogger.shared.logError("플레이어 데이터 새로고침 실패 - \(error)", category: .game)
+            GameLogger.shared.logError("플레이어 데이터 새로고침 실패 - \(error)", category: .gameplay)
             addNotification(
                 title: "데이터 동기화 실패",
                 message: "플레이어 정보를 업데이트할 수 없습니다",
@@ -170,7 +170,7 @@ class GameManager: ObservableObject {
                     longitude: coordinate.longitude
                 )
             } catch {
-                GameLogger.shared.logError("위치 업데이트 실패 - \(error)", category: .game)
+                GameLogger.shared.logError("위치 업데이트 실패 - \(error)", category: .gameplay)
             }
         }
 
@@ -200,7 +200,7 @@ class GameManager: ObservableObject {
                     }
                 }
             } catch {
-                GameLogger.shared.logError("근처 상인 검색 실패 - \(error)", category: .game)
+                GameLogger.shared.logError("근처 상인 검색 실패 - \(error)", category: .gameplay)
             }
         }
     }
@@ -219,7 +219,7 @@ class GameManager: ObservableObject {
                 }
             }
         } catch {
-            GameLogger.shared.logError("시장 가격 업데이트 실패 - \(error)", category: .game)
+            GameLogger.shared.logError("시장 가격 업데이트 실패 - \(error)", category: .gameplay)
         }
     }
 
@@ -334,7 +334,7 @@ class GameManager: ObservableObject {
             UserDefaults.standard.set(player.core.name, forKey: "lastPlayerName")
         }
 
-        GameLogger.shared.logInfo("게임 데이터 저장됨", category: .game)
+        GameLogger.shared.logInfo("게임 데이터 저장됨", category: .gameplay)
     }
 
     private func updateGameStatistics() {

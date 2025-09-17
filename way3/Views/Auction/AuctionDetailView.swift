@@ -115,7 +115,7 @@ struct AuctionDetailView: View {
         }
         
         // 플레이어 잔액 확인 (실제로는 서버에서 확인해야 함)
-        let playerMoney = AuthManager.shared.currentPlayer?.money ?? 0
+        let playerMoney = Int(AuthManager.shared.currentPlayer?.money ?? 0)
         guard bidAmount <= playerMoney else {
             bidErrorMessage = "보유 금액이 부족합니다."
             showBidError = true
@@ -438,7 +438,7 @@ struct AuctionBiddingSection: View {
                     
                     QuickBidButton(
                         title: "MAX",
-                        amount: AuthManager.shared.currentPlayer?.money ?? 0,
+                        amount: Int(AuthManager.shared.currentPlayer?.money ?? 0),
                         bidAmount: $bidAmount
                     )
                 }
@@ -594,7 +594,7 @@ struct AuctionItemDetails: View {
             VStack(spacing: 12) {
                 DetailRow(title: "기본 가격", value: "₩\(auction.item.basePrice.formatted())")
                 DetailRow(title: "필요 라이센스", value: auction.item.requiredLicense.displayName)
-                DetailRow(title: "무게", value: "\(auction.item.weight, specifier: "%.1f")kg")
+                DetailRow(title: "무게", value: String(format: "%.1f", auction.item.weight) + "kg")
                 
                 if !auction.item.description.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {

@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import UIKit
 import Combine
 import SocketIO
 
@@ -18,96 +19,44 @@ class AuctionManager: ObservableObject {
     @Published var isConnected = false
     @Published var connectionStatus = "연결 중..."
     
-    private var socket: SocketIOClient?
-    private var socketManager: SocketManager?
     private var cancellables = Set<AnyCancellable>()
-    private let baseURL = "http://localhost:3000"
-    
+    private let socketManager = SocketManager.shared
+
     init() {
         setupSocket()
-        connectSocket()
     }
-    
-    deinit {
-        disconnectSocket()
-    }
-    
+
     // MARK: - 소켓 설정
     private func setupSocket() {
-        guard let url = URL(string: baseURL) else { return }
-        
-        socketManager = SocketManager(socketURL: url, config: [
-            .log(false),
-            .compress,
-            .connectParams(["token": AuthManager.shared.currentToken ?? ""])
-        ])
-        
-        socket = socketManager?.defaultSocket
-        
-        setupSocketEvents()
+        setupSocketObservers()
     }
     
-    private func setupSocketEvents() {
-        socket?.on(clientEvent: .connect) { [weak self] data, ack in
-            DispatchQueue.main.async {
-                self?.isConnected = true
-                self?.connectionStatus = "연결됨"
-                self?.fetchActiveAuctions()
+    private func setupSocketObservers() {
+        // SocketManager의 연결 상태 관찰
+        socketManager.$isConnected
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isConnected in
+                self?.isConnected = isConnected
+                self?.connectionStatus = isConnected ? "연결됨" : "연결 끊김"
+                if isConnected {
+                    self?.fetchActiveAuctions()
+                }
             }
-        }
-        
-        socket?.on(clientEvent: .disconnect) { [weak self] data, ack in
-            DispatchQueue.main.async {
-                self?.isConnected = false
-                self?.connectionStatus = "연결 끊김"
-            }
-        }
-        
-        socket?.on(clientEvent: .error) { [weak self] data, ack in
-            DispatchQueue.main.async {
-                self?.isConnected = false
-                self?.connectionStatus = "연결 오류"
-            }
-        }
-        
-        // 경매 관련 이벤트
-        socket?.on("auction_list") { [weak self] data, ack in
-            self?.handleAuctionList(data: data)
-        }
-        
-        socket?.on("auction_update") { [weak self] data, ack in
-            self?.handleAuctionUpdate(data: data)
-        }
-        
-        socket?.on("new_bid") { [weak self] data, ack in
-            self?.handleNewBid(data: data)
-        }
-        
-        socket?.on("auction_ended") { [weak self] data, ack in
-            self?.handleAuctionEnded(data: data)
-        }
-        
-        socket?.on("bid_success") { [weak self] data, ack in
-            self?.handleBidSuccess(data: data)
-        }
-        
-        socket?.on("bid_error") { [weak self] data, ack in
-            self?.handleBidError(data: data)
-        }
+            .store(in: &cancellables)
     }
     
-    // MARK: - 소켓 연결
+    // MARK: - 연결 관리
     func connectSocket() {
-        socket?.connect()
+        // SocketManager가 자동으로 연결을 관리
     }
-    
+
     func disconnectSocket() {
-        socket?.disconnect()
+        // SocketManager가 자동으로 연결을 관리
     }
     
     // MARK: - 활성 경매 조회
     private func fetchActiveAuctions() {
-        socket?.emit("get_auctions")
+        // TODO: SocketManager에 get_auctions 메서드 추가 필요
     }
     
     // MARK: - 경매 참여
@@ -118,7 +67,11 @@ class AuctionManager: ObservableObject {
             "timestamp": Date().timeIntervalSince1970
         ]
         
-        socket?.emit("place_bid", bidData)
+        socketManager.submitAuctionBid(
+            auctionId: auctionId,
+            playerId: AuthManager.shared.currentPlayer?.id ?? "",
+            bidAmount: amount
+        )
     }
     
     // MARK: - 새 경매 생성
@@ -133,12 +86,12 @@ class AuctionManager: ObservableObject {
             "createdAt": Date().timeIntervalSince1970
         ]
         
-        socket?.emit("create_auction", auctionData)
+        // TODO: SocketManager에 create_auction 메서드 추가 필요
     }
     
     // MARK: - 경매 참가 취소
     func cancelBid(auctionId: String) {
-        socket?.emit("cancel_bid", ["auctionId": auctionId])
+        // TODO: SocketManager에 cancel_bid 메서드 추가 필요
         
         DispatchQueue.main.async {
             self.userBids.removeValue(forKey: auctionId)
@@ -159,9 +112,9 @@ class AuctionManager: ObservableObject {
     }
     
     private func handleAuctionUpdate(data: [Any]) {
-        guard let auctionData = data.first as? [String: Any],
-              let updatedAuction = Auction(from: auctionData) else { return }
-        
+        guard let auctionData = data.first as? [String: Any] else { return }
+        let updatedAuction = Auction(from: auctionData)
+
         DispatchQueue.main.async {
             if let index = self.activeAuctions.firstIndex(where: { $0.id == updatedAuction.id }) {
                 self.activeAuctions[index] = updatedAuction
@@ -267,7 +220,7 @@ class AuctionManager: ObservableObject {
               let currentPlayerId = AuthManager.shared.currentPlayer?.id else {
             return false
         }
-        
+
         return auction.highestBidderId == currentPlayerId
     }
     
@@ -316,7 +269,10 @@ struct Auction: Identifiable, Codable {
                 grade: ItemGrade(rawValue: itemDict["grade"] as? Int ?? 0) ?? .common,
                 requiredLicense: LicenseLevel(rawValue: itemDict["requiredLicense"] as? Int ?? 0) ?? .beginner,
                 basePrice: itemDict["basePrice"] as? Int ?? 0,
-                currentPrice: itemDict["currentPrice"] as? Int ?? 0
+                currentPrice: itemDict["currentPrice"] as? Int,
+                weight: itemDict["weight"] as? Double ?? 1.0,
+                description: itemDict["description"] as? String ?? "",
+                iconId: itemDict["iconId"] as? Int ?? 1
             )
         } else {
             // 기본값 설정
@@ -326,7 +282,11 @@ struct Auction: Identifiable, Codable {
                 category: "일반품",
                 grade: .common,
                 requiredLicense: .beginner,
-                basePrice: 0
+                basePrice: 0,
+                currentPrice: 0,
+                weight: 1.0,
+                description: "",
+                iconId: 1
             )
         }
         

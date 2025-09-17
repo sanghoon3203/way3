@@ -12,6 +12,7 @@ import SwiftUI
 // MARK: - Player Stats Class
 class PlayerStats: ObservableObject, Codable {
     // MARK: - 기본 스탯
+    @Published var level: Int = 1           // 플레이어 레벨
     @Published var strength: Int = 10        // 힘 (무거운 아이템 운반)
     @Published var intelligence: Int = 10    // 지능 (아이템 감정, 시장 분석)
     @Published var charisma: Int = 10       // 매력 (거래 가격, 상인 친밀도)
@@ -27,13 +28,14 @@ class PlayerStats: ObservableObject, Codable {
 
     // MARK: - Codable 구현
     enum CodingKeys: String, CodingKey {
-        case strength, intelligence, charisma, luck
+        case level, strength, intelligence, charisma, luck
         case tradingSkill, negotiationSkill, appraisalSkill
     }
 
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
+        level = try container.decode(Int.self, forKey: .level)
         strength = try container.decode(Int.self, forKey: .strength)
         intelligence = try container.decode(Int.self, forKey: .intelligence)
         charisma = try container.decode(Int.self, forKey: .charisma)
@@ -46,6 +48,7 @@ class PlayerStats: ObservableObject, Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
+        try container.encode(level, forKey: .level)
         try container.encode(strength, forKey: .strength)
         try container.encode(intelligence, forKey: .intelligence)
         try container.encode(charisma, forKey: .charisma)

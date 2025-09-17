@@ -154,7 +154,7 @@ extension View {
 extension View {
     // 비동기 작업에서 에러 처리를 위한 헬퍼
     func handleAsyncError<T>(
-        operation: () async throws -> T,
+        operation: @escaping () async throws -> T,
         onSuccess: @escaping (T) -> Void = { _ in },
         onError: @escaping (Error) -> Void = { _ in }
     ) {
@@ -175,7 +175,7 @@ extension View {
 
     // 게임별 특화 에러 처리
     func handleGameError<T>(
-        operation: () async throws -> T,
+        operation: @escaping () async throws -> T,
         successMessage: String? = nil,
         onSuccess: @escaping (T) -> Void = { _ in }
     ) {
