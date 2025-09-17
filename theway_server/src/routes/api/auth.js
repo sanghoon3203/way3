@@ -3,7 +3,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 const DatabaseManager = require('../../database/DatabaseManager');
 const logger = require('../../config/logger');
 const StandardResponse = require('../../utils/StandardResponse');
@@ -55,8 +55,8 @@ router.post('/register', [
         const passwordHash = await bcrypt.hash(password, saltRounds);
 
         // UUID 생성
-        const userId = uuidv4();
-        const playerId = uuidv4();
+        const userId = randomUUID();
+        const playerId = randomUUID();
 
         // 트랜잭션으로 사용자 및 플레이어 생성
         await DatabaseManager.transaction([

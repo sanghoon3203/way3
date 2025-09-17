@@ -1,6 +1,6 @@
 // 📁 src/middleware/adminAuth.js - 어드민 인증 미들웨어
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const DatabaseManager = require('../database/DatabaseManager');
 const logger = require('../config/logger');
 

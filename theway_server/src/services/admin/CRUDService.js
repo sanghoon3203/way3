@@ -216,11 +216,28 @@ class AdminCRUDService {
             ? `WHERE ${whereConditions.join(' AND ')}` 
             : '';
 
+        // 엔티티별 기본 정렬 컬럼 설정
+        const getDefaultSortColumn = (entityName) => {
+            switch (entityName) {
+                case 'merchants':
+                    return 'last_restocked'; // merchants 테이블에는 created_at이 없음
+                case 'users':
+                case 'players':
+                    return 'created_at';
+                case 'trade_records':
+                    return 'created_at'; // trade_date가 아닌 created_at 사용
+                default:
+                    return 'id'; // 안전한 기본값
+            }
+        };
+
+        const sortColumn = getDefaultSortColumn(entity);
+
         // 데이터 조회
         const dataQuery = `
-            SELECT * FROM ${config.table} 
-            ${whereClause} 
-            ORDER BY created_at DESC 
+            SELECT * FROM ${config.table}
+            ${whereClause}
+            ORDER BY ${sortColumn} DESC
             LIMIT ? OFFSET ?
         `;
         

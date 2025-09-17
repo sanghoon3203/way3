@@ -59,7 +59,7 @@ class GameManager: ObservableObject {
      */
     func startGame() {
         guard let player = currentPlayer else {
-            print("❌ GameManager: 플레이어 정보 없음")
+            GameLogger.shared.logError("플레이어 정보 없음", category: .game)
             return
         }
 
@@ -79,7 +79,7 @@ class GameManager: ObservableObject {
             type: .info
         )
 
-        print("🎮 GameManager: 게임 시작됨")
+        GameLogger.shared.logInfo("게임 시작됨", category: .game)
     }
 
     /**
@@ -90,7 +90,7 @@ class GameManager: ObservableObject {
         stopGameLoop()
         locationManager.stopLocationUpdates()
 
-        print("⏸️ GameManager: 게임 일시정지됨")
+        GameLogger.shared.logInfo("게임 일시정지됨", category: .game)
     }
 
     /**
@@ -103,7 +103,7 @@ class GameManager: ObservableObject {
         locationManager.startLocationUpdates()
         startGameLoop()
 
-        print("▶️ GameManager: 게임 재개됨")
+        GameLogger.shared.logInfo("게임 재개됨", category: .game)
     }
 
     /**
@@ -119,7 +119,7 @@ class GameManager: ObservableObject {
         // 게임 데이터 저장
         saveGameData()
 
-        print("🛑 GameManager: 게임 종료됨")
+        GameLogger.shared.logInfo("게임 종료됨", category: .game)
     }
 
     // MARK: - Player Management
@@ -131,7 +131,7 @@ class GameManager: ObservableObject {
         self.currentPlayer = player
         updateGameStatistics()
 
-        print("👤 GameManager: 플레이어 설정됨 - \(player.core.name)")
+        GameLogger.shared.logInfo("플레이어 설정됨 - \(player.core.name)", category: .game)
     }
 
     /**
@@ -145,7 +145,7 @@ class GameManager: ObservableObject {
                 updatePlayerFromDetail(playerDetail)
             }
         } catch {
-            print("❌ GameManager: 플레이어 데이터 새로고침 실패 - \(error)")
+            GameLogger.shared.logError("플레이어 데이터 새로고침 실패 - \(error)", category: .game)
             addNotification(
                 title: "데이터 동기화 실패",
                 message: "플레이어 정보를 업데이트할 수 없습니다",
@@ -170,7 +170,7 @@ class GameManager: ObservableObject {
                     longitude: coordinate.longitude
                 )
             } catch {
-                print("❌ GameManager: 위치 업데이트 실패 - \(error)")
+                GameLogger.shared.logError("위치 업데이트 실패 - \(error)", category: .game)
             }
         }
 
@@ -200,7 +200,7 @@ class GameManager: ObservableObject {
                     }
                 }
             } catch {
-                print("❌ GameManager: 근처 상인 검색 실패 - \(error)")
+                GameLogger.shared.logError("근처 상인 검색 실패 - \(error)", category: .game)
             }
         }
     }
@@ -219,7 +219,7 @@ class GameManager: ObservableObject {
                 }
             }
         } catch {
-            print("❌ GameManager: 시장 가격 업데이트 실패 - \(error)")
+            GameLogger.shared.logError("시장 가격 업데이트 실패 - \(error)", category: .game)
         }
     }
 
@@ -334,7 +334,7 @@ class GameManager: ObservableObject {
             UserDefaults.standard.set(player.core.name, forKey: "lastPlayerName")
         }
 
-        print("💾 GameManager: 게임 데이터 저장됨")
+        GameLogger.shared.logInfo("게임 데이터 저장됨", category: .game)
     }
 
     private func updateGameStatistics() {
@@ -357,23 +357,24 @@ class GameManager: ObservableObject {
         // PlayerDetail의 정보로 Player 업데이트
         player.core.money = detail.money
         player.core.trustPoints = detail.trustPoints
-        player.core.currentLicense = detail.currentLicense
+        player.core.currentLicense = LicenseLevel(rawValue: detail.currentLicense) ?? .beginner
         player.inventory.maxInventorySize = detail.maxInventorySize
 
         currentPlayer = player
     }
 
     private func convertMerchantData(_ data: MerchantData) -> Merchant {
-        return Merchant(
+        var merchant = Merchant(
             id: data.id,
             name: data.name,
-            type: MerchantType(rawValue: data.type) ?? .general,
-            district: data.district,
+            type: MerchantType(rawValue: data.type) ?? .retail,
+            district: SeoulDistrict(rawValue: data.district) ?? .jongno,
             coordinate: data.location.coordinate,
-            requiredLicense: data.requiredLicense,
-            inventory: data.inventory,
-            distance: data.distance
+            requiredLicense: LicenseLevel(rawValue: data.requiredLicense) ?? .beginner,
+            inventory: data.inventory
         )
+        merchant.distance = data.distance ?? 0.0
+        return merchant
     }
 }
 
@@ -414,8 +415,4 @@ enum GameNotificationType {
 }
 
 // MARK: - Extensions
-extension LocationData {
-    var coordinate: CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: lat, longitude: lng)
-    }
-}
+// LocationData extension은 CLLocationCoordinate2D+Codable.swift에 정의됨

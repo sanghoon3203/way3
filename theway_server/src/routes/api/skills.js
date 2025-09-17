@@ -3,7 +3,7 @@ const express = require('express');
 const { authenticateToken } = require('../../middleware/auth');
 const DatabaseManager = require('../../database/DatabaseManager');
 const logger = require('../../config/logger');
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 
 const router = express.Router();
 router.use(authenticateToken);
@@ -257,7 +257,7 @@ router.post('/:skillId/upgrade', async (req, res) => {
                     INSERT INTO player_skills (
                         id, player_id, skill_template_id, current_level, experience, learned_at, last_upgraded
                     ) VALUES (?, ?, ?, 1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-                `, [uuidv4(), playerId, skillId]);
+                `, [randomUUID(), playerId, skillId]);
             }
 
             await DatabaseManager.run('COMMIT');
@@ -315,7 +315,7 @@ router.post('/use', async (req, res) => {
             INSERT INTO skill_usage_logs (
                 id, player_id, skill_template_id, skill_level, context, used_at
             ) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-        `, [uuidv4(), playerId, skillId, playerSkill.current_level, JSON.stringify(context || {})]);
+        `, [randomUUID(), playerId, skillId, playerSkill.current_level, JSON.stringify(context || {})]);
 
         // 스킬 마지막 사용 시간 업데이트
         await DatabaseManager.run(`

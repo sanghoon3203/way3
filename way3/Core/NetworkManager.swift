@@ -194,10 +194,10 @@ class NetworkManager: ObservableObject {
 
         // 환경 정보 로깅 (디버그 모드에서만)
         #if DEBUG
-        print("🌐 NetworkManager initialized")
-        print("📡 Environment: \(NetworkConfiguration.currentEnvironment)")
-        print("🔗 Base URL: \(NetworkConfiguration.baseURL)")
-        print("⏱️ Request Timeout: \(NetworkConfiguration.requestTimeout)s")
+        GameLogger.shared.logInfo("NetworkManager initialized", category: .network)
+        GameLogger.shared.logInfo("Environment: \(NetworkConfiguration.currentEnvironment)", category: .network)
+        GameLogger.shared.logInfo("Base URL: \(NetworkConfiguration.baseURL)", category: .network)
+        GameLogger.shared.logInfo("Request Timeout: \(NetworkConfiguration.requestTimeout)s", category: .network)
         #endif
 
         // 저장된 토큰 복원
@@ -445,8 +445,8 @@ extension NetworkManager {
                 }
 
             } catch let decodingError {
-                print("❌ JSON 파싱 오류: \(decodingError)")
-                print("❌ 응답 데이터: \(String(data: data, encoding: .utf8) ?? "Invalid UTF-8")")
+                GameLogger.shared.logError("JSON 파싱 오류", error: decodingError, category: .network)
+                GameLogger.shared.logDebug("응답 데이터: \(String(data: data, encoding: .utf8) ?? "Invalid UTF-8")", category: .network)
                 throw NetworkError.invalidResponse
             }
             
@@ -531,7 +531,7 @@ extension NetworkManager {
             self._activeRequests.removeAll()
         }
         
-        print("🔓 로그아웃 완료")
+        GameLogger.shared.logInfo("로그아웃 완료", category: .network)
     }
     
     // ✅ 토큰 갱신
@@ -713,8 +713,7 @@ struct BaseResponse: Codable {
     let error: String?
 }
 
-// 빈 데이터 타입 (에러 응답 파싱용)
-struct EmptyData: Codable {}
+// EmptyData는 APIResponse.swift에 정의됨
 
 // AuthResponse는 AuthManager.swift에 정의됨
 
@@ -775,10 +774,7 @@ struct PlayerDetail: Codable {
     let inventoryCount: Int
 }
 
-struct LocationData: Codable {
-    let lat: Double
-    let lng: Double
-}
+// LocationData는 APIResponse.swift에 정의됨
 
 struct InventoryItem: Codable {
     let id: String

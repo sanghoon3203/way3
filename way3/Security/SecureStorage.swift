@@ -69,7 +69,7 @@ class SecureStorage {
         let timestamp = Date().timeIntervalSince1970
         try storeSecureData("\(timestamp)".data(using: .utf8)!, forKey: Keys.lastTokenRefresh, requireBiometric: false)
 
-        print("🔐 SecureStorage: 액세스 토큰 저장됨")
+        GameLogger.shared.logInfo("액세스 토큰 저장됨", category: .security)
     }
 
     /**
@@ -77,7 +77,7 @@ class SecureStorage {
      */
     func storeRefreshToken(_ token: String) throws {
         try storeSecureData(token.data(using: .utf8)!, forKey: Keys.refreshToken, requireBiometric: true)
-        print("🔐 SecureStorage: 리프레시 토큰 저장됨 (생체 인증 보호)")
+        GameLogger.shared.logInfo("리프레시 토큰 저장됨 (생체 인증 보호)", category: .security)
     }
 
     /**
@@ -156,7 +156,7 @@ class SecureStorage {
             return hoursSinceRefresh >= 1.0
 
         } catch {
-            print("❌ SecureStorage: 토큰 갱신 시간 확인 실패 - \(error)")
+            GameLogger.shared.logError("토큰 갱신 시간 확인 실패", error: error, category: .security)
             return true
         }
     }
@@ -175,7 +175,7 @@ class SecureStorage {
 
         // NetworkManager를 통한 토큰 갱신
         // 실제 구현에서는 NetworkManager.shared.refreshToken() 호출
-        print("🔄 SecureStorage: 토큰 자동 갱신 시작")
+        GameLogger.shared.logInfo("토큰 자동 갱신 시작", category: .security)
 
         return true
     }
@@ -217,7 +217,7 @@ class SecureStorage {
             try deleteSecureData(forKey: key)
         }
 
-        print("🗑️ SecureStorage: 모든 인증 정보 삭제됨")
+        GameLogger.shared.logInfo("모든 인증 정보 삭제됨", category: .security)
     }
 
     /**
@@ -337,7 +337,7 @@ class SecureStorage {
                         continuation.resume(returning: data)
                     case errSecItemNotFound:
                         continuation.resume(returning: nil)
-                    case errSecUserCancel:
+                    case -128: // errSecUserCancel
                         continuation.resume(throwing: SecureStorageError.biometricAuthenticationFailed)
                     case errSecAuthFailed:
                         continuation.resume(throwing: SecureStorageError.biometricAuthenticationFailed)

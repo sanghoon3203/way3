@@ -1,7 +1,7 @@
 // 📁 src/routes/api/trade.js - 거래 관련 API 라우트
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 const DatabaseManager = require('../../database/DatabaseManager');
 const { authenticateToken } = require('../../middleware/auth');
 const logger = require('../../config/logger');
@@ -148,7 +148,7 @@ router.post('/execute', [
                 {
                     sql: `INSERT INTO player_items (id, player_id, item_template_id, quantity, storage_type, purchase_price, purchase_date)
                           VALUES (?, ?, ?, ?, 'inventory', ?, CURRENT_TIMESTAMP)`,
-                    params: [uuidv4(), playerId, itemTemplateId, quantity, Math.round(finalPrice / quantity)]
+                    params: [randomUUID(), playerId, itemTemplateId, quantity, Math.round(finalPrice / quantity)]
                 }
             ];
 
@@ -220,13 +220,13 @@ router.post('/execute', [
                 tradeQueries.push({
                     sql: `INSERT INTO merchant_inventory (id, merchant_id, item_template_id, quantity, current_price)
                           VALUES (?, ?, ?, ?, ?)`,
-                    params: [uuidv4(), merchantId, itemTemplateId, quantity, itemTemplate.base_price]
+                    params: [randomUUID(), merchantId, itemTemplateId, quantity, itemTemplate.base_price]
                 });
             }
         }
 
         // 거래 기록 추가
-        const tradeRecordId = uuidv4();
+        const tradeRecordId = randomUUID();
         tradeQueries.push({
             sql: `INSERT INTO trade_records (id, player_id, merchant_id, item_template_id, trade_type, quantity, unit_price, total_price, profit, experience_gained)
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -245,7 +245,7 @@ router.post('/execute', [
                          COALESCE((SELECT total_spent FROM merchant_relationships WHERE player_id = ? AND merchant_id = ?), 0) + ?,
                          CURRENT_TIMESTAMP)`,
             params: [
-                uuidv4(), playerId, merchantId,
+                randomUUID(), playerId, merchantId,
                 playerId, merchantId, relationshipChange.friendship,
                 playerId, merchantId, relationshipChange.trust,
                 playerId, merchantId,

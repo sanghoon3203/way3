@@ -1,7 +1,7 @@
 // 📁 src/services/admin/SkillService.js - 스킬 시스템 관리 서비스
 const DatabaseManager = require('../../database/DatabaseManager');
 const logger = require('../../config/logger');
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 
 class SkillService {
 
@@ -69,7 +69,7 @@ class SkillService {
             // 입력 데이터 검증
             const validatedData = this.validateSkillData(skillData);
             
-            const skillId = uuidv4();
+            const skillId = randomUUID();
             const now = new Date().toISOString();
 
             // 스킬 템플릿 생성
@@ -111,7 +111,7 @@ class SkillService {
                             description, requirements
                         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     `, [
-                        uuidv4(),
+                        randomUUID(),
                         skillId,
                         levelData.level,
                         levelData.cost,
@@ -591,7 +591,7 @@ class SkillService {
                     id, admin_id, action, target_type, details, ip_address
                 ) VALUES (?, ?, ?, ?, ?, ?)
             `, [
-                uuidv4(),
+                randomUUID(),
                 adminId,
                 action,
                 'skill',

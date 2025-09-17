@@ -178,7 +178,7 @@ class SocketManager: ObservableObject {
     
     private func setupSocket() {
         guard let url = URL(string: NetworkConfiguration.baseURL) else {
-            print("Invalid socket URL")
+            GameLogger.shared.logError("Invalid socket URL", category: .socket)
             return
         }
         
@@ -202,9 +202,7 @@ class SocketManager: ObservableObject {
                 self?.isConnected = true
                 self?.connectionStatus = .connected
                 self?.resetReconnectionAttempts()
-                #if DEBUG
-                print("✅ Socket 연결 성공")
-                #endif
+                GameLogger.shared.logInfo("Socket 연결 성공", category: .socket)
             }
         }
 
@@ -212,9 +210,7 @@ class SocketManager: ObservableObject {
             DispatchQueue.main.async {
                 self?.isConnected = false
                 self?.connectionStatus = .disconnected
-                #if DEBUG
-                print("❌ Socket 연결 끊김")
-                #endif
+                GameLogger.shared.logInfo("Socket 연결 끊김", category: .socket)
 
                 // 자동 재연결 시작 (의도적 disconnect가 아닌 경우)
                 if self?.connectionStatus != .disconnected {
@@ -226,11 +222,9 @@ class SocketManager: ObservableObject {
         socket?.on(clientEvent: .error) { [weak self] data, ack in
             DispatchQueue.main.async {
                 self?.connectionStatus = .failed
-                #if DEBUG
                 if let errorData = data.first {
-                    print("❌ Socket 오류: \(errorData)")
+                    GameLogger.shared.logError("Socket 오류: \(errorData)", category: .socket)
                 }
-                #endif
 
                 // 오류 발생 시 재연결 시도
                 self?.startReconnection()
@@ -239,9 +233,7 @@ class SocketManager: ObservableObject {
 
         socket?.on(clientEvent: .reconnect) { [weak self] data, ack in
             DispatchQueue.main.async {
-                #if DEBUG
-                print("🔄 Socket 재연결됨")
-                #endif
+                GameLogger.shared.logInfo("Socket 재연결됨", category: .socket)
             }
         }
         
@@ -402,9 +394,7 @@ class SocketManager: ObservableObject {
     }
     
     func disconnect() {
-        #if DEBUG
-        print("🔌 Socket 연결 해제")
-        #endif
+        GameLogger.shared.logInfo("Socket 연결 해제", category: .socket)
 
         stopReconnectionTimer()
         connectionStatus = .disconnected
@@ -412,9 +402,7 @@ class SocketManager: ObservableObject {
     }
 
     func forceReconnect() {
-        #if DEBUG
-        print("🔄 Socket 강제 재연결")
-        #endif
+        GameLogger.shared.logInfo("Socket 강제 재연결", category: .socket)
 
         disconnect()
         reconnectionAttempts = 0
@@ -428,9 +416,7 @@ class SocketManager: ObservableObject {
         guard !isReconnecting && reconnectionAttempts < maxReconnectionAttempts else {
             if reconnectionAttempts >= maxReconnectionAttempts {
                 connectionStatus = .failed
-                #if DEBUG
-                print("❌ Socket 재연결 포기 (최대 시도 횟수 초과)")
-                #endif
+                GameLogger.shared.logError("Socket 재연결 포기 (최대 시도 횟수 초과)", category: .socket)
             }
             return
         }
@@ -439,9 +425,7 @@ class SocketManager: ObservableObject {
         connectionStatus = .reconnecting
         reconnectionAttempts += 1
 
-        #if DEBUG
-        print("🔄 Socket 재연결 시도 \(reconnectionAttempts)/\(maxReconnectionAttempts)")
-        #endif
+        GameLogger.shared.logInfo("Socket 재연결 시도 \(reconnectionAttempts)/\(maxReconnectionAttempts)", category: .socket)
 
         reconnectionTimer = Timer.scheduledTimer(withTimeInterval: reconnectionDelay, repeats: false) { [weak self] _ in
             self?.attemptReconnection()
@@ -496,6 +480,14 @@ class SocketManager: ObservableObject {
     func leaveLocationGroup(district: String) {
         socket?.emit("leaveLocationGroup", district)
     }
+
+    func searchNearbyPlayers(lat: Double, lng: Double, radius: Double) {
+        socket?.emit("searchNearbyPlayers", [
+            "lat": lat,
+            "lng": lng,
+            "radius": radius
+        ])
+    }
     
     // MARK: - Auction Methods
     func joinAuction(auctionId: String) {
@@ -540,9 +532,7 @@ class SocketManager: ObservableObject {
 
     // MARK: - Cleanup
     deinit {
-        #if DEBUG
-        print("🧹 SocketManager 정리 중...")
-        #endif
+        GameLogger.shared.logInfo("SocketManager 정리 중...", category: .socket)
 
         stopReconnectionTimer()
         socket?.disconnect()

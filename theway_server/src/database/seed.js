@@ -1,6 +1,6 @@
 // 📁 src/database/seed.js - 기본 샘플 데이터 추가
 const DatabaseManager = require('./DatabaseManager');
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 const logger = require('../config/logger');
 
 async function seedDatabase() {
@@ -85,7 +85,7 @@ async function seedItemTemplates() {
             INSERT INTO item_templates (id, name, category, grade, required_license, base_price, weight, description, icon_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `, [
-            uuidv4(),
+            randomUUID(),
             item.name,
             item.category,
             item.grade,
@@ -246,7 +246,7 @@ async function seedMerchants() {
                 reputation_requirement, is_active, last_restocked
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
         `, [
-            uuidv4(),
+            randomUUID(),
             merchant.name,
             merchant.title,
             merchant.type,
@@ -308,7 +308,7 @@ async function seedMerchantInventory() {
                 INSERT INTO merchant_inventory (id, merchant_id, item_template_id, quantity, current_price, last_updated)
                 VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
             `, [
-                uuidv4(),
+                randomUUID(),
                 merchant.id,
                 item.id,
                 quantity,
@@ -678,7 +678,7 @@ async function seedSkillTemplates() {
                 icon_id, is_active, sort_order
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `, [
-            uuidv4(),
+            randomUUID(),
             skill.name,
             skill.description,
             skill.category,
@@ -841,7 +841,7 @@ async function seedAchievements() {
                 rewards, points, rarity, is_secret, sort_order, created_at
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
         `, [
-            uuidv4(),
+            randomUUID(),
             achievement.name,
             achievement.description,
             achievement.category,
@@ -903,8 +903,8 @@ async function seedTestPlayers() {
     ];
     
     for (const testUser of testUsers) {
-        const userId = uuidv4();
-        const playerId = uuidv4();
+        const userId = randomUUID();
+        const playerId = randomUUID();
         const passwordHash = await bcrypt.hash(testUser.password, 12);
         
         // 사용자 생성

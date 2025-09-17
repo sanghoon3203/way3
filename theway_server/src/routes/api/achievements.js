@@ -274,7 +274,7 @@ router.post('/:achievementId/claim', async (req, res) => {
                 id, player_id, achievement_template_id, total_points
             ) VALUES (?, ?, ?, ?)
         `, [
-            require('uuid').v4(),
+            require('crypto').randomUUID(),
             playerId,
             achievementId,
             playerAchievement.points || 0
@@ -332,7 +332,7 @@ async function updateAchievementProgress(playerId, achievementId, incrementValue
 
         if (!playerAchievement) {
             // 새 성취 진행상황 생성
-            const achievementUuid = require('uuid').v4();
+            const achievementUuid = require('crypto').randomUUID();
             await DatabaseManager.run(`
                 INSERT INTO player_achievements (
                     id, player_id, achievement_template_id, status, current_value, target_value, unlocked_at

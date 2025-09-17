@@ -3,7 +3,7 @@ const express = require('express');
 const { authenticateToken } = require('../../middleware/auth');
 const DatabaseManager = require('../../database/DatabaseManager');
 const logger = require('../../config/logger');
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 
 const router = express.Router();
 router.use(authenticateToken);
@@ -217,7 +217,7 @@ router.post('/:questId/accept', async (req, res) => {
         }
         
         // 퀘스트 수락
-        const playerQuestId = uuidv4();
+        const playerQuestId = randomUUID();
         await DatabaseManager.run(`
             INSERT INTO player_quests (
                 id, player_id, quest_template_id, status, progress, accepted_at

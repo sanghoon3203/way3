@@ -92,14 +92,14 @@ class AuthManager: ObservableObject {
                     self.currentPlayer = try JSONDecoder().decode(PlayerData.self, from: playerData)
                     self.isAuthenticated = true
 
-                    print("🔐 AuthManager: SecureStorage에서 인증 정보 복원됨")
+                    GameLogger.shared.logInfo("SecureStorage에서 인증 정보 복원됨", category: .auth)
                 } catch {
-                    print("❌ AuthManager: 플레이어 데이터 로드 실패 - \(error)")
+                    GameLogger.shared.logError("플레이어 데이터 로드 실패", error: error, category: .auth)
                     clearStoredCredentials()
                 }
             }
         } catch {
-            print("❌ AuthManager: SecureStorage 로드 실패 - \(error)")
+            GameLogger.shared.logError("SecureStorage 로드 실패", error: error, category: .auth)
             // 기존 UserDefaults 방식으로 폴백
             loadLegacyCredentials()
         }
@@ -120,7 +120,7 @@ class AuthManager: ObservableObject {
                 migrateToSecureStorage()
 
             } catch {
-                print("❌ AuthManager: 레거시 플레이어 데이터 로드 실패 - \(error)")
+                GameLogger.shared.logError("레거시 플레이어 데이터 로드 실패", error: error, category: .auth)
                 clearStoredCredentials()
             }
         }
@@ -141,7 +141,7 @@ class AuthManager: ObservableObject {
                     let encoded = try JSONEncoder().encode(playerData)
                     UserDefaults.standard.set(encoded, forKey: Keys.playerData)
                 } catch {
-                    print("❌ AuthManager: 플레이어 데이터 저장 실패 - \(error)")
+                    GameLogger.shared.logError("플레이어 데이터 저장 실패", error: error, category: .auth)
                 }
             }
 
@@ -149,10 +149,10 @@ class AuthManager: ObservableObject {
             self.refreshToken = authData.refreshToken
             self.currentPlayer = authData.player
 
-            print("🔐 AuthManager: 인증 정보가 SecureStorage에 저장됨")
+            GameLogger.shared.logInfo("인증 정보가 SecureStorage에 저장됨", category: .auth)
 
         } catch {
-            print("❌ AuthManager: SecureStorage 저장 실패 - \(error)")
+            GameLogger.shared.logError("SecureStorage 저장 실패", error: error, category: .auth)
             // 폴백: UserDefaults 사용
             saveLegacyCredentials(authData: authData)
         }
@@ -168,7 +168,7 @@ class AuthManager: ObservableObject {
                 let encoded = try JSONEncoder().encode(playerData)
                 UserDefaults.standard.set(encoded, forKey: Keys.playerData)
             } catch {
-                print("❌ AuthManager: 레거시 플레이어 데이터 저장 실패 - \(error)")
+                GameLogger.shared.logError("레거시 플레이어 데이터 저장 실패", error: error, category: .auth)
             }
         }
 
@@ -176,7 +176,7 @@ class AuthManager: ObservableObject {
         self.refreshToken = authData.refreshToken
         self.currentPlayer = authData.player
 
-        print("⚠️ AuthManager: 레거시 방식으로 인증 정보 저장됨")
+        GameLogger.shared.logInfo("레거시 방식으로 인증 정보 저장됨", category: .auth)
     }
     
     // MARK: - 인증 정보 삭제 (SecureStorage 사용)
@@ -185,7 +185,7 @@ class AuthManager: ObservableObject {
             // SecureStorage에서 모든 인증 정보 삭제
             try SecureStorage.shared.clearAllAuthData()
         } catch {
-            print("❌ AuthManager: SecureStorage 삭제 실패 - \(error)")
+            GameLogger.shared.logError("SecureStorage 삭제 실패", error: error, category: .auth)
         }
 
         // UserDefaults에서 플레이어 데이터 삭제
@@ -198,7 +198,7 @@ class AuthManager: ObservableObject {
         self.currentPlayer = nil
         self.isAuthenticated = false
 
-        print("🗑️ AuthManager: 모든 인증 정보 삭제됨")
+        GameLogger.shared.logInfo("모든 인증 정보 삭제됨", category: .auth)
     }
 
     // MARK: - 데이터 마이그레이션
@@ -222,10 +222,10 @@ class AuthManager: ObservableObject {
             UserDefaults.standard.removeObject(forKey: Keys.authToken)
             UserDefaults.standard.removeObject(forKey: Keys.refreshToken)
 
-            print("🔄 AuthManager: SecureStorage로 마이그레이션 완료")
+            GameLogger.shared.logInfo("SecureStorage로 마이그레이션 완료", category: .auth)
 
         } catch {
-            print("❌ AuthManager: SecureStorage 마이그레이션 실패 - \(error)")
+            GameLogger.shared.logError("SecureStorage 마이그레이션 실패", error: error, category: .auth)
         }
     }
 
@@ -236,16 +236,14 @@ class AuthManager: ObservableObject {
         do {
             let refreshed = try await SecureStorage.shared.refreshTokenIfNeeded()
             if refreshed {
-                print("🔄 AuthManager: 토큰 자동 갱신 완료")
+                GameLogger.shared.logInfo("토큰 자동 갱신 완료", category: .auth)
                 // 갱신된 토큰으로 플레이어 데이터 다시 로드
                 await refreshPlayerData()
             }
         } catch {
-            print("❌ AuthManager: 토큰 자동 갱신 실패 - \(error)")
+            GameLogger.shared.logError("토큰 자동 갱신 실패", error: error, category: .auth)
             // 갱신 실패 시 로그아웃
-            await MainActor.run {
-                logout()
-            }
+            await logout()
         }
     }
 
@@ -336,7 +334,7 @@ class AuthManager: ObservableObject {
                 body: EmptyBody()
             )
         } catch {
-            print("로그아웃 API 호출 실패: \(error)")
+            GameLogger.shared.logError("로그아웃 API 호출 실패", error: error, category: .auth)
         }
         
         await MainActor.run {
@@ -364,7 +362,7 @@ class AuthManager: ObservableObject {
             }
             
         } catch {
-            print("토큰 갱신 실패: \(error)")
+            GameLogger.shared.logError("토큰 갱신 실패", error: error, category: .auth)
         }
         
         // 토큰 갱신 실패시 로그아웃

@@ -248,34 +248,40 @@ class MetricsCollector {
      */
     async saveServerMetrics(metrics) {
         try {
-            await DatabaseManager.run(`
-                INSERT INTO server_metrics (
-                    id, timestamp, 
-                    active_players, total_players, new_players_24h,
-                    daily_trades, daily_volume, avg_player_money,
-                    active_quests, completed_quests_24h,
-                    skill_uses_24h, sessions_24h, avg_session_duration,
-                    memory_usage, cpu_usage, uptime,
-                    created_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-            `, [
-                require('uuid').v4(),
-                metrics.timestamp,
-                metrics.players.activeUsers || 0,
-                metrics.players.totalUsers || 0,
-                metrics.players.newSignups24h || 0,
-                metrics.economy.dailyTrades || 0,
-                metrics.economy.dailyVolume || 0,
-                metrics.economy.avgPlayerMoney || 0,
-                metrics.activities.activeQuests || 0,
-                metrics.activities.questsCompletedToday || 0,
-                metrics.activities.skillUsesToday || 0,
-                metrics.activities.sessionsToday || 0,
-                metrics.activities.avgSessionDuration || 0,
-                JSON.stringify(metrics.server.memoryUsage),
-                JSON.stringify(metrics.server.cpuUsage),
-                metrics.server.uptime
-            ]);
+            const { randomUUID } = require('crypto');
+
+            // 각 메트릭을 개별 레코드로 저장 (스키마에 맞게)
+            const metricsToSave = [
+                { name: 'active_players', value: metrics.players.activeUsers || 0, unit: 'count' },
+                { name: 'total_players', value: metrics.players.totalUsers || 0, unit: 'count' },
+                { name: 'new_players_24h', value: metrics.players.newSignups24h || 0, unit: 'count' },
+                { name: 'daily_trades', value: metrics.economy.dailyTrades || 0, unit: 'count' },
+                { name: 'daily_volume', value: metrics.economy.dailyVolume || 0, unit: 'currency' },
+                { name: 'avg_player_money', value: metrics.economy.avgPlayerMoney || 0, unit: 'currency' },
+                { name: 'active_quests', value: metrics.activities.activeQuests || 0, unit: 'count' },
+                { name: 'completed_quests_24h', value: metrics.activities.questsCompletedToday || 0, unit: 'count' },
+                { name: 'skill_uses_24h', value: metrics.activities.skillUsesToday || 0, unit: 'count' },
+                { name: 'sessions_24h', value: metrics.activities.sessionsToday || 0, unit: 'count' },
+                { name: 'avg_session_duration', value: metrics.activities.avgSessionDuration || 0, unit: 'minutes' },
+                { name: 'memory_usage', value: metrics.server.memoryUsage.heapUsed || 0, unit: 'bytes' },
+                { name: 'cpu_usage', value: metrics.server.cpuUsage.user + metrics.server.cpuUsage.system || 0, unit: 'microseconds' },
+                { name: 'uptime', value: metrics.server.uptime || 0, unit: 'seconds' }
+            ];
+
+            // 각 메트릭을 개별 레코드로 삽입
+            for (const metric of metricsToSave) {
+                await DatabaseManager.run(`
+                    INSERT INTO server_metrics (id, metric_name, metric_value, metric_unit)
+                    VALUES (?, ?, ?, ?)
+                `, [
+                    randomUUID(),
+                    metric.name,
+                    metric.value,
+                    metric.unit
+                ]);
+            }
+
+            logger.debug(`${metricsToSave.length}개 서버 메트릭 저장 완료`);
 
         } catch (error) {
             logger.error('서버 메트릭 저장 실패:', error);
@@ -317,7 +323,7 @@ class MetricsCollector {
                         id, player_id, event_type, event_data, created_at
                     ) VALUES (?, ?, ?, ?, ?)
                 `, [
-                    require('uuid').v4(),
+                    require('crypto').randomUUID(),
                     metric.playerId,
                     metric.eventType,
                     JSON.stringify(metric.eventData),
