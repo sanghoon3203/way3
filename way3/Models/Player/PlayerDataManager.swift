@@ -270,13 +270,15 @@ extension PlayerDataManager {
         #endif
     }
 
-    func stopAutoSave() {
-        autoSaveTimer?.invalidate()
-        autoSaveTimer = nil
+    nonisolated func stopAutoSave() {
+        Task { @MainActor in
+            autoSaveTimer?.invalidate()
+            autoSaveTimer = nil
 
-        #if DEBUG
-        print("⏰ Auto-save stopped")
-        #endif
+            #if DEBUG
+            print("⏰ Auto-save stopped")
+            #endif
+        }
     }
 }
 
