@@ -452,3 +452,49 @@ extension Player {
         return Player()
     }
 }
+
+// MARK: - Local Data Persistence
+extension Player {
+
+    // 플레이어 데이터 저장
+    func save() async -> Bool {
+        return await PlayerDataManager.shared.savePlayer(self)
+    }
+
+    // 플레이어 데이터 로드
+    static func load() async -> Player? {
+        return await PlayerDataManager.shared.loadPlayer()
+    }
+
+    // 자동 저장 시작
+    func startAutoSave() {
+        PlayerDataManager.shared.startAutoSave(for: self)
+    }
+
+    // 자동 저장 중지
+    func stopAutoSave() {
+        PlayerDataManager.shared.stopAutoSave()
+    }
+
+    // 데이터 변경 시 호출 (중요한 변경 사항 즉시 저장)
+    func markAsChanged() {
+        Task { @MainActor in
+            await save()
+        }
+    }
+
+    // 저장된 데이터 존재 여부 확인
+    static func hasSavedData() -> Bool {
+        return PlayerDataManager.shared.hasSavedData()
+    }
+
+    // 저장된 데이터 삭제 (신규 게임 시작)
+    static func clearSavedData() async -> Bool {
+        return await PlayerDataManager.shared.clearSavedData()
+    }
+
+    // 백업 정보 조회
+    static func getBackupInfo() -> [BackupInfo] {
+        return PlayerDataManager.shared.getBackupInfo()
+    }
+}
