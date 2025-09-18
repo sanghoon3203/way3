@@ -487,7 +487,9 @@ extension Player {
 
     // 자동 저장 중지
     func stopAutoSave() {
-        PlayerDataManager.shared.stopAutoSave()
+        Task { @MainActor in
+            PlayerDataManager.shared.stopAutoSave()
+        }
     }
 
     // 데이터 변경 시 호출 (중요한 변경 사항 즉시 저장)
