@@ -430,6 +430,20 @@ extension Player {
     var reputation: Int { relationships.reputationScore }
     var currentLicense: LicenseLevel { core.currentLicense }
 
+    // 프로필 정보 convenience properties
+    var age: Int {
+        get { core.age }
+        set { core.age = newValue }
+    }
+    var personality: String {
+        get { core.personality }
+        set { core.personality = newValue }
+    }
+    var gender: String {
+        get { core.gender }
+        set { core.gender = newValue }
+    }
+
     // 자주 사용되는 메서드들의 convenience wrapper
     func gainExperience(_ amount: Int) {
         core.gainExperience(amount)

@@ -17,6 +17,11 @@ class PlayerCore: ObservableObject, Codable {
     @Published var name: String = ""
     @Published var email: String?
 
+    // MARK: - 프로필 정보
+    @Published var age: Int = 0
+    @Published var personality: String = ""
+    @Published var gender: String = ""
+
     // MARK: - 게임 기본 스탯
     @Published var money: Int = 50000
     @Published var trustPoints: Int = 0
@@ -51,6 +56,7 @@ class PlayerCore: ObservableObject, Codable {
     // MARK: - Codable 구현
     enum CodingKeys: String, CodingKey {
         case id, userId, name, email
+        case age, personality, gender
         case money, trustPoints, reputation, currentLicense
         case level, experience, statPoints, skillPoints
         case createdAt, lastActive, totalPlayTime, dailyPlayTime
@@ -63,6 +69,9 @@ class PlayerCore: ObservableObject, Codable {
         userId = try container.decodeIfPresent(String.self, forKey: .userId)
         name = try container.decode(String.self, forKey: .name)
         email = try container.decodeIfPresent(String.self, forKey: .email)
+        age = try container.decodeIfPresent(Int.self, forKey: .age) ?? 0
+        personality = try container.decodeIfPresent(String.self, forKey: .personality) ?? ""
+        gender = try container.decodeIfPresent(String.self, forKey: .gender) ?? ""
         money = try container.decode(Int.self, forKey: .money)
         trustPoints = try container.decode(Int.self, forKey: .trustPoints)
         reputation = try container.decode(Int.self, forKey: .reputation)
@@ -84,6 +93,9 @@ class PlayerCore: ObservableObject, Codable {
         try container.encodeIfPresent(userId, forKey: .userId)
         try container.encode(name, forKey: .name)
         try container.encodeIfPresent(email, forKey: .email)
+        try container.encode(age, forKey: .age)
+        try container.encode(personality, forKey: .personality)
+        try container.encode(gender, forKey: .gender)
         try container.encode(money, forKey: .money)
         try container.encode(trustPoints, forKey: .trustPoints)
         try container.encode(reputation, forKey: .reputation)

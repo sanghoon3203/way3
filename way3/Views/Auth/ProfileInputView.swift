@@ -179,11 +179,12 @@ extension ProfileInputView {
 
                 // 입력 필드 (필요한 단계에서만)
                 if needsInput {
-                    InputFieldView               }
+                    InputFieldView
+                }
 
                 // 선택 옵션 (필요한 단계에서만)
                 if needsSelection {
-                    SelectionView()
+                    SelectionView
                 }
 
                 // 다음 화살표
@@ -379,7 +380,7 @@ extension ProfileInputView {
         case .profileImage:
             // 프로필 이미지 처리 (향후 서버 업로드)
             break
-        case .confirmation:
+        case .completion:
             break
         }
     }
