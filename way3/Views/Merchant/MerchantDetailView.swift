@@ -14,19 +14,19 @@ struct MerchantDetailView: View {
     @EnvironmentObject var gameManager: GameManager
 
     // 대화 상태
-    @State private var currentMode: MerchantInteractionMode = .dialogue
-    @State private var displayedText = ""
-    @State private var isTypingComplete = false
-    @State private var showNextArrow = false
-    @State private var currentDialogueIndex = 0
+    @State var currentMode: MerchantInteractionMode = .dialogue
+    @State var displayedText = ""
+    @State var isTypingComplete = false
+    @State var showNextArrow = false
+    @State var currentDialogueIndex = 0
 
     // 거래 상태
-    @StateObject private var cartManager = CartManager()
-    @State private var selectedTradeType: TradeType = .buy
-    @State private var showQuantityPopup = false
-    @State private var selectedItem: TradeItem?
-    @State private var showCartDetail = false
-    @State private var showPurchaseConfirmation = false
+    @StateObject var cartManager = CartManager()
+    @State var selectedTradeType: TradeType = .buy
+    @State var showQuantityPopup = false
+    @State var selectedItem: TradeItem?
+    @State var showCartDetail = false
+    @State var showPurchaseConfirmation = false
 
     // 상인 이미지 이름
     private var merchantImageName: String {

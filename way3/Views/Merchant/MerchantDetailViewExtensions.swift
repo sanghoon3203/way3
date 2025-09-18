@@ -215,7 +215,7 @@ extension MerchantDetailView {
     var CartDetailView: some View {
         VStack(spacing: 0) {
             // 헤더
-            CartHeaderView()
+            CartHeaderView
 
             // 장바구니 아이템들
             ScrollView {
@@ -365,9 +365,18 @@ extension MerchantDetailView {
     }
 
     func QuantityPopupContent(item: TradeItem) -> some View {
-        @State var quantity = 1
+        QuantityPopupContentView(item: item, cartManager: cartManager, showQuantityPopup: $showQuantityPopup)
+    }
+}
 
-        return VStack(spacing: 20) {
+struct QuantityPopupContentView: View {
+    let item: TradeItem
+    let cartManager: CartManager
+    @Binding var showQuantityPopup: Bool
+    @State private var quantity = 1
+
+    var body: some View {
+        VStack(spacing: 20) {
             Text("수량 선택")
                 .font(.chosunOrFallback(size: 18, weight: .bold))
                 .foregroundColor(.cyan)
@@ -447,7 +456,9 @@ extension MerchantDetailView {
         )
         .padding(.horizontal, 40)
     }
+}
 
+extension MerchantDetailView {
     // 구매 완료 처리
     func completePurchase() {
         // 실제 플레이어 머니 차감
@@ -568,6 +579,36 @@ struct CartItemRow: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color.white.opacity(0.1))
         )
+    }
+
+    // 장바구니 헤더
+    var CartHeaderView: some View {
+        HStack {
+            Button(action: {
+                currentMode = .trading
+            }) {
+                HStack {
+                    Image(systemName: "chevron.left")
+                    Text("거래로 돌아가기")
+                }
+                .font(.chosunOrFallback(size: 16))
+                .foregroundColor(.white)
+            }
+
+            Spacer()
+
+            Text("장바구니")
+                .font(.chosunOrFallback(size: 20, weight: .bold))
+                .foregroundColor(.white)
+
+            Spacer()
+
+            Text("총 \(cartManager.items.count)개")
+                .font(.chosunOrFallback(size: 14))
+                .foregroundColor(.white.opacity(0.7))
+        }
+        .padding()
+        .background(Color.purple.opacity(0.3))
     }
 }
 
