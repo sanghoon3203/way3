@@ -37,7 +37,7 @@ struct MapView: View {
     )
 
     // MARK: - UI State
-    @State private var showingMerchantSheet = false
+    @State private var showingMerchantDetail = false
     @State private var selectedMerchant: Merchant?
     @State private var showNearbyPlayers = false
     @State private var showTradeActivity = false
@@ -114,9 +114,9 @@ struct MapView: View {
                 tradeActivityFeed
             }
         }
-        .sheet(isPresented: $showingMerchantSheet) {
+        .fullScreenCover(isPresented: $showingMerchantDetail) {
             if let selectedMerchant = selectedMerchant {
-                MerchantDetailSheet(merchant: selectedMerchant)
+                MerchantDetailView(merchant: selectedMerchant, isPresented: $showingMerchantDetail)
                     .environmentObject(gameManager)
             }
         }
@@ -131,12 +131,28 @@ struct MapView: View {
     
     // MARK: - 🎮 Simplified Map Overlay
     private var pokemonGOStyleOverlay: some View {
-        VStack {
-            // 상단 영역은 비어있음 (플레이어 정보와 설정 아이콘 제거)
-            Spacer()
+        ZStack {
+            // 💰 Money Display (왼쪽 하단)
+            VStack {
+                Spacer()
+                HStack {
+                    moneyDisplayComponent
+                    Spacer()
+                }
+                .padding(.leading, 30)
+                .padding(.bottom, 20)
+            }
 
-            // 🎯 Bottom Action Panel with proper margin
-            bottomActionPanel
+            // 📍 Location Button (오른쪽 하단)
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    locationButton
+                }
+                .padding(.trailing, 30)
+                .padding(.bottom, 40)
+            }
         }
     }
 
@@ -210,104 +226,54 @@ struct MapView: View {
         .shadow(radius: 8)
     }
 
-    // MARK: - 🎯 Bottom Action Panel (Pokemon GO Style)
-    private var bottomActionPanel: some View {
-        HStack(spacing: 24) {
-            // 👥 Nearby Players
-            actionButton(
-                icon: "person.2.fill",
-                title: "플레이어",
-                badgeCount: socketManager.nearbyPlayers.count,
-                color: .blue
-            ) {
-                showNearbyPlayers = true
-            }
 
-            // 🏪 Merchant Finder
-            actionButton(
-                icon: "storefront.fill",
-                title: "상인",
-                badgeCount: allMerchants.filter { $0.isActive }.count,
-                color: .green
-            ) {
-                findNearestMerchant()
-            }
 
-            // 💱 Trade Activity
-            actionButton(
-                icon: "arrow.left.arrow.right",
-                title: "거래",
-                badgeCount: socketManager.recentTradeActivity.count,
-                color: .orange
-            ) {
-                showTradeActivity = true
-            }
+    // MARK: - 💰 Money Display Component
+    private var moneyDisplayComponent: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "wonsign.circle.fill")
+                .foregroundColor(.yellow)
+                .font(.system(size: 16, weight: .semibold))
 
-            // 📍 Current Location
-            actionButton(
-                icon: "location.fill",
-                title: "위치",
-                color: .purple
-            ) {
-                centerOnPlayerLocation()
+            if let player = gameManager.currentPlayer {
+                Text("₩\(player.money.formatted())")
+                    .font(.custom("ChosunCentennial", size: 16))
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+            } else {
+                Text("₩0")
+                    .font(.custom("ChosunCentennial", size: 16))
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
             }
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 16)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
         .background(
-            RoundedRectangle(cornerRadius: 28)
-                .fill(Color.black.opacity(0.8))
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.black.opacity(0.7))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 28)
-                        .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.yellow.opacity(0.6), lineWidth: 1)
                 )
         )
-        .padding(.horizontal)
-        .padding(.bottom, 50)
-        .shadow(radius: 12)
+        .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 4)
     }
 
-    // MARK: - 🎮 Action Button Component
-    private func actionButton(
-        icon: String,
-        title: String,
-        badgeCount: Int? = nil,
-        color: Color,
-        action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
-            VStack(spacing: 6) {
-                ZStack {
+    // MARK: - 📍 Location Button
+    private var locationButton: some View {
+        Button(action: {
+            centerOnPlayerLocation()
+        }) {
+            Image(systemName: "location.fill")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundColor(.white)
+                .frame(width: 50, height: 50)
+                .background(
                     Circle()
-                        .fill(color.gradient)
-                        .frame(width: 44, height: 44)
-                        .shadow(radius: 4)
-
-                    Image(systemName: icon)
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundColor(.white)
-
-                    // 📊 Badge Count
-                    if let count = badgeCount, count > 0 {
-                        Text("\(count)")
-                            .font(.caption2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .frame(width: 18, height: 18)
-                            .background(
-                                Circle()
-                                    .fill(Color.red.gradient)
-                            )
-                            .offset(x: 16, y: -16)
-                    }
-                }
-
-                Text(title)
-                    .font(.custom("ChosunCentennial", size: 11))
-                    .foregroundColor(.white.opacity(0.9))
-                    .shadow(radius: 1)
-            }
-            .frame(width: 60, height: 70)
+                        .fill(Color.purple.gradient)
+                        .shadow(color: .purple.opacity(0.4), radius: 8, x: 0, y: 4)
+                )
         }
         .buttonStyle(PlainButtonStyle())
     }
@@ -341,15 +307,13 @@ struct MapView: View {
             print("✅ 로컬 glb 모델 발견: \(modelName).glb")
             return Model(
                 uri: modelURL,
-                orientation: [0, 0, 180],
-                scale: [1.8, 1.8, 1.8]  // 로컬 모델도 크기 증가
+                orientation: [0, 0, 180]
             )
         } else if let modelURL = Bundle.main.url(forResource: modelName, withExtension: "gltf") {
             print("✅ 로컬 gltf 모델 발견: \(modelName).gltf")
             return Model(
                 uri: modelURL,
-                orientation: [0, 0, 180],
-                scale: [1.8, 1.8, 1.8]
+                orientation: [0, 0, 180]
             )
         } else {
             print("⚠️ 로컬 모델 없음. 기본 온라인 모델 사용: \(modelName)")
@@ -391,15 +355,13 @@ struct MapView: View {
             // Fallback to most reliable model
             return Model(
                 uri: URL(string: modelURLs[0])!,
-                orientation: [0, 0, 0],
-                scale: [1.5, 1.5, 1.5]
+                orientation: [0, 0, 0]
             )
         }
 
         return Model(
             uri: url,
-            orientation: [0, 0, 0],
-            scale: [1.5, 1.5, 1.5]  // 1.5배 크기로 가시성 향상
+            orientation: [0, 0, 0]
         )
     }
 
@@ -466,7 +428,7 @@ struct MapView: View {
 
             if distance <= 1000 {
                 selectedMerchant = merchant
-                showingMerchantSheet = true
+                showingMerchantDetail = true
 
                 // 🎯 Focus camera on merchant with smooth animation
                 withAnimation(.easeInOut(duration: 1.2)) {
@@ -592,6 +554,12 @@ struct EnhancedMerchantPinView: View {
     @State private var animationScale: CGFloat = 1.0
     @State private var pulseOpacity: Double = 0.7
 
+    // 상인 이미지 이름 추출 (Assets/Merchant/상인이름 폴더에서)
+    private var merchantImageName: String {
+        // 상인 이름에서 공백 제거하고 Assets에 있는 폴더명과 매칭
+        return merchant.name.replacingOccurrences(of: " ", with: "")
+    }
+
     private var isNearby: Bool {
         guard let userLoc = userLocation else { return false }
         let distance = CLLocation(
@@ -625,15 +593,26 @@ struct EnhancedMerchantPinView: View {
                 .scaleEffect(isNearby ? 1.1 : 1.0)
                 .animation(.easeInOut(duration: 0.5), value: isNearby)
 
-            // 🏪 Main Merchant Pin
+            // 🏪 Main Merchant Pin with Real Image
             Circle()
                 .fill(merchant.type.color.gradient)
                 .frame(width: 36, height: 36)
                 .overlay(
-                    Image(systemName: merchant.type.iconName)
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(.white)
-                        .shadow(radius: 2)
+                    // 실제 상인 이미지 사용
+                    Group {
+                        if let _ = UIImage(named: merchantImageName) {
+                            Image(merchantImageName)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 32, height: 32)
+                                .clipShape(Circle())
+                        } else {
+                            // 이미지가 없을 경우 fallback 아이콘
+                            Image(systemName: merchant.type.iconName)
+                                .font(.system(size: 18, weight: .bold))
+                                .foregroundColor(.white)
+                        }
+                    }
                 )
                 .shadow(radius: 6)
 

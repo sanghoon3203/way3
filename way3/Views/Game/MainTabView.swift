@@ -70,24 +70,26 @@ struct MainTabView: View {
     private func setupEnhancedTabBarAppearance() {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.systemBackground
 
-        // Shadow and border for modern look
-        appearance.shadowColor = UIColor.black.withAlphaComponent(0.1)
+        // 사이버펑크 + 전통한국 테마: 어두운 배경
+        appearance.backgroundColor = UIColor.black.withAlphaComponent(0.9)
+
+        // 네온 효과를 위한 그림자와 테두리
+        appearance.shadowColor = UIColor.cyan.withAlphaComponent(0.3)
         appearance.shadowImage = UIImage()
 
-        // Normal tab styling with Chosun font
-        appearance.stackedLayoutAppearance.normal.iconColor = UIColor.systemGray2
+        // Normal tab styling with cyberpunk theme and ChosunCentennial_otf font
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor.systemGray4
         appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
-            .foregroundColor: UIColor.systemGray2,
-            .font: UIFont.chosunSmall
+            .foregroundColor: UIColor.systemGray4,
+            .font: UIFont(name: "ChosunCentennial_otf", size: 12) ?? UIFont.systemFont(ofSize: 12, weight: .regular)
         ]
 
-        // Selected tab styling with enhanced colors
-        appearance.stackedLayoutAppearance.selected.iconColor = UIColor.systemBlue
+        // Selected tab styling with neon cyan color and ChosunCentennial_otf font
+        appearance.stackedLayoutAppearance.selected.iconColor = UIColor.cyan
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
-            .foregroundColor: UIColor.systemBlue,
-            .font: UIFont(name: "ChosunCentennial", size: 12) ?? UIFont.systemFont(ofSize: 12, weight: .medium)
+            .foregroundColor: UIColor.cyan,
+            .font: UIFont(name: "ChosunCentennial_otf", size: 12) ?? UIFont.systemFont(ofSize: 12, weight: .medium)
         ]
 
         // Apply appearance with top margin consideration
@@ -96,7 +98,7 @@ struct MainTabView: View {
 
         // Additional tab bar configuration for spacing
         if let tabBar = UIApplication.shared.windows.first?.rootViewController?.tabBarController?.tabBar {
-            tabBar.frame.origin.y -= 25  // Top margin: 25pt as requested
+            tabBar.frame.origin.y -= 40  // Top margin: 40pt as requested
         }
     }
 }
@@ -236,22 +238,7 @@ struct ItemDetailView: View {
     }
 }
 
-// MARK: - 임시 뷰들 (나중에 별도 파일로 분리)
-struct QuestView: View {
-    var body: some View {
-        NavigationView {
-            VStack {
-                Text("퀘스트 시스템")
-                    .font(.custom("ChosunCentennial", size: 24))
-                    .fontWeight(.bold)
-                Text("곧 구현 예정입니다!")
-                    .font(.custom("ChosunCentennial", size: 16))
-                    .foregroundColor(.secondary)
-            }
-            .navigationTitle("퀘스트")
-        }
-    }
-}
+// MARK: - 임시 뷰들 제거됨 (별도 파일로 분리 완료)
 
 // ShopView는 별도 파일로 이동됩니다
 

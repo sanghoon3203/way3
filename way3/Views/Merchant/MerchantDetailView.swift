@@ -2,8 +2,8 @@
 //  MerchantDetailView.swift
 //  way3 - Way Trading Game
 //
-//  Created by Claude on 12/25/25.
-//  상인 상세 정보 및 거래 화면
+//  JRPG 스타일 상인 대화 시스템 및 거래 화면
+//  ProfileInputView와 동일한 대화창 구조 사용
 //
 
 import SwiftUI
@@ -11,72 +11,393 @@ import SwiftUI
 struct MerchantDetailView: View {
     let merchant: Merchant
     @Binding var isPresented: Bool
-    @State private var selectedTab = 0
-    @State private var showTradeView = false
-    @StateObject private var tradeManager = TradeManager()
-    
+    @EnvironmentObject var gameManager: GameManager
+
+    // 대화 상태
+    @State private var currentMode: MerchantInteractionMode = .dialogue
+    @State private var displayedText = ""
+    @State private var isTypingComplete = false
+    @State private var showNextArrow = false
+    @State private var currentDialogueIndex = 0
+
+    // 거래 상태
+    @StateObject private var cartManager = CartManager()
+    @State private var selectedTradeType: TradeType = .buy
+    @State private var showQuantityPopup = false
+    @State private var selectedItem: TradeItem?
+    @State private var showCartDetail = false
+    @State private var showPurchaseConfirmation = false
+
+    // 상인 이미지 이름
+    private var merchantImageName: String {
+        return merchant.name.replacingOccurrences(of: " ", with: "")
+    }
+
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                // 상인 헤더
-                MerchantHeaderView(merchant: merchant)
-                
-                // 탭 선택
-                TabSelectionView(selectedTab: $selectedTab)
-                
-                // 탭 컨텐츠
-                TabView(selection: $selectedTab) {
-                    // 구매 탭
-                    MerchantInventoryView(merchant: merchant, tradeManager: tradeManager, tradeType: .buy)
-                        .tag(0)
-                    
-                    // 판매 탭
-                    PlayerInventoryView(merchant: merchant, tradeManager: tradeManager, tradeType: .sell)
-                        .tag(1)
-                    
-                    // 정보 탭
-                    MerchantInfoView(merchant: merchant)
-                        .tag(2)
-                }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                
-                // 거래 요약 및 버튼
-                if !tradeManager.selectedItems.isEmpty {
-                    TradeFooterView(tradeManager: tradeManager) {
-                        showTradeView = true
-                    }
-                }
+        ZStack {
+            // 1. 검정보라색 울렁거리는 애니메이션 배경 (ProfileInputView와 동일)
+            AnimatedPurpleBackground()
+
+            // 2. 메인 레이아웃
+            if currentMode == .dialogue {
+                DialogueView
+            } else if currentMode == .trading {
+                TradingView
+            } else if currentMode == .cart {
+                CartDetailView
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("닫기") {
-                        isPresented = false
-                    }
-                    .font(.custom("ChosunCentennial", size: 16))
+
+            // 3. 팝업들
+            if showQuantityPopup {
+                QuantitySelectionPopup
+            }
+
+            if showPurchaseConfirmation {
+                PurchaseConfirmationPopup
+            }
+        }
+        .navigationBarHidden(true)
+        .onAppear {
+            startDialogue()
+        }
+    }
+}
+
+// MARK: - 상호작용 모드
+enum MerchantInteractionMode {
+    case dialogue    // 대화 모드
+    case trading     // 거래 모드
+    case cart        // 장바구니 상세
+}
+
+// MARK: - 대화 화면
+extension MerchantDetailView {
+    var DialogueView: some View {
+        HStack(spacing: 0) {
+            // 좌측: 상인 캐릭터
+            VStack {
+                Spacer()
+                MerchantCharacterView
+                Spacer()
+            }
+            .frame(width: UIScreen.main.bounds.width * 0.4)
+
+            // 우측: 대화창 + 선택지
+            VStack {
+                Spacer()
+
+                // 대화창
+                DialogueBoxView
+
+                // 선택지 (JRPG 스타일)
+                if isTypingComplete {
+                    DialogueChoicesView
                 }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        // 즐겨찾기 토글
-                    }) {
-                        Image(systemName: "heart")
-                            .foregroundColor(.red)
+
+                Spacer()
+            }
+            .frame(width: UIScreen.main.bounds.width * 0.6)
+        }
+    }
+
+    var MerchantCharacterView: some View {
+        VStack(spacing: 12) {
+            // 상인 캐릭터 이미지
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                merchant.type.color.opacity(0.3),
+                                merchant.type.color.opacity(0.1)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 140, height: 180)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(merchant.type.color.opacity(0.6), lineWidth: 2)
+                    )
+
+                // 실제 상인 이미지 또는 fallback
+                Group {
+                    if let _ = UIImage(named: merchantImageName) {
+                        Image(merchantImageName)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 120, height: 160)
+                            .clipShape(RoundedRectangle(cornerRadius: 15))
+                    } else {
+                        // fallback 캐릭터
+                        VStack(spacing: 8) {
+                            Image(systemName: merchant.type.iconName)
+                                .font(.system(size: 50))
+                                .foregroundColor(merchant.type.color)
+
+                            Text(merchant.name)
+                                .font(.chosunOrFallback(size: 14, weight: .bold))
+                                .foregroundColor(.white)
+                                .multilineTextAlignment(.center)
+                        }
                     }
                 }
             }
         }
-        .sheet(isPresented: $showTradeView) {
-            TradeConfirmationView(
-                merchant: merchant,
-                tradeManager: tradeManager,
-                isPresented: $showTradeView
+    }
+
+    var DialogueBoxView: some View {
+        ZStack {
+            // 대화창 배경
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.black.opacity(0.85))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(merchant.type.color.opacity(0.6), lineWidth: 2)
+                )
+
+            VStack(spacing: 16) {
+                // 상인 이름과 대화 텍스트
+                HStack {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text(merchant.name)
+                            .font(.chosunOrFallback(size: 16, weight: .bold))
+                            .foregroundColor(merchant.type.color)
+
+                        Text(displayedText)
+                            .font(.chosunOrFallback(size: 16))
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.leading)
+                    }
+                    Spacer()
+                }
+
+                // 다음 화살표
+                HStack {
+                    Spacer()
+                    if showNextArrow && !merchantDialogues.isEmpty {
+                        Button(action: proceedToNextDialogue) {
+                            HStack(spacing: 8) {
+                                Text("다음")
+                                    .font(.chosunOrFallback(size: 14))
+                                    .foregroundColor(merchant.type.color)
+
+                                Image(systemName: "arrow.right.circle.fill")
+                                    .font(.title2)
+                                    .foregroundColor(merchant.type.color)
+                            }
+                        }
+                        .opacity(isTypingComplete ? 1.0 : 0.0)
+                        .animation(.easeInOut(duration: 0.3), value: isTypingComplete)
+                    }
+                }
+            }
+            .padding(20)
+        }
+        .frame(height: 200)
+        .padding(.horizontal, 20)
+    }
+
+    var DialogueChoicesView: some View {
+        VStack(spacing: 12) {
+            DialogueChoiceButton(
+                title: "대화하기",
+                icon: "bubble.left.fill",
+                action: { continueDialogue() }
+            )
+
+            DialogueChoiceButton(
+                title: "거래하기",
+                icon: "bag.fill",
+                action: { startTrading() }
+            )
+
+            DialogueChoiceButton(
+                title: "나가기",
+                icon: "xmark.circle.fill",
+                action: { exitMerchant() }
+            )
+        }
+        .padding(.top, 16)
+        .transition(.opacity.combined(with: .move(edge: .bottom)))
+    }
+}
+
+// MARK: - 거래 화면
+extension MerchantDetailView {
+    var TradingView: some View {
+        VStack(spacing: 0) {
+            // 상인 헤더
+            TradingHeaderView
+
+            // 탭 선택 (구매/판매)
+            TradeTabSelectionView
+
+            // 아이템 그리드
+            if selectedTradeType == .buy {
+                MerchantInventoryGridView
+            } else {
+                PlayerInventoryGridView
+            }
+
+            // 장바구니 푸터
+            if !cartManager.items.isEmpty {
+                CartFooterView
+            }
+        }
+        .background(Color.black.opacity(0.9))
+    }
+
+    var TradingHeaderView: some View {
+        HStack {
+            // 뒤로가기 버튼
+            Button(action: { currentMode = .dialogue }) {
+                HStack {
+                    Image(systemName: "arrow.left")
+                    Text("대화로 돌아가기")
+                }
+                .font(.chosunOrFallback(size: 16))
+                .foregroundColor(.cyan)
+            }
+
+            Spacer()
+
+            // 상인 정보
+            HStack {
+                // 상인 이미지 (작게)
+                Group {
+                    if let _ = UIImage(named: merchantImageName) {
+                        Image(merchantImageName)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                    } else {
+                        Circle()
+                            .fill(merchant.type.color)
+                            .frame(width: 40, height: 40)
+                            .overlay(
+                                Image(systemName: merchant.type.iconName)
+                                    .foregroundColor(.white)
+                            )
+                    }
+                }
+
+                Text(merchant.name)
+                    .font(.chosunOrFallback(size: 18, weight: .bold))
+                    .foregroundColor(.white)
+            }
+        }
+        .padding()
+        .background(Color.black.opacity(0.8))
+    }
+
+    var TradeTabSelectionView: some View {
+        HStack {
+            TradeTabButton(
+                title: "구매",
+                isSelected: selectedTradeType == .buy,
+                action: { selectedTradeType = .buy }
+            )
+
+            TradeTabButton(
+                title: "판매",
+                isSelected: selectedTradeType == .sell,
+                action: { selectedTradeType = .sell }
+            )
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 10)
+    }
+
+    var CartFooterView: some View {
+        VStack(spacing: 12) {
+            HStack {
+                Text("장바구니: \(cartManager.items.count)개")
+                    .font(.chosunOrFallback(size: 16))
+                    .foregroundColor(.white)
+
+                Spacer()
+
+                Text("총액: ₩\(cartManager.totalAmount)")
+                    .font(.chosunOrFallback(size: 18, weight: .bold))
+                    .foregroundColor(.cyan)
+            }
+
+            Button("장바구니 보기") {
+                currentMode = .cart
+            }
+            .font(.chosunOrFallback(size: 16, weight: .semibold))
+            .foregroundColor(.black)
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(Color.cyan)
+            )
+        }
+        .padding()
+        .background(Color.black.opacity(0.9))
+    }
+}
+
+// MARK: - 헬퍼 컴포넌트들
+struct DialogueChoiceButton: View {
+    let title: String
+    let icon: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                Image(systemName: icon)
+                    .font(.title3)
+                    .foregroundColor(.cyan)
+
+                Text(title)
+                    .font(.chosunOrFallback(size: 16))
+                    .foregroundColor(.white)
+
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.white.opacity(0.1))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
+                    )
             )
         }
     }
 }
 
-// MARK: - 상인 헤더
+struct TradeTabButton: View {
+    let title: String
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                Text(title)
+                    .font(.chosunOrFallback(size: 16))
+                    .fontWeight(isSelected ? .semibold : .regular)
+                    .foregroundColor(isSelected ? .cyan : .white.opacity(0.7))
+
+                Rectangle()
+                    .frame(height: 2)
+                    .foregroundColor(isSelected ? .cyan : .clear)
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
+// MARK: - 상인 헤더 (기존 코드 유지)
 struct MerchantHeaderView: View {
     let merchant: Merchant
     

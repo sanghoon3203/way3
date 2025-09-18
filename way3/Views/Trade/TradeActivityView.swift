@@ -107,13 +107,12 @@ struct TradeActivityView: View {
     
     // MARK: - Price Activity View
     private var priceActivityView: some View {
-        Group {
-            if socketManager.marketPriceUpdates.isEmpty {
-                emptyPriceState
-            } else {
-                List {
+        if socketManager.marketPriceUpdates.isEmpty {
+            AnyView(emptyPriceState)
+        } else {
+            AnyView(List {
                     Section(header: Text("시장 가격 변동")
-                        .font(.chosunHeadline)
+                        .font(.chosunH3)
                         .foregroundColor(.primary)
                     ) {
                         ForEach(socketManager.marketPriceUpdates) { update in
@@ -122,7 +121,7 @@ struct TradeActivityView: View {
                     }
                 }
                 .listStyle(InsetGroupedListStyle())
-            }
+            )
         }
     }
     
@@ -136,7 +135,7 @@ struct TradeActivityView: View {
                 .foregroundColor(.gray)
             
             Text("최근 거래 활동이 없습니다")
-                .font(.chosunHeadline)
+                .font(.chosunH3)
                 .fontWeight(.semibold)
             
             Text("다른 플레이어들의 거래가 시작되면\\n실시간으로 표시됩니다")
@@ -157,7 +156,7 @@ struct TradeActivityView: View {
                 .font(.system(size: 60))
             
             Text("\\(selectedDistrict.displayName)에서 활동이 없습니다")
-                .font(.chosunHeadline)
+                .font(.chosunH3)
                 .fontWeight(.semibold)
             
             Text("이 지역에서 거래가 발생하면\\n활동이 표시됩니다")
@@ -190,7 +189,7 @@ struct TradeActivityView: View {
                 .foregroundColor(.gray)
             
             Text("가격 변동 정보가 없습니다")
-                .font(.chosunHeadline)
+                .font(.chosunH3)
                 .fontWeight(.semibold)
             
             Text("시장에서 큰 가격 변동이 발생하면\\n여기에 표시됩니다")
@@ -212,7 +211,7 @@ struct TradeActivityView: View {
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(selectedDistrict.displayName)
-                        .font(.chosunHeadline)
+                        .font(.chosunH3)
                         .fontWeight(.bold)
                     
                     Text(selectedDistrict.description)
@@ -227,7 +226,7 @@ struct TradeActivityView: View {
             HStack(spacing: 20) {
                 VStack {
                     Text("\\(districtManager.districtActivity.filter { $0.district == selectedDistrict }.count)")
-                        .font(.chosunHeadline)
+                        .font(.chosunH3)
                         .fontWeight(.bold)
                         .foregroundColor(selectedDistrict.color)
                     
@@ -243,7 +242,7 @@ struct TradeActivityView: View {
                     }.count
                     
                     Text("\\(recentCount)")
-                        .font(.chosunHeadline)
+                        .font(.chosunH3)
                         .fontWeight(.bold)
                         .foregroundColor(.gameGreen)
                     

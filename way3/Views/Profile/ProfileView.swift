@@ -18,7 +18,7 @@ struct PlayerProfile: Codable {
     var tradeLevel: Int
     var totalEarnings: Int
     var tradingDays: Int
-
+    
     enum PlayerGender: String, CaseIterable, Codable {
         case male = "남성"
         case female = "여성"
@@ -66,6 +66,7 @@ struct ProfileView: View {
     @State private var showingBackstory = false
     @State private var showingProfileEditor = false
     @State private var showingImagePicker = false
+    @State private var pickedImage: UIImage?
 
     // Sample profile data (should come from authManager.currentPlayer)
     @State private var playerProfile = PlayerProfile(
@@ -165,13 +166,6 @@ struct ProfileView: View {
                                 icon: "calendar.badge.clock"
                             )
 
-                            TradingStatCard(
-                                title: "가문 복원도",
-                                value: "\(calculateFamilyRestoration())%",
-                                subtitle: "영광스러운 가문 재건 진행도",
-                                color: .purple,
-                                icon: "building.columns.fill"
-                            )
                         }
                         .padding(.horizontal, 20)
                     }
@@ -284,22 +278,12 @@ struct ProfileView: View {
             ProfileEditorView(profile: $playerProfile)
         }
         .sheet(isPresented: $showingImagePicker) {
-            ImagePickerView { image in
-                // TODO: Handle image selection
-                print("Selected image: \(image)")
+            ImagePickerView (selectedImage: $pickedImage)
             }
         }
     }
 
-    private func calculateFamilyRestoration() -> Int {
-        // Based on trading level, earnings, and days
-        let baseProgress = min(playerProfile.tradeLevel * 2, 50)
-        let earningsProgress = min(playerProfile.totalEarnings / 50000, 30)
-        let timeProgress = min(playerProfile.tradingDays, 20)
-        return baseProgress + earningsProgress + timeProgress
-    }
-}
-
+    
 // MARK: - Profile Image View
 struct ProfileImageView: View {
     let profileImage: String?
@@ -611,65 +595,4 @@ struct ProfileEditorView: View {
     }
 }
 
-// MARK: - Image Picker View (Placeholder)
-struct ImagePickerView: View {
-    let onImageSelected: (UIImage) -> Void
-    @Environment(\.presentationMode) var presentationMode
 
-    var body: some View {
-        NavigationView {
-            VStack(spacing: 30) {
-                Image(systemName: "camera.fill")
-                    .font(.system(size: 60))
-                    .foregroundColor(.gray)
-
-                Text("이미지 선택 기능")
-                    .font(.chosunH2)
-                    .fontWeight(.semibold)
-
-                Text("실제 구현 시 UIImagePickerController 또는\nPHPickerViewController를 사용하세요")
-                    .font(.chosunBody)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-
-                // Sample buttons
-                VStack(spacing: 16) {
-                    Button("카메라로 촬영") {
-                        // TODO: Camera implementation
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                    .font(.chosunButton)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 50)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
-
-                    Button("앨범에서 선택") {
-                        // TODO: Photo library implementation
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                    .font(.chosunButton)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 50)
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
-                }
-                .padding(.horizontal, 40)
-
-                Spacer()
-            }
-            .padding(.top, 40)
-            .navigationTitle("프로필 이미지")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("취소") {
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                }
-            }
-        }
-    }
-}

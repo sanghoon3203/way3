@@ -2,342 +2,432 @@
 //  LoginView.swift
 //  way3 - Way Trading Game
 //
-//  Created by Claude on 12/25/25.
-//  Pokemon GO 스타일 로그인 화면
+//  네오-서울 테마 로그인 화면
+//  배경 영상 + 블러 + 인증 시스템
 //
 
 import SwiftUI
+import AVKit
 
 struct LoginView: View {
     @Binding var showLoginView: Bool
-    @StateObject private var authManager = AuthManager.shared
-    @State private var email = ""
+    @EnvironmentObject var authManager: AuthManager
+
+    // 폼 상태
+    @State private var username = ""
     @State private var password = ""
-    @State private var playerName = ""
-    @State private var isRegistering = false
+    @State private var isAutoLoginEnabled = false
     @State private var showPassword = false
-    
+
+    // UI 상태
+    @State private var loginState: LoginState = .idle
+    @State private var showRegisterView = false
+    @State private var showForgotPasswordView = false
+
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                // 배경 그라데이션 (Pokemon GO 스타일)
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color(.systemBlue).opacity(0.8),
-                        Color(.systemIndigo).opacity(0.9),
-                        Color(.systemPurple).opacity(0.7)
-                    ]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
-                
-                // 움직이는 파티클 효과
-                ParticleEffectView()
-                
-                ScrollView {
-                    VStack(spacing: 30) {
-                        Spacer(minLength: 80)
-                        
-                        // 로고 및 타이틀
-                        VStack(spacing: 20) {
-                            // Way3 로고
-                            ZStack {
-                                Circle()
-                                    .fill(Color.white.opacity(0.2))
-                                    .frame(width: 120, height: 120)
-                                    .blur(radius: 10)
-                                
-                                Image(systemName: "location.circle.fill")
-                                    .font(.system(size: 80))
-                                    .foregroundColor(.white)
-                                    .shadow(radius: 10)
-                            }
-                            .scaleEffect(1.0)
-                            .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: showLoginView)
-                            
-                            VStack(spacing: 8) {
-                                Text("Way3")
-                                    .font(.custom("ChosunCentennial", size: 36))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                    .shadow(radius: 5)
-                                
-                                Text("위치기반 무역 게임")
-                                    .font(.custom("ChosunCentennial", size: 16))
-                                    .foregroundColor(.white.opacity(0.9))
-                                    .shadow(radius: 3)
-                            }
-                        }
-                        
-                        // 로그인/회원가입 폼
-                        VStack(spacing: 25) {
-                            // 탭 선택
-                            HStack {
-                                ForEach([false, true], id: \.self) { isRegister in
-                                    Button(action: {
-                                        withAnimation(.spring()) {
-                                            isRegistering = isRegister
-                                        }
-                                    }) {
-                                        VStack(spacing: 5) {
-                                            Text(isRegister ? "회원가입" : "로그인")
-                                                .font(.custom("ChosunCentennial", size: 18))
-                                                .foregroundColor(isRegistering == isRegister ? .white : .white.opacity(0.6))
-                                            
-                                            Rectangle()
-                                                .frame(height: 2)
-                                                .foregroundColor(isRegistering == isRegister ? .white : .clear)
-                                        }
-                                    }
-                                }
-                            }
-                            .padding(.horizontal, 20)
-                            
-                            // 입력 필드들
-                            VStack(spacing: 20) {
-                                // 이메일
-                                CustomTextField(
-                                    text: $email,
-                                    placeholder: "이메일",
-                                    icon: "envelope.fill",
-                                    keyboardType: .emailAddress
-                                )
-                                
-                                // 비밀번호
-                                CustomSecureField(
-                                    text: $password,
-                                    placeholder: "비밀번호",
-                                    showPassword: $showPassword
-                                )
-                                
-                                // 회원가입시 플레이어 이름
-                                if isRegistering {
-                                    CustomTextField(
-                                        text: $playerName,
-                                        placeholder: "플레이어 이름",
-                                        icon: "person.fill",
-                                        keyboardType: .default
-                                    )
-                                    .transition(.move(edge: .top).combined(with: .opacity))
-                                }
-                            }
-                            .padding(.horizontal, 20)
-                            
-                            // 에러 메시지
-                            if !authManager.errorMessage.isEmpty {
-                                Text(authManager.errorMessage)
-                                    .font(.custom("ChosunCentennial", size: 14))
-                                    .foregroundColor(.red)
-                                    .padding(.horizontal, 20)
-                                    .multilineTextAlignment(.center)
-                            }
-                            
-                            // 로그인/회원가입 버튼
-                            Button(action: {
-                                Task {
-                                    if isRegistering {
-                                        await authManager.register(email: email, password: password, playerName: playerName)
-                                    } else {
-                                        await authManager.login(email: email, password: password)
-                                    }
-                                    
-                                    if authManager.isAuthenticated {
-                                        showLoginView = false
-                                    }
-                                }
-                            }) {
-                                HStack {
-                                    if authManager.isLoading {
-                                        ProgressView()
-                                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                            .scaleEffect(0.8)
-                                    } else {
-                                        Image(systemName: isRegistering ? "person.badge.plus" : "arrow.right.circle.fill")
-                                            .font(.title2)
-                                    }
-                                    
-                                    Text(isRegistering ? "계정 만들기" : "게임 시작")
-                                        .font(.custom("ChosunCentennial", size: 18))
-                                        .fontWeight(.semibold)
-                                }
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 55)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 27.5)
-                                        .fill(isFormValid ? Color.orange : Color.gray)
-                                        .shadow(radius: 10)
-                                )
-                            }
-                            .disabled(!isFormValid || authManager.isLoading)
-                            .padding(.horizontal, 20)
-                            .padding(.top, 10)
-                        }
-                        .padding(.vertical, 30)
-                        .background(
-                            RoundedRectangle(cornerRadius: 25)
-                                .fill(Color.white.opacity(0.15))
-                                .blur(radius: 1)
-                        )
-                        .padding(.horizontal, 20)
-                        
-                        Spacer(minLength: 50)
-                    }
-                }
+        ZStack {
+            // 1. 배경 영상 레이어 (StartView와 동일)
+            BackgroundVideoLayer()
+
+            // 2. 블러 오버레이 (얇은 블러)
+            BlurOverlayLayer()
+
+            // 3. 컨텐츠 레이어
+            ContentLayer()
+
+            // 4. 로딩 오버레이
+            if loginState == .authenticating {
+                LoadingOverlay
             }
         }
-        .onChange(of: authManager.isAuthenticated) { isAuth in
-            if isAuth {
-                showLoginView = false
-            }
-        }
-    }
-    
-    // 폼 유효성 검사
-    private var isFormValid: Bool {
-        if isRegistering {
-            return !email.isEmpty && !password.isEmpty && !playerName.isEmpty && 
-                   email.contains("@") && password.count >= 6 && playerName.count >= 2
-        } else {
-            return !email.isEmpty && !password.isEmpty && email.contains("@")
+        .navigationBarHidden(true)
+        .onAppear {
+            loadAutoLoginPreference()
         }
     }
 }
 
-// MARK: - 커스텀 텍스트 필드
-struct CustomTextField: View {
+
+// MARK: - Blur Overlay Layer
+struct BlurOverlayLayer: View {
+    var body: some View {
+        ZStack {
+            // 얇은 블러 효과
+            VisualEffectView(effect: UIBlurEffect(style: .dark))
+                .opacity(0.3)
+
+            // 추가적인 어두운 오버레이
+            Color.black.opacity(0.2)
+        }
+        .ignoresSafeArea()
+    }
+}
+
+// MARK: - Content Layer
+extension LoginView {
+    func ContentLayer() -> some View {
+        ScrollView {
+            VStack(spacing: 40) {
+                Spacer(minLength: 60)
+
+                // 로고 컴포넌트
+                LogoComponent
+
+                // 로그인 폼
+                LoginFormComponent
+
+                // 액션 버튼들
+                ActionButtonsComponent
+
+                Spacer(minLength: 40)
+            }
+        }
+    }
+
+    // MARK: - Logo Component
+    var LogoComponent: some View {
+        VStack(spacing: 12) {
+            Text("네오-서울")
+                .font(.chosunOrFallback(size: 32, weight: .bold))
+                .foregroundColor(.white)
+                .shadow(color: .cyan.opacity(0.5), radius: 8, x: 0, y: 0)
+
+            Text("트레이딩 게임")
+                .font(.chosunOrFallback(size: 16, weight: .medium))
+                .foregroundColor(.cyan)
+                .shadow(color: .cyan.opacity(0.3), radius: 5, x: 0, y: 0)
+        }
+        .padding(.bottom, 20)
+    }
+
+    // MARK: - Login Form Component
+    var LoginFormComponent: some View {
+        VStack(spacing: 20) {
+            // 아이디 입력 필드
+            IDTextField(
+                text: $username,
+                placeholder: "아이디",
+                icon: "person.fill"
+            )
+
+            // 비밀번호 입력 필드
+            NeoSeoulSecureField(
+                text: $password,
+                placeholder: "비밀번호",
+                showPassword: $showPassword
+            )
+
+            // 자동 로그인 체크박스
+            AutoLoginToggle
+
+            // 로그인 버튼
+            LoginButton
+        }
+        .padding(.horizontal, 30)
+        .padding(.vertical, 25)
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.black.opacity(0.7))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
+                )
+        )
+        .padding(.horizontal, 20)
+    }
+
+    // MARK: - Auto Login Toggle
+    var AutoLoginToggle: some View {
+        HStack {
+            Button(action: {
+                isAutoLoginEnabled.toggle()
+                saveAutoLoginPreference()
+            }) {
+                HStack(spacing: 8) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 4)
+                            .stroke(Color.cyan.opacity(0.6), lineWidth: 1)
+                            .frame(width: 20, height: 20)
+
+                        if isAutoLoginEnabled {
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundColor(.cyan)
+                        }
+                    }
+
+                    Text("자동 로그인")
+                        .font(.chosunOrFallback(size: 14))
+                        .foregroundColor(.white.opacity(0.8))
+                }
+            }
+
+            Spacer()
+        }
+    }
+
+    // MARK: - Login Button
+    var LoginButton: some View {
+        Button(action: {
+            Task {
+                await performLogin()
+            }
+        }) {
+            HStack {
+                if loginState == .authenticating {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                        .scaleEffect(0.8)
+                } else {
+                    Image(systemName: "arrow.right.circle.fill")
+                        .font(.title2)
+                }
+
+                Text(loginButtonText)
+                    .font(.chosunOrFallback(size: 16, weight: .semibold))
+            }
+            .foregroundColor(isLoginButtonActive ? .black : .gray)
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(isLoginButtonActive ? Color.cyan : Color.gray.opacity(0.3))
+            )
+        }
+        .disabled(!isLoginButtonActive || loginState == .authenticating)
+        .padding(.top, 10)
+    }
+
+    // MARK: - Action Buttons Component
+    var ActionButtonsComponent: some View {
+        VStack(spacing: 16) {
+            // 회원가입 버튼
+            Button("회원가입") {
+                showRegisterView = true
+            }
+            .font(.chosunOrFallback(size: 16))
+            .foregroundColor(.cyan)
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(
+                RoundedRectangle(cornerRadius: 25)
+                    .stroke(Color.cyan.opacity(0.6), lineWidth: 1)
+                    .background(Color.clear)
+            )
+
+            // 비밀번호 찾기 버튼
+            Button("비밀번호 찾기") {
+                showForgotPasswordView = true
+            }
+            .font(.chosunOrFallback(size: 14))
+            .foregroundColor(.white.opacity(0.7))
+            .underline()
+        }
+        .padding(.horizontal, 20)
+        .fullScreenCover(isPresented: $showRegisterView) {
+            RegisterView(isPresented: $showRegisterView)
+        }
+        .fullScreenCover(isPresented: $showForgotPasswordView) {
+            ForgotPasswordView(isPresented: $showForgotPasswordView)
+        }
+    }
+}
+
+// MARK: - Custom Text Fields
+struct IDTextField: View {
     @Binding var text: String
     let placeholder: String
     let icon: String
-    let keyboardType: UIKeyboardType
-    
+
     var body: some View {
-        HStack(spacing: 15) {
+        HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.title2)
-                .foregroundColor(.white.opacity(0.7))
+                .foregroundColor(.cyan.opacity(0.7))
                 .frame(width: 25)
-            
+
             TextField(placeholder, text: $text)
-                .font(.custom("ChosunCentennial", size: 16))
+                .font(.chosunOrFallback(size: 16))
                 .foregroundColor(.white)
-                .keyboardType(keyboardType)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
+                .textFieldStyle(PlainTextFieldStyle())
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 15)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .background(
-            RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                .background(
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(Color.white.opacity(0.1))
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white.opacity(0.15))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
                 )
         )
     }
 }
 
-// MARK: - 커스텀 보안 텍스트 필드
-struct CustomSecureField: View {
+struct NeoSeoulSecureField: View {
     @Binding var text: String
     let placeholder: String
     @Binding var showPassword: Bool
-    
+
     var body: some View {
-        HStack(spacing: 15) {
+        HStack(spacing: 12) {
             Image(systemName: "lock.fill")
                 .font(.title2)
-                .foregroundColor(.white.opacity(0.7))
+                .foregroundColor(.cyan.opacity(0.7))
                 .frame(width: 25)
-            
+
             if showPassword {
                 TextField(placeholder, text: $text)
-                    .font(.custom("ChosunCentennial", size: 16))
+                    .font(.chosunOrFallback(size: 16))
                     .foregroundColor(.white)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
+                    .textFieldStyle(PlainTextFieldStyle())
             } else {
                 SecureField(placeholder, text: $text)
-                    .font(.custom("ChosunCentennial", size: 16))
+                    .font(.chosunOrFallback(size: 16))
                     .foregroundColor(.white)
+                    .textFieldStyle(PlainTextFieldStyle())
             }
-            
+
             Button(action: {
                 showPassword.toggle()
             }) {
                 Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
                     .font(.title3)
-                    .foregroundColor(.white.opacity(0.7))
+                    .foregroundColor(.white.opacity(0.6))
             }
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 15)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .background(
-            RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                .background(
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(Color.white.opacity(0.1))
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white.opacity(0.15))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
                 )
         )
     }
 }
 
-// MARK: - 파티클 효과
-struct ParticleEffectView: View {
-    @State private var particles: [Particle] = []
-    
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                ForEach(particles, id: \.id) { particle in
-                    Circle()
-                        .fill(Color.white.opacity(0.3))
-                        .frame(width: particle.size, height: particle.size)
-                        .position(x: particle.x, y: particle.y)
-                        .blur(radius: 2)
-                }
+// MARK: - Loading Overlay
+extension LoginView {
+    var LoadingOverlay: some View {
+        ZStack {
+            Color.black.opacity(0.7)
+                .ignoresSafeArea()
+
+            VStack(spacing: 20) {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .cyan))
+                    .scaleEffect(1.5)
+
+                Text("로그인 중...")
+                    .font(.chosunOrFallback(size: 16))
+                    .foregroundColor(.white)
             }
-        }
-        .onAppear {
-            createParticles()
-            startParticleAnimation()
-        }
-    }
-    
-    private func createParticles() {
-        particles = (0..<20).map { _ in
-            Particle(
-                id: UUID(),
-                x: CGFloat.random(in: 0...UIScreen.main.bounds.width),
-                y: CGFloat.random(in: 0...UIScreen.main.bounds.height),
-                size: CGFloat.random(in: 2...8)
+            .padding(30)
+            .background(
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color.black.opacity(0.8))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(Color.cyan.opacity(0.5), lineWidth: 1)
+                    )
             )
-        }
-    }
-    
-    private func startParticleAnimation() {
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-            withAnimation(.linear(duration: 0.1)) {
-                for i in particles.indices {
-                    particles[i].y -= CGFloat.random(in: 0.5...2)
-                    particles[i].x += CGFloat.random(in: -1...1)
-                    
-                    if particles[i].y < -10 {
-                        particles[i].y = UIScreen.main.bounds.height + 10
-                        particles[i].x = CGFloat.random(in: 0...UIScreen.main.bounds.width)
-                    }
-                }
-            }
         }
     }
 }
 
-struct Particle {
-    let id: UUID
-    var x: CGFloat
-    var y: CGFloat
-    let size: CGFloat
+// MARK: - Helper Components
+struct VisualEffectView: UIViewRepresentable {
+    let effect: UIVisualEffect
+
+    func makeUIView(context: Context) -> UIVisualEffectView {
+        return UIVisualEffectView(effect: effect)
+    }
+
+    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
+        uiView.effect = effect
+    }
+}
+
+// MARK: - State & Logic
+extension LoginView {
+    enum LoginState: Equatable {
+        case idle
+        case validating
+        case authenticating
+        case success
+        case failed(String)
+    }
+
+    private var isLoginButtonActive: Bool {
+        !username.isEmpty && !password.isEmpty && loginState != .authenticating
+    }
+
+    private var loginButtonText: String {
+        switch loginState {
+        case .idle, .validating:
+            return "로그인"
+        case .authenticating:
+            return "로그인 중..."
+        case .success:
+            return "성공"
+        case .failed:
+            return "다시 시도"
+        }
+    }
+
+    private func performLogin() async {
+        loginState = .authenticating
+
+        // TODO: 실제 서버 API 호출
+        // 임시로 딜레이 추가
+        try? await Task.sleep(nanoseconds: 1_500_000_000)
+
+        // 로그인 성공 시
+        if username == "test" && password == "test" {
+            loginState = .success
+
+            // 자동 로그인 설정 저장
+            if isAutoLoginEnabled {
+                UserDefaults.standard.set(true, forKey: "autoLogin")
+                UserDefaults.standard.set(username, forKey: "savedUsername")
+            }
+
+            // LoginView 닫기
+            showLoginView = false
+        } else {
+            loginState = .failed("아이디 또는 비밀번호가 올바르지 않습니다.")
+
+            // 2초 후 상태 초기화
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                loginState = .idle
+            }
+        }
+    }
+
+    private func loadAutoLoginPreference() {
+        isAutoLoginEnabled = UserDefaults.standard.bool(forKey: "autoLogin")
+        if isAutoLoginEnabled {
+            username = UserDefaults.standard.string(forKey: "savedUsername") ?? ""
+        }
+    }
+
+    private func saveAutoLoginPreference() {
+        UserDefaults.standard.set(isAutoLoginEnabled, forKey: "autoLogin")
+        if !isAutoLoginEnabled {
+            UserDefaults.standard.removeObject(forKey: "savedUsername")
+        }
+    }
+}
+
+// MARK: - Preview
+#Preview {
+    LoginView(showLoginView: .constant(true))
+        .environmentObject(AuthManager.shared)
 }

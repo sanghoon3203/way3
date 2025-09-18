@@ -72,7 +72,8 @@ class QuestManager: ObservableObject {
     }
 
     func loadQuestsFromServer() {
-        // TODO: 실제 서버에서 근처 상인 기반 퀘스트 불러오기
+        // 실제 서버에서 근처 상인 기반 퀘스트 불러오기
+        // 현재는 샘플 데이터 사용
         generateSampleQuests()
     }
 

@@ -14,7 +14,7 @@ struct SpecialItem: Identifiable, Codable {
     let name: String
     let description: String
     let price: Int
-    let grade: TradeGood.ItemGrade
+    let grade: ItemGrade
     let specialEffect: String
     let imageName: String
     let isLimited: Bool
@@ -56,7 +56,7 @@ struct ShopView: View {
             name: "행운의 목걸이",
             description: "착용하면 모든 거래에서 행운이 따르는 목걸이",
             price: 80000,
-            grade: .epic,
+            grade: .advanced,
             specialEffect: "거래 성공률 +25%",
             imageName: "gift.circle.fill",
             isLimited: false,
@@ -76,7 +76,7 @@ struct ShopView: View {
             name: "텔레포트 스크롤",
             description: "원하는 상인에게 즉시 이동할 수 있는 마법 스크롤",
             price: 50000,
-            grade: .uncommon,
+            grade: .intermediate,
             specialEffect: "즉시 이동",
             imageName: "location.fill",
             isLimited: false,
@@ -337,7 +337,7 @@ struct SpecialItemCard: View {
                         .lineLimit(1)
 
                     // Grade Badge
-                    Text(specialItem.grade.rawValue)
+                    Text(specialItem.grade.displayName)
                         .font(.chosunSmall)
                         .fontWeight(.medium)
                         .foregroundColor(.white)
@@ -542,7 +542,7 @@ struct SpecialItemDetailSheet: View {
                                 Text("등급:")
                                     .font(.chosunSubhead)
                                 Spacer()
-                                Text(specialItem.grade.rawValue)
+                                Text(specialItem.grade.displayName)
                                     .font(.chosunSubhead)
                                     .fontWeight(.semibold)
                                     .foregroundColor(specialItem.grade.color)

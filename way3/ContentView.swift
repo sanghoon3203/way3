@@ -13,10 +13,13 @@ struct ContentView: View {
     @StateObject private var authManager = AuthManager.shared
     @StateObject private var player = Player.createDefault()
     @State private var selectedTab = 0
+    @State private var showStartView = true
 
     var body: some View {
         Group {
-            if !authManager.isAuthenticated {
+            if showStartView {
+                StartView(isPresented: $showStartView)
+            } else if !authManager.isAuthenticated {
                 LoginView(showLoginView: .constant(true))
                     .environmentObject(authManager)
             } else {

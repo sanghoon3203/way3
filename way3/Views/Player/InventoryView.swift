@@ -17,31 +17,13 @@ struct TradeGood: Identifiable, Codable {
     let basePrice: Int
     let quantity: Int
     let imageName: String
-
-    enum ItemGrade: String, CaseIterable, Codable {
-        case common = "일반"
-        case uncommon = "고급"
-        case rare = "희귀"
-        case epic = "영웅"
-        case legendary = "전설"
-
-        var color: Color {
-            switch self {
-            case .common: return .gray
-            case .uncommon: return .green
-            case .rare: return .blue
-            case .epic: return .purple
-            case .legendary: return .orange
-            }
-        }
-    }
 }
 
-// MARK: - Inventory Item Model
-struct InventoryItem: Identifiable, Codable {
+// MARK: - Player Inventory Item Model
+struct PlayerInventoryItem: Identifiable, Codable {
     let id = UUID()
     let name: String
-    let grade: TradeGood.ItemGrade
+    let grade: ItemGrade
     let effect: String
     let imageName: String
 }
@@ -54,16 +36,16 @@ struct InventoryView: View {
     // Sample Trade Goods
     @State private var tradeGoods: [TradeGood] = [
         TradeGood(name: "고급 차잎", category: "농산물", grade: .rare, basePrice: 45000, quantity: 5, imageName: "leaf.fill"),
-        TradeGood(name: "스마트폰", category: "전자제품", grade: .epic, basePrice: 800000, quantity: 2, imageName: "iphone"),
+        TradeGood(name: "스마트폰", category: "전자제품", grade: .legendary, basePrice: 800000, quantity: 2, imageName: "iphone"),
         TradeGood(name: "한우", category: "축산물", grade: .legendary, basePrice: 120000, quantity: 3, imageName: "heart.fill"),
         TradeGood(name: "전통 도자기", category: "공예품", grade: .rare, basePrice: 200000, quantity: 1, imageName: "cup.and.saucer.fill")
     ]
 
     // Sample Inventory Items
-    @State private var inventoryItems: [InventoryItem] = [
-        InventoryItem(name: "체력 물약", grade: .common, effect: "체력 +50", imageName: "heart.circle.fill"),
-        InventoryItem(name: "행운의 부적", grade: .rare, effect: "거래 성공률 +10%", imageName: "sparkles"),
-        InventoryItem(name: "상인의 인장", grade: .epic, effect: "가격 협상 +15%", imageName: "seal.fill")
+    @State private var inventoryItems: [PlayerInventoryItem] = [
+        PlayerInventoryItem(name: "체력 물약", grade: .common, effect: "체력 +50", imageName: "heart.circle.fill"),
+        PlayerInventoryItem(name: "행운의 부적", grade: .rare, effect: "거래 성공률 +10%", imageName: "sparkles"),
+        PlayerInventoryItem(name: "상인의 인장", grade: .legendary, effect: "가격 협상 +15%", imageName: "seal.fill")
     ]
 
     var body: some View {
@@ -126,7 +108,7 @@ struct InventoryView: View {
                         // Inventory Items List
                         LazyVStack(spacing: 12) {
                             ForEach(inventoryItems) { item in
-                                InventoryItemBoxView(inventoryItem: item)
+                                PlayerInventoryItemBoxView(inventoryItem: item)
                             }
                         }
                         .padding(.horizontal, 20)
@@ -200,7 +182,7 @@ struct TradeGoodBoxView: View {
                 // Bottom Row: Grade, Quantity
                 HStack(spacing: 110) {
                     // Grade Badge
-                    Text(tradeGood.grade.rawValue)
+                    Text(tradeGood.grade.displayName)
                         .font(.chosunSmall)
                         .fontWeight(.medium)
                         .foregroundColor(.white)
@@ -234,8 +216,8 @@ struct TradeGoodBoxView: View {
 }
 
 // MARK: - Inventory Item Box Component
-struct InventoryItemBoxView: View {
-    let inventoryItem: InventoryItem
+struct PlayerInventoryItemBoxView: View {
+    let inventoryItem: PlayerInventoryItem
 
     var body: some View {
         HStack(spacing: 0) {
@@ -256,7 +238,7 @@ struct InventoryItemBoxView: View {
                     .foregroundColor(.primary)
 
                 // Grade Badge
-                Text(inventoryItem.grade.rawValue)
+                Text(inventoryItem.grade.displayName)
                     .font(.chosunSmall)
                     .fontWeight(.medium)
                     .foregroundColor(.white)
@@ -317,7 +299,7 @@ struct TradeGoodDetailSheet: View {
                             Text("등급")
                                 .font(.chosunCaption)
                                 .foregroundColor(.secondary)
-                            Text(tradeGood.grade.rawValue)
+                            Text(tradeGood.grade.displayName)
                                 .font(.chosunSubhead)
                                 .fontWeight(.semibold)
                                 .foregroundColor(tradeGood.grade.color)
