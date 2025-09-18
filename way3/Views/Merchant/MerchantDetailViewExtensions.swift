@@ -580,35 +580,5 @@ struct CartItemRow: View {
                 .fill(Color.white.opacity(0.1))
         )
     }
-
-    // 장바구니 헤더
-    var CartHeaderView: some View {
-        HStack {
-            Button(action: {
-                currentMode = .trading
-            }) {
-                HStack {
-                    Image(systemName: "chevron.left")
-                    Text("거래로 돌아가기")
-                }
-                .font(.chosunOrFallback(size: 16))
-                .foregroundColor(.white)
-            }
-
-            Spacer()
-
-            Text("장바구니")
-                .font(.chosunOrFallback(size: 20, weight: .bold))
-                .foregroundColor(.white)
-
-            Spacer()
-
-            Text("총 \(cartManager.items.count)개")
-                .font(.chosunOrFallback(size: 14))
-                .foregroundColor(.white.opacity(0.7))
-        }
-        .padding()
-        .background(Color.purple.opacity(0.3))
-    }
 }
 
