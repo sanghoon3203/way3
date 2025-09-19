@@ -4,8 +4,8 @@
 
 echo "🚀 Way Game Server 시작 중..."
 
-# 서버 디렉토리로 이동
-cd theway_server
+# 서버 디렉토리 확인 (이미 올바른 위치에 있음)
+echo "📂 현재 디렉토리: $(pwd)"
 
 # Node.js 버전 확인
 echo "📍 Node.js 버전 확인:"
