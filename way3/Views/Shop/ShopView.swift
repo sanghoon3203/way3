@@ -102,63 +102,51 @@ struct ShopView: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-                // Custom Tab Selector
-                HStack(spacing: 0) {
-                    Button(action: { selectedTab = 0 }) {
-                        VStack(spacing: 8) {
-                            Image(systemName: "storefront.fill")
-                                .font(.system(size: 20))
-                            Text("비밀상점")
-                                .font(.chosunSmall)
-                        }
-                        .foregroundColor(selectedTab == 0 ? .blue : .gray)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(
-                            Rectangle()
-                                .fill(selectedTab == 0 ? Color.blue.opacity(0.1) : Color.clear)
+            ZStack {
+                // 사이버펑크 배경
+                Color.cyberpunkDarkBg
+                    .ignoresSafeArea()
+
+                VStack(spacing: 0) {
+                    // Custom Tab Selector - 사이버펑크 스타일
+                    HStack(spacing: 0) {
+                        CyberpunkTabButton(
+                            title: "SECRET_SHOP",
+                            icon: "building.2.fill",
+                            isSelected: selectedTab == 0,
+                            action: { selectedTab = 0 }
+                        )
+
+                        CyberpunkTabButton(
+                            title: "AUCTION_HOUSE",
+                            icon: "hammer.fill",
+                            isSelected: selectedTab == 1,
+                            action: { selectedTab = 1 }
                         )
                     }
+                    .background(Color.cyberpunkPanelBg)
 
-                    Button(action: { selectedTab = 1 }) {
-                        VStack(spacing: 8) {
-                            Image(systemName: "hammer.fill")
-                                .font(.system(size: 20))
-                            Text("경매장")
-                                .font(.chosunSmall)
-                        }
-                        .foregroundColor(selectedTab == 1 ? .blue : .gray)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(
-                            Rectangle()
-                                .fill(selectedTab == 1 ? Color.blue.opacity(0.1) : Color.clear)
+                    // Content based on selected tab
+                    if selectedTab == 0 {
+                        CyberpunkSecretShopView(
+                            specialItems: specialItems,
+                            adBanners: adBanners,
+                            onItemTap: { item in
+                                selectedItem = item
+                                showingItemDetail = true
+                            }
                         )
+                    } else {
+                        CyberpunkAuctionView()
                     }
                 }
-                .background(Color(.systemGray6))
-
-                // Content based on selected tab
-                if selectedTab == 0 {
-                    SecretShopView(
-                        specialItems: specialItems,
-                        adBanners: adBanners,
-                        onItemTap: { item in
-                            selectedItem = item
-                            showingItemDetail = true
-                        }
-                    )
-                } else {
-                    AuctionPlaceholderView()
-                }
+                .navigationTitle("")
+                .navigationBarHidden(true)
             }
-            .navigationTitle("")
-            .navigationBarHidden(true)
         }
         .sheet(isPresented: $showingItemDetail) {
             if let item = selectedItem {
-                SpecialItemDetailSheet(specialItem: item)
+                CyberpunkSpecialItemDetailSheet(specialItem: item)
             }
         }
     }

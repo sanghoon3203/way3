@@ -18,7 +18,7 @@ struct BackgroundVideoLayer: View {
     @State private var player: AVPlayer?
 
     // 기본 생성자 (기존 호환성 유지)
-    init(videoName: String = "bgMV1", videoExtension: String = "mp4", directory: String? = "backgrdMV") {
+    init(videoName: String = "bgmv1", videoExtension: String = "mp4", directory: String? = "Bgmv") {
         self.videoName = videoName
         self.videoExtension = videoExtension
         self.directory = directory
@@ -92,7 +92,7 @@ struct StartViewBackgroundLayer: View {
     @State private var showVideo = true
     @State private var selectedVideoName = ""
 
-    private let videoOptions = ["bgMV1", "bgMV2"]
+    private let videoOptions = ["bgmv1", "bgmv2"]
 
     var body: some View {
         ZStack {
@@ -132,10 +132,10 @@ struct StartViewBackgroundLayer: View {
 
     private func setupRandomVideo() {
         // 랜덤으로 비디오 선택
-        selectedVideoName = videoOptions.randomElement() ?? "bgMV1"
+        selectedVideoName = videoOptions.randomElement() ?? "bgmv1"
 
         // 선택된 비디오에 따라 배경 이미지 설정
-        currentBackgroundImage = selectedVideoName == "bgMV1" ? "bg1" : "bg2"
+        currentBackgroundImage = selectedVideoName == "bgmv1" ? "bg1" : "bg2"
 
         guard let videoPath = Bundle.main.path(forResource: selectedVideoName, ofType: "mp4", inDirectory: "Bgmv") else {
             print("⚠️ 배경 영상을 찾을 수 없습니다: Bgmv/\(selectedVideoName).mp4")

@@ -50,80 +50,79 @@ struct InventoryView: View {
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 30) {
-                    // MARK: - 무역품 섹션
-                    VStack(alignment: .leading, spacing: 16) {
-                        // Section Header
-                        HStack {
-                            Text("무역품")
-                                .font(.chosunH1)
-                                .fontWeight(.bold)
-                                .foregroundColor(.primary)
+            ZStack {
+                // 사이버펑크 배경
+                Color.cyberpunkDarkBg
+                    .ignoresSafeArea()
 
-                            Spacer()
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        // MARK: - 무역품 섹션
+                        VStack(alignment: .leading, spacing: 16) {
+                            // Section Header - 사이버펑크 스타일
+                            CyberpunkSectionHeader(
+                                title: "TRADE_GOODS",
+                                subtitle: "INVENTORY_SYSTEM_V2.1",
+                                rightContent: "VALUE: ₩\(calculateTradeGoodsValue())"
+                            )
 
-                            Text("₩\(calculateTradeGoodsValue())")
-                                .font(.chosunSubhead)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.green)
-                        }
-                        .padding(.horizontal, 20)
-
-                        // Trade Goods List
-                        LazyVStack(spacing: 12) {
-                            ForEach(tradeGoods) { good in
-                                TradeGoodBoxView(tradeGood: good) {
+                            // Trade Goods List - 사이버펑크 그리드
+                            CyberpunkInventoryGrid(
+                                items: tradeGoods,
+                                columns: 2,
+                                emptySlots: 2
+                            ) { good in
+                                CyberpunkTradeGoodCard(tradeGood: good) {
                                     selectedItem = good
                                     showingSellSheet = true
                                 }
                             }
+                            .padding(.horizontal, CyberpunkLayout.screenPadding)
                         }
-                        .padding(.horizontal, 20)
-                    }
 
-                    // Section Divider
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.3))
-                        .frame(height: 1)
-                        .padding(.horizontal, 20)
+                        // Section Divider - 사이버펑크 스타일
+                        Rectangle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [.cyberpunkYellow, .cyberpunkCyan, .clear],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .frame(height: 1)
+                            .padding(.horizontal, CyberpunkLayout.screenPadding)
 
-                    // MARK: - 인벤토리 섹션
-                    VStack(alignment: .leading, spacing: 16) {
-                        // Section Header
-                        HStack {
-                            Text("인벤토리")
-                                .font(.chosunH1)
-                                .fontWeight(.bold)
-                                .foregroundColor(.primary)
+                        // MARK: - 인벤토리 섹션
+                        VStack(alignment: .leading, spacing: 16) {
+                            // Section Header - 사이버펑크 스타일
+                            CyberpunkSectionHeader(
+                                title: "PLAYER_INVENTORY",
+                                subtitle: "PERSONAL_ITEMS",
+                                rightContent: "ITEMS: \(inventoryItems.count)/20"
+                            )
 
-                            Spacer()
-
-                            Text("\(inventoryItems.count)개 아이템")
-                                .font(.chosunSubhead)
-                                .foregroundColor(.secondary)
-                        }
-                        .padding(.horizontal, 20)
-
-                        // Inventory Items List
-                        LazyVStack(spacing: 12) {
-                            ForEach(inventoryItems) { item in
-                                PlayerInventoryItemBoxView(inventoryItem: item)
+                            // Inventory Items List - 사이버펑크 그리드
+                            CyberpunkInventoryGrid(
+                                items: inventoryItems,
+                                columns: 1,
+                                emptySlots: 3
+                            ) { item in
+                                CyberpunkPlayerInventoryCard(inventoryItem: item)
                             }
+                            .padding(.horizontal, CyberpunkLayout.screenPadding)
                         }
-                        .padding(.horizontal, 20)
-                    }
 
-                    Spacer(minLength: 100) // Tab bar spacing
+                        Spacer(minLength: 100) // Tab bar spacing
+                    }
+                    .padding(.vertical, 20)
                 }
-                .padding(.vertical, 20)
+                .navigationTitle("")
+                .navigationBarHidden(true)
             }
-            .navigationTitle("")
-            .navigationBarHidden(true)
         }
         .sheet(isPresented: $showingSellSheet) {
             if let item = selectedItem {
-                TradeGoodDetailSheet(tradeGood: item)
+                CyberpunkTradeGoodDetailSheet(tradeGood: item)
             }
         }
     }

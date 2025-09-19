@@ -79,7 +79,7 @@ struct JRPGScreenManager {
     // MARK: - JRPG 전용 색상 팔레트
     struct JRPGColors {
         static let dialogueBackground = Color.black.opacity(0.85)
-        static let dialogueBorder = Color.gold
+        static let dialogueBorder = Color.commonGray
         static let dialogueText = Color.white
         static let choiceBackground = Color.blue.opacity(0.9)
         static let choiceBorder = Color.cyan

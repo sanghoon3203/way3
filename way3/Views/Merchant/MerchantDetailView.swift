@@ -12,14 +12,14 @@ struct MerchantDetailView: View {
     let merchant: Merchant
     @Binding var isPresented: Bool
     @EnvironmentObject var gameManager: GameManager
-
+    
     // 대화 상태
     @State var currentMode: MerchantInteractionMode = .dialogue
     @State var displayedText = ""
     @State var isTypingComplete = false
     @State var showNextArrow = false
     @State var currentDialogueIndex = 0
-
+    
     // 거래 상태
     @StateObject var cartManager = CartManager()
     @State var selectedTradeType: TradeType = .buy
@@ -27,35 +27,60 @@ struct MerchantDetailView: View {
     @State var selectedItem: TradeItem?
     @State var showCartDetail = false
     @State var showPurchaseConfirmation = false
-
+    
     // 상인 이미지 이름
     private var merchantImageName: String {
         return merchant.name.replacingOccurrences(of: " ", with: "")
     }
-
+    
+    // Extensions에서 사용할 수 있도록 computed properties 추가
+    var merchantInventoryGridView: some View {
+        MerchantInventoryGridView
+    }
+    
+    var playerInventoryGridView: some View {
+        PlayerInventoryGridView
+    }
+    
+    var cartDetailView: some View {
+        CartDetailView
+    }
+    
+    var quantitySelectionPopup: some View {
+        QuantitySelectionPopup
+    }
+    
+    var purchaseConfirmationPopup: some View {
+        PurchaseConfirmationPopup
+    }
+    
     var body: some View {
         ZStack {
-            // 1. 검정보라색 울렁거리는 애니메이션 배경 (ProfileInputView와 동일)
-            AnimatedPurpleBackground()
-
+            // 1. 사이버펑크 다크 배경
+            Color.cyberpunkDarkBg
+                .ignoresSafeArea()
+            
             // 2. 메인 레이아웃
             if currentMode == .dialogue {
                 DialogueView
             } else if currentMode == .trading {
-                TradingView
+                tradingView
             } else if currentMode == .cart {
                 CartDetailView
             }
-
+            
             // 3. 팝업들
             if showQuantityPopup {
                 QuantitySelectionPopup
             }
-
+            
             if showPurchaseConfirmation {
                 PurchaseConfirmationPopup
             }
+            
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .clipped()
         .navigationBarHidden(true)
         .onAppear {
             startDialogue()
@@ -74,79 +99,71 @@ enum MerchantInteractionMode {
 extension MerchantDetailView {
     var DialogueView: some View {
         VStack(spacing: 0) {
-            // 상단: 상인 캐릭터 영역 (65%)
-            JRPGCharacterArea
+            // 상단: 상인 캐릭터 영역 (65%) - JRPG 레이아웃 유지
+            CyberpunkCharacterArea
                 .frame(height: JRPGScreenManager.characterAreaHeight)
+                .layoutPriority(1)
 
-            // 하단: 대화창 영역 (35%)
-            ZStack(alignment: .topTrailing) {
-                // 메인 대화창
-                JRPGDialogueArea
+            // 하단: 대화창 영역 (35%) - JRPG 레이아웃 유지
+            GeometryReader { geometry in
+                ZStack(alignment: .topTrailing) {
+                    // 메인 대화창 - JRPG 구조 유지, 사이버펑크 스타일 적용
+                    CyberpunkJRPGDialogueArea
 
-                // 우상단 선택지 메뉴 (JRPG 전통 스타일)
-                if isTypingComplete {
-                    JRPGChoiceMenu
-                        .offset(
-                            x: JRPGScreenManager.JRPGLayout.choiceMenuOffset.x,
-                            y: JRPGScreenManager.JRPGLayout.choiceMenuOffset.y
-                        )
-                        .transition(.asymmetric(
-                            insertion: .scale.combined(with: .opacity),
-                            removal: .scale.combined(with: .opacity)
-                        ))
-                        .animation(.easeOut(duration: JRPGScreenManager.JRPGAnimations.choiceMenuAppearDuration), value: isTypingComplete)
+                    // 우상단 선택지 메뉴 - JRPG 위치 유지, 사이버펑크 스타일 적용
+                    if isTypingComplete {
+                        CyberpunkJRPGChoiceMenu
+                            .offset(
+                                x: min(JRPGScreenManager.JRPGLayout.choiceMenuOffset.x, -20),
+                                y: max(JRPGScreenManager.JRPGLayout.choiceMenuOffset.y, 20)
+                            )
+                            .position(
+                                x: geometry.size.width - (JRPGScreenManager.JRPGLayout.choiceMenuWidth / 2) - 20,
+                                y: geometry.size.height * 0.3
+                            )
+                            .transition(.asymmetric(
+                                insertion: .scale.combined(with: .opacity),
+                                removal: .scale.combined(with: .opacity)
+                            ))
+                            .animation(.easeOut(duration: JRPGScreenManager.JRPGAnimations.choiceMenuAppearDuration), value: isTypingComplete)
+                    }
                 }
             }
             .frame(height: JRPGScreenManager.dialogueAreaHeight)
+            .layoutPriority(2)
         }
-        .background(JRPGScreenManager.JRPGColors.characterAreaBackground)
+        .background(Color.cyberpunkDarkBg) // 배경만 사이버펑크로
     }
 
-    // MARK: - JRPG 캐릭터 영역
-    var JRPGCharacterArea: some View {
+    // MARK: - 사이버펑크 스타일 캐릭터 영역 (JRPG 구조 유지)
+    var CyberpunkCharacterArea: some View {
         ZStack {
-            // 배경 효과
-            JRPGCharacterBackground
+            // 사이버펑크 배경 효과
+            CyberpunkCharacterBackground
 
-            // 상인 캐릭터 (중앙 배치)
+            // 상인 캐릭터 (중앙 배치) - JRPG 위치 유지
             VStack {
                 Spacer()
 
-                JRPGMerchantCharacter
+                CyberpunkMerchantCharacter
                     .scaleEffect(JRPGScreenManager.isCompactHeight ? 0.8 : 1.0)
 
                 Spacer()
-
-                // 상인 이름 표시
-                Text(merchant.name)
-                    .font(.jrpgTitle())
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 8)
-                    .background(
-                        Capsule()
-                            .fill(Color.black.opacity(0.7))
-                            .overlay(
-                                Capsule()
-                                    .stroke(Color.gold, lineWidth: 1.5)
-                            )
-                    )
-                    .jrpgGlowPulse()
 
                 Spacer().frame(height: 40)
             }
         }
     }
 
-    // MARK: - JRPG 캐릭터 배경 효과
-    var JRPGCharacterBackground: some View {
+    // MARK: - 사이버펑크 캐릭터 배경 효과
+    var CyberpunkCharacterBackground: some View {
         Rectangle()
             .fill(
                 RadialGradient(
                     colors: [
-                        Color.purple.opacity(0.2),
-                        Color.blue.opacity(0.1),
-                        Color.black.opacity(0.3)
+                        Color.cyberpunkYellow.opacity(0.1),
+                        Color.cyberpunkCyan.opacity(0.05),
+                        Color.cyberpunkDarkBg.opacity(0.8)
                     ],
                     center: .center,
                     startRadius: 50,
@@ -154,78 +171,112 @@ extension MerchantDetailView {
                 )
             )
             .overlay(
-                // 미묘한 파티클 효과 (향후 추가)
+                // 사이버펑크 스타일 스캔라인 효과
                 Rectangle()
-                    .fill(Color.clear)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.clear,
+                                Color.cyberpunkCyan.opacity(0.1),
+                                Color.clear
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .opacity(0.3)
             )
     }
 
-    // MARK: - JRPG 상인 캐릭터
-    var JRPGMerchantCharacter: some View {
+    // MARK: - 사이버펑크 스타일 상인 캐릭터 (JRPG 애니메이션 유지)
+    var CyberpunkMerchantCharacter: some View {
         ZStack {
-            // 캐릭터 배경 원
-            Circle()
+            // 사이버펑크 캐릭터 홀로그램 배경
+            Rectangle()
                 .fill(
                     RadialGradient(
-                        colors: [Color.gold.opacity(0.3), Color.clear],
+                        colors: [Color.cyberpunkCyan.opacity(0.2), Color.clear],
                         center: .center,
                         startRadius: 20,
                         endRadius: 80
                     )
                 )
                 .frame(width: 160, height: 160)
+                .clipShape(RoundedRectangle(cornerRadius: 4)) // 각진 사이버펑크 스타일
                 .scaleEffect(JRPGScreenManager.isLargeScreen ? 1.2 : 1.0)
+                .overlay(
+                    // 홀로그램 효과 테두리
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(Color.cyberpunkCyan.opacity(0.6), lineWidth: 1)
+                )
 
-            // 동적 상인 이미지 (Asset 폴더 자동 매칭)
+            // 동적 상인 이미지 (Asset 폴더 자동 매칭) - 기존 시스템 유지
             MerchantImageView(
                 merchantName: merchant.name,
                 width: JRPGScreenManager.isLargeScreen ? 140 : 120,
                 height: JRPGScreenManager.isLargeScreen ? 140 : 120
             )
-            // 캐릭터 살랑살랑 애니메이션
+            // 캐릭터 살랑살랑 애니메이션 유지
             .offset(y: sin(Date().timeIntervalSince1970) * 3)
             .animation(
                 Animation.easeInOut(duration: JRPGScreenManager.JRPGAnimations.characterBounceDuration)
                     .repeatForever(autoreverses: true),
                 value: UUID()
             )
+            .overlay(
+                // 홀로그램 글리치 효과
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(Color.cyberpunkYellow.opacity(0.3), lineWidth: 0.5)
+                    .opacity(sin(Date().timeIntervalSince1970 * 8) * 0.5 + 0.5)
+            )
         }
     }
 
-    // MARK: - JRPG 대화창 영역
-    var JRPGDialogueArea: some View {
-        VStack(spacing: 0) {
-            Spacer()
+    // MARK: - 사이버펑크 JRPG 대화창 영역 (구조 유지)
+    var CyberpunkJRPGDialogueArea: some View {
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                Spacer()
 
-            // 메인 대화창 (하단 고정)
-            JRPGDialogueBox
-                .padding(.horizontal, JRPGScreenManager.JRPGLayout.screenPadding)
-                .padding(.bottom, JRPGScreenManager.JRPGLayout.screenPadding)
+                // 메인 대화창 (하단 고정) - JRPG 위치 유지
+                CyberpunkJRPGDialogueBox
+                    .padding(.horizontal, min(JRPGScreenManager.JRPGLayout.screenPadding, geometry.size.width * 0.05))
+                    .padding(.bottom, JRPGScreenManager.JRPGLayout.screenPadding)
+            }
+            .frame(maxWidth: .infinity)
         }
     }
 
-    // MARK: - JRPG 스타일 대화창
-    var JRPGDialogueBox: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // 대화창 헤더 (상인 이름)
+    // MARK: - 사이버펑크 JRPG 대화창 (기존 기능 완전 유지)
+    var CyberpunkJRPGDialogueBox: some View {
+        VStack(alignment: .center, spacing: 12) {
+            // 대화창 헤더 (상인 이름) - 사이버펑크 스타일
             HStack {
-                Image(systemName: "person.circle.fill")
-                    .foregroundColor(.gold)
-                    .font(.system(size: 20))
+                Image(systemName: "antenna.radiowaves.left.and.right")
+                    .foregroundColor(.cyberpunkCyan)
+                    .font(.system(size: 16))
 
-                Text(merchant.name)
-                    .font(.jrpgTitle())
-                    .foregroundColor(.white)
+                Text("COMM_LINK")
+                    .font(.cyberpunkTechnical())
+                    .foregroundColor(.cyberpunkTextSecondary)
+
+                Rectangle()
+                    .fill(Color.cyberpunkYellow)
+                    .frame(width: 20, height: 1)
+
+                Text(merchant.name.uppercased())
+                    .font(.cyberpunkCaption())
+                    .foregroundColor(.cyberpunkYellow)
 
                 Spacer()
 
-                // 대화 진행 상태 표시
+                // 대화 진행 상태 표시 - 사이버펑크 스타일
                 if !isTypingComplete {
-                    HStack(spacing: 3) {
+                    HStack(spacing: 2) {
                         ForEach(0..<3) { index in
-                            Circle()
-                                .fill(Color.gold)
-                                .frame(width: 4, height: 4)
+                            Rectangle()
+                                .fill(Color.cyberpunkCyan)
+                                .frame(width: 3, height: 3)
                                 .opacity(0.6)
                                 .scaleEffect(typingDotAnimation(index: index))
                                 .animation(
@@ -235,39 +286,42 @@ extension MerchantDetailView {
                                     value: UUID()
                                 )
                         }
+
+                        Text("PROCESSING")
+                            .font(.cyberpunkTechnical())
+                            .foregroundColor(.cyberpunkCyan)
                     }
                 }
             }
             .padding(.bottom, 8)
 
-            // 대화 텍스트
+            // 대화 텍스트 - 기존 스크롤뷰 유지
             ScrollView {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(displayedText)
-                        .font(.jrpgDialogue())
-                        .foregroundColor(JRPGScreenManager.JRPGColors.dialogueText)
+                        .font(.cyberpunkBody()) // 사이버펑크 폰트로 변경
+                        .foregroundColor(.cyberpunkTextPrimary) // 사이버펑크 텍스트 색상
                         .lineLimit(nil)
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(.vertical, 4)
             }
-            .frame(height: 80)
 
-            // 하단 액션 영역
+            // 하단 액션 영역 - 기존 기능 유지, 스타일만 변경
             HStack {
                 Spacer()
 
                 // 다음 화살표 (타이핑 완료 시)
                 if showNextArrow {
                     HStack(spacing: 4) {
-                        Text("계속")
-                            .font(.jrpgUI())
-                            .foregroundColor(.gold)
+                        Text("CONTINUE")
+                            .font(.cyberpunkTechnical())
+                            .foregroundColor(.cyberpunkYellow)
 
-                        Image(systemName: "arrowtriangle.right.fill")
-                            .foregroundColor(.gold)
-                            .font(.system(size: 12))
+                        Text(">")
+                            .font(.cyberpunkCaption())
+                            .foregroundColor(.cyberpunkYellow)
                             .offset(x: sin(Date().timeIntervalSince1970 * 3) * 2)
                             .animation(
                                 Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true),
@@ -275,15 +329,20 @@ extension MerchantDetailView {
                             )
                     }
                     .onTapGesture {
-                        continueDialogue()
+                        continueDialogue() // 기존 함수 유지
                     }
                 }
             }
         }
-        .padding(JRPGScreenManager.JRPGLayout.dialoguePadding)
-        .frame(height: JRPGScreenManager.JRPGLayout.dialogueBoxHeight)
-        .jrpgDialogueBox()
-        .transition(.asymmetric(
+        .padding(JRPGScreenManager.JRPGLayout.dialoguePadding) // 기존 패딩 유지
+        .frame(height: JRPGScreenManager.JRPGLayout.dialogueBoxHeight) // 기존 높이 유지
+        .background(Color.cyberpunkCardBg) // 사이버펑크 배경
+        .overlay(
+            Rectangle()
+                .stroke(Color.cyberpunkBorder, lineWidth: CyberpunkLayout.borderWidth)
+        )
+        .clipShape(Rectangle()) // 각진 사이버펑크 스타일
+        .transition(.asymmetric( // 기존 애니메이션 유지
             insertion: .move(edge: .bottom).combined(with: .opacity),
             removal: .move(edge: .bottom).combined(with: .opacity)
         ))
@@ -296,88 +355,103 @@ extension MerchantDetailView {
         return 1.0 + sin(time * 2 + Double(index) * 0.5) * 0.3
     }
 
-    // MARK: - JRPG 스타일 선택지 메뉴
-    var JRPGChoiceMenu: some View {
+    // MARK: - 사이버펑크 JRPG 선택지 메뉴 (기존 구조 유지)
+    var CyberpunkJRPGChoiceMenu: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 선택지 헤더
+            // 선택지 헤더 - 사이버펑크 스타일
             HStack {
-                Image(systemName: "list.bullet.circle.fill")
-                    .foregroundColor(.cyan)
-                    .font(.system(size: 16))
+                Image(systemName: "command.circle.fill")
+                    .foregroundColor(.cyberpunkYellow)
+                    .font(.system(size: 14))
 
-                Text("선택하세요")
-                    .font(.jrpgChoice())
-                    .foregroundColor(.white)
+                Text("ACTION_MENU")
+                    .font(.cyberpunkTechnical())
+                    .foregroundColor(.cyberpunkTextPrimary)
                     .fontWeight(.semibold)
 
                 Spacer()
+
+                Text("[SELECT]")
+                    .font(.cyberpunkTechnical())
+                    .foregroundColor(.cyberpunkCyan)
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Color.cyberpunkDarkBg)
+            .overlay(
                 Rectangle()
-                    .fill(Color.blue.opacity(0.8))
-                    .overlay(
-                        Rectangle()
-                            .stroke(Color.cyan, lineWidth: 1)
-                    )
+                    .fill(Color.cyberpunkYellow)
+                    .frame(height: 1),
+                alignment: .bottom
             )
 
-            // 선택지 리스트
-            VStack(alignment: .leading, spacing: 2) {
-                JRPGChoiceButton(
-                    text: "💰 거래하기",
-                    action: { startTrading() },
+            // 선택지 리스트 - 기존 액션 유지, 스타일만 변경
+            VStack(alignment: .leading, spacing: 1) {
+                CyberpunkJRPGChoiceButton(
+                    text: "TRADE",
+                    icon: "$",
+                    action: { startTrading() }, // 기존 함수 유지
                     isSelected: false
                 )
 
-                JRPGChoiceButton(
-                    text: "💬 대화하기",
-                    action: { continueDialogue() },
+                CyberpunkJRPGChoiceButton(
+                    text: "DIALOGUE",
+                    icon: ">>",
+                    action: { continueDialogue() }, // 기존 함수 유지
                     isSelected: false
                 )
 
-                JRPGChoiceButton(
-                    text: "🚪 떠나기",
-                    action: { closeDialogue() },
+                CyberpunkJRPGChoiceButton(
+                    text: "EXIT",
+                    icon: "X",
+                    action: { closeDialogue() }, // 기존 함수 유지
                     isSelected: false
                 )
             }
-            .padding(.horizontal, 4)
-            .padding(.vertical, 4)
+            .padding(4)
         }
-        .frame(width: JRPGScreenManager.JRPGLayout.choiceMenuWidth)
-        .jrpgChoiceMenu()
+        .frame(width: JRPGScreenManager.JRPGLayout.choiceMenuWidth) // 기존 너비 유지
+        .background(Color.cyberpunkPanelBg)
+        .overlay(
+            Rectangle()
+                .stroke(Color.cyberpunkBorder, lineWidth: CyberpunkLayout.borderWidth)
+        )
+        .clipShape(Rectangle())
     }
 
-    // MARK: - JRPG 선택지 버튼
-    func JRPGChoiceButton(text: String, action: @escaping () -> Void, isSelected: Bool) -> some View {
+    // MARK: - 사이버펑크 JRPG 선택지 버튼 (기존 기능 유지)
+    func CyberpunkJRPGChoiceButton(text: String, icon: String, action: @escaping () -> Void, isSelected: Bool) -> some View {
         Button(action: action) {
             HStack {
-                // 선택 표시 화살표
-                Image(systemName: "arrowtriangle.right.fill")
-                    .foregroundColor(.gold)
-                    .font(.system(size: 10))
+                // 선택 표시 화살표 - 사이버펑크 스타일
+                Text(">")
+                    .font(.cyberpunkCaption())
+                    .foregroundColor(.cyberpunkYellow)
                     .opacity(isSelected ? 1.0 : 0.0)
                     .animation(.easeInOut(duration: 0.2), value: isSelected)
 
+                Text(icon)
+                    .font(.cyberpunkCaption())
+                    .foregroundColor(.cyberpunkCyan)
+                    .frame(width: 16)
+
                 Text(text)
-                    .font(.jrpgChoice())
-                    .foregroundColor(isSelected ? .gold : .white)
-                    .fontWeight(isSelected ? .bold : .medium)
+                    .font(.cyberpunkBody())
+                    .foregroundColor(isSelected ? .cyberpunkYellow : .cyberpunkTextPrimary)
+                    .fontWeight(isSelected ? .semibold : .medium)
 
                 Spacer()
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
             .background(
                 Rectangle()
-                    .fill(isSelected ? Color.gold.opacity(0.2) : Color.clear)
+                    .fill(isSelected ? Color.cyberpunkYellow.opacity(0.1) : Color.clear)
                     .overlay(
                         Rectangle()
                             .stroke(
-                                isSelected ? Color.gold.opacity(0.8) : Color.clear,
-                                lineWidth: 1
+                                isSelected ? Color.cyberpunkYellow.opacity(0.6) : Color.clear,
+                                lineWidth: 0.5
                             )
                     )
             )
@@ -392,10 +466,6 @@ extension MerchantDetailView {
         }
     }
 
-    func continueDialogue() {
-        // Extensions에서 정의된 기존 대화 시스템 사용
-        proceedToNextDialogue()
-    }
 
     // Extensions에 정의된 함수들과 연결하기 위한 래퍼
     func getDialogues() -> [String] {
@@ -409,109 +479,35 @@ extension MerchantDetailView {
     }
 }
 
-    var DialogueBoxView: some View {
-        ZStack {
-            // 대화창 배경
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color.black.opacity(0.85))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(merchant.type.color.opacity(0.6), lineWidth: 2)
-                )
 
-            VStack(spacing: 16) {
-                // 상인 이름과 대화 텍스트
-                HStack {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text(merchant.name)
-                            .font(.chosunOrFallback(size: 16, weight: .bold))
-                            .foregroundColor(merchant.type.color)
 
-                        Text(displayedText)
-                            .font(.chosunOrFallback(size: 16))
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.leading)
-                    }
-                    Spacer()
-                }
-
-                // 다음 화살표
-                HStack {
-                    Spacer()
-                    if showNextArrow && !merchantDialogues.isEmpty {
-                        Button(action: proceedToNextDialogue) {
-                            HStack(spacing: 8) {
-                                Text("다음")
-                                    .font(.chosunOrFallback(size: 14))
-                                    .foregroundColor(merchant.type.color)
-
-                                Image(systemName: "arrow.right.circle.fill")
-                                    .font(.title2)
-                                    .foregroundColor(merchant.type.color)
-                            }
-                        }
-                        .opacity(isTypingComplete ? 1.0 : 0.0)
-                        .animation(.easeInOut(duration: 0.3), value: isTypingComplete)
-                    }
-                }
-            }
-            .padding(20)
-        }
-        .frame(height: 200)
-        .padding(.horizontal, 20)
-    }
-
-    var DialogueChoicesView: some View {
-        VStack(spacing: 12) {
-            DialogueChoiceButton(
-                title: "대화하기",
-                icon: "bubble.left.fill",
-                action: { continueDialogue() }
-            )
-
-            DialogueChoiceButton(
-                title: "거래하기",
-                icon: "bag.fill",
-                action: { startTrading() }
-            )
-
-            DialogueChoiceButton(
-                title: "나가기",
-                icon: "xmark.circle.fill",
-                action: { exitMerchant() }
-            )
-        }
-        .padding(.top, 16)
-        .transition(.opacity.combined(with: .move(edge: .bottom)))
-    }
-}
 
 // MARK: - 거래 화면
 extension MerchantDetailView {
-    var TradingView: some View {
+    var tradingView: some View {
         VStack(spacing: 0) {
             // 상인 헤더
-            TradingHeaderView
+            tradingHeaderView
 
             // 탭 선택 (구매/판매)
-            TradeTabSelectionView
+            tradeTabSelectionView
 
             // 아이템 그리드
             if selectedTradeType == .buy {
-                MerchantInventoryGridView
+                merchantInventoryGridView
             } else {
-                PlayerInventoryGridView
+                playerInventoryGridView
             }
 
             // 장바구니 푸터
             if !cartManager.items.isEmpty {
-                CartFooterView
+                cartFooterView
             }
         }
         .background(Color.black.opacity(0.9))
     }
 
-    var TradingHeaderView: some View {
+    var tradingHeaderView: some View {
         HStack {
             // 뒤로가기 버튼
             Button(action: { currentMode = .dialogue }) {
@@ -537,16 +533,16 @@ extension MerchantDetailView {
                             .clipShape(Circle())
                     } else {
                         Circle()
-                            .fill(merchant.type.color)
+                            .fill(self.merchant.type.color)
                             .frame(width: 40, height: 40)
                             .overlay(
-                                Image(systemName: merchant.type.iconName)
+                                Image(systemName: self.merchant.type.iconName)
                                     .foregroundColor(.white)
                             )
                     }
                 }
 
-                Text(merchant.name)
+                Text(self.merchant.name)
                     .font(.chosunOrFallback(size: 18, weight: .bold))
                     .foregroundColor(.white)
             }
@@ -555,7 +551,7 @@ extension MerchantDetailView {
         .background(Color.black.opacity(0.8))
     }
 
-    var TradeTabSelectionView: some View {
+    var tradeTabSelectionView: some View {
         HStack {
             TradeTabButton(
                 title: "구매",
@@ -573,7 +569,7 @@ extension MerchantDetailView {
         .padding(.vertical, 10)
     }
 
-    var CartFooterView: some View {
+    var cartFooterView: some View {
         VStack(spacing: 12) {
             HStack {
                 Text("장바구니: \(cartManager.items.count)개")
@@ -659,69 +655,7 @@ struct TradeTabButton: View {
     }
 }
 
-// MARK: - 상인 헤더 (기존 코드 유지)
-struct MerchantHeaderView: View {
-    let merchant: Merchant
-    
-    var body: some View {
-        VStack(spacing: 15) {
-            // 상인 아바타
-            ZStack {
-                Circle()
-                    .fill(merchant.pinColor)
-                    .frame(width: 80, height: 80)
-                    .shadow(radius: 10)
-                
-                Image(systemName: merchant.iconName)
-                    .font(.system(size: 40))
-                    .foregroundColor(.white)
-            }
-            
-            VStack(spacing: 8) {
-                Text(merchant.name)
-                    .font(.custom("ChosunCentennial", size: 24))
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-                
-                Text("\(merchant.type.displayName) 상인 • \(merchant.district.displayName)")
-                    .font(.custom("ChosunCentennial", size: 16))
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                
-                HStack(spacing: 20) {
-                    // 거리
-                    HStack(spacing: 5) {
-                        Image(systemName: "location.fill")
-                            .foregroundColor(.blue)
-                        Text("\(Int(merchant.distance))m")
-                            .font(.custom("ChosunCentennial", size: 14))
-                    }
-                    
-                    // 평점
-                    HStack(spacing: 5) {
-                        Image(systemName: "star.fill")
-                            .foregroundColor(.yellow)
-                        Text("4.5")
-                            .font(.custom("ChosunCentennial", size: 14))
-                    }
-                    
-                    // 카테고리
-                    Text(merchant.type.displayName)
-                        .font(.custom("ChosunCentennial", size: 12))
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(merchant.pinColor.opacity(0.2))
-                        )
-                        .foregroundColor(merchant.pinColor)
-                }
-            }
-        }
-        .padding(.vertical, 20)
-        .background(Color(.systemBackground))
-    }
-}
+
 
 // MARK: - 탭 선택
 struct TabSelectionView: View {

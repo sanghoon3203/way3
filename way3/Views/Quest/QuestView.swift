@@ -259,101 +259,61 @@ struct QuestView: View {
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    // Header Section
-                    HStack {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("오늘의 퀘스트")
-                                .font(.chosunH1)
-                                .fontWeight(.bold)
-                                .foregroundColor(.primary)
+            ZStack {
+                // 사이버펑크 배경
+                Color.cyberpunkDarkBg
+                    .ignoresSafeArea()
 
-                            Text("근처 상인들의 의뢰를 확인하세요")
-                                .font(.chosunSubhead)
-                                .foregroundColor(.secondary)
-                        }
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        // Header Section - 사이버펑크 스타일
+                        CyberpunkSectionHeader(
+                            title: "MISSION_TERMINAL",
+                            subtitle: "DAILY_QUEST_SYSTEM_V3.2",
+                            rightContent: "REFRESH: \(questManager.timeUntilRefresh())"
+                        )
+                        .padding(.top, 10)
 
-                        Spacer()
+                        // Daily Quest Progress - 사이버펑크 스타일
+                        CyberpunkStatusPanel(
+                            title: "DAILY_PROGRESS",
+                            statusItems: [
+                                ("COMPLETED", "\(questManager.dailyQuestCount)/3", .cyberpunkGreen),
+                                ("STATUS", questManager.canAcceptQuest() ? "ACTIVE" : "LIMIT_REACHED", questManager.canAcceptQuest() ? .cyberpunkGreen : .cyberpunkError),
+                                ("RESET_TIME", "00:00 KST", .cyberpunkCyan)
+                            ]
+                        )
+                        .padding(.horizontal, CyberpunkLayout.screenPadding)
 
-                        // Refresh Timer
-                        VStack(alignment: .trailing, spacing: 4) {
-                            Text("갱신까지")
-                                .font(.chosunSmall)
-                                .foregroundColor(.secondary)
-
-                            Text(questManager.timeUntilRefresh())
-                                .font(.chosunCaption)
-                                .fontWeight(.bold)
-                                .foregroundColor(.blue)
-                                .monospacedDigit()
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 10)
-
-                    // Daily Quest Progress
-                    HStack {
-                        Image(systemName: "calendar.badge.clock")
-                            .foregroundColor(.orange)
-
-                        Text("오늘 완료: \(questManager.dailyQuestCount)/3")
-                            .font(.chosunSubhead)
-                            .fontWeight(.medium)
-
-                        Spacer()
-
-                        Text("한국 시간 00:00에 초기화")
-                            .font(.chosunSmall)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 12)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.orange.opacity(0.1))
-                    )
-                    .padding(.horizontal, 20)
-
-                    // Quest Cards
-                    LazyVStack(spacing: 20) {
-                        ForEach(questManager.currentQuests) { quest in
-                            QuestBoxView(quest: quest) {
-                                if questManager.canAcceptQuest() {
-                                    questManager.acceptQuest(quest)
+                        // Quest Cards - 사이버펑크 스타일
+                        LazyVStack(spacing: 16) {
+                            ForEach(questManager.currentQuests) { quest in
+                                CyberpunkQuestCard(quest: quest) {
+                                    if questManager.canAcceptQuest() {
+                                        questManager.acceptQuest(quest)
+                                    }
                                 }
                             }
                         }
-                    }
-                    .padding(.horizontal, 20)
+                        .padding(.horizontal, CyberpunkLayout.screenPadding)
 
-                    // Refresh Button (if refresh time passed)
-                    if questManager.timeUntilRefresh() == "새로고침 가능" {
-                        Button(action: {
-                            questManager.refreshQuests()
-                        }) {
-                            HStack {
-                                Image(systemName: "arrow.clockwise")
-                                Text("새로운 퀘스트 불러오기")
-                                    .font(.chosunButton)
-                                    .fontWeight(.medium)
+                        // Refresh Button (if refresh time passed) - 사이버펑크 스타일
+                        if questManager.timeUntilRefresh() == "새로고침 가능" {
+                            CyberpunkButton(
+                                title: "REFRESH_MISSIONS",
+                                style: .primary
+                            ) {
+                                questManager.refreshQuests()
                             }
-                            .foregroundColor(.blue)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.blue, lineWidth: 2)
-                            )
+                            .padding(.horizontal, CyberpunkLayout.screenPadding)
                         }
-                        .padding(.horizontal, 20)
-                    }
 
-                    Spacer(minLength: 100) // Extra space for tab bar
+                        Spacer(minLength: 100) // Extra space for tab bar
                 }
+                }
+                .navigationTitle("")
+                .navigationBarHidden(true)
             }
-            .navigationTitle("")
-            .navigationBarHidden(true)
         }
         .onAppear {
             startTimer()

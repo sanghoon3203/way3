@@ -47,6 +47,16 @@ enum ItemGrade: Int, CaseIterable, Codable {
         case .legendary: return "전설"
         }
     }
+
+    var cyberpunkColor: Color {
+        switch self {
+        case .common: return .cyberpunkTextSecondary
+        case .intermediate: return .cyberpunkCyan
+        case .advanced: return .cyberpunkGreen
+        case .rare: return .cyberpunkYellow
+        case .legendary: return .cyberpunkGold
+        }
+    }
 }
 
 // MARK: - 라이센스 등급

@@ -132,13 +132,6 @@ extension MerchantDetailView {
         }
     }
 
-    // 거래 시작
-    func startTrading() {
-        withAnimation(.easeInOut(duration: 0.5)) {
-            currentMode = .trading
-        }
-    }
-
     // 나가기
     func exitMerchant() {
         isPresented = false
@@ -161,34 +154,40 @@ extension MerchantDetailView {
 // MARK: - 아이템 그리드 뷰들
 extension MerchantDetailView {
     var MerchantInventoryGridView: some View {
-        ScrollView {
-            LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ], spacing: 15) {
-                ForEach(sampleMerchantItems) { item in
-                    SimpleTradeItemCard(item: item) {
-                        selectItem(item)
+        GeometryReader { geometry in
+            ScrollView {
+                LazyVGrid(columns: [
+                    GridItem(.flexible(minimum: 120, maximum: 200)),
+                    GridItem(.flexible(minimum: 120, maximum: 200))
+                ], spacing: 15) {
+                    ForEach(sampleMerchantItems) { item in
+                        SimpleTradeItemCard(item: item) {
+                            selectItem(item)
+                        }
                     }
                 }
+                .padding(.horizontal, max(16, geometry.size.width * 0.05))
+                .padding(.vertical, 16)
             }
-            .padding()
         }
     }
 
     var PlayerInventoryGridView: some View {
-        ScrollView {
-            LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ], spacing: 15) {
-                ForEach(samplePlayerItems) { item in
-                    SimpleTradeItemCard(item: item) {
-                        selectItem(item)
+        GeometryReader { geometry in
+            ScrollView {
+                LazyVGrid(columns: [
+                    GridItem(.flexible(minimum: 120, maximum: 200)),
+                    GridItem(.flexible(minimum: 120, maximum: 200))
+                ], spacing: 15) {
+                    ForEach(samplePlayerItems) { item in
+                        SimpleTradeItemCard(item: item) {
+                            selectItem(item)
+                        }
                     }
                 }
+                .padding(.horizontal, max(16, geometry.size.width * 0.05))
+                .padding(.vertical, 16)
             }
-            .padding()
         }
     }
 
@@ -490,52 +489,69 @@ extension MerchantDetailView {
     }
 }
 
-// MARK: - 헬퍼 컴포넌트들
+// MARK: - 사이버펑크 트레이드 아이템 카드 (기존 기능 유지)
 struct SimpleTradeItemCard: View {
     let item: TradeItem
     let onTap: () -> Void
 
     var body: some View {
         Button(action: onTap) {
-            VStack(spacing: 12) {
+            VStack(spacing: 6) {
+                // 아이템 헤더
+                HStack {
+                    Text("ID: \(String(item.id.uuidString.prefix(4)))")
+                        .font(.cyberpunkTechnical())
+                        .foregroundColor(.cyberpunkTextSecondary)
+
+                    Spacer()
+
+                    Text(item.grade.displayName.uppercased())
+                        .font(.cyberpunkTechnical())
+                        .foregroundColor(item.grade.cyberpunkColor)
+                }
+
                 // 아이템 이미지
                 ZStack {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(item.grade.color.opacity(0.2))
-                        .frame(height: 80)
+                    Rectangle()
+                        .fill(item.grade.cyberpunkColor.opacity(0.1))
+                        .aspectRatio(1, contentMode: .fit)
+                        .overlay(
+                            Rectangle()
+                                .stroke(item.grade.cyberpunkColor.opacity(0.6), lineWidth: 1)
+                        )
 
                     Image(systemName: item.iconName)
-                        .font(.system(size: 30))
-                        .foregroundColor(item.grade.color)
+                        .font(.system(size: 20))
+                        .foregroundColor(item.grade.cyberpunkColor)
                 }
+                .frame(maxHeight: 50)
 
-                VStack(spacing: 4) {
-                    Text(item.name)
-                        .font(.chosunOrFallback(size: 16))
+                VStack(spacing: 2) {
+                    Text(item.name.uppercased())
+                        .font(.cyberpunkCaption())
                         .fontWeight(.semibold)
                         .lineLimit(1)
-                        .foregroundColor(.white)
+                        .foregroundColor(.cyberpunkTextPrimary)
+                        .minimumScaleFactor(0.8)
 
-                    Text("₩\(item.currentPrice)")
-                        .font(.chosunOrFallback(size: 14))
-                        .foregroundColor(.cyan)
-                        .fontWeight(.medium)
+                    CyberpunkDataDisplay(
+                        label: "PRICE",
+                        value: "₩\(item.currentPrice)",
+                        valueColor: .cyberpunkGreen
+                    )
 
-                    Text("재고: \(item.quantity)개")
-                        .font(.chosunOrFallback(size: 12))
-                        .foregroundColor(.white.opacity(0.7))
+                    CyberpunkDataDisplay(
+                        label: "STOCK",
+                        value: "\(item.quantity)",
+                        valueColor: .cyberpunkCyan
+                    )
                 }
             }
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 15)
-                    .fill(Color.white.opacity(0.1))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 15)
-                            .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
-                    )
-            )
+            .padding(8)
+            .frame(maxWidth: .infinity, minHeight: 120)
+            .cyberpunkGridSlot()
         }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 

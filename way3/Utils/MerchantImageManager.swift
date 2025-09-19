@@ -203,8 +203,8 @@ struct MerchantImageView: View {
         }
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.gold, lineWidth: 3)
-                .shadow(color: Color.gold.opacity(0.5), radius: 8)
+                .stroke(Color.commonGray, lineWidth: 3)
+                .shadow(color: Color.commonGray.opacity(0.5), radius: 8)
         )
     }
 }
@@ -220,7 +220,7 @@ struct JRPGMerchantPlaceholder: View {
                 .fill(
                     LinearGradient(
                         colors: [
-                            Color.gold.opacity(0.8),
+                            Color.commonGray.opacity(0.8),
                             Color.orange.opacity(0.6),
                             Color.red.opacity(0.4)
                         ],
@@ -260,39 +260,3 @@ struct JRPGMerchantPlaceholder: View {
     }
 }
 
-// MARK: - 상인 타입별 기본 색상 확장
-extension MerchantType {
-    var jrpgColor: Color {
-        switch self {
-        case .general:
-            return .blue
-        case .weaponsmith:
-            return .red
-        case .armorsmith:
-            return .orange
-        case .potion:
-            return .green
-        case .magic:
-            return .purple
-        case .rare:
-            return .gold
-        }
-    }
-
-    var jrpgIconName: String {
-        switch self {
-        case .general:
-            return "bag.fill"
-        case .weaponsmith:
-            return "hammer.fill"
-        case .armorsmith:
-            return "shield.fill"
-        case .potion:
-            return "flask.fill"
-        case .magic:
-            return "sparkles"
-        case .rare:
-            return "star.fill"
-        }
-    }
-}
