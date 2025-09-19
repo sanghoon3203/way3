@@ -499,7 +499,7 @@ struct SimpleTradeItemCard: View {
             VStack(spacing: 6) {
                 // 아이템 헤더
                 HStack {
-                    Text("ID: \(String(item.id.uuidString.prefix(4)))")
+                    Text("ID: \(String(item.id.prefix(4)))")
                         .font(.cyberpunkTechnical())
                         .foregroundColor(.cyberpunkTextSecondary)
 

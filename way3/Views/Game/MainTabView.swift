@@ -12,12 +12,14 @@ struct MainTabView: View {
     @Binding var selectedTab: Int
     @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var authManager: AuthManager
-    @State private var showProfile = false
-    @State private var showSettings = false
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Main Content Area
+        CyberpunkEnhancedTabView(
+            selectedTab: $selectedTab,
+            credits: Int(authManager.currentPlayer?.money ?? 1200000),
+            level: authManager.currentPlayer?.level ?? 7,
+            connectionStatus: locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways ? "99.7" : "85.2"
+        ) {
             TabView(selection: $selectedTab) {
                 // 📍 맵 (첫 번째 탭)
                 MapView()
@@ -59,46 +61,6 @@ struct MainTabView: View {
                     }
                     .tag(4)
             }
-        }
-        .background(Color(.systemBackground))
-        .onAppear {
-            setupEnhancedTabBarAppearance()
-            FontSystemManager.setupAppFonts()
-        }
-    }
-    
-    private func setupEnhancedTabBarAppearance() {
-        let appearance = UITabBarAppearance()
-        appearance.configureWithOpaqueBackground()
-
-        // 사이버펑크 + 전통한국 테마: 어두운 배경
-        appearance.backgroundColor = UIColor.black.withAlphaComponent(0.9)
-
-        // 네온 효과를 위한 그림자와 테두리
-        appearance.shadowColor = UIColor.cyan.withAlphaComponent(0.3)
-        appearance.shadowImage = UIImage()
-
-        // Normal tab styling with cyberpunk theme and ChosunCentennial_otf font
-        appearance.stackedLayoutAppearance.normal.iconColor = UIColor.systemGray4
-        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
-            .foregroundColor: UIColor.systemGray4,
-            .font: UIFont(name: "ChosunCentennial_otf", size: 12) ?? UIFont.systemFont(ofSize: 12, weight: .regular)
-        ]
-
-        // Selected tab styling with neon cyan color and ChosunCentennial_otf font
-        appearance.stackedLayoutAppearance.selected.iconColor = UIColor.cyan
-        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
-            .foregroundColor: UIColor.cyan,
-            .font: UIFont(name: "ChosunCentennial_otf", size: 12) ?? UIFont.systemFont(ofSize: 12, weight: .medium)
-        ]
-
-        // Apply appearance with top margin consideration
-        UITabBar.appearance().standardAppearance = appearance
-        UITabBar.appearance().scrollEdgeAppearance = appearance
-
-        // Additional tab bar configuration for spacing
-        if let tabBar = UIApplication.shared.windows.first?.rootViewController?.tabBarController?.tabBar {
-            tabBar.frame.origin.y -= 40  // Top margin: 40pt as requested
         }
     }
 }

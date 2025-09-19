@@ -83,7 +83,27 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack(spacing: 30) {
+                VStack(spacing: 20) {
+                    // Cyberpunk Profile Header
+                    CyberpunkProfileHeader(
+                        profile: playerProfile,
+                        onEditProfile: {
+                            showingProfileEditor = true
+                        }
+                    )
+
+                    // Cyberpunk Trading Dashboard
+                    CyberpunkTradingDashboard(profile: playerProfile)
+
+                    // Cyberpunk Biography Panel
+                    CyberpunkBiographyPanel(backgroundStory: backstoryManager.getBackstoryText())
+
+                    // Cyberpunk Control Panel (Settings)
+                    CyberpunkControlPanel()
+
+                    // Legacy Profile Content (temporarily hidden for cyberpunk theme)
+                    /*
+                    */
                     // Profile Header
                     VStack(spacing: 20) {
                         // Profile Image
@@ -268,8 +288,10 @@ struct ProfileView: View {
                     Spacer(minLength: 100) // Tab bar spacing
                 }
             }
+            .background(Color.cyberpunkDarkBg)
             .navigationTitle("")
             .navigationBarHidden(true)
+            .cyberpunkStatusBar(title: "OPERATIVE_PROFILE", status: "ONLINE")
         }
         .sheet(isPresented: $showingBackstory) {
             BackstoryView(backstory: backstoryManager.getBackstoryText())
