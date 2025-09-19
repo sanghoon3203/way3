@@ -70,82 +70,344 @@ enum MerchantInteractionMode {
     case cart        // 장바구니 상세
 }
 
-// MARK: - 대화 화면
+// MARK: - JRPG 스타일 대화 화면
 extension MerchantDetailView {
     var DialogueView: some View {
-        HStack(spacing: 0) {
-            // 좌측: 상인 캐릭터
-            VStack {
-                Spacer()
-                MerchantCharacterView
-                Spacer()
-            }
-            .frame(width: UIScreen.main.bounds.width * 0.4)
+        VStack(spacing: 0) {
+            // 상단: 상인 캐릭터 영역 (65%)
+            JRPGCharacterArea
+                .frame(height: JRPGScreenManager.characterAreaHeight)
 
-            // 우측: 대화창 + 선택지
-            VStack {
-                Spacer()
+            // 하단: 대화창 영역 (35%)
+            ZStack(alignment: .topTrailing) {
+                // 메인 대화창
+                JRPGDialogueArea
 
-                // 대화창
-                DialogueBoxView
-
-                // 선택지 (JRPG 스타일)
+                // 우상단 선택지 메뉴 (JRPG 전통 스타일)
                 if isTypingComplete {
-                    DialogueChoicesView
+                    JRPGChoiceMenu
+                        .offset(
+                            x: JRPGScreenManager.JRPGLayout.choiceMenuOffset.x,
+                            y: JRPGScreenManager.JRPGLayout.choiceMenuOffset.y
+                        )
+                        .transition(.asymmetric(
+                            insertion: .scale.combined(with: .opacity),
+                            removal: .scale.combined(with: .opacity)
+                        ))
+                        .animation(.easeOut(duration: JRPGScreenManager.JRPGAnimations.choiceMenuAppearDuration), value: isTypingComplete)
                 }
+            }
+            .frame(height: JRPGScreenManager.dialogueAreaHeight)
+        }
+        .background(JRPGScreenManager.JRPGColors.characterAreaBackground)
+    }
+
+    // MARK: - JRPG 캐릭터 영역
+    var JRPGCharacterArea: some View {
+        ZStack {
+            // 배경 효과
+            JRPGCharacterBackground
+
+            // 상인 캐릭터 (중앙 배치)
+            VStack {
+                Spacer()
+
+                JRPGMerchantCharacter
+                    .scaleEffect(JRPGScreenManager.isCompactHeight ? 0.8 : 1.0)
 
                 Spacer()
+
+                // 상인 이름 표시
+                Text(merchant.name)
+                    .font(.jrpgTitle())
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 8)
+                    .background(
+                        Capsule()
+                            .fill(Color.black.opacity(0.7))
+                            .overlay(
+                                Capsule()
+                                    .stroke(Color.gold, lineWidth: 1.5)
+                            )
+                    )
+                    .jrpgGlowPulse()
+
+                Spacer().frame(height: 40)
             }
-            .frame(width: UIScreen.main.bounds.width * 0.6)
         }
     }
 
-    var MerchantCharacterView: some View {
-        VStack(spacing: 12) {
-            // 상인 캐릭터 이미지
-            ZStack {
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                merchant.type.color.opacity(0.3),
-                                merchant.type.color.opacity(0.1)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 140, height: 180)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(merchant.type.color.opacity(0.6), lineWidth: 2)
-                    )
+    // MARK: - JRPG 캐릭터 배경 효과
+    var JRPGCharacterBackground: some View {
+        Rectangle()
+            .fill(
+                RadialGradient(
+                    colors: [
+                        Color.purple.opacity(0.2),
+                        Color.blue.opacity(0.1),
+                        Color.black.opacity(0.3)
+                    ],
+                    center: .center,
+                    startRadius: 50,
+                    endRadius: 200
+                )
+            )
+            .overlay(
+                // 미묘한 파티클 효과 (향후 추가)
+                Rectangle()
+                    .fill(Color.clear)
+            )
+    }
 
-                // 실제 상인 이미지 또는 fallback
-                Group {
-                    if let _ = UIImage(named: merchantImageName) {
-                        Image(merchantImageName)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 120, height: 160)
-                            .clipShape(RoundedRectangle(cornerRadius: 15))
-                    } else {
-                        // fallback 캐릭터
-                        VStack(spacing: 8) {
-                            Image(systemName: merchant.type.iconName)
-                                .font(.system(size: 50))
-                                .foregroundColor(merchant.type.color)
+    // MARK: - JRPG 상인 캐릭터
+    var JRPGMerchantCharacter: some View {
+        ZStack {
+            // 캐릭터 배경 원
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [Color.gold.opacity(0.3), Color.clear],
+                        center: .center,
+                        startRadius: 20,
+                        endRadius: 80
+                    )
+                )
+                .frame(width: 160, height: 160)
+                .scaleEffect(JRPGScreenManager.isLargeScreen ? 1.2 : 1.0)
 
-                            Text(merchant.name)
-                                .font(.chosunOrFallback(size: 14, weight: .bold))
-                                .foregroundColor(.white)
-                                .multilineTextAlignment(.center)
+            // 동적 상인 이미지 (Asset 폴더 자동 매칭)
+            MerchantImageView(
+                merchantName: merchant.name,
+                width: JRPGScreenManager.isLargeScreen ? 140 : 120,
+                height: JRPGScreenManager.isLargeScreen ? 140 : 120
+            )
+            // 캐릭터 살랑살랑 애니메이션
+            .offset(y: sin(Date().timeIntervalSince1970) * 3)
+            .animation(
+                Animation.easeInOut(duration: JRPGScreenManager.JRPGAnimations.characterBounceDuration)
+                    .repeatForever(autoreverses: true),
+                value: UUID()
+            )
+        }
+    }
+
+    // MARK: - JRPG 대화창 영역
+    var JRPGDialogueArea: some View {
+        VStack(spacing: 0) {
+            Spacer()
+
+            // 메인 대화창 (하단 고정)
+            JRPGDialogueBox
+                .padding(.horizontal, JRPGScreenManager.JRPGLayout.screenPadding)
+                .padding(.bottom, JRPGScreenManager.JRPGLayout.screenPadding)
+        }
+    }
+
+    // MARK: - JRPG 스타일 대화창
+    var JRPGDialogueBox: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // 대화창 헤더 (상인 이름)
+            HStack {
+                Image(systemName: "person.circle.fill")
+                    .foregroundColor(.gold)
+                    .font(.system(size: 20))
+
+                Text(merchant.name)
+                    .font(.jrpgTitle())
+                    .foregroundColor(.white)
+
+                Spacer()
+
+                // 대화 진행 상태 표시
+                if !isTypingComplete {
+                    HStack(spacing: 3) {
+                        ForEach(0..<3) { index in
+                            Circle()
+                                .fill(Color.gold)
+                                .frame(width: 4, height: 4)
+                                .opacity(0.6)
+                                .scaleEffect(typingDotAnimation(index: index))
+                                .animation(
+                                    Animation.easeInOut(duration: 0.6)
+                                        .repeatForever()
+                                        .delay(Double(index) * 0.2),
+                                    value: UUID()
+                                )
                         }
                     }
                 }
             }
+            .padding(.bottom, 8)
+
+            // 대화 텍스트
+            ScrollView {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(displayedText)
+                        .font(.jrpgDialogue())
+                        .foregroundColor(JRPGScreenManager.JRPGColors.dialogueText)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.vertical, 4)
+            }
+            .frame(height: 80)
+
+            // 하단 액션 영역
+            HStack {
+                Spacer()
+
+                // 다음 화살표 (타이핑 완료 시)
+                if showNextArrow {
+                    HStack(spacing: 4) {
+                        Text("계속")
+                            .font(.jrpgUI())
+                            .foregroundColor(.gold)
+
+                        Image(systemName: "arrowtriangle.right.fill")
+                            .foregroundColor(.gold)
+                            .font(.system(size: 12))
+                            .offset(x: sin(Date().timeIntervalSince1970 * 3) * 2)
+                            .animation(
+                                Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true),
+                                value: UUID()
+                            )
+                    }
+                    .onTapGesture {
+                        continueDialogue()
+                    }
+                }
+            }
+        }
+        .padding(JRPGScreenManager.JRPGLayout.dialoguePadding)
+        .frame(height: JRPGScreenManager.JRPGLayout.dialogueBoxHeight)
+        .jrpgDialogueBox()
+        .transition(.asymmetric(
+            insertion: .move(edge: .bottom).combined(with: .opacity),
+            removal: .move(edge: .bottom).combined(with: .opacity)
+        ))
+        .animation(.easeOut(duration: JRPGScreenManager.JRPGAnimations.dialogueAppearDuration), value: displayedText)
+    }
+
+    // MARK: - 타이핑 도트 애니메이션
+    func typingDotAnimation(index: Int) -> CGFloat {
+        let time = Date().timeIntervalSince1970
+        return 1.0 + sin(time * 2 + Double(index) * 0.5) * 0.3
+    }
+
+    // MARK: - JRPG 스타일 선택지 메뉴
+    var JRPGChoiceMenu: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // 선택지 헤더
+            HStack {
+                Image(systemName: "list.bullet.circle.fill")
+                    .foregroundColor(.cyan)
+                    .font(.system(size: 16))
+
+                Text("선택하세요")
+                    .font(.jrpgChoice())
+                    .foregroundColor(.white)
+                    .fontWeight(.semibold)
+
+                Spacer()
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(
+                Rectangle()
+                    .fill(Color.blue.opacity(0.8))
+                    .overlay(
+                        Rectangle()
+                            .stroke(Color.cyan, lineWidth: 1)
+                    )
+            )
+
+            // 선택지 리스트
+            VStack(alignment: .leading, spacing: 2) {
+                JRPGChoiceButton(
+                    text: "💰 거래하기",
+                    action: { startTrading() },
+                    isSelected: false
+                )
+
+                JRPGChoiceButton(
+                    text: "💬 대화하기",
+                    action: { continueDialogue() },
+                    isSelected: false
+                )
+
+                JRPGChoiceButton(
+                    text: "🚪 떠나기",
+                    action: { closeDialogue() },
+                    isSelected: false
+                )
+            }
+            .padding(.horizontal, 4)
+            .padding(.vertical, 4)
+        }
+        .frame(width: JRPGScreenManager.JRPGLayout.choiceMenuWidth)
+        .jrpgChoiceMenu()
+    }
+
+    // MARK: - JRPG 선택지 버튼
+    func JRPGChoiceButton(text: String, action: @escaping () -> Void, isSelected: Bool) -> some View {
+        Button(action: action) {
+            HStack {
+                // 선택 표시 화살표
+                Image(systemName: "arrowtriangle.right.fill")
+                    .foregroundColor(.gold)
+                    .font(.system(size: 10))
+                    .opacity(isSelected ? 1.0 : 0.0)
+                    .animation(.easeInOut(duration: 0.2), value: isSelected)
+
+                Text(text)
+                    .font(.jrpgChoice())
+                    .foregroundColor(isSelected ? .gold : .white)
+                    .fontWeight(isSelected ? .bold : .medium)
+
+                Spacer()
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(
+                Rectangle()
+                    .fill(isSelected ? Color.gold.opacity(0.2) : Color.clear)
+                    .overlay(
+                        Rectangle()
+                            .stroke(
+                                isSelected ? Color.gold.opacity(0.8) : Color.clear,
+                                lineWidth: 1
+                            )
+                    )
+            )
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+
+    // MARK: - 선택지 액션들
+    func startTrading() {
+        withAnimation(.easeInOut(duration: 0.5)) {
+            currentMode = .trading
         }
     }
+
+    func continueDialogue() {
+        // Extensions에서 정의된 기존 대화 시스템 사용
+        proceedToNextDialogue()
+    }
+
+    // Extensions에 정의된 함수들과 연결하기 위한 래퍼
+    func getDialogues() -> [String] {
+        return merchantDialogues
+    }
+
+    func closeDialogue() {
+        withAnimation(.easeInOut(duration: 0.5)) {
+            isPresented = false
+        }
+    }
+}
 
     var DialogueBoxView: some View {
         ZStack {
