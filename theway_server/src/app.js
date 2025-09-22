@@ -124,6 +124,9 @@ app.use('/api/achievements', require('./routes/api/achievements'));
 app.use('/api/skills', require('./routes/api/skills'));
 app.use('/api/personal-items', require('./routes/api/personal-items'));
 
+// 게임 클라이언트 라우트 (iOS/Android)
+app.use('/game/quests', require('./routes/game/quests'));
+
 // 어드민 라우트
 app.use('/admin', require('./routes/admin'));
 

@@ -11,6 +11,7 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var locationManager: LocationManager
     @StateObject private var authManager = AuthManager.shared
+    @StateObject private var gameManager = GameManager.shared
     @StateObject private var player = Player.createDefault()
     @State private var selectedTab = 0
     @State private var showStartView = true
@@ -30,6 +31,7 @@ struct ContentView: View {
             } else {
                 MainTabView(selectedTab: $selectedTab)
                     .environmentObject(authManager)
+                    .environmentObject(gameManager)
                     .environmentObject(locationManager)
                     .environmentObject(player)
             }
@@ -44,6 +46,11 @@ struct ContentView: View {
         .onChange(of: authManager.isAuthenticated) { isAuthenticated in
             if isAuthenticated {
                 loadPlayerData()
+                // 게임 데이터 초기화
+                Task {
+                    await gameManager.loadPersonalItemsData()
+                    await gameManager.loadQuestsData()
+                }
             } else {
                 player.stopAutoSave()
             }

@@ -40,6 +40,13 @@ class GameManager: ObservableObject {
     @Published var permanentEffects: [PermanentEffect] = []
     @Published var lastPersonalItemsUpdate: Date = Date()
 
+    // MARK: - Quest Management
+    @Published var availableQuests: [QuestData] = []
+    @Published var activeQuests: [QuestData] = []
+    @Published var completedQuests: [QuestData] = []
+    @Published var questsViewState: QuestsViewState = .loading
+    @Published var lastQuestsUpdate: Date = Date()
+
     // MARK: - Game Statistics
     @Published var gameStats: GameStatistics = GameStatistics()
 
@@ -793,6 +800,275 @@ class GameManager: ObservableObject {
         UserDefaults.standard.removeObject(forKey: "cached_personal_items_timestamp")
     }
 
+    // MARK: - Quest Management
+
+    /**
+     * 퀘스트 데이터 로딩
+     */
+    func loadQuestsData() async {
+        await MainActor.run {
+            questsViewState = .loading
+            GameLogger.shared.logInfo("퀘스트 데이터 로딩 시작", category: .gameplay)
+        }
+
+        do {
+            let response = try await networkManager.getQuests()
+            if response.success, let questsData = response.data {
+                await MainActor.run {
+                    availableQuests = questsData.questsByStatus.available
+                    activeQuests = questsData.questsByStatus.active
+                    completedQuests = questsData.questsByStatus.completed
+                    questsViewState = .loaded
+                    lastQuestsUpdate = Date()
+                    cacheQuestsData()
+                    GameLogger.shared.logInfo("퀘스트 데이터 로딩 완료 (사용 가능: \(availableQuests.count), 진행 중: \(activeQuests.count))", category: .gameplay)
+                }
+            } else {
+                await handleQuestsLoadingError("서버에서 올바른 데이터를 받지 못했습니다")
+            }
+        } catch {
+            await handleQuestsLoadingError(error.localizedDescription)
+        }
+    }
+
+    /**
+     * 퀘스트 데이터 새로고침
+     */
+    func refreshQuestsData() async {
+        guard questsViewState == .loaded else {
+            await loadQuestsData()
+            return
+        }
+
+        await MainActor.run { questsViewState = .refreshing }
+
+        do {
+            let response = try await networkManager.getQuests()
+            if response.success, let questsData = response.data {
+                await MainActor.run {
+                    availableQuests = questsData.questsByStatus.available
+                    activeQuests = questsData.questsByStatus.active
+                    completedQuests = questsData.questsByStatus.completed
+                    questsViewState = .loaded
+                    lastQuestsUpdate = Date()
+                    cacheQuestsData()
+                    GameLogger.shared.logInfo("퀘스트 데이터 새로고침 완료", category: .gameplay)
+                }
+            }
+        } catch {
+            await MainActor.run {
+                questsViewState = .loaded
+                GameLogger.shared.logError("퀘스트 새로고침 실패: \(error)", category: .gameplay)
+            }
+        }
+    }
+
+    /**
+     * 퀘스트 수락
+     */
+    func acceptQuest(_ quest: QuestData) async -> Bool {
+        await MainActor.run {
+            questsViewState = .accepting(quest)
+        }
+
+        do {
+            let response = try await networkManager.acceptQuest(questId: quest.id)
+            if response.success {
+                await MainActor.run {
+                    // 사용 가능한 퀘스트에서 제거하고 진행 중인 퀘스트에 추가
+                    availableQuests.removeAll { $0.id == quest.id }
+
+                    // 업데이트된 퀘스트 정보로 진행 중 목록에 추가
+                    var updatedQuest = quest
+                    updatedQuest.status = "active"
+                    updatedQuest.acceptedAt = response.data?.acceptedAt
+                    activeQuests.append(updatedQuest)
+
+                    questsViewState = .loaded
+                    cacheQuestsData()
+
+                    addNotification(
+                        title: "퀘스트 수락",
+                        message: "\(quest.title)을(를) 수락했습니다",
+                        type: .success
+                    )
+                }
+                return true
+            } else {
+                await MainActor.run {
+                    questsViewState = .loaded
+                    addNotification(
+                        title: "수락 실패",
+                        message: response.error ?? "퀘스트를 수락할 수 없습니다",
+                        type: .error
+                    )
+                }
+                return false
+            }
+        } catch {
+            await MainActor.run {
+                questsViewState = .loaded
+                addNotification(
+                    title: "수락 실패",
+                    message: "네트워크 오류가 발생했습니다",
+                    type: .error
+                )
+            }
+            return false
+        }
+    }
+
+    /**
+     * 퀘스트 보상 수령
+     */
+    func claimQuestReward(_ quest: QuestData) async -> Bool {
+        await MainActor.run {
+            questsViewState = .claiming(quest)
+        }
+
+        do {
+            let response = try await networkManager.claimQuestReward(questId: quest.id)
+            if response.success {
+                await MainActor.run {
+                    // 완료된 퀘스트 목록에서 보상 수령 상태 업데이트
+                    if let index = completedQuests.firstIndex(where: { $0.id == quest.id }) {
+                        completedQuests[index].rewardClaimed = true
+                    }
+
+                    questsViewState = .loaded
+                    cacheQuestsData()
+
+                    // 플레이어 정보 새로고침 (보상 반영)
+                    Task { await refreshPlayerData() }
+
+                    addNotification(
+                        title: "보상 수령",
+                        message: "\(quest.title) 보상을 받았습니다",
+                        type: .success
+                    )
+                }
+                return true
+            } else {
+                await MainActor.run {
+                    questsViewState = .loaded
+                    addNotification(
+                        title: "보상 수령 실패",
+                        message: response.error ?? "보상을 받을 수 없습니다",
+                        type: .error
+                    )
+                }
+                return false
+            }
+        } catch {
+            await MainActor.run {
+                questsViewState = .loaded
+                addNotification(
+                    title: "보상 수령 실패",
+                    message: "네트워크 오류가 발생했습니다",
+                    type: .error
+                )
+            }
+            return false
+        }
+    }
+
+    /**
+     * 퀘스트 진행 상황 업데이트
+     */
+    func updateQuestProgress(actionType: String, actionData: [String: Any]) async {
+        do {
+            let response = try await networkManager.updateQuestProgress(actionType: actionType, actionData: actionData)
+            if response.success {
+                // 퀘스트 목록 새로고침하여 진행 상황 반영
+                await refreshQuestsData()
+
+                if let updatedQuests = response.data?.updatedQuests, !updatedQuests.isEmpty {
+                    await MainActor.run {
+                        let completedCount = updatedQuests.filter { $0.isCompleted }.count
+                        if completedCount > 0 {
+                            addNotification(
+                                title: "퀘스트 완료",
+                                message: "\(completedCount)개의 퀘스트가 완료되었습니다",
+                                type: .success
+                            )
+                        }
+                    }
+                }
+            }
+        } catch {
+            GameLogger.shared.logError("퀘스트 진행 상황 업데이트 실패: \(error)", category: .gameplay)
+        }
+    }
+
+    /**
+     * 퀘스트 로딩 에러 처리
+     */
+    private func handleQuestsLoadingError(_ message: String) async {
+        await MainActor.run {
+            if let cachedData = loadCachedQuests() {
+                availableQuests = cachedData.available
+                activeQuests = cachedData.active
+                completedQuests = cachedData.completed
+                questsViewState = .loaded
+                addNotification(
+                    title: "오프라인 모드",
+                    message: "저장된 퀘스트 데이터를 표시합니다",
+                    type: .warning
+                )
+                GameLogger.shared.logInfo("캐시된 퀘스트 데이터 사용", category: .gameplay)
+            } else {
+                questsViewState = .error(message)
+                GameLogger.shared.logError("퀘스트 데이터 로딩 실패: \(message)", category: .gameplay)
+            }
+        }
+    }
+
+    /**
+     * 퀘스트 데이터 캐시 저장
+     */
+    private func cacheQuestsData() {
+        let questsCache = QuestsCache(
+            available: availableQuests,
+            active: activeQuests,
+            completed: completedQuests
+        )
+
+        guard let data = try? JSONEncoder().encode(questsCache) else { return }
+        UserDefaults.standard.set(data, forKey: "cached_quests")
+        UserDefaults.standard.set(Date(), forKey: "cached_quests_timestamp")
+        GameLogger.shared.logInfo("퀘스트 데이터 캐시 저장", category: .gameplay)
+    }
+
+    /**
+     * 캐시된 퀘스트 데이터 로드
+     */
+    private func loadCachedQuests() -> QuestsCache? {
+        if let timestamp = UserDefaults.standard.object(forKey: "cached_quests_timestamp") as? Date {
+            let cacheAge = Date().timeIntervalSince(timestamp)
+            let maxCacheAge: TimeInterval = 24 * 60 * 60
+
+            if cacheAge > maxCacheAge {
+                clearQuestsCache()
+                return nil
+            }
+        }
+
+        guard let data = UserDefaults.standard.data(forKey: "cached_quests"),
+              let cache = try? JSONDecoder().decode(QuestsCache.self, from: data) else {
+            return nil
+        }
+
+        return cache
+    }
+
+    /**
+     * 퀘스트 캐시 삭제
+     */
+    private func clearQuestsCache() {
+        UserDefaults.standard.removeObject(forKey: "cached_quests")
+        UserDefaults.standard.removeObject(forKey: "cached_quests_timestamp")
+    }
+
     // MARK: - Location Management
 
     /**
@@ -1118,6 +1394,32 @@ enum PersonalItemsViewState {
             return false
         }
     }
+}
+
+// MARK: - Quests View State Enum
+enum QuestsViewState {
+    case loading
+    case loaded
+    case error(String)
+    case refreshing
+    case accepting(QuestData)  // 퀘스트 수락 중
+    case claiming(QuestData)   // 보상 수령 중
+
+    var isLoading: Bool {
+        switch self {
+        case .loading, .refreshing, .accepting, .claiming:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
+// MARK: - Quests Cache
+struct QuestsCache: Codable {
+    let available: [QuestData]
+    let active: [QuestData]
+    let completed: [QuestData]
 }
 
 // MARK: - Game Statistics
