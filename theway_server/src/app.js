@@ -122,6 +122,7 @@ app.use('/api/trade', require('./routes/api/trade'));
 app.use('/api/quests', require('./routes/api/quests'));
 app.use('/api/achievements', require('./routes/api/achievements'));
 app.use('/api/skills', require('./routes/api/skills'));
+app.use('/api/personal-items', require('./routes/api/personal-items'));
 
 // 어드민 라우트
 app.use('/admin', require('./routes/admin'));

@@ -694,6 +694,66 @@ extension NetworkManager {
             useCache: true
         )
     }
+
+    // MARK: - Personal Items API Methods
+    func getPersonalItems() async throws -> PersonalItemsResponse {
+        return try await makeRequest(
+            endpoint: "/personal-items",
+            method: .GET,
+            requiresAuth: true,
+            responseType: PersonalItemsResponse.self,
+            useCache: true
+        )
+    }
+
+    func usePersonalItem(itemId: String, targetId: String? = nil) async throws -> PersonalItemActionResponse {
+        var body: [String: Any] = ["itemId": itemId]
+        if let targetId = targetId {
+            body["targetId"] = targetId
+        }
+
+        return try await makeRequest(
+            endpoint: "/personal-items/use",
+            method: .POST,
+            body: body,
+            requiresAuth: true,
+            responseType: PersonalItemActionResponse.self
+        )
+    }
+
+    func equipPersonalItem(itemId: String) async throws -> PersonalItemActionResponse {
+        let body = ["itemId": itemId]
+
+        return try await makeRequest(
+            endpoint: "/personal-items/equip",
+            method: .POST,
+            body: body,
+            requiresAuth: true,
+            responseType: PersonalItemActionResponse.self
+        )
+    }
+
+    func unequipPersonalItem(itemId: String) async throws -> PersonalItemActionResponse {
+        let body = ["itemId": itemId]
+
+        return try await makeRequest(
+            endpoint: "/personal-items/unequip",
+            method: .POST,
+            body: body,
+            requiresAuth: true,
+            responseType: PersonalItemActionResponse.self
+        )
+    }
+
+    func getActiveEffects() async throws -> ActiveEffectsResponse {
+        return try await makeRequest(
+            endpoint: "/personal-items/effects",
+            method: .GET,
+            requiresAuth: true,
+            responseType: ActiveEffectsResponse.self,
+            useCache: true
+        )
+    }
 }
 
 // MARK: - HTTP Method Enum
@@ -979,4 +1039,19 @@ struct QuestHistoryItem: Codable {
     let completedAt: String?
     let rewardClaimed: Bool
     let rewards: QuestRewards
+}
+
+// MARK: - Personal Items Response Models
+struct PersonalItemActionResponse: Codable {
+    let success: Bool
+    let data: PersonalItemActionData?
+    let message: String?
+    let error: String?
+}
+
+struct PersonalItemActionData: Codable {
+    let item: PersonalItemServerData
+    let effectsApplied: [ItemEffectServerData]?
+    let activeEffects: [ActiveEffectServerData]?
+    let message: String?
 }

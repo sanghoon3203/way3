@@ -33,6 +33,13 @@ class GameManager: ObservableObject {
     @Published var inventoryViewState: InventoryViewState = .loading
     @Published var lastInventoryUpdate: Date = Date()
 
+    // MARK: - Personal Items Management
+    @Published var personalItems: [PersonalItem] = []
+    @Published var personalItemsViewState: PersonalItemsViewState = .loading
+    @Published var activeEffects: [ActiveEffect] = []
+    @Published var permanentEffects: [PermanentEffect] = []
+    @Published var lastPersonalItemsUpdate: Date = Date()
+
     // MARK: - Game Statistics
     @Published var gameStats: GameStatistics = GameStatistics()
 
@@ -516,6 +523,276 @@ class GameManager: ObservableObject {
         return cacheAge <= maxCacheAge
     }
 
+    // MARK: - Personal Items Management
+
+    /**
+     * 개인 아이템 데이터 로딩
+     */
+    func loadPersonalItemsData() async {
+        await MainActor.run {
+            personalItemsViewState = .loading
+            GameLogger.shared.logInfo("개인 아이템 데이터 로딩 시작", category: .gameplay)
+        }
+
+        do {
+            let response = try await networkManager.getPersonalItems()
+            if response.success, let itemsData = response.data {
+                await MainActor.run {
+                    personalItems = itemsData.personalItems.map { PersonalItem.from(serverData: $0) }
+                    personalItemsViewState = .loaded
+                    lastPersonalItemsUpdate = Date()
+                    cachePersonalItemsData()
+                    GameLogger.shared.logInfo("개인 아이템 데이터 로딩 완료 (\(personalItems.count)개)", category: .gameplay)
+                }
+            } else {
+                await handlePersonalItemsLoadingError("서버에서 올바른 데이터를 받지 못했습니다")
+            }
+        } catch {
+            await handlePersonalItemsLoadingError(error.localizedDescription)
+        }
+    }
+
+    /**
+     * 개인 아이템 데이터 새로고침
+     */
+    func refreshPersonalItemsData() async {
+        guard personalItemsViewState == .loaded else {
+            await loadPersonalItemsData()
+            return
+        }
+
+        await MainActor.run { personalItemsViewState = .refreshing }
+
+        do {
+            let response = try await networkManager.getPersonalItems()
+            if response.success, let itemsData = response.data {
+                await MainActor.run {
+                    personalItems = itemsData.personalItems.map { PersonalItem.from(serverData: $0) }
+                    personalItemsViewState = .loaded
+                    lastPersonalItemsUpdate = Date()
+                    cachePersonalItemsData()
+                    GameLogger.shared.logInfo("개인 아이템 새로고침 완료", category: .gameplay)
+                }
+            }
+        } catch {
+            await MainActor.run {
+                personalItemsViewState = .loaded
+                GameLogger.shared.logError("개인 아이템 새로고침 실패: \(error)", category: .gameplay)
+            }
+        }
+    }
+
+    /**
+     * 개인 아이템 사용
+     */
+    func usePersonalItem(_ item: PersonalItem, targetId: String? = nil) async -> Bool {
+        guard item.isUsable else {
+            await MainActor.run {
+                addNotification(
+                    title: "사용 불가",
+                    message: "이 아이템은 현재 사용할 수 없습니다",
+                    type: .warning
+                )
+            }
+            return false
+        }
+
+        await MainActor.run {
+            personalItemsViewState = .using(item)
+        }
+
+        do {
+            let response = try await networkManager.usePersonalItem(itemId: item.id, targetId: targetId)
+            if response.success {
+                await MainActor.run {
+                    // 아이템 목록과 활성 효과 업데이트
+                    refreshPersonalItemsAndEffects()
+                    personalItemsViewState = .loaded
+
+                    addNotification(
+                        title: "아이템 사용",
+                        message: "\(item.name)을(를) 사용했습니다",
+                        type: .success
+                    )
+                }
+                return true
+            } else {
+                await MainActor.run {
+                    personalItemsViewState = .loaded
+                    addNotification(
+                        title: "사용 실패",
+                        message: response.error ?? "아이템을 사용할 수 없습니다",
+                        type: .error
+                    )
+                }
+                return false
+            }
+        } catch {
+            await MainActor.run {
+                personalItemsViewState = .loaded
+                addNotification(
+                    title: "사용 실패",
+                    message: "네트워크 오류가 발생했습니다",
+                    type: .error
+                )
+            }
+            return false
+        }
+    }
+
+    /**
+     * 개인 아이템 장착/해제
+     */
+    func toggleEquipPersonalItem(_ item: PersonalItem) async -> Bool {
+        guard item.isEquippable else {
+            await MainActor.run {
+                addNotification(
+                    title: "장착 불가",
+                    message: "이 아이템은 장착할 수 없습니다",
+                    type: .warning
+                )
+            }
+            return false
+        }
+
+        await MainActor.run {
+            personalItemsViewState = .equipping(item)
+        }
+
+        do {
+            let response: PersonalItemActionResponse
+            if item.isEquipped {
+                response = try await networkManager.unequipPersonalItem(itemId: item.id)
+            } else {
+                response = try await networkManager.equipPersonalItem(itemId: item.id)
+            }
+
+            if response.success {
+                await MainActor.run {
+                    refreshPersonalItemsAndEffects()
+                    personalItemsViewState = .loaded
+
+                    let action = item.isEquipped ? "해제" : "장착"
+                    addNotification(
+                        title: "아이템 \(action)",
+                        message: "\(item.name)을(를) \(action)했습니다",
+                        type: .success
+                    )
+                }
+                return true
+            } else {
+                await MainActor.run {
+                    personalItemsViewState = .loaded
+                    addNotification(
+                        title: "장착 실패",
+                        message: response.error ?? "아이템을 장착할 수 없습니다",
+                        type: .error
+                    )
+                }
+                return false
+            }
+        } catch {
+            await MainActor.run {
+                personalItemsViewState = .loaded
+                addNotification(
+                    title: "장착 실패",
+                    message: "네트워크 오류가 발생했습니다",
+                    type: .error
+                )
+            }
+            return false
+        }
+    }
+
+    /**
+     * 활성 효과 로딩
+     */
+    func loadActiveEffects() async {
+        do {
+            let response = try await networkManager.getActiveEffects()
+            if response.success, let effectsData = response.data {
+                await MainActor.run {
+                    activeEffects = effectsData.temporaryEffects.map { ActiveEffect.from(serverData: $0) }
+                    permanentEffects = effectsData.permanentEffects.map { PermanentEffect.from(serverData: $0) }
+                    GameLogger.shared.logInfo("활성 효과 로딩 완료", category: .gameplay)
+                }
+            }
+        } catch {
+            GameLogger.shared.logError("활성 효과 로딩 실패: \(error)", category: .gameplay)
+        }
+    }
+
+    /**
+     * 개인 아이템과 효과 동시 새로고침
+     */
+    private func refreshPersonalItemsAndEffects() {
+        Task {
+            await loadPersonalItemsData()
+            await loadActiveEffects()
+        }
+    }
+
+    /**
+     * 개인 아이템 로딩 에러 처리
+     */
+    private func handlePersonalItemsLoadingError(_ message: String) async {
+        await MainActor.run {
+            if let cachedItems = loadCachedPersonalItems() {
+                personalItems = cachedItems
+                personalItemsViewState = .loaded
+                addNotification(
+                    title: "오프라인 모드",
+                    message: "저장된 개인 아이템 데이터를 표시합니다",
+                    type: .warning
+                )
+                GameLogger.shared.logInfo("캐시된 개인 아이템 데이터 사용", category: .gameplay)
+            } else {
+                personalItemsViewState = .error(message)
+                GameLogger.shared.logError("개인 아이템 로딩 실패: \(message)", category: .gameplay)
+            }
+        }
+    }
+
+    /**
+     * 개인 아이템 데이터 캐시 저장
+     */
+    private func cachePersonalItemsData() {
+        guard let data = try? JSONEncoder().encode(personalItems) else { return }
+        UserDefaults.standard.set(data, forKey: "cached_personal_items")
+        UserDefaults.standard.set(Date(), forKey: "cached_personal_items_timestamp")
+        GameLogger.shared.logInfo("개인 아이템 데이터 캐시 저장", category: .gameplay)
+    }
+
+    /**
+     * 캐시된 개인 아이템 데이터 로드
+     */
+    private func loadCachedPersonalItems() -> [PersonalItem]? {
+        if let timestamp = UserDefaults.standard.object(forKey: "cached_personal_items_timestamp") as? Date {
+            let cacheAge = Date().timeIntervalSince(timestamp)
+            let maxCacheAge: TimeInterval = 24 * 60 * 60
+
+            if cacheAge > maxCacheAge {
+                clearPersonalItemsCache()
+                return nil
+            }
+        }
+
+        guard let data = UserDefaults.standard.data(forKey: "cached_personal_items"),
+              let items = try? JSONDecoder().decode([PersonalItem].self, from: data) else {
+            return nil
+        }
+
+        return items
+    }
+
+    /**
+     * 개인 아이템 캐시 삭제
+     */
+    private func clearPersonalItemsCache() {
+        UserDefaults.standard.removeObject(forKey: "cached_personal_items")
+        UserDefaults.standard.removeObject(forKey: "cached_personal_items_timestamp")
+    }
+
     // MARK: - Location Management
 
     /**
@@ -817,6 +1094,25 @@ enum InventoryViewState {
     var isLoading: Bool {
         switch self {
         case .loading, .refreshing:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
+// MARK: - Personal Items View State Enum
+enum PersonalItemsViewState {
+    case loading
+    case loaded
+    case error(String)
+    case refreshing
+    case using(PersonalItem)  // 아이템 사용 중
+    case equipping(PersonalItem)  // 아이템 장착/해제 중
+
+    var isLoading: Bool {
+        switch self {
+        case .loading, .refreshing, .using, .equipping:
             return true
         default:
             return false

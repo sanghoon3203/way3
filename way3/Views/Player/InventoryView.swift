@@ -85,13 +85,174 @@ struct InventoryItem: Codable {
     let purchasePrice: Int?
 }
 
-// MARK: - Player Inventory Item Model
-struct PlayerInventoryItem: Identifiable, Codable {
-    let id = UUID()
-    let name: String
-    let grade: ItemGrade
-    let effect: String
-    let imageName: String
+// MARK: - Personal Items Views
+
+struct PersonalItemsLoadingView: View {
+    var body: some View {
+        VStack(spacing: 12) {
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: .cyberpunkCyan))
+                .scaleEffect(0.8)
+
+            Text("개인 아이템 로딩 중...")
+                .font(.cyberpunkCaption)
+                .foregroundColor(.cyberpunkTextSecondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 20)
+    }
+}
+
+struct EmptyPersonalItemsView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "cube.box")
+                .font(.largeTitle)
+                .foregroundColor(.cyberpunkTextTertiary)
+
+            Text("보유한 개인 아이템이 없습니다")
+                .font(.cyberpunkBody)
+                .foregroundColor(.cyberpunkTextSecondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 40)
+    }
+}
+
+struct PersonalItemsErrorView: View {
+    let message: String
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.largeTitle)
+                .foregroundColor(.cyberpunkRed)
+
+            Text("개인 아이템 로딩 실패")
+                .font(.cyberpunkBody)
+                .foregroundColor(.cyberpunkTextPrimary)
+
+            Text(message)
+                .font(.cyberpunkCaption)
+                .foregroundColor(.cyberpunkTextSecondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 40)
+    }
+}
+
+struct PersonalItemsGridView: View {
+    let items: [PersonalItem]
+    let onItemTap: (PersonalItem) -> Void
+    let isRefreshing: Bool
+    let usingItem: PersonalItem?
+    let equippingItem: PersonalItem?
+
+    init(
+        items: [PersonalItem],
+        onItemTap: @escaping (PersonalItem) -> Void,
+        isRefreshing: Bool = false,
+        usingItem: PersonalItem? = nil,
+        equippingItem: PersonalItem? = nil
+    ) {
+        self.items = items
+        self.onItemTap = onItemTap
+        self.isRefreshing = isRefreshing
+        self.usingItem = usingItem
+        self.equippingItem = equippingItem
+    }
+
+    var body: some View {
+        LazyVGrid(columns: [
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ], spacing: 12) {
+            ForEach(items) { item in
+                PersonalItemCard(
+                    item: item,
+                    isLoading: (usingItem?.id == item.id) || (equippingItem?.id == item.id),
+                    onTap: { onItemTap(item) }
+                )
+            }
+        }
+        .padding(.horizontal, CyberpunkLayout.screenPadding)
+    }
+}
+
+struct PersonalItemCard: View {
+    let item: PersonalItem
+    let isLoading: Bool
+    let onTap: () -> Void
+
+    var body: some View {
+        Button(action: onTap) {
+            VStack(spacing: 8) {
+                // 아이템 아이콘
+                ZStack {
+                    Circle()
+                        .fill(item.grade.cyberpunkColor.opacity(0.2))
+                        .frame(width: 50, height: 50)
+
+                    if let firstEffect = item.effects.first {
+                        Image(systemName: firstEffect.type.icon)
+                            .font(.title2)
+                            .foregroundColor(firstEffect.type.color)
+                    } else {
+                        Image(systemName: "cube.box.fill")
+                            .font(.title2)
+                            .foregroundColor(.cyberpunkTextSecondary)
+                    }
+
+                    if isLoading {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .cyberpunkCyan))
+                            .scaleEffect(0.6)
+                    }
+                }
+
+                // 아이템 정보
+                VStack(spacing: 4) {
+                    Text(item.name)
+                        .font(.cyberpunkCaption)
+                        .foregroundColor(.cyberpunkTextPrimary)
+                        .lineLimit(1)
+
+                    Text(item.type.displayName)
+                        .font(.system(size: 10))
+                        .foregroundColor(item.type.color)
+
+                    // 수량 또는 장착 상태
+                    Group {
+                        if item.type == .consumable {
+                            Text("x\(item.quantity)")
+                                .font(.system(size: 10))
+                                .foregroundColor(.cyberpunkTextSecondary)
+                        } else if item.isEquipped {
+                            Text("장착됨")
+                                .font(.system(size: 10))
+                                .foregroundColor(.cyberpunkGreen)
+                        } else {
+                            Text("미장착")
+                                .font(.system(size: 10))
+                                .foregroundColor(.cyberpunkTextTertiary)
+                        }
+                    }
+                }
+            }
+            .padding(12)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.cyberpunkCardBg)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(item.grade.cyberpunkColor, lineWidth: 1)
+                    )
+            )
+        }
+        .buttonStyle(PlainButtonStyle())
+        .disabled(isLoading)
+    }
 }
 
 struct InventoryView: View {
@@ -117,12 +278,10 @@ struct InventoryView: View {
         }
     }
 
-    // Sample Inventory Items
-    @State private var inventoryItems: [PlayerInventoryItem] = [
-        PlayerInventoryItem(name: "체력 물약", grade: .common, effect: "체력 +50", imageName: "heart.circle.fill"),
-        PlayerInventoryItem(name: "행운의 부적", grade: .rare, effect: "거래 성공률 +10%", imageName: "sparkles"),
-        PlayerInventoryItem(name: "상인의 인장", grade: .legendary, effect: "가격 협상 +15%", imageName: "seal.fill")
-    ]
+    // 서버 데이터 기반 개인 아이템
+    private var personalItems: [PersonalItem] {
+        return gameManager.personalItems
+    }
 
     var body: some View {
         NavigationView {
@@ -138,10 +297,15 @@ struct InventoryView: View {
                 case .loaded:
                     InventoryContentView(
                         tradeGoods: tradeGoods,
-                        inventoryItems: inventoryItems,
-                        onItemTap: { item in
+                        personalItems: personalItems,
+                        personalItemsState: gameManager.personalItemsViewState,
+                        onTradeItemTap: { item in
                             selectedItem = item
                             showingSellSheet = true
+                        },
+                        onPersonalItemTap: { item in
+                            // 개인 아이템 액션 메뉴 표시
+                            handlePersonalItemTap(item)
                         }
                     )
                 case .error(let message):
@@ -156,10 +320,14 @@ struct InventoryView: View {
                 case .refreshing:
                     InventoryContentView(
                         tradeGoods: tradeGoods,
-                        inventoryItems: inventoryItems,
-                        onItemTap: { item in
+                        personalItems: personalItems,
+                        personalItemsState: gameManager.personalItemsViewState,
+                        onTradeItemTap: { item in
                             selectedItem = item
                             showingSellSheet = true
+                        },
+                        onPersonalItemTap: { item in
+                            handlePersonalItemTap(item)
                         },
                         isRefreshing: true
                     )
@@ -170,10 +338,12 @@ struct InventoryView: View {
             .onAppear {
                 Task {
                     await gameManager.smartLoadInventory()
+                    await gameManager.loadPersonalItemsData()
                 }
             }
             .refreshable {
                 await gameManager.refreshInventoryData()
+                await gameManager.refreshPersonalItemsData()
             }
         }
         .sheet(isPresented: $showingSellSheet) {
@@ -189,19 +359,48 @@ struct InventoryView: View {
             total + (good.basePrice * good.quantity)
         }
     }
+
+    private func handlePersonalItemTap(_ item: PersonalItem) {
+        // 개인 아이템 액션 시트 또는 상세 뷰 표시
+        // 현재는 사용 또는 장착 액션만 수행
+        Task {
+            if item.type == .consumable {
+                let success = await gameManager.usePersonalItem(item)
+                if success {
+                    // 성공 시 UI 업데이트는 GameManager에서 처리
+                }
+            } else if item.type == .equipment {
+                let success = await gameManager.toggleEquipPersonalItem(item)
+                if success {
+                    // 성공 시 UI 업데이트는 GameManager에서 처리
+                }
+            }
+        }
+    }
 }
 
 // MARK: - Inventory Content View
 struct InventoryContentView: View {
     let tradeGoods: [TradeGood]
-    let inventoryItems: [PlayerInventoryItem]
-    let onItemTap: (TradeGood) -> Void
+    let personalItems: [PersonalItem]
+    let personalItemsState: PersonalItemsViewState
+    let onTradeItemTap: (TradeGood) -> Void
+    let onPersonalItemTap: (PersonalItem) -> Void
     let isRefreshing: Bool
 
-    init(tradeGoods: [TradeGood], inventoryItems: [PlayerInventoryItem], onItemTap: @escaping (TradeGood) -> Void, isRefreshing: Bool = false) {
+    init(
+        tradeGoods: [TradeGood],
+        personalItems: [PersonalItem],
+        personalItemsState: PersonalItemsViewState,
+        onTradeItemTap: @escaping (TradeGood) -> Void,
+        onPersonalItemTap: @escaping (PersonalItem) -> Void,
+        isRefreshing: Bool = false
+    ) {
         self.tradeGoods = tradeGoods
-        self.inventoryItems = inventoryItems
-        self.onItemTap = onItemTap
+        self.personalItems = personalItems
+        self.personalItemsState = personalItemsState
+        self.onTradeItemTap = onTradeItemTap
+        self.onPersonalItemTap = onPersonalItemTap
         self.isRefreshing = isRefreshing
     }
 
@@ -227,7 +426,7 @@ struct InventoryContentView: View {
                             emptySlots: 2
                         ) { good in
                             CyberpunkTradeGoodCard(tradeGood: good) {
-                                onItemTap(good)
+                                onTradeItemTap(good)
                             }
                         }
                         .padding(.horizontal, CyberpunkLayout.screenPadding)
@@ -246,24 +445,49 @@ struct InventoryContentView: View {
                     .frame(height: 1)
                     .padding(.horizontal, CyberpunkLayout.screenPadding)
 
-                // MARK: - 인벤토리 섹션
+                // MARK: - 개인 아이템 섹션
                 VStack(alignment: .leading, spacing: 16) {
                     // Section Header - 사이버펑크 스타일
                     CyberpunkSectionHeader(
-                        title: "PLAYER_INVENTORY",
-                        subtitle: "PERSONAL_ITEMS",
-                        rightContent: "ITEMS: \(inventoryItems.count)/20"
+                        title: "PERSONAL_ITEMS",
+                        subtitle: personalItemsState.isLoading ? "LOADING..." : "ENHANCEMENT_ITEMS",
+                        rightContent: "ITEMS: \(personalItems.count)/50"
                     )
 
-                    // Inventory Items List - 사이버펑크 그리드
-                    CyberpunkInventoryGrid(
-                        items: inventoryItems,
-                        columns: 1,
-                        emptySlots: 3
-                    ) { item in
-                        CyberpunkPlayerInventoryCard(inventoryItem: item)
+                    // 개인 아이템 상태별 렌더링
+                    switch personalItemsState {
+                    case .loading:
+                        PersonalItemsLoadingView()
+                    case .loaded:
+                        if personalItems.isEmpty {
+                            EmptyPersonalItemsView()
+                        } else {
+                            PersonalItemsGridView(
+                                items: personalItems,
+                                onItemTap: onPersonalItemTap
+                            )
+                        }
+                    case .error(let message):
+                        PersonalItemsErrorView(message: message)
+                    case .refreshing:
+                        PersonalItemsGridView(
+                            items: personalItems,
+                            onItemTap: onPersonalItemTap,
+                            isRefreshing: true
+                        )
+                    case .using(let item):
+                        PersonalItemsGridView(
+                            items: personalItems,
+                            onItemTap: onPersonalItemTap,
+                            usingItem: item
+                        )
+                    case .equipping(let item):
+                        PersonalItemsGridView(
+                            items: personalItems,
+                            onItemTap: onPersonalItemTap,
+                            equippingItem: item
+                        )
                     }
-                    .padding(.horizontal, CyberpunkLayout.screenPadding)
                 }
 
                 Spacer(minLength: 100) // Tab bar spacing
