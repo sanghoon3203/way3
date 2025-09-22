@@ -25,6 +25,14 @@ class GameManager: ObservableObject {
     @Published var marketPrices: [MarketPrice] = []
     @Published var gameNotifications: [GameNotification] = []
 
+    // MARK: - Profile Management
+    @Published var profileViewState: ProfileViewState = .loading
+    @Published var lastProfileUpdate: Date = Date()
+
+    // MARK: - Inventory Management
+    @Published var inventoryViewState: InventoryViewState = .loading
+    @Published var lastInventoryUpdate: Date = Date()
+
     // MARK: - Game Statistics
     @Published var gameStats: GameStatistics = GameStatistics()
 
@@ -50,6 +58,13 @@ class GameManager: ObservableObject {
 
         setupObservers()
         setupAutoSave()
+
+        // 앱 시작 시 캐시된 플레이어 데이터 로드 시도
+        if let cachedPlayer = loadCachedPlayer() {
+            currentPlayer = cachedPlayer
+            profileViewState = .loaded
+            GameLogger.shared.logInfo("캐시된 플레이어 데이터로 초기화", category: .gameplay)
+        }
     }
 
     // MARK: - Game Lifecycle
@@ -152,6 +167,353 @@ class GameManager: ObservableObject {
                 type: .error
             )
         }
+    }
+
+    /**
+     * 프로필 화면용 데이터 로딩
+     */
+    func loadProfileData() async {
+        await MainActor.run {
+            profileViewState = .loading
+            GameLogger.shared.logInfo("프로필 데이터 로딩 시작", category: .gameplay)
+        }
+
+        do {
+            // 서버에서 최신 플레이어 데이터 가져오기
+            let response = try await networkManager.getPlayerData()
+
+            if response.success, let playerDetail = response.data {
+                await MainActor.run {
+                    updatePlayerFromDetail(playerDetail)
+                    profileViewState = .loaded
+                    lastProfileUpdate = Date()
+                    GameLogger.shared.logInfo("프로필 데이터 로딩 완료", category: .gameplay)
+                }
+            } else {
+                await handleProfileLoadingError("서버에서 올바른 데이터를 받지 못했습니다")
+            }
+        } catch {
+            await handleProfileLoadingError(error.localizedDescription)
+        }
+    }
+
+    /**
+     * 프로필 데이터 새로고침 (이미 로드된 상태에서)
+     */
+    func refreshProfileData() async {
+        guard profileViewState == .loaded else {
+            await loadProfileData()
+            return
+        }
+
+        await MainActor.run { profileViewState = .refreshing }
+
+        do {
+            let response = try await networkManager.getPlayerData()
+
+            if response.success, let playerDetail = response.data {
+                await MainActor.run {
+                    updatePlayerFromDetail(playerDetail)
+                    profileViewState = .loaded
+                    lastProfileUpdate = Date()
+
+                    // 성공 알림
+                    addNotification(
+                        title: "프로필 업데이트",
+                        message: "최신 정보로 업데이트되었습니다",
+                        type: .success
+                    )
+                }
+            }
+        } catch {
+            await MainActor.run {
+                profileViewState = .loaded // 기존 데이터 유지
+                addNotification(
+                    title: "업데이트 실패",
+                    message: "프로필 정보를 업데이트할 수 없습니다",
+                    type: .error
+                )
+            }
+        }
+    }
+
+    /**
+     * 프로필 로딩 에러 처리
+     */
+    private func handleProfileLoadingError(_ message: String) async {
+        await MainActor.run {
+            // 캐시된 플레이어 데이터가 있는지 확인
+            if let cachedPlayer = loadCachedPlayer() {
+                currentPlayer = cachedPlayer
+                profileViewState = .loaded
+                addNotification(
+                    title: "오프라인 모드",
+                    message: "캐시된 데이터를 사용합니다",
+                    type: .warning
+                )
+                GameLogger.shared.logInfo("캐시된 프로필 데이터 사용", category: .gameplay)
+            } else {
+                profileViewState = .error(message)
+                GameLogger.shared.logError("프로필 데이터 로딩 실패: \(message)", category: .gameplay)
+            }
+        }
+    }
+
+    /**
+     * 캐시된 플레이어 데이터 로드
+     */
+    private func loadCachedPlayer() -> Player? {
+        // 캐시 유효성 확인 (24시간 이내)
+        if let timestamp = UserDefaults.standard.object(forKey: "cached_player_timestamp") as? Date {
+            let cacheAge = Date().timeIntervalSince(timestamp)
+            let maxCacheAge: TimeInterval = 24 * 60 * 60 // 24시간
+
+            if cacheAge > maxCacheAge {
+                GameLogger.shared.logInfo("캐시 데이터가 만료되어 삭제", category: .gameplay)
+                clearPlayerCache()
+                return nil
+            }
+        }
+
+        // UserDefaults에서 마지막 저장된 플레이어 데이터 로드
+        guard let data = UserDefaults.standard.data(forKey: "cached_player_data"),
+              let player = try? JSONDecoder().decode(Player.self, from: data) else {
+            return nil
+        }
+
+        GameLogger.shared.logInfo("유효한 캐시 데이터 발견", category: .gameplay)
+        return player
+    }
+
+    /**
+     * 플레이어 데이터 캐시 저장
+     */
+    private func cachePlayerData() {
+        guard let player = currentPlayer,
+              let data = try? JSONEncoder().encode(player) else { return }
+
+        UserDefaults.standard.set(data, forKey: "cached_player_data")
+        UserDefaults.standard.set(Date(), forKey: "cached_player_timestamp")
+
+        GameLogger.shared.logInfo("플레이어 데이터 캐시 저장", category: .gameplay)
+    }
+
+    /**
+     * 플레이어 캐시 데이터 삭제
+     */
+    private func clearPlayerCache() {
+        UserDefaults.standard.removeObject(forKey: "cached_player_data")
+        UserDefaults.standard.removeObject(forKey: "cached_player_timestamp")
+    }
+
+    /**
+     * 네트워크 연결 상태 확인
+     */
+    private var isNetworkAvailable: Bool {
+        return networkManager.isConnected
+    }
+
+    /**
+     * 스마트 프로필 로딩 (네트워크 상태에 따라 캐시 우선 또는 서버 우선)
+     */
+    func smartLoadProfile() async {
+        if isNetworkAvailable {
+            // 네트워크 사용 가능 시 서버 데이터 우선
+            await loadProfileData()
+        } else {
+            // 오프라인 시 캐시 데이터 사용
+            await handleProfileLoadingError("네트워크에 연결되지 않았습니다")
+        }
+    }
+
+    // MARK: - Inventory Management
+
+    /**
+     * 인벤토리 데이터 로딩 (서버 우선, 캐시 fallback)
+     */
+    func loadInventoryData() async {
+        await MainActor.run {
+            inventoryViewState = .loading
+            GameLogger.shared.logInfo("인벤토리 데이터 로딩 시작", category: .gameplay)
+        }
+
+        do {
+            let playerDetail = try await networkManager.fetchPlayerProfile()
+            await MainActor.run {
+                updatePlayerInventoryFromDetail(playerDetail.data)
+                inventoryViewState = .loaded
+                lastInventoryUpdate = Date()
+                GameLogger.shared.logInfo("인벤토리 데이터 로딩 성공", category: .gameplay)
+            }
+        } catch {
+            GameLogger.shared.logError("인벤토리 로딩 실패 - \(error)", category: .gameplay)
+            await handleInventoryLoadingError("인벤토리를 불러올 수 없습니다")
+        }
+    }
+
+    /**
+     * 인벤토리 데이터 새로고침
+     */
+    func refreshInventoryData() async {
+        guard inventoryViewState == .loaded else {
+            await loadInventoryData()
+            return
+        }
+
+        await MainActor.run {
+            inventoryViewState = .refreshing
+        }
+
+        do {
+            let playerDetail = try await networkManager.fetchPlayerProfile()
+            await MainActor.run {
+                updatePlayerInventoryFromDetail(playerDetail.data)
+                inventoryViewState = .loaded
+                lastInventoryUpdate = Date()
+                GameLogger.shared.logInfo("인벤토리 새로고침 성공", category: .gameplay)
+            }
+        } catch {
+            GameLogger.shared.logError("인벤토리 새로고침 실패 - \(error)", category: .gameplay)
+            await MainActor.run {
+                inventoryViewState = .loaded // 기존 데이터 유지
+            }
+        }
+    }
+
+    /**
+     * 스마트 인벤토리 로딩 (온라인/오프라인 대응)
+     */
+    func smartLoadInventory() async {
+        if isNetworkAvailable {
+            // 네트워크 사용 가능 시 서버 데이터 우선
+            await loadInventoryData()
+        } else {
+            // 오프라인 시 캐시 데이터 사용
+            await handleInventoryLoadingError("네트워크에 연결되지 않았습니다")
+        }
+    }
+
+    /**
+     * 서버 데이터로 플레이어 인벤토리 업데이트
+     */
+    private func updatePlayerInventoryFromDetail(_ playerDetail: PlayerDetail) {
+        guard let player = currentPlayer else { return }
+
+        // 서버 inventory를 TradeItem으로 변환하여 player.inventory.inventory에 저장
+        let serverInventoryItems = playerDetail.inventory.map { inventoryItem in
+            TradeItem(
+                id: inventoryItem.id,
+                name: inventoryItem.name,
+                category: inventoryItem.category,
+                basePrice: inventoryItem.basePrice,
+                quantity: inventoryItem.quantity,
+                grade: ItemGrade.fromServerGrade(inventoryItem.grade),
+                weight: 1.0, // 기본값 설정
+                description: inventoryItem.name,
+                iconId: 1,
+                requiredLicense: 0,
+                durability: 100,
+                effects: []
+            )
+        }
+
+        player.inventory.inventory = serverInventoryItems
+
+        // 인벤토리 및 플레이어 캐시 저장
+        saveInventoryToCache(serverInventoryItems)
+        savePlayerToCache(player)
+    }
+
+    /**
+     * 인벤토리 로딩 에러 처리
+     */
+    private func handleInventoryLoadingError(_ message: String) async {
+        await MainActor.run {
+            // 캐시된 인벤토리 데이터 확인
+            if let cachedInventory = loadCachedInventory() {
+                // 캐시된 인벤토리가 유효한지 확인
+                let cacheAge = Date().timeIntervalSince(lastInventoryUpdate)
+                let maxCacheAge: TimeInterval = 24 * 60 * 60 // 24시간
+
+                if cacheAge <= maxCacheAge || !isNetworkAvailable {
+                    if let player = currentPlayer {
+                        player.inventory.inventory = cachedInventory
+                        inventoryViewState = .loaded
+                        GameLogger.shared.logInfo("캐시된 인벤토리 데이터 사용 (age: \(Int(cacheAge/60))분)", category: .gameplay)
+
+                        addNotification(
+                            title: "오프라인 모드",
+                            message: "저장된 인벤토리 데이터를 표시합니다",
+                            type: .warning
+                        )
+                        return
+                    }
+                }
+            }
+
+            // 캐시가 없거나 만료된 경우
+            inventoryViewState = .error(message)
+            GameLogger.shared.logError("인벤토리 에러: \(message)", category: .gameplay)
+        }
+    }
+
+    // MARK: - Inventory Cache Management
+
+    /**
+     * 인벤토리 데이터를 캐시에 저장
+     */
+    private func saveInventoryToCache(_ inventory: [TradeItem]) {
+        do {
+            let data = try JSONEncoder().encode(inventory)
+            UserDefaults.standard.set(data, forKey: "cached_inventory")
+            UserDefaults.standard.set(Date(), forKey: "inventory_cache_timestamp")
+            GameLogger.shared.logInfo("인벤토리 캐시 저장 완료", category: .gameplay)
+        } catch {
+            GameLogger.shared.logError("인벤토리 캐시 저장 실패: \(error)", category: .gameplay)
+        }
+    }
+
+    /**
+     * 캐시에서 인벤토리 데이터 로드
+     */
+    private func loadCachedInventory() -> [TradeItem]? {
+        guard let data = UserDefaults.standard.data(forKey: "cached_inventory") else {
+            return nil
+        }
+
+        do {
+            let inventory = try JSONDecoder().decode([TradeItem].self, from: data)
+            if let timestamp = UserDefaults.standard.object(forKey: "inventory_cache_timestamp") as? Date {
+                lastInventoryUpdate = timestamp
+            }
+            return inventory
+        } catch {
+            GameLogger.shared.logError("인벤토리 캐시 로드 실패: \(error)", category: .gameplay)
+            return nil
+        }
+    }
+
+    /**
+     * 인벤토리 캐시 정리
+     */
+    private func clearInventoryCache() {
+        UserDefaults.standard.removeObject(forKey: "cached_inventory")
+        UserDefaults.standard.removeObject(forKey: "inventory_cache_timestamp")
+        GameLogger.shared.logInfo("인벤토리 캐시 정리 완료", category: .gameplay)
+    }
+
+    /**
+     * 인벤토리 캐시 유효성 검사
+     */
+    private func isInventoryCacheValid() -> Bool {
+        guard let timestamp = UserDefaults.standard.object(forKey: "inventory_cache_timestamp") as? Date else {
+            return false
+        }
+
+        let cacheAge = Date().timeIntervalSince(timestamp)
+        let maxCacheAge: TimeInterval = 24 * 60 * 60 // 24시간
+
+        return cacheAge <= maxCacheAge
     }
 
     // MARK: - Location Management
@@ -352,15 +714,57 @@ class GameManager: ObservableObject {
     }
 
     private func updatePlayerFromDetail(_ detail: PlayerDetail) {
+        // 기존 플레이어가 없으면 새로 생성
+        if currentPlayer == nil {
+            currentPlayer = Player(
+                id: detail.id,
+                name: detail.name
+            )
+        }
+
         guard var player = currentPlayer else { return }
 
-        // PlayerDetail의 정보로 Player 업데이트
+        // PlayerDetail의 모든 정보로 Player 업데이트
+        player.core.id = detail.id
+        player.core.name = detail.name
         player.core.money = detail.money
         player.core.trustPoints = detail.trustPoints
         player.core.currentLicense = LicenseLevel(rawValue: detail.currentLicense) ?? .beginner
         player.inventory.maxInventorySize = detail.maxInventorySize
 
+        // 위치 정보 업데이트
+        if detail.location.lat != 0 && detail.location.lng != 0 {
+            player.currentLocation = CLLocationCoordinate2D(
+                latitude: detail.location.lat,
+                longitude: detail.location.lng
+            )
+        }
+
+        // 인벤토리 업데이트 (기존 인벤토리 클리어 후 서버 데이터로 대체)
+        player.inventory.inventory.removeAll()
+        for inventoryItem in detail.inventory {
+            let tradeItem = TradeItem(
+                itemId: inventoryItem.id,
+                name: inventoryItem.name,
+                category: inventoryItem.category,
+                grade: ItemGrade(rawValue: inventoryItem.grade) ?? .common,
+                requiredLicense: LicenseLevel(rawValue: inventoryItem.requiredLicense) ?? .beginner,
+                basePrice: inventoryItem.basePrice,
+                currentPrice: inventoryItem.currentPrice,
+                weight: 1.0, // 기본값, 나중에 API에서 제공
+                description: "", // 기본값, 나중에 API에서 제공
+                iconId: 1 // 기본값, 나중에 API에서 제공
+            )
+            player.inventory.inventory.append(tradeItem)
+        }
+
+        // 업데이트된 플레이어 저장
         currentPlayer = player
+
+        // 캐시에 저장
+        cachePlayerData()
+
+        GameLogger.shared.logInfo("플레이어 데이터 업데이트 완료 - \(player.core.name)", category: .gameplay)
     }
 
     private func convertMerchantData(_ data: MerchantData) -> Merchant {
@@ -384,6 +788,40 @@ enum GameState {
     case active
     case paused
     case loading
+}
+
+// MARK: - Profile View State Enum
+enum ProfileViewState {
+    case loading
+    case loaded
+    case error(String)
+    case refreshing
+
+    var isLoading: Bool {
+        switch self {
+        case .loading, .refreshing:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
+// MARK: - Inventory View State Enum
+enum InventoryViewState {
+    case loading
+    case loaded
+    case error(String)
+    case refreshing
+
+    var isLoading: Bool {
+        switch self {
+        case .loading, .refreshing:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 // MARK: - Game Statistics

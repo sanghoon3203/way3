@@ -57,6 +57,11 @@ enum ItemGrade: Int, CaseIterable, Codable {
         case .legendary: return .cyberpunkGold
         }
     }
+
+    // 서버 grade 숫자를 ItemGrade로 변환
+    static func fromServerGrade(_ serverGrade: Int) -> ItemGrade {
+        return ItemGrade(rawValue: serverGrade) ?? .common
+    }
 }
 
 // MARK: - 라이센스 등급
