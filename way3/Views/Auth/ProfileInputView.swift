@@ -7,12 +7,12 @@
 //
 
 import SwiftUI
-import PhotosUI
 
 struct ProfileInputView: View {
     @Binding var isPresented: Bool
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var player: Player
+    @ObservedObject private var networkManager = NetworkManager.shared
 
     // 대화 상태
     @State private var currentStep: ProfileStep = .name
@@ -31,7 +31,12 @@ struct ProfileInputView: View {
     // UI 상태
     @State private var showConfirmationPopup = false
     @State private var showCorrectionDialog = false
-    @State private var correctionField = ""
+
+    // 서버 연동 상태
+    @State private var isSavingProfile = false
+    @State private var saveError: String? = nil
+    @State private var showErrorAlert = false
+    @State private var saveTask: Task<Void, Never>? = nil
 
     var body: some View {
         ZStack {
@@ -71,8 +76,19 @@ struct ProfileInputView: View {
         .sheet(isPresented: $showImagePicker) {
             ImagePickerView(selectedImage: $profileImage)
         }
+        .alert("프로필 저장 오류", isPresented: $showErrorAlert) {
+            Button("확인", role: .cancel) {
+                // 오류 발생 시에도 화면은 닫기 (로컬 저장은 되었으므로)
+                isPresented = false
+            }
+        } message: {
+            Text(saveError ?? "알 수 없는 오류가 발생했습니다")
+        }
         .onAppear {
             startTypingDialogue()
+        }
+        .onDisappear {
+            saveTask?.cancel()
         }
     }
 }
@@ -279,7 +295,7 @@ extension ProfileInputView {
 
                     Button("기본 이미지 사용") {
                         profileImage = nil
-                        selectedGender = "default"
+                        // selectedGender는 유지 (서버 규격에 맞지 않는 "default" 제거)
                     }
                     .font(.chosunOrFallback(size: 12))
                     .foregroundColor(.white.opacity(0.7))
@@ -327,7 +343,6 @@ extension ProfileInputView {
                 displayedText += String(characters[currentIndex])
                 currentIndex += 1
 
-                // 타이핑 효과 햅틱
                 if currentIndex % 4 == 0 {
                     let impactFeedback = UIImpactFeedbackGenerator(style: .light)
                     impactFeedback.impactOccurred()
@@ -352,37 +367,18 @@ extension ProfileInputView {
         let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
         impactFeedback.impactOccurred()
 
-        // 현재 단계의 데이터 저장
         saveCurrentStepData()
 
-        // 다음 단계로 진행
         if let nextStep = currentStep.nextStep {
             currentStep = nextStep
             startTypingDialogue()
         } else {
-            // 최종 확인 팝업 표시
             showConfirmationPopup = true
         }
     }
 
     private func saveCurrentStepData() {
-        switch currentStep {
-        case .name:
-            player.name = playerName
-        case .age:
-            if let age = Int(playerAge) {
-                player.age = age
-            }
-        case .personality:
-            player.personality = selectedPersonality
-        case .gender:
-            player.gender = selectedGender
-        case .profileImage:
-            // 프로필 이미지 처리 (향후 서버 업로드)
-            break
-        case .completion:
-            break
-        }
+        // 모든 데이터는 서버 연동 시에만 업데이트
     }
 }
 
@@ -445,7 +441,17 @@ extension ProfileInputView {
                     .padding(.vertical, 12)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.cyan)
+                            .fill(isSavingProfile ? Color.gray : Color.cyan)
+                    )
+                    .disabled(isSavingProfile)
+                    .overlay(
+                        Group {
+                            if isSavingProfile {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .scaleEffect(0.8)
+                            }
+                        }
                     )
                 }
             }
@@ -475,9 +481,7 @@ extension ProfileInputView {
                 VStack(spacing: 12) {
                     ForEach(["이름", "나이", "성격", "성별"], id: \.self) { field in
                         Button(field) {
-                            correctionField = field
                             showCorrectionDialog = false
-                            // 해당 단계로 돌아가기
                             goBackToStep(for: field)
                         }
                         .font(.chosunOrFallback(size: 16))
@@ -550,12 +554,122 @@ extension ProfileInputView {
     }
 
     private func saveProfileToServer() {
-        // TODO: 실제 서버 API 호출
+        // 입력 유효성 검사
+        let validationError = validateInputs()
+        if let error = validationError {
+            saveError = error
+            showErrorAlert = true
+            return
+        }
+
+        guard let age = Int(playerAge) else {
+            saveError = "나이는 숫자로 입력해주세요"
+            showErrorAlert = true
+            return
+        }
+
+        isSavingProfile = true
+        saveError = nil
+
+        saveTask = Task {
+            do {
+                let response = try await networkManager.createPlayerProfile(
+                    name: playerName,
+                    age: age,
+                    gender: selectedGender,
+                    personality: selectedPersonality
+                )
+
+                await MainActor.run {
+                    isSavingProfile = false
+                    handleServerResponse(response)
+                }
+            } catch {
+                await MainActor.run {
+                    isSavingProfile = false
+                    handleNetworkError(error)
+                }
+            }
+        }
+    }
+
+    private func validateInputs() -> String? {
+        if playerName.isEmpty {
+            return "이름을 입력해주세요"
+        }
+        if playerName.count < 2 || playerName.count > 20 {
+            return "이름은 2-20자 사이로 입력해주세요"
+        }
+        if playerAge.isEmpty {
+            return "나이를 입력해주세요"
+        }
+        if let age = Int(playerAge), (age < 16 || age > 100) {
+            return "나이는 16-100세 사이로 입력해주세요"
+        }
+        if selectedPersonality.isEmpty {
+            return "성격을 선택해주세요"
+        }
+        if selectedGender.isEmpty {
+            return "성별을 선택해주세요"
+        }
+        return nil
+    }
+
+    private func handleServerResponse(_ response: ProfileCreationResponse) {
+        if response.success {
+            saveToLocalBackup(syncedWithServer: true)
+            updatePlayerWithServerData(response.data)
+            GameLogger.shared.logInfo("프로필 생성 성공: \(playerName)", category: .network)
+        } else {
+            let errorMessage = response.error ?? "프로필 저장에 실패했습니다"
+            saveError = getLocalizedErrorMessage(errorMessage)
+            showErrorAlert = true
+            GameLogger.shared.logError("프로필 생성 실패: \(errorMessage)", category: .network)
+        }
+    }
+
+    private func handleNetworkError(_ error: Error) {
+        let errorMessage = "네트워크 연결을 확인해주세요"
+        saveError = errorMessage
+        showErrorAlert = true
+        GameLogger.shared.logError("프로필 생성 네트워크 오류: \(error)", category: .network)
+
+        // 오프라인 모드로 로컬 저장
+        saveToLocalBackup(syncedWithServer: false)
+    }
+
+    private func saveToLocalBackup(syncedWithServer: Bool) {
         UserDefaults.standard.set(playerName, forKey: "playerName")
         UserDefaults.standard.set(playerAge, forKey: "playerAge")
         UserDefaults.standard.set(selectedPersonality, forKey: "playerPersonality")
         UserDefaults.standard.set(selectedGender, forKey: "playerGender")
-        UserDefaults.standard.set(true, forKey: "profileCompleted")
+        UserDefaults.standard.set(syncedWithServer, forKey: "profileCompleted")
+    }
+
+    private func getLocalizedErrorMessage(_ serverError: String) -> String {
+        // 서버 에러를 사용자 친화적 메시지로 변환
+        if serverError.contains("name") {
+            return "이름 형식이 올바르지 않습니다"
+        } else if serverError.contains("age") {
+            return "나이 정보가 올바르지 않습니다"
+        } else if serverError.contains("gender") {
+            return "성별 정보가 올바르지 않습니다"
+        } else if serverError.contains("personality") {
+            return "성격 정보가 올바르지 않습니다"
+        } else if serverError.contains("already") {
+            return "이미 설정된 프로필이 있습니다"
+        } else {
+            return "프로필 저장 중 오류가 발생했습니다"
+        }
+    }
+
+    private func updatePlayerWithServerData(_ data: ProfileCreationData?) {
+        guard let data = data else { return }
+
+        // Player 객체 기본 정보만 업데이트
+        player.core.name = data.name
+
+        // 나머지 상세 정보는 서버에서 관리되므로 로컬에 중복 저장하지 않음
     }
 }
 
@@ -586,7 +700,7 @@ enum ProfileStep: CaseIterable {
             return "알겠어! 이제 거의 다 끝났어.\n\n프로필 사진을 하나 골라줄래? 다른 상인들이 널 알아볼 수 있게 말이야. 안 고르면 기본 이미지로 설정할게."
 
         case .completion:
-            return "\(UserDefaults.standard.string(forKey: "playerName") ?? "상인")! 이제 모든 준비가 끝났어.\n\n네오-서울에서 잘 살아남길 바래! 이곳은 위험하지만 기회도 많은 곳이야.\n\n다시 또 보자!"
+            return "\(playerName)! 이제 모든 준비가 끝났어.\n\n네오-서울에서 잘 살아남길 바래! 이곳은 위험하지만 기회도 많은 곳이야.\n\n다시 또 보자!"
         }
     }
 

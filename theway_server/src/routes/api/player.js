@@ -364,6 +364,198 @@ router.post('/increase-skill', [
 });
 
 /**
+ * 플레이어 프로필 생성 (첫 가입 시)
+ * POST /api/player/create-profile
+ */
+router.post('/create-profile', [
+    body('name')
+        .trim()
+        .isLength({ min: 2, max: 20 })
+        .withMessage('이름은 2-20자 사이여야 합니다'),
+    body('age')
+        .isInt({ min: 16, max: 100 })
+        .withMessage('나이는 16-100세 사이여야 합니다'),
+    body('gender')
+        .isIn(['male', 'female'])
+        .withMessage('유효한 성별을 선택해주세요'),
+    body('personality')
+        .isIn(['aggressive', 'careful', 'balanced', 'adventurous', 'analytical'])
+        .withMessage('유효한 성격을 선택해주세요')
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                error: '입력 정보가 유효하지 않습니다',
+                details: errors.array()
+            });
+        }
+
+        const { name, age, gender, personality } = req.body;
+        const playerId = req.player.id;
+
+        // 이미 프로필이 완성된 플레이어인지 확인
+        const existingPlayer = await DatabaseManager.get(
+            'SELECT profile_completed FROM players WHERE id = ?',
+            [playerId]
+        );
+
+        if (existingPlayer && existingPlayer.profile_completed) {
+            return res.status(400).json({
+                success: false,
+                error: '이미 프로필이 설정된 플레이어입니다'
+            });
+        }
+
+        // 프로필 정보 업데이트
+        await DatabaseManager.run(`
+            UPDATE players
+            SET
+                name = ?,
+                age = ?,
+                gender = ?,
+                personality = ?,
+                profile_completed = 1,
+                last_active = CURRENT_TIMESTAMP
+            WHERE id = ?
+        `, [name, age, gender, personality, playerId]);
+
+        // 활동 로그 기록
+        await DatabaseManager.run(`
+            INSERT INTO activity_logs (player_id, action_type, details)
+            VALUES (?, 'profile_created', ?)
+        `, [playerId, JSON.stringify({ name, age, gender, personality })]);
+
+        logger.info('플레이어 프로필 생성:', { playerId, name, age, gender, personality });
+
+        res.json({
+            success: true,
+            message: '프로필이 성공적으로 생성되었습니다',
+            data: {
+                name,
+                age,
+                gender,
+                personality,
+                profileCompleted: true
+            }
+        });
+
+    } catch (error) {
+        logger.error('프로필 생성 실패:', error);
+        res.status(500).json({
+            success: false,
+            error: '서버 오류가 발생했습니다'
+        });
+    }
+});
+
+/**
+ * 플레이어 프로필 업데이트
+ * PUT /api/player/profile
+ */
+router.put('/profile', [
+    body('name')
+        .optional()
+        .trim()
+        .isLength({ min: 2, max: 20 })
+        .withMessage('이름은 2-20자 사이여야 합니다'),
+    body('age')
+        .optional()
+        .isInt({ min: 16, max: 100 })
+        .withMessage('나이는 16-100세 사이여야 합니다'),
+    body('gender')
+        .optional()
+        .isIn(['male', 'female'])
+        .withMessage('유효한 성별을 선택해주세요'),
+    body('personality')
+        .optional()
+        .isIn(['aggressive', 'careful', 'balanced', 'adventurous', 'analytical'])
+        .withMessage('유효한 성격을 선택해주세요')
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                error: '입력 정보가 유효하지 않습니다',
+                details: errors.array()
+            });
+        }
+
+        const { name, age, gender, personality } = req.body;
+        const playerId = req.player.id;
+
+        // 업데이트할 필드들 동적 구성
+        const updateFields = [];
+        const updateValues = [];
+
+        if (name !== undefined) {
+            updateFields.push('name = ?');
+            updateValues.push(name);
+        }
+        if (age !== undefined) {
+            updateFields.push('age = ?');
+            updateValues.push(age);
+        }
+        if (gender !== undefined) {
+            updateFields.push('gender = ?');
+            updateValues.push(gender);
+        }
+        if (personality !== undefined) {
+            updateFields.push('personality = ?');
+            updateValues.push(personality);
+        }
+
+        if (updateFields.length === 0) {
+            return res.status(400).json({
+                success: false,
+                error: '업데이트할 정보가 없습니다'
+            });
+        }
+
+        updateFields.push('last_active = CURRENT_TIMESTAMP');
+        updateValues.push(playerId);
+
+        // 프로필 업데이트
+        const updateQuery = `
+            UPDATE players
+            SET ${updateFields.join(', ')}
+            WHERE id = ?
+        `;
+
+        await DatabaseManager.run(updateQuery, updateValues);
+
+        // 활동 로그 기록
+        await DatabaseManager.run(`
+            INSERT INTO activity_logs (player_id, action_type, details)
+            VALUES (?, 'profile_updated', ?)
+        `, [playerId, JSON.stringify({ name, age, gender, personality })]);
+
+        // 업데이트된 플레이어 정보 조회
+        const updatedPlayer = await DatabaseManager.get(
+            'SELECT name, age, gender, personality FROM players WHERE id = ?',
+            [playerId]
+        );
+
+        logger.info('플레이어 프로필 업데이트:', { playerId, updates: { name, age, gender, personality } });
+
+        res.json({
+            success: true,
+            message: '프로필이 성공적으로 업데이트되었습니다',
+            data: updatedPlayer
+        });
+
+    } catch (error) {
+        logger.error('프로필 업데이트 실패:', error);
+        res.status(500).json({
+            success: false,
+            error: '서버 오류가 발생했습니다'
+        });
+    }
+});
+
+/**
  * 라이센스 업그레이드
  * POST /api/player/upgrade-license
  */

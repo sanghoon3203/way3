@@ -12,6 +12,9 @@ struct MerchantDetailView: View {
     let merchant: Merchant
     @Binding var isPresented: Bool
     @EnvironmentObject var gameManager: GameManager
+
+    // 🚀 하드코딩 제거: ViewModel 사용
+    @StateObject private var viewModel = MerchantDetailViewModel()
     
     // 대화 상태
     @State var currentMode: MerchantInteractionMode = .dialogue
@@ -33,13 +36,23 @@ struct MerchantDetailView: View {
         return merchant.name.replacingOccurrences(of: " ", with: "")
     }
     
-    // Extensions에서 사용할 수 있도록 computed properties 추가
+    // Extensions에서 사용할 수 있도록 computed properties 추가 - 🚀 ViewModel 연동
     var merchantInventoryGridView: some View {
-        MerchantInventoryGridView
+        MerchantInventoryView(
+            merchant: merchant,
+            tradeManager: cartManager as! TradeManager,
+            viewModel: viewModel,
+            tradeType: .buy
+        )
     }
-    
+
     var playerInventoryGridView: some View {
-        PlayerInventoryGridView
+        PlayerInventoryView(
+            merchant: merchant,
+            tradeManager: cartManager as! TradeManager,
+            viewModel: viewModel,
+            tradeType: .sell
+        )
     }
     
     var cartDetailView: some View {
@@ -60,13 +73,25 @@ struct MerchantDetailView: View {
             Color.cyberpunkDarkBg
                 .ignoresSafeArea()
             
-            // 2. 메인 레이아웃
-            if currentMode == .dialogue {
-                DialogueView
-            } else if currentMode == .trading {
-                tradingView
-            } else if currentMode == .cart {
-                CartDetailView
+            // 2. 메인 레이아웃 또는 로딩/에러 상태 🚀
+            if viewModel.isLoading {
+                LoadingView(
+                    message: "상인 정보를 불러오는 중...",
+                    style: .merchant
+                )
+            } else if let error = viewModel.error {
+                ErrorView(error: error) {
+                    viewModel.retryLoading()
+                }
+            } else {
+                // 정상 상태 - 기존 UI
+                if currentMode == .dialogue {
+                    DialogueView
+                } else if currentMode == .trading {
+                    tradingView
+                } else if currentMode == .cart {
+                    CartDetailView
+                }
             }
             
             // 3. 팝업들
@@ -83,7 +108,9 @@ struct MerchantDetailView: View {
         .clipped()
         .navigationBarHidden(true)
         .onAppear {
-            startDialogue()
+            Task {
+                await viewModel.loadMerchant(id: merchant.id)
+            }
         }
     }
 }
@@ -691,18 +718,12 @@ struct TabSelectionView: View {
     }
 }
 
-// MARK: - 상인 인벤토리 (구매 탭)
+// MARK: - 상인 인벤토리 (구매 탭) - 🚀 하드코딩 제거 완료!
 struct MerchantInventoryView: View {
     let merchant: Merchant
     @ObservedObject var tradeManager: TradeManager
+    @ObservedObject var viewModel: MerchantDetailViewModel
     let tradeType: TradeType
-    
-    private let sampleItems = [
-        TradeItem(itemId: "1", name: "고급 쌀", category: "food", grade: .common, requiredLicense: .beginner, basePrice: 2500, description: "고품질 쌀"),
-        TradeItem(itemId: "2", name: "한우", category: "food", grade: .rare, requiredLicense: .intermediate, basePrice: 15000, description: "최고급 한우"),
-        TradeItem(itemId: "3", name: "인삼", category: "food", grade: .intermediate, requiredLicense: .intermediate, basePrice: 8000, description: "6년근 인삼"),
-        TradeItem(itemId: "4", name: "전통차", category: "food", grade: .common, requiredLicense: .beginner, basePrice: 4500, description: "전통 한국차")
-    ]
     
     var body: some View {
         ScrollView {
@@ -710,7 +731,7 @@ struct MerchantInventoryView: View {
                 GridItem(.flexible()),
                 GridItem(.flexible())
             ], spacing: 15) {
-                ForEach(sampleItems) { item in
+                ForEach(viewModel.inventory) { item in
                     TradeItemCard(
                         item: item,
                         tradeType: tradeType,
@@ -726,17 +747,12 @@ struct MerchantInventoryView: View {
     }
 }
 
-// MARK: - 플레이어 인벤토리 (판매 탭)
+// MARK: - 플레이어 인벤토리 (판매 탭) - 🚀 하드코딩 제거 완료!
 struct PlayerInventoryView: View {
     let merchant: Merchant
     @ObservedObject var tradeManager: TradeManager
+    @ObservedObject var viewModel: MerchantDetailViewModel
     let tradeType: TradeType
-    
-    private let sampleItems = [
-        TradeItem(itemId: "p1", name: "사과", category: "food", grade: .common, requiredLicense: .beginner, basePrice: 800, description: "신선한 사과"),
-        TradeItem(itemId: "p2", name: "배", category: "food", grade: .common, requiredLicense: .beginner, basePrice: 1200, description: "달콤한 배"),
-        TradeItem(itemId: "p3", name: "고구마", category: "food", grade: .common, requiredLicense: .beginner, basePrice: 600, description: "고구마")
-    ]
     
     var body: some View {
         ScrollView {
@@ -744,7 +760,7 @@ struct PlayerInventoryView: View {
                 GridItem(.flexible()),
                 GridItem(.flexible())
             ], spacing: 15) {
-                ForEach(sampleItems) { item in
+                ForEach(viewModel.playerInventory) { item in
                     TradeItemCard(
                         item: item,
                         tradeType: tradeType,

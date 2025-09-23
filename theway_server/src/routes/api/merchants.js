@@ -261,8 +261,8 @@ router.get('/:merchantId', async (req, res) => {
  */
 router.get('/', async (req, res) => {
     try {
-        const merchants = await DatabaseManager.all(`
-            SELECT 
+        let merchants = await DatabaseManager.all(`
+            SELECT
                 m.*,
                 COUNT(mi.id) as inventory_count
             FROM merchants m
@@ -271,6 +271,149 @@ router.get('/', async (req, res) => {
             GROUP BY m.id
             ORDER BY m.district, m.name
         `);
+
+        // 데이터베이스가 비어있으면 하드코딩된 fallback 사용
+        if (merchants.length === 0) {
+            const fallbackData = [
+                {
+                    id: "Alicegang",
+                    name: "애니박",
+                    title: null,
+                    type: "retail",
+                    personality: "neutral",
+                    district: "jung",
+                    location: { lat: 37.5636, lng: 126.9979 },
+                    requiredLicense: 1,
+                    reputationRequirement: 0,
+                    priceModifier: 1,
+                    negotiationDifficulty: 3,
+                    inventory: []
+                },
+                {
+                    id: "nacho",
+                    name: "카타리나 최",
+                    title: null,
+                    type: "retail",
+                    personality: "neutral",
+                    district: "jung",
+                    location: { lat: 37.5636, lng: 126.9979 },
+                    requiredLicense: 1,
+                    reputationRequirement: 0,
+                    priceModifier: 1,
+                    negotiationDifficulty: 3,
+                    inventory: []
+                },
+                {
+                    id: "corea",
+                    name: "진백호",
+                    title: null,
+                    type: "cafe",
+                    personality: "neutral",
+                    district: "gangdong",
+                    location: { lat: 37.5301, lng: 127.1238 },
+                    requiredLicense: 1,
+                    reputationRequirement: 0,
+                    priceModifier: 1,
+                    negotiationDifficulty: 3,
+                    inventory: []
+                },
+                {
+                    id: "joo",
+                    name: "주블수",
+                    title: null,
+                    type: "weaponsmith",
+                    personality: "neutral",
+                    district: "gangdong",
+                    location: { lat: 37.5301, lng: 127.1238 },
+                    requiredLicense: 1,
+                    reputationRequirement: 0,
+                    priceModifier: 1,
+                    negotiationDifficulty: 3,
+                    inventory: []
+                },
+                {
+                    id: "Seongbok",
+                    name: "김세휘",
+                    title: null,
+                    type: "retail",
+                    personality: "neutral",
+                    district: "jung",
+                    location: { lat: 37.5636, lng: 126.9979 },
+                    requiredLicense: 1,
+                    reputationRequirement: 0,
+                    priceModifier: 1,
+                    negotiationDifficulty: 3,
+                    inventory: []
+                },
+                {
+                    id: "mariapple",
+                    name: "마리",
+                    title: null,
+                    type: "retail",
+                    personality: "neutral",
+                    district: "jung",
+                    location: { lat: 37.5636, lng: 126.9979 },
+                    requiredLicense: 1,
+                    reputationRequirement: 0,
+                    priceModifier: 1,
+                    negotiationDifficulty: 3,
+                    inventory: []
+                },
+                {
+                    id: "seoye",
+                    name: "서예나",
+                    title: null,
+                    type: "auction",
+                    personality: "neutral",
+                    district: "gangnam",
+                    location: { lat: 37.5172, lng: 127.0473 },
+                    requiredLicense: 1,
+                    reputationRequirement: 0,
+                    priceModifier: 1,
+                    negotiationDifficulty: 3,
+                    inventory: []
+                }
+            ];
+
+            const merchantsByDistrict = fallbackData.reduce((acc, merchant) => {
+                if (!acc[merchant.district]) {
+                    acc[merchant.district] = [];
+                }
+                acc[merchant.district].push({
+                    id: merchant.id,
+                    name: merchant.name,
+                    title: merchant.title,
+                    type: merchant.type,
+                    personality: merchant.personality,
+                    location: merchant.location,
+                    requiredLicense: merchant.requiredLicense,
+                    reputationRequirement: merchant.reputationRequirement,
+                    priceModifier: merchant.priceModifier,
+                    negotiationDifficulty: merchant.negotiationDifficulty,
+                    inventoryCount: merchant.inventory.length
+                });
+                return acc;
+            }, {});
+
+            return res.json({
+                success: true,
+                data: {
+                    merchants: fallbackData.map(m => ({
+                        id: m.id,
+                        name: m.name,
+                        title: m.title,
+                        type: m.type,
+                        personality: m.personality,
+                        district: m.district,
+                        location: m.location,
+                        inventoryCount: m.inventory.length
+                    })),
+                    merchantsByDistrict,
+                    total: fallbackData.length,
+                    source: 'fallback'
+                }
+            });
+        }
 
         const merchantsByDistrict = merchants.reduce((acc, merchant) => {
             if (!acc[merchant.district]) {

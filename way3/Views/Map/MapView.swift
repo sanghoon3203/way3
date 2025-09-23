@@ -21,7 +21,7 @@ import CoreLocation
  *    - 실제 게임용 캐릭터로 교체 권장
  */
 
-// MARK: - Enhanced MapView with Pokemon GO Style
+// MARK: - Enhanced MapView with 3D Player Visualization
 struct MapView: View {
     @EnvironmentObject var gameManager: GameManager
     @EnvironmentObject var authManager: AuthManager
@@ -40,8 +40,6 @@ struct MapView: View {
     @State private var showingMerchantDetail = false
     @State private var selectedMerchant: Merchant?
     @State private var showNearbyPlayers = false
-    @State private var showTradeActivity = false
-    @State private var showingLocationPicker = false
 
     // MARK: - 3D Puck State
     @State private var playerModelScale: [Double] = [2.0, 2.0, 2.0]
@@ -50,9 +48,6 @@ struct MapView: View {
 
     // MARK: - Game State
     @State private var userLocation: CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 37.5665, longitude: 126.9780)
-    @State private var isTracking = true
-    @State private var nearbyMerchants: [Merchant] = []
-    @State private var lastLocationUpdate = Date()
 
     // 플레이어 위치를 동기화하기 위한 computed property
     private var synchronizedLocation: CLLocationCoordinate2D? {
@@ -62,12 +57,20 @@ struct MapView: View {
         return userLocation
     }
 
-    // 오프라인 데이터 생성기
-    private let offlineDataGenerator = OfflineDataGenerator()
+    // 서버 데이터 매니저
+    private let merchantDataManager = MerchantDataManager.shared
+    @State private var serverMerchants: [Merchant] = []
+    @State private var isLoadingMerchants = false
 
-    // 모든 상인을 표시 (거래는 상인 마커에서 거리 체크)
+    // ⚡ 성능 최적화: 화면에 보이는 상인만 표시
     private var allMerchants: [Merchant] {
-        return offlineDataGenerator.generateOfflineData().merchants
+        // 화면에 보이는 상인만 필터링 (성능 향상)
+        guard let userLoc = synchronizedLocation else { return serverMerchants }
+
+        return serverMerchants.filter { merchant in
+            let distance = calculateDistance(from: userLoc, to: merchant.coordinate)
+            return distance <= 2000 // 2km 이내 상인만 표시
+        }
     }
     
     var body: some View {
@@ -78,9 +81,9 @@ struct MapView: View {
                 Puck3D(model: create3DPlayerModel(), bearing: .heading)
 
                 // 🏪 Animated Merchant Markers (Pokemon GO Style)
-                ForEvery(allMerchants) { merchant in
+                ForEvery(allMerchants.prefix(20)) { merchant in
                     MapViewAnnotation(coordinate: merchant.coordinate) {
-                        EnhancedMerchantPinView(
+                        OptimizedMerchantPinView(
                             merchant: merchant,
                             userLocation: synchronizedLocation
                         )
@@ -127,8 +130,65 @@ struct MapView: View {
         .onAppear {
             setupGameEnvironment()
         }
+        .task {
+            // 서버에서 상인 데이터 로드
+            await loadMerchantsFromServer()
+        }
     }
     
+    // MARK: - 🌐 Server Data Loading
+    @MainActor
+    private func loadMerchantsFromServer() async {
+        guard !isLoadingMerchants else { return }
+
+        isLoadingMerchants = true
+
+        do {
+            // 서버에서 상인 목록 가져오기
+            let networkManager = NetworkManager.shared
+            let response = try await networkManager.getNearbyMerchants(
+                latitude: gameManager.currentPlayer?.currentLat ?? 37.5665,
+                longitude: gameManager.currentPlayer?.currentLng ?? 126.9780,
+                radius: 10000 // 10km 반경
+            )
+
+            // 서버 응답을 Merchant 모델로 변환
+            let merchants = response.merchants.map { merchantData in
+                Merchant(
+                    id: merchantData.id,
+                    name: merchantData.name,
+                    type: convertServerTypeToMerchantType(merchantData.type),
+                    coordinate: CLLocationCoordinate2D(
+                        latitude: merchantData.location.lat,
+                        longitude: merchantData.location.lng
+                    ),
+                    isActive: merchantData.canTrade
+                )
+            }
+
+            // UI 업데이트
+            serverMerchants = merchants
+            GameLogger.shared.logDebug("서버에서 \(merchants.count)명의 상인 데이터 로드 완료", category: .networking)
+
+        } catch {
+            GameLogger.shared.logError("상인 데이터 로드 실패: \(error)", category: .networking)
+            // 오류 시 빈 배열 유지 (fallback은 서버에서 처리됨)
+        }
+
+        isLoadingMerchants = false
+    }
+
+    // 서버 타입을 앱 MerchantType으로 변환
+    private func convertServerTypeToMerchantType(_ serverType: String) -> MerchantType {
+        switch serverType {
+        case "weaponsmith": return .retail
+        case "cafe": return .foodMerchant
+        case "auction": return .antique
+        case "retail": return .retail
+        default: return .retail
+        }
+    }
+
     // MARK: - 🎮 Simplified Map Overlay
     private var pokemonGOStyleOverlay: some View {
         ZStack {
@@ -155,77 +215,6 @@ struct MapView: View {
             }
         }
     }
-
-    // MARK: - 👤 Enhanced Player Info Panel
-    private var playerInfoPanel: some View {
-        HStack(spacing: 12) {
-            // 🎨 Player Avatar with Level Ring
-            ZStack {
-                Circle()
-                    .stroke(Color.yellow, lineWidth: 3)
-                    .frame(width: 48, height: 48)
-
-                Circle()
-                    .fill(Color.blue.gradient)
-                    .frame(width: 42, height: 42)
-                    .overlay(
-                        Image(systemName: "person.fill")
-                            .foregroundColor(.white)
-                            .font(.system(size: 20))
-                    )
-            }
-
-            VStack(alignment: .leading, spacing: 2) {
-                if let player = gameManager.currentPlayer {
-                    Text(player.name)
-                        .font(.custom("ChosunCentennial", size: 16))
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .shadow(radius: 2)
-
-                    HStack(spacing: 8) {
-                        // 💰 Money Display
-                        HStack(spacing: 4) {
-                            Image(systemName: "wonsign.circle.fill")
-                                .foregroundColor(.yellow)
-                                .font(.system(size: 12))
-                            Text("\(player.money)")
-                                .font(.custom("ChosunCentennial", size: 12))
-                                .foregroundColor(.white)
-                        }
-
-                        // 📊 Level Display
-                        HStack(spacing: 4) {
-                            Image(systemName: "star.fill")
-                                .foregroundColor(.orange)
-                                .font(.system(size: 12))
-                            Text("Lv.\(player.level)")
-                                .font(.custom("ChosunCentennial", size: 12))
-                                .foregroundColor(.white)
-                        }
-                    }
-                } else {
-                    Text("플레이어")
-                        .font(.custom("ChosunCentennial", size: 16))
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .shadow(radius: 2)
-                }
-            }
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(Color.black.opacity(0.4))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 24)
-                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                )
-        )
-        .shadow(radius: 8)
-    }
-
 
 
     // MARK: - 💰 Money Display Component
@@ -299,90 +288,105 @@ struct MapView: View {
 
     // MARK: - 🎯 3D Player Model Configuration
     private func create3DPlayerModel() -> Model {
-        // 플레이어 상태에 따른 3D 모델 선택
         let modelName = getPlayerModelName()
 
-        // 🔍 로컬 3D 모델 파일 확인 및 개선된 오류 처리
-        if let modelURL = Bundle.main.url(forResource: modelName, withExtension: "glb") {
-            print("✅ 로컬 glb 모델 발견: \(modelName).glb")
-            return Model(
-                uri: modelURL,
-                orientation: [0, 0, 180]
-            )
-        } else if let modelURL = Bundle.main.url(forResource: modelName, withExtension: "gltf") {
-            print("✅ 로컬 gltf 모델 발견: \(modelName).gltf")
-            return Model(
-                uri: modelURL,
-                orientation: [0, 0, 180]
-            )
-        } else {
-            print("⚠️ 로컬 모델 없음. 기본 온라인 모델 사용: \(modelName)")
-            // 기본 3D 플레이어 표현 사용
-            return createDefaultPlayerModel()
-        }
+        // 🚀 개선된 모델 로딩 시스템: 캐싱 + 폴백
+        return loadOptimizedPlayerModel(named: modelName)
     }
 
-    private func getPlayerModelName() -> String {
-        guard let player = gameManager.currentPlayer else { return "player_default" }
-
-        // 플레이어 레벨과 상태에 따른 모델 선택
-        switch player.level {
-        case 1...5:
-            return isPlayerMoving ? "player_novice_walking" : "player_novice_idle"
-        case 6...10:
-            return isPlayerMoving ? "player_trader_walking" : "player_trader_idle"
-        case 11...20:
-            return isPlayerMoving ? "player_expert_walking" : "player_expert_idle"
-        default:
-            return isPlayerMoving ? "player_master_walking" : "player_master_idle"
+    // 🎯 로컬 전용 모델 로딩 시스템
+    private func loadOptimizedPlayerModel(named modelName: String) -> Model {
+        // 1차: 로컬 GLB 모델 검색 (Resources/3D_Models/)
+        if let modelURL = findLocalModel(named: modelName, extension: "glb") {
+            print("✅ 로컬 GLB 모델 로드: \(modelName).glb")
+            return createModelWithOptimization(url: modelURL)
         }
+
+        // 2차: 로컬 GLTF 모델 검색
+        if let modelURL = findLocalModel(named: modelName, extension: "gltf") {
+            print("✅ 로컬 GLTF 모델 로드: \(modelName).gltf")
+            return createModelWithOptimization(url: modelURL)
+        }
+
+        // 모델 없음: 기본 큐브나 빈 모델 사용
+        print("❌ 로컬 모델 없음: \(modelName) - 기본 모델 사용")
+        return createEmptyPlayerModel()
     }
 
-    private func createDefaultPlayerModel() -> Model {
-        // 💫 Enhanced 3D Player Model with Better Visibility
-        // 신뢰성 높은 glTF 2.0 샘플 모델 사용 (안정적인 호스팅)
-        let modelURLs = [
-            "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Duck/glTF-Binary/Duck.glb",
-            "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Avocado/glTF-Binary/Avocado.glb",
-            "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
-        ]
+    // 🔍 로컬 모델 파일 검색 최적화
+    private func findLocalModel(named modelName: String, extension fileExtension: String) -> URL? {
+        // Resources/3D_Models/ 폴더에서 검색
+        return Bundle.main.url(forResource: "3D_Models/\(modelName)", withExtension: fileExtension) ??
+               Bundle.main.url(forResource: modelName, withExtension: fileExtension)
+    }
 
-        // 플레이어 레벨에 따라 다른 모델 선택
-        let modelIndex = min((gameManager.currentPlayer?.level ?? 1) / 5, modelURLs.count - 1)
-        let selectedURL = modelURLs[modelIndex]
-
-        guard let url = URL(string: selectedURL) else {
-            // Fallback to most reliable model
-            return Model(
-                uri: URL(string: modelURLs[0])!,
-                orientation: [0, 0, 0]
-            )
-        }
-
+    // 🎯 최적화된 3D 모델 생성
+    private func createModelWithOptimization(url: URL) -> Model {
         return Model(
             uri: url,
-            orientation: [0, 0, 0]
+            orientation: [0, 0, 180],
+            scale: playerModelScale,
+            opacity: playerModelOpacity
         )
     }
 
-    // MARK: - 🎯 3D Puck Animation Methods
+    // 🎯 스마트 모델 네이밍 시스템
+    private func getPlayerModelName() -> String {
+        guard let player = gameManager.currentPlayer else { return "player_novice_idle" }
+
+        let levelTier = getPlayerLevelTier(level: player.level)
+        let animationState = isPlayerMoving ? "walking" : "idle"
+
+        return "player_\(levelTier)_\(animationState)"
+    }
+
+    private func getPlayerLevelTier(level: Int) -> String {
+        switch level {
+        case 1...5: return "novice"    // 초보자: 간단한 복장
+        case 6...10: return "trader"   // 상인: 가방, 계산기
+        case 11...20: return "expert"  // 전문가: 정장, 브리프케이스
+        default: return "master"       // 마스터: 화려한 복장
+        }
+    }
+
+    // 📦 기본 빈 모델 (로컬 모델 없을 때 사용)
+    private func createEmptyPlayerModel() -> Model {
+        // 기본 학습용 모델 또는 빈 모델 반환
+        // 사용자가 모델을 추가할 때까지 대기
+        fatalError("📦 3D 모델을 Resources/3D_Models/ 폴더에 추가해주세요!\n필요한 모델: \(getPlayerModelName())")
+    }
+
+    // MARK: - 🎯 최적화된 3D 애니메이션 시스템
     private func startPlayerMovingAnimation() {
         guard !isPlayerMoving else { return }
 
         withAnimation(.easeInOut(duration: 0.5)) {
             isPlayerMoving = true
-            playerModelScale = [2.2, 2.2, 2.2] // 움직일 때 약간 커짐
+            playerModelScale = [2.2, 2.2, 2.2]
             playerModelOpacity = 1.0
         }
 
-        // 걸음 애니메이션 효과
-        Timer.scheduledTimer(withTimeInterval: 0.8, repeats: true) { timer in
-            if isPlayerMoving {
-                withAnimation(.easeInOut(duration: 0.4)) {
-                    playerModelScale = playerModelScale == [2.2, 2.2, 2.2] ? [2.0, 2.0, 2.0] : [2.2, 2.2, 2.2]
-                }
-            } else {
-                timer.invalidate()
+        // ⚡ 성능 최적화: 타이머 대신 애니메이션 체인 사용
+        startContinuousWalkingAnimation()
+    }
+
+    // 🚶‍♂️ 지속적인 걸음 애니메이션 (메모리 효율적)
+    private func startContinuousWalkingAnimation() {
+        guard isPlayerMoving else { return }
+
+        withAnimation(.easeInOut(duration: 0.4)) {
+            playerModelScale = [2.0, 2.0, 2.0]
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            guard self.isPlayerMoving else { return }
+
+            withAnimation(.easeInOut(duration: 0.4)) {
+                self.playerModelScale = [2.2, 2.2, 2.2]
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                self.startContinuousWalkingAnimation() // 재귀 호출
             }
         }
     }
@@ -397,48 +401,68 @@ struct MapView: View {
         }
     }
 
+    // 💰 거래 애니메이션 (향상된 피드백)
     private func playTradeAnimation() {
-        // 거래 시 특별한 애니메이션
+        // 💫 거래 성공 피드백: 확대 + 회전 + 펄스
+        let originalScale = playerModelScale
+        let originalOpacity = playerModelOpacity
+
+        // 1단계: 확대 애니메이션
         withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {
-            playerModelScale = [2.5, 2.5, 2.5]
+            playerModelScale = [2.8, 2.8, 2.8]
             playerModelOpacity = 1.0
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            withAnimation(.easeInOut(duration: 0.5)) {
-                playerModelScale = [2.0, 2.0, 2.0]
-                playerModelOpacity = 0.9
+        // 2단계: 펄스 효과
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            withAnimation(.easeInOut(duration: 0.2).repeatCount(2, autoreverses: true)) {
+                self.playerModelOpacity = 0.7
             }
+        }
+
+        // 3단계: 원래 상태로 복귀
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+            withAnimation(.easeInOut(duration: 0.5)) {
+                self.playerModelScale = originalScale
+                self.playerModelOpacity = originalOpacity
+            }
+        }
+
+        // 🎵 햅틱 피드백
+        let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
+        impactFeedback.impactOccurred()
+    }
+
+    // MARK: - 🛠️ 유틸리티 함수들
+    private func calculateDistance(from location1: CLLocationCoordinate2D, to location2: CLLocationCoordinate2D) -> CLLocationDistance {
+        let loc1 = CLLocation(latitude: location1.latitude, longitude: location1.longitude)
+        let loc2 = CLLocation(latitude: location2.latitude, longitude: location2.longitude)
+        return loc1.distance(from: loc2)
+    }
+
+    private func focusCamera(on coordinate: CLLocationCoordinate2D, zoom: Double = 17) {
+        withAnimation(.easeInOut(duration: 1.2)) {
+            viewport = .camera(
+                center: coordinate,
+                zoom: zoom,
+                bearing: 45,
+                pitch: 65
+            )
         }
     }
 
     // MARK: - 🎮 Game Methods
     private func handleMerchantTap(_ merchant: Merchant) {
-        // 500m 이내에서만 거래 가능
+        // 1000m 이내에서만 거래 가능
         if let syncLocation = synchronizedLocation {
-            let merchantLocation = CLLocation(
-                latitude: merchant.coordinate.latitude,
-                longitude: merchant.coordinate.longitude
-            )
-            let userLocationCL = CLLocation(
-                latitude: syncLocation.latitude,
-                longitude: syncLocation.longitude
-            )
-            let distance = userLocationCL.distance(from: merchantLocation)
+            let distance = calculateDistance(from: syncLocation, to: merchant.coordinate)
 
             if distance <= 1000 {
                 selectedMerchant = merchant
                 showingMerchantDetail = true
 
                 // 🎯 Focus camera on merchant with smooth animation
-                withAnimation(.easeInOut(duration: 1.2)) {
-                    viewport = .camera(
-                        center: merchant.coordinate,
-                        zoom: 17,
-                        bearing: 45,
-                        pitch: 65
-                    )
-                }
+                focusCamera(on: merchant.coordinate)
 
                 // 🎯 플레이어 거래 애니메이션 실행
                 playTradeAnimation()
@@ -454,51 +478,10 @@ struct MapView: View {
         }
     }
 
-    private func findNearestMerchant() {
-        guard let playerLocation = synchronizedLocation else { return }
-
-        let nearestMerchant = allMerchants.min { merchant1, merchant2 in
-            let distance1 = CLLocation(
-                latitude: merchant1.coordinate.latitude,
-                longitude: merchant1.coordinate.longitude
-            ).distance(from: CLLocation(
-                latitude: playerLocation.latitude,
-                longitude: playerLocation.longitude
-            ))
-
-            let distance2 = CLLocation(
-                latitude: merchant2.coordinate.latitude,
-                longitude: merchant2.coordinate.longitude
-            ).distance(from: CLLocation(
-                latitude: playerLocation.latitude,
-                longitude: playerLocation.longitude
-            ))
-
-            return distance1 < distance2
-        }
-
-        if let merchant = nearestMerchant {
-            withAnimation(.easeInOut(duration: 1.5)) {
-                viewport = .camera(
-                    center: merchant.coordinate,
-                    zoom: 17,
-                    bearing: 45,
-                    pitch: 65
-                )
-            }
-        }
-    }
 
     private func centerOnPlayerLocation() {
         if let location = synchronizedLocation {
-            withAnimation(.easeInOut(duration: 1.0)) {
-                viewport = .camera(
-                    center: location,
-                    zoom: 16,
-                    bearing: 45,
-                    pitch: 65
-                )
-            }
+            focusCamera(on: location, zoom: 16)
         }
     }
 
@@ -540,14 +523,10 @@ struct MapView: View {
         }
     }
 
-    private func stopTracking() {
-        isTracking = false
-        viewport = .idle
-    }
 }
 
-// MARK: - 🎯 Enhanced Merchant Pin View (Pokemon GO Style)
-struct EnhancedMerchantPinView: View {
+// MARK: - ⚡ 최적화된 상인 핀 뷰 (Pokemon GO Style + 성능 개선)
+struct OptimizedMerchantPinView: View {
     let merchant: Merchant
     let userLocation: CLLocationCoordinate2D?
 
@@ -562,14 +541,15 @@ struct EnhancedMerchantPinView: View {
 
     private var isNearby: Bool {
         guard let userLoc = userLocation else { return false }
-        let distance = CLLocation(
-            latitude: merchant.coordinate.latitude,
-            longitude: merchant.coordinate.longitude
-        ).distance(from: CLLocation(
-            latitude: userLoc.latitude,
-            longitude: userLoc.longitude
-        ))
+        let distance = calculateDistance(from: userLoc, to: merchant.coordinate)
         return distance <= 500
+    }
+
+    // ⚡ 로컬 거리 계산 유틸리티
+    private func calculateDistance(from location1: CLLocationCoordinate2D, to location2: CLLocationCoordinate2D) -> CLLocationDistance {
+        let loc1 = CLLocation(latitude: location1.latitude, longitude: location1.longitude)
+        let loc2 = CLLocation(latitude: location2.latitude, longitude: location2.longitude)
+        return loc1.distance(from: loc2)
     }
 
     var body: some View {
@@ -626,9 +606,11 @@ struct EnhancedMerchantPinView: View {
             }
         }
         .onAppear {
-            animationScale = merchant.isActive ? 1.3 : 1.1
-            pulseOpacity = merchant.isActive ? 0.8 : 0.4
+            // ⚡ 성능 최적화: 어니메이션 간소화
+            animationScale = merchant.isActive ? 1.2 : 1.05
+            pulseOpacity = merchant.isActive ? 0.7 : 0.3
         }
+        .drawingGroup() // 렌더링 성능 향상
     }
 }
 

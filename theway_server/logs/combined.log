@@ -976,3 +976,46 @@
 {"level":"info","message":"실시간 메트릭 수집 시작됨","service":"way-game-server","timestamp":"2025-09-17 22:15:24"}
 {"level":"info","message":"📊 실시간 메트릭 수집 시작됨","service":"way-game-server","timestamp":"2025-09-17 22:15:24"}
 {"level":"info","message":"==================================================","service":"way-game-server","timestamp":"2025-09-17 22:15:24"}
+{"level":"info","message":"데이터베이스 연결됨: ./data/way_game.sqlite","service":"way-game-server","timestamp":"2025-09-23 10:39:39"}
+{"level":"info","message":"모든 테이블 생성 완료","service":"way-game-server","timestamp":"2025-09-23 10:39:39"}
+{"level":"info","message":"확장 테이블 생성 시작...","service":"way-game-server","timestamp":"2025-09-23 10:39:39"}
+{"level":"info","message":"모든 확장 테이블 및 인덱스 생성 완료","service":"way-game-server","timestamp":"2025-09-23 10:39:39"}
+{"level":"info","message":"모든 인덱스 생성 완료","service":"way-game-server","timestamp":"2025-09-23 10:39:39"}
+{"level":"info","message":"데이터베이스 초기화 완료","service":"way-game-server","timestamp":"2025-09-23 10:39:39"}
+{"level":"info","message":"데이터베이스 초기화 완료","service":"way-game-server","timestamp":"2025-09-23 10:39:39"}
+{"level":"info","message":"🚀 Way Game Server 시작됨 - 포트: 3000","service":"way-game-server","timestamp":"2025-09-23 10:39:39"}
+{"level":"info","message":"📱 환경: development","service":"way-game-server","timestamp":"2025-09-23 10:39:39"}
+{"level":"info","message":"🗄️  데이터베이스: ./data/way_game.sqlite","service":"way-game-server","timestamp":"2025-09-23 10:39:39"}
+{"level":"info","message":"실시간 메트릭 수집 시작됨","service":"way-game-server","timestamp":"2025-09-23 10:39:39"}
+{"level":"info","message":"📊 실시간 메트릭 수집 시작됨","service":"way-game-server","timestamp":"2025-09-23 10:39:39"}
+{"level":"info","message":"==================================================","service":"way-game-server","timestamp":"2025-09-23 10:39:39"}
+{"level":"info","message":"GET /health - 200 [3ms]","service":"way-game-server","timestamp":"2025-09-23 10:39:50"}
+{"level":"info","message":"데이터베이스 연결됨: ./data/way_game.sqlite","service":"way-game-server","timestamp":"2025-09-23 11:18:46"}
+{"level":"info","message":"모든 테이블 생성 완료","service":"way-game-server","timestamp":"2025-09-23 11:18:46"}
+{"level":"info","message":"확장 테이블 생성 시작...","service":"way-game-server","timestamp":"2025-09-23 11:18:46"}
+{"level":"info","message":"모든 확장 테이블 및 인덱스 생성 완료","service":"way-game-server","timestamp":"2025-09-23 11:18:46"}
+{"level":"info","message":"모든 인덱스 생성 완료","service":"way-game-server","timestamp":"2025-09-23 11:18:46"}
+{"level":"info","message":"데이터베이스 초기화 완료","service":"way-game-server","timestamp":"2025-09-23 11:18:46"}
+{"error":"SQLITE_CONSTRAINT: UNIQUE constraint failed: merchants.id","level":"error","message":"SQL 실행 실패:","params":["Alicegang","애니박","retail","neutral","jung",37.5636,126.9979,1,0,1,3],"service":"way-game-server","sql":"\n                    INSERT INTO merchants (\n                        id, name, merchant_type, personality, district,\n                        lat, lng, required_license, reputation_requirement,\n                        price_modifier, negotiation_difficulty, last_restocked\n                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))\n                ","timestamp":"2025-09-23 11:18:46"}
+{"error":"SQLITE_ERROR: no such column: type","level":"error","message":"SQL 조회 실패:","params":[],"service":"way-game-server","sql":"SELECT id, name, type, district FROM merchants LIMIT 5","timestamp":"2025-09-23 11:18:46"}
+{"level":"info","message":"데이터베이스 연결됨: ./data/way_game.sqlite","service":"way-game-server","timestamp":"2025-09-23 11:19:08"}
+{"level":"info","message":"모든 테이블 생성 완료","service":"way-game-server","timestamp":"2025-09-23 11:19:08"}
+{"level":"info","message":"확장 테이블 생성 시작...","service":"way-game-server","timestamp":"2025-09-23 11:19:08"}
+{"level":"info","message":"모든 확장 테이블 및 인덱스 생성 완료","service":"way-game-server","timestamp":"2025-09-23 11:19:08"}
+{"level":"info","message":"모든 인덱스 생성 완료","service":"way-game-server","timestamp":"2025-09-23 11:19:08"}
+{"level":"info","message":"데이터베이스 초기화 완료","service":"way-game-server","timestamp":"2025-09-23 11:19:08"}
+{"error":"SQLITE_CONSTRAINT: FOREIGN KEY constraint failed","level":"error","message":"SQL 실행 실패:","params":[],"service":"way-game-server","sql":"DELETE FROM merchants","timestamp":"2025-09-23 11:19:08"}
+{"level":"info","message":"데이터베이스 연결됨: ./data/way_game.sqlite","service":"way-game-server","timestamp":"2025-09-23 11:19:18"}
+{"level":"info","message":"모든 테이블 생성 완료","service":"way-game-server","timestamp":"2025-09-23 11:19:18"}
+{"level":"info","message":"확장 테이블 생성 시작...","service":"way-game-server","timestamp":"2025-09-23 11:19:18"}
+{"level":"info","message":"모든 확장 테이블 및 인덱스 생성 완료","service":"way-game-server","timestamp":"2025-09-23 11:19:18"}
+{"level":"info","message":"모든 인덱스 생성 완료","service":"way-game-server","timestamp":"2025-09-23 11:19:18"}
+{"level":"info","message":"데이터베이스 초기화 완료","service":"way-game-server","timestamp":"2025-09-23 11:19:18"}
+{"error":"SQLITE_CONSTRAINT: UNIQUE constraint failed: merchants.id","level":"error","message":"SQL 실행 실패:","params":["Alicegang","애니박","retail","neutral","jung",37.5636,126.9979,1,0,1,3],"service":"way-game-server","sql":"\n                    INSERT INTO merchants (\n                        id, name, merchant_type, personality, district,\n                        lat, lng, required_license, reputation_requirement,\n                        price_modifier, negotiation_difficulty, last_restocked\n                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))\n                ","timestamp":"2025-09-23 11:19:18"}
+{"level":"info","message":"데이터베이스 연결됨: ./data/way_game.sqlite","service":"way-game-server","timestamp":"2025-09-23 11:22:41"}
+{"level":"info","message":"모든 테이블 생성 완료","service":"way-game-server","timestamp":"2025-09-23 11:22:41"}
+{"level":"info","message":"확장 테이블 생성 시작...","service":"way-game-server","timestamp":"2025-09-23 11:22:41"}
+{"level":"info","message":"모든 확장 테이블 및 인덱스 생성 완료","service":"way-game-server","timestamp":"2025-09-23 11:22:41"}
+{"level":"info","message":"모든 인덱스 생성 완료","service":"way-game-server","timestamp":"2025-09-23 11:22:41"}
+{"level":"info","message":"데이터베이스 초기화 완료","service":"way-game-server","timestamp":"2025-09-23 11:22:41"}
+{"error":"SQLITE_CONSTRAINT: UNIQUE constraint failed: merchants.id","level":"error","message":"SQL 실행 실패:","params":["Alicegang","애니박","retail","neutral","jung",37.5636,126.9979,1,0,1,3],"service":"way-game-server","sql":"\n                    INSERT INTO merchants (\n                        id, name, merchant_type, personality, district,\n                        lat, lng, required_license, reputation_requirement,\n                        price_modifier, negotiation_difficulty, last_restocked\n                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))\n                ","timestamp":"2025-09-23 11:22:41"}

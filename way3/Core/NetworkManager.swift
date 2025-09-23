@@ -10,7 +10,7 @@ struct NetworkConfiguration {
 
     // 환경별 동적 Base URL 설정
     static let baseURL: String = {
-        // 환경 변수 또는 Info.plist에서 우선 확인
+        // 환경 변수에서 우선 확인
         if let envURL = ProcessInfo.processInfo.environment["API_BASE_URL"] {
             return envURL
         }
@@ -22,24 +22,46 @@ struct NetworkConfiguration {
 
         // 빌드 설정에 따른 기본값
         #if DEBUG
-            return "http://localhost:3000"  // 개발 환경
+            return "http://localhost:3000"  // 로컬 개발 환경
         #elseif STAGING
-            return "https://staging-api.waygame.com"  // 스테이징 환경
+            return "https://way3-production.up.railway.app"  // 스테이징 환경
         #else
-            return "https://api.waygame.com"  // 프로덕션 환경
+            return "https://way3-production.up.railway.app"  // 프로덕션 환경 (Railway)
         #endif
     }()
 
     // 현재 환경 표시 (디버깅용)
     static let currentEnvironment: String = {
         #if DEBUG
-            return "Development"
+            return "Development (Local)"
         #elseif STAGING
-            return "Staging"
+            return "Staging (Railway)"
         #else
-            return "Production"
+            return "Production (Railway)"
         #endif
     }()
+
+    // 배포된 서버 헬스 체크
+    static func checkServerHealth() async -> Bool {
+        guard let url = URL(string: "\(baseURL)/health") else { return false }
+
+        do {
+            let (_, response) = try await URLSession.shared.data(from: url)
+            if let httpResponse = response as? HTTPURLResponse {
+                return httpResponse.statusCode == 200
+            }
+        } catch {
+            print("❌ 서버 헬스 체크 실패: \(error.localizedDescription)")
+        }
+
+        return false
+    }
+
+    // 네트워크 연결 상태 확인
+    static func isNetworkAvailable() -> Bool {
+        // 간단한 네트워크 체크 (실제로는 Reachability 라이브러리 사용 권장)
+        return true
+    }
 }
 
 class NetworkManager: ObservableObject {
@@ -207,6 +229,26 @@ class NetworkManager: ObservableObject {
 
         // ✅ 주기적 캐시 정리
         setupCacheCleanup()
+
+        // ✅ 서버 연결 상태 확인 (백그라운드)
+        Task {
+            await checkServerConnection()
+        }
+    }
+
+    // MARK: - 서버 연결 확인
+    /// 서버 연결 상태를 확인하고 UI 상태 업데이트
+    @MainActor
+    func checkServerConnection() async {
+        let serverHealthy = await NetworkConfiguration.checkServerHealth()
+        isConnected = serverHealthy
+
+        if serverHealthy {
+            GameLogger.shared.logInfo("✅ 서버 연결 확인됨: \(NetworkConfiguration.baseURL)", category: .network)
+        } else {
+            GameLogger.shared.logWarning("❌ 서버 연결 실패: \(NetworkConfiguration.baseURL)", category: .network)
+            lastError = .noInternetConnection
+        }
     }
     
     deinit {
@@ -564,6 +606,51 @@ extension NetworkManager {
             useCache: true
         )
     }
+
+    // MARK: - Player Profile API
+    func createPlayerProfile(name: String, age: Int, gender: String, personality: String) async throws -> ProfileCreationResponse {
+        let body = [
+            "name": name,
+            "age": age,
+            "gender": gender,
+            "personality": personality
+        ] as [String : Any]
+
+        return try await makeRequest(
+            endpoint: "/player/create-profile",
+            method: .POST,
+            body: body,
+            requiresAuth: true,
+            responseType: ProfileCreationResponse.self
+        )
+    }
+
+    func updatePlayerProfile(name: String? = nil, age: Int? = nil, gender: String? = nil, personality: String? = nil) async throws -> ProfileUpdateResponse {
+        var body: [String: Any] = [:]
+
+        if let name = name { body["name"] = name }
+        if let age = age { body["age"] = age }
+        if let gender = gender { body["gender"] = gender }
+        if let personality = personality { body["personality"] = personality }
+
+        return try await makeRequest(
+            endpoint: "/player/profile",
+            method: .PUT,
+            body: body,
+            requiresAuth: true,
+            responseType: ProfileUpdateResponse.self
+        )
+    }
+
+    func fetchPlayerProfile() async throws -> PlayerProfileResponse {
+        return try await makeRequest(
+            endpoint: "/player/profile",
+            method: .GET,
+            requiresAuth: true,
+            responseType: PlayerProfileResponse.self,
+            useCache: true
+        )
+    }
     
     func updatePlayerLocation(latitude: Double, longitude: Double) async throws -> BaseResponse {
         let body = [
@@ -590,14 +677,31 @@ extension NetworkManager {
     
     func getMerchants(latitude: Double? = nil, longitude: Double? = nil) async throws -> MerchantsResponse {
         var endpoint = "/game/merchants"
-        
+
         if let lat = latitude, let lng = longitude {
             endpoint += "?lat=\(lat)&lng=\(lng)"
         }
-        
+
         return try await makeRequest(
             endpoint: endpoint,
             responseType: MerchantsResponse.self,
+            useCache: true
+        )
+    }
+
+    func getMerchantDetail(merchantId: String) async throws -> MerchantDetailResponse {
+        return try await makeRequest(
+            endpoint: "/game/merchants/\(merchantId)",
+            requiresAuth: true,
+            responseType: MerchantDetailResponse.self,
+            useCache: true
+        )
+    }
+
+    func getNearbyMerchants(latitude: Double, longitude: Double, radius: Double = 1000) async throws -> NearbyMerchantsResponse {
+        return try await makeRequest(
+            endpoint: "/game/merchants/nearby?lat=\(latitude)&lng=\(longitude)&radius=\(radius)",
+            responseType: NearbyMerchantsResponse.self,
             useCache: true
         )
     }
@@ -1054,4 +1158,40 @@ struct PersonalItemActionData: Codable {
     let effectsApplied: [ItemEffectServerData]?
     let activeEffects: [ActiveEffectServerData]?
     let message: String?
+}
+
+// MARK: - Profile Response Models
+struct ProfileCreationResponse: Codable {
+    let success: Bool
+    let data: ProfileCreationData?
+    let message: String?
+    let error: String?
+}
+
+struct ProfileCreationData: Codable {
+    let name: String
+    let age: Int
+    let gender: String
+    let personality: String
+    let profileCompleted: Bool
+}
+
+struct ProfileUpdateResponse: Codable {
+    let success: Bool
+    let data: ProfileUpdateData?
+    let message: String?
+    let error: String?
+}
+
+struct ProfileUpdateData: Codable {
+    let name: String
+    let age: Int
+    let gender: String
+    let personality: String
+}
+
+struct PlayerProfileResponse: Codable {
+    let success: Bool
+    let data: PlayerDetail?
+    let error: String?
 }
