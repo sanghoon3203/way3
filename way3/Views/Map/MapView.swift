@@ -162,7 +162,8 @@ struct MapView: View {
                         latitude: merchantData.location.lat,
                         longitude: merchantData.location.lng
                     ),
-                    isActive: merchantData.canTrade
+                    isActive: merchantData.canTrade,
+                    imageFileName: merchantData.imageFileName
                 )
             }
 
@@ -533,10 +534,15 @@ struct OptimizedMerchantPinView: View {
     @State private var animationScale: CGFloat = 1.0
     @State private var pulseOpacity: Double = 0.7
 
-    // 상인 이미지 이름 추출 (Assets/Merchant/상인이름 폴더에서)
+    // 상인 이미지 이름 추출 (서버에서 받아온 imageFileName 사용)
     private var merchantImageName: String {
-        // 상인 이름에서 공백 제거하고 Assets에 있는 폴더명과 매칭
-        return merchant.name.replacingOccurrences(of: " ", with: "")
+        // 서버에서 imageFileName이 있으면 사용, 없으면 이름 기반으로 생성
+        if let imageFileName = merchant.imageFileName, !imageFileName.isEmpty {
+            return imageFileName.replacingOccurrences(of: ".png", with: "")
+        } else {
+            // 폴백: 상인 이름에서 공백 제거
+            return merchant.name.replacingOccurrences(of: " ", with: "")
+        }
     }
 
     private var isNearby: Bool {

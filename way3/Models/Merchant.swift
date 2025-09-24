@@ -28,7 +28,10 @@ struct Merchant: Identifiable {
     // 상태 시스템
     var isActive: Bool
     var lastRestocked: Date
-    
+
+    // 이미지 정보
+    var imageFileName: String?
+
     // 거리 (계산된 값, 옵셔널)
     var distance: Double = 0.0
     
@@ -48,7 +51,8 @@ struct Merchant: Identifiable {
         preferredItems: [String] = [],
         dislikedItems: [String] = [],
         reputationRequirement: Int = 0,
-        isActive: Bool = true
+        isActive: Bool = true,
+        imageFileName: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -65,6 +69,7 @@ struct Merchant: Identifiable {
         self.dislikedItems = dislikedItems
         self.reputationRequirement = reputationRequirement
         self.isActive = isActive
+        self.imageFileName = imageFileName
         self.lastRestocked = Date()
     }
     
@@ -88,6 +93,7 @@ struct Merchant: Identifiable {
         self.dislikedItems = serverMerchant.dislikedItems ?? []
         self.reputationRequirement = serverMerchant.reputationRequirement
         self.isActive = serverMerchant.isActive
+        self.imageFileName = serverMerchant.imageFileName
         self.lastRestocked = Date(timeIntervalSince1970: serverMerchant.lastRestocked)
     }
     
@@ -187,7 +193,7 @@ extension Merchant: Codable {
         case coordinateLatitude, coordinateLongitude
         case requiredLicense, inventory, priceModifier, negotiationDifficulty
         case preferredItems, dislikedItems, reputationRequirement
-        case isActive, lastRestocked, distance
+        case isActive, lastRestocked, imageFileName, distance
     }
     
     init(from decoder: Decoder) throws {
@@ -213,6 +219,7 @@ extension Merchant: Codable {
         reputationRequirement = try container.decode(Int.self, forKey: .reputationRequirement)
         isActive = try container.decode(Bool.self, forKey: .isActive)
         lastRestocked = try container.decode(Date.self, forKey: .lastRestocked)
+        imageFileName = try container.decodeIfPresent(String.self, forKey: .imageFileName)
         distance = try container.decodeIfPresent(Double.self, forKey: .distance) ?? 0.0
     }
     
@@ -236,6 +243,7 @@ extension Merchant: Codable {
         try container.encode(reputationRequirement, forKey: .reputationRequirement)
         try container.encode(isActive, forKey: .isActive)
         try container.encode(lastRestocked, forKey: .lastRestocked)
+        try container.encodeIfPresent(imageFileName, forKey: .imageFileName)
         try container.encode(distance, forKey: .distance)
     }
 }
@@ -387,6 +395,7 @@ struct ServerMerchantResponse: Codable {
     let reputationRequirement: Int
     let isActive: Bool
     let lastRestocked: TimeInterval
+    let imageFileName: String?
 }
 
 // 기존 GameEnums.swift에 정의된 enum들을 사용
