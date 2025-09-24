@@ -354,7 +354,9 @@ class GameManager: ObservableObject {
         do {
             let playerDetail = try await networkManager.fetchPlayerProfile()
             await MainActor.run {
-                updatePlayerInventoryFromDetail(playerDetail.data)
+                if let playerData = playerDetail.data {
+                    updatePlayerInventoryFromDetail(playerData)
+                }
                 inventoryViewState = .loaded
                 lastInventoryUpdate = Date()
                 GameLogger.shared.logInfo("인벤토리 데이터 로딩 성공", category: .gameplay)
@@ -381,7 +383,9 @@ class GameManager: ObservableObject {
         do {
             let playerDetail = try await networkManager.fetchPlayerProfile()
             await MainActor.run {
-                updatePlayerInventoryFromDetail(playerDetail.data)
+                if let playerData = playerDetail.data {
+                    updatePlayerInventoryFromDetail(playerData)
+                }
                 inventoryViewState = .loaded
                 lastInventoryUpdate = Date()
                 GameLogger.shared.logInfo("인벤토리 새로고침 성공", category: .gameplay)
@@ -1344,7 +1348,7 @@ enum GameState {
 }
 
 // MARK: - Profile View State Enum
-enum ProfileViewState {
+enum ProfileViewState: Equatable {
     case loading
     case loaded
     case error(String)
@@ -1361,7 +1365,7 @@ enum ProfileViewState {
 }
 
 // MARK: - Inventory View State Enum
-enum InventoryViewState {
+enum InventoryViewState: Equatable {
     case loading
     case loaded
     case error(String)
@@ -1397,7 +1401,7 @@ enum PersonalItemsViewState {
 }
 
 // MARK: - Quests View State Enum
-enum QuestsViewState {
+enum QuestsViewState: Equatable {
     case loading
     case loaded
     case error(String)

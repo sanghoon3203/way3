@@ -124,7 +124,7 @@ extension PlayerRelationships {
 
     // 상인과의 관계 점수
     func getRelationshipScore(with merchantId: String) -> Int {
-        return merchantRelationships[merchantId]?.relationshipScore ?? 0
+        return merchantRelationships[merchantId]?.friendshipPoints ?? 0
     }
 
     // 상인 할인율 계산
@@ -280,19 +280,25 @@ extension PlayerRelationships {
 // MARK: - 지원 구조체들
 struct MerchantRelationship: Codable {
     let merchantId: String
-    var relationshipScore: Int = 0
-    var tradeCount: Int = 0
-    var lastTradeDate: Date?
-    var averageSatisfaction: Double = 0.0
+    var friendshipPoints: Int = 0
+    var trustLevel: Int = 0
+    var totalTrades: Int = 0
+    var totalSpent: Int = 0
+    var lastInteraction: String?
+    var notes: String?
 
     mutating func updateRelationship(satisfaction: Int) {
-        tradeCount += 1
-        relationshipScore += (satisfaction - 3) * 5
-        relationshipScore = max(0, relationshipScore)
-        lastTradeDate = Date()
+        totalTrades += 1
+        friendshipPoints += (satisfaction - 3) * 5
+        friendshipPoints = max(0, friendshipPoints)
+        lastInteraction = ISO8601DateFormatter().string(from: Date())
 
-        // 평균 만족도 계산 (단순화)
-        averageSatisfaction = (averageSatisfaction * Double(tradeCount - 1) + Double(satisfaction)) / Double(tradeCount)
+        // 신뢰 레벨 계산 (거래 횟수와 만족도 기반)
+        if satisfaction >= 4 {
+            trustLevel = min(trustLevel + 1, 100)
+        } else if satisfaction <= 2 {
+            trustLevel = max(trustLevel - 1, 0)
+        }
     }
 }
 

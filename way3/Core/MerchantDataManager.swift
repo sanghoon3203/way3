@@ -13,7 +13,6 @@ class MerchantDataManager: ObservableObject {
     private init() {}
 
     // MARK: - Published Properties
-    @Published var cachedMerchants: [String: MerchantProfile] = [:]
     @Published var cachedInventories: [String: [TradeItem]] = [:]
     @Published var cachedRelationships: [String: MerchantRelationship] = [:]
 
@@ -21,26 +20,14 @@ class MerchantDataManager: ObservableObject {
     private let networkManager = NetworkManager.shared
     private var cancellables = Set<AnyCancellable>()
 
-    // MARK: - 상인 프로필 조회
-    /// 상인 기본 정보를 서버에서 가져옴
+    // MARK: - 상인 상세 정보 조회
+    /// 상인 상세 정보를 서버에서 직접 가져옴 (서버 응답 그대로)
     /// - Parameter merchantId: 상인 ID
-    /// - Returns: 상인 프로필 정보
-    func fetchMerchantProfile(merchantId: String) async throws -> MerchantProfile {
-        // 캐시 확인
-        if let cached = cachedMerchants[merchantId] {
-            return cached
-        }
-
-        // 서버에서 가져오기
-        let response = try await networkManager.getMerchantDetail(merchantId: merchantId)
-
-        let profile = MerchantProfile(from: response)
-
-        // 캐시 저장
-        cachedMerchants[merchantId] = profile
-
-        return profile
+    /// - Returns: 서버 응답 상세 정보
+    func fetchMerchantDetail(merchantId: String) async throws -> MerchantDetailResponse {
+        return try await networkManager.getMerchantDetail(merchantId: merchantId)
     }
+
 
     // MARK: - 상인 인벤토리 조회
     /// 상인의 실시간 인벤토리를 서버에서 가져옴 (하드코딩 대체)
@@ -78,7 +65,15 @@ class MerchantDataManager: ObservableObject {
     func fetchMerchantRelationship(merchantId: String) async throws -> MerchantRelationship {
         let response = try await networkManager.getMerchantDetail(merchantId: merchantId)
 
-        let relationship = MerchantRelationship(from: response.relationship)
+        let relationship = MerchantRelationship(
+            merchantId: merchantId,
+            friendshipPoints: response.relationship.friendshipPoints,
+            trustLevel: response.relationship.trustLevel,
+            totalTrades: response.relationship.totalTrades,
+            totalSpent: response.relationship.totalSpent,
+            lastInteraction: response.relationship.lastInteraction,
+            notes: response.relationship.notes
+        )
 
         // 캐시 저장
         cachedRelationships[merchantId] = relationship
@@ -110,14 +105,12 @@ class MerchantDataManager: ObservableObject {
     // MARK: - 캐시 관리
     /// 특정 상인의 캐시를 무효화
     func invalidateCache(for merchantId: String) {
-        cachedMerchants.removeValue(forKey: merchantId)
         cachedInventories.removeValue(forKey: merchantId)
         cachedRelationships.removeValue(forKey: merchantId)
     }
 
     /// 모든 캐시를 무효화
     func invalidateAllCache() {
-        cachedMerchants.removeAll()
         cachedInventories.removeAll()
         cachedRelationships.removeAll()
     }
@@ -180,6 +173,37 @@ struct LocationResponse: Codable {
     let lng: Double
 }
 
+/// 근처 상인 미리보기 정보 (지도용)
+struct MerchantPreview: Identifiable {
+    let id: String
+    let name: String
+    let title: String?
+    let type: MerchantType
+    let district: SeoulDistrict
+    let coordinate: CLLocationCoordinate2D
+    let distance: Double
+    let canTrade: Bool
+    let inventoryCount: Int
+
+    var distanceText: String {
+        if distance < 1000 {
+            return "\(Int(distance))m"
+        } else {
+            return String(format: "%.1fkm", distance / 1000)
+        }
+    }
+
+    var statusEmoji: String {
+        if !canTrade {
+            return "🔒"
+        } else if inventoryCount == 0 {
+            return "📦"
+        } else {
+            return "💼"
+        }
+    }
+}
+
 struct NearbyMerchantsResponse: Codable {
     let merchants: [MerchantPreviewResponse]
     let total: Int
@@ -197,42 +221,7 @@ struct MerchantPreviewResponse: Codable {
     let inventoryCount: Int
 }
 
-// MARK: - 모델 변환 확장
-extension MerchantProfile {
-    init(from response: MerchantDetailResponse) {
-        self.init(
-            id: response.id,
-            name: response.name,
-            title: response.title,
-            type: MerchantType(rawValue: response.type) ?? .retail,
-            personality: PersonalityType(rawValue: response.personality) ?? .calm,
-            district: SeoulDistrict(rawValue: response.district) ?? .jongno,
-            coordinate: CLLocationCoordinate2D(
-                latitude: response.location.lat,
-                longitude: response.location.lng
-            ),
-            requiredLicense: LicenseLevel(rawValue: response.requiredLicense) ?? .beginner,
-            reputationRequirement: response.reputationRequirement,
-            priceModifier: response.priceModifier,
-            negotiationDifficulty: response.negotiationDifficulty,
-            preferredCategories: response.preferredCategories,
-            dislikedCategories: response.dislikedCategories
-        )
-    }
-}
 
-extension MerchantRelationship {
-    init(from response: RelationshipResponse) {
-        self.init(
-            friendshipPoints: response.friendshipPoints,
-            trustLevel: response.trustLevel,
-            totalTrades: response.totalTrades,
-            totalSpent: response.totalSpent,
-            lastInteraction: response.lastInteraction,
-            notes: response.notes
-        )
-    }
-}
 
 extension MerchantPreview {
     init(from response: MerchantPreviewResponse) {
@@ -259,6 +248,10 @@ enum MerchantDataError: LocalizedError {
     case invalidResponse
     case merchantNotFound
     case cacheError
+    case tradeValidationFailed(String)
+    case tradeExecutionFailed(String)
+    case insufficientFunds
+    case insufficientItems
 
     var errorDescription: String? {
         switch self {
@@ -270,6 +263,53 @@ enum MerchantDataError: LocalizedError {
             return "상인을 찾을 수 없습니다"
         case .cacheError:
             return "캐시 처리 중 오류가 발생했습니다"
+        case .tradeValidationFailed(let message):
+            return "거래 검증 실패: \(message)"
+        case .tradeExecutionFailed(let message):
+            return "거래 실행 실패: \(message)"
+        case .insufficientFunds:
+            return "보유 금액이 부족합니다"
+        case .insufficientItems:
+            return "보유 아이템이 부족합니다"
         }
+    }
+}
+
+// MARK: - MerchantDetailResponse Extensions
+extension MerchantDetailResponse {
+    /// 서버 문자열을 MerchantType enum으로 변환
+    var merchantType: MerchantType {
+        return MerchantType(rawValue: type) ?? .retail
+    }
+
+    /// 서버 문자열을 PersonalityType enum으로 변환
+    var personalityType: PersonalityType {
+        return PersonalityType(rawValue: personality) ?? .balanced
+    }
+
+    /// 서버 문자열을 SeoulDistrict enum으로 변환
+    var seoulDistrict: SeoulDistrict {
+        return SeoulDistrict(rawValue: district) ?? .jung
+    }
+
+    /// 서버 location을 CLLocationCoordinate2D로 변환
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: location.lat, longitude: location.lng)
+    }
+
+    /// 서버 정수를 LicenseLevel enum으로 변환
+    var licenseLevel: LicenseLevel {
+        return LicenseLevel(rawValue: requiredLicense) ?? .beginner
+    }
+
+    /// 표시용 제목 (MerchantProfile과 동일한 인터페이스)
+    var displayTitle: String {
+        return title ?? merchantType.displayName
+    }
+
+    /// 접근성 설명 (MerchantProfile과 동일한 인터페이스)
+    var accessibilityDescription: String {
+        let licenseText = licenseLevel == .beginner ? "누구나" : "\(licenseLevel.displayName) 이상"
+        return "\(name), \(displayTitle), \(seoulDistrict.displayName), \(licenseText) 거래 가능"
     }
 }

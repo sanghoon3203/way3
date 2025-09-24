@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import Foundation
 
 // MARK: - Cyberpunk Dialogue Interface (JRPG 기능 유지)
 struct CyberpunkDialogueBox: View {

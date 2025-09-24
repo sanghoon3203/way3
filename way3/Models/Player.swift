@@ -347,7 +347,7 @@ extension Player {
             achievementCompletion: achievements.completionRate,
             skillAverageLevel: stats.averageSkillLevel,
             inventoryUtilization: Double(inventory.inventory.count) / Double(inventory.maxInventorySize),
-            relationshipScore: Double(relationships.merchantRelationships.values.map { $0.relationshipScore }.reduce(0, +))
+            relationshipScore: Double(relationships.merchantRelationships.values.map { $0.friendshipPoints }.reduce(0, +))
         )
     }
 }

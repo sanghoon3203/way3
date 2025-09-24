@@ -32,6 +32,9 @@ struct LoadingView: View {
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.cyberpunkDarkBg.opacity(0.8))
+        .onAppear {
+            startAnimations()
+        }
     }
 
     // MARK: - 상인 특화 로딩 애니메이션
@@ -135,27 +138,16 @@ struct LoadingView: View {
         return 1.0 + sin(time * 3 + Double(index) * 0.5) * 0.5
     }
 
-    // MARK: - 초기화
-    init() {
-        self.message = "로딩 중..."
-        self.style = .merchant
-
-        // 애니메이션 초기화
-        _pulseScale = State(initialValue: 1.0)
-        _rotationAngle = State(initialValue: 0)
-        _progressValue = State(initialValue: 0.0)
-
-        // 애니메이션 시작
-        DispatchQueue.main.async {
-            withAnimation(Animation.easeInOut(duration: 1.5).repeatForever()) {
-                pulseScale = 1.3
-            }
-            withAnimation(Animation.linear(duration: 2.0).repeatForever(autoreverses: false)) {
-                rotationAngle = 360
-            }
-            withAnimation(Animation.easeInOut(duration: 1.5).repeatForever()) {
-                progressValue = 1.0
-            }
+    // MARK: - 애니메이션 시작
+    private func startAnimations() {
+        withAnimation(Animation.easeInOut(duration: 1.5).repeatForever()) {
+            pulseScale = 1.3
+        }
+        withAnimation(Animation.linear(duration: 2.0).repeatForever(autoreverses: false)) {
+            rotationAngle = 360
+        }
+        withAnimation(Animation.easeInOut(duration: 1.5).repeatForever()) {
+            progressValue = 1.0
         }
     }
 }
@@ -176,12 +168,12 @@ struct ErrorView: View {
             // 에러 아이콘
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: 50))
-                .foregroundColor(.cyberpunkRed)
+                .foregroundColor(.cyberpunkError)
 
             // 에러 메시지
             VStack(spacing: 8) {
                 Text("오류가 발생했습니다")
-                    .font(.cyberpunkTitle3())
+                    .font(.cyberpunkTitle())
                     .foregroundColor(.cyberpunkTextPrimary)
 
                 Text(error.localizedDescription)

@@ -3,162 +3,253 @@
 //  way3 - Way Trading Game
 //
 //  사이버펑크 스타일 퀘스트 컴포넌트들
-//  기존 QuestView 기능을 완전히 유지하면서 사이버펑크 테마 적용
+//  서버 QuestData 규격에 맞춘 컴포넌트
 //
 
 import SwiftUI
-import Foundation
 
-// MARK: - Cyberpunk Quest Card
+// MARK: - Cyberpunk Quest Card (서버 데이터 사용)
 struct CyberpunkQuestCard: View {
-    let quest: Quest
-    let onAccept: () -> Void
-    @State private var showAcceptAlert = false
-    @State private var isPressed = false
+    let quest: QuestData
+    let onAction: () -> Void
+    @State private var showActionAlert = false
+    @State private var isProcessing = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Quest Header
+        VStack(alignment: .leading, spacing: 16) {
+            // Quest Header with status
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text("MISSION")
-                            .font(.cyberpunkTechnical())
-                            .foregroundColor(.cyberpunkTextSecondary)
+                    Text(quest.title.uppercased())
+                        .font(.cyberpunkHeading(size: 16))
+                        .fontWeight(.bold)
+                        .foregroundColor(.cyberpunkTextPrimary)
 
-                        Rectangle()
-                            .fill(Color.cyberpunkYellow)
-                            .frame(width: 16, height: 1)
-
-                        Text(quest.name.uppercased())
-                            .font(.cyberpunkHeading(size: 16))
-                            .foregroundColor(.cyberpunkTextPrimary)
-                            .fontWeight(.bold)
-                    }
-
-                    Text("LOCATION: \(quest.merchantLocation.uppercased())")
+                    Text("CATEGORY: \(quest.category.uppercased())")
                         .font(.cyberpunkTechnical())
                         .foregroundColor(.cyberpunkTextSecondary)
-
-                    Text("CLIENT: \(quest.merchantName.uppercased())")
-                        .font(.cyberpunkTechnical())
-                        .foregroundColor(.cyberpunkCyan)
                 }
 
                 Spacer()
 
-                // Difficulty Badge
-                VStack(spacing: 4) {
-                    Text("DIFFICULTY")
+                // Status Badge
+                HStack(spacing: 8) {
+                    // Difficulty Badge
+                    Text(difficultyText)
                         .font(.cyberpunkTechnical())
-                        .foregroundColor(.cyberpunkTextSecondary)
-
-                    Text(quest.difficulty.rawValue.uppercased())
-                        .font(.cyberpunkCaption())
-                        .fontWeight(.semibold)
-                        .foregroundColor(.cyberpunkTextPrimary)
+                        .fontWeight(.medium)
+                        .foregroundColor(.cyberpunkDarkBg)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(
-                            Rectangle()
-                                .fill(quest.difficulty.cyberpunkColor.opacity(0.2))
-                                .overlay(
-                                    Rectangle()
-                                        .stroke(quest.difficulty.cyberpunkColor, lineWidth: 1)
-                                )
-                        )
+                        .background(difficultyColor)
+
+                    // Status Badge
+                    Text(questStatusText)
+                        .font(.cyberpunkTechnical())
+                        .fontWeight(.medium)
+                        .foregroundColor(.cyberpunkDarkBg)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(questStatusColor)
                 }
             }
 
-            // Mission Briefing
-            VStack(alignment: .leading, spacing: 8) {
-                Text("MISSION_BRIEFING:")
+            // Quest Description
+            Text(quest.description)
+                .font(.cyberpunkBody())
+                .foregroundColor(.cyberpunkTextPrimary)
+                .lineLimit(3)
+                .multilineTextAlignment(.leading)
+
+            // Progress (for active quests)
+            if quest.status == "active" {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Text("PROGRESS")
+                            .font(.cyberpunkTechnical())
+                            .foregroundColor(.cyberpunkTextSecondary)
+
+                        Spacer()
+
+                        Text("\(quest.currentProgress)/\(quest.maxProgress)")
+                            .font(.cyberpunkCaption())
+                            .fontWeight(.medium)
+                            .foregroundColor(.cyberpunkCyan)
+                    }
+
+                    CyberpunkProgressBar(
+                        progress: progressPercentage,
+                        color: .cyberpunkCyan,
+                        height: 4
+                    )
+                }
+            }
+
+            // Reward Info
+            VStack(alignment: .leading, spacing: 4) {
+                Text("REWARD_PACKAGE:")
                     .font(.cyberpunkTechnical())
                     .foregroundColor(.cyberpunkTextSecondary)
 
-                Text(quest.description)
-                    .font(.cyberpunkBody())
-                    .foregroundColor(.cyberpunkTextPrimary)
-                    .lineLimit(3)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            // Mission Specs
-            VStack(spacing: 4) {
-                HStack {
-                    Text("TIME_LIMIT:")
-                        .font(.cyberpunkTechnical())
-                        .foregroundColor(.cyberpunkTextSecondary)
-
-                    Spacer()
-
-                    Text(formatTimeLimit(quest.timeLimit))
-                        .font(.cyberpunkCaption())
-                        .foregroundColor(.cyberpunkYellow)
-                        .fontWeight(.medium)
-                }
-
-                HStack {
-                    Text("REWARD_PACKAGE:")
-                        .font(.cyberpunkTechnical())
-                        .foregroundColor(.cyberpunkTextSecondary)
-
-                    Spacer()
-
-                    Text(quest.reward.displayString.uppercased())
-                        .font(.cyberpunkCaption())
-                        .foregroundColor(.cyberpunkGreen)
-                        .fontWeight(.medium)
-                        .lineLimit(1)
-                }
+                Text(rewardDisplayString)
+                    .font(.cyberpunkCaption())
+                    .fontWeight(.medium)
+                    .foregroundColor(.cyberpunkGold)
+                    .lineLimit(2)
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 8)
             .background(Color.cyberpunkDarkBg.opacity(0.6))
 
-            // Accept Button
+            // Action Button
             CyberpunkButton(
-                title: "ACCEPT_MISSION",
-                style: .primary
-            ) {
-                showAcceptAlert = true
-            }
+                title: actionButtonText,
+                style: buttonStyle,
+                action: {
+                    showActionAlert = true
+                }
+            )
+            .disabled(!canPerformAction)
         }
         .padding(16)
-        .cyberpunkCard(isActive: isPressed)
-        .scaleEffect(isPressed ? 0.98 : 1.0)
-        .onLongPressGesture(minimumDuration: 0, maximumDistance: CGFloat.infinity, pressing: { isPressing in
-            withAnimation(.easeInOut(duration: 0.1)) {
-                isPressed = isPressing
-            }
-        }, perform: {})
-        .alert("MISSION_CONFIRMATION", isPresented: $showAcceptAlert) {
+        .cyberpunkCard()
+        .alert(alertTitle, isPresented: $showActionAlert) {
             Button("CANCEL", role: .cancel) { }
-            Button("ACCEPT") {
-                onAccept()
+            Button("CONFIRM") {
+                performAction()
             }
         } message: {
-            Text("Accept mission '\(quest.name.uppercased())'? Time limit will be enforced.")
+            Text(alertMessage)
                 .font(.cyberpunkBody())
         }
     }
 
-    private func formatTimeLimit(_ timeLimit: TimeInterval) -> String {
-        let hours = Int(timeLimit) / 3600
-        return "\(hours)H"
+    // MARK: - Computed Properties
+    private var difficultyText: String {
+        switch quest.priority {
+        case 1: return "EASY"
+        case 2: return "NORMAL"
+        case 3...Int.max: return "HARD"
+        default: return "UNKNOWN"
+        }
     }
-}
 
-// MARK: - Extensions for Quest.QuestDifficulty
-extension Quest.QuestDifficulty {
-    var cyberpunkColor: Color {
-        switch self {
-        case .easy:
-            return .cyberpunkGreen
-        case .normal:
-            return .cyberpunkYellow
-        case .hard:
-            return .cyberpunkError
+    private var difficultyColor: Color {
+        switch quest.priority {
+        case 1: return .cyberpunkGreen
+        case 2: return .cyberpunkYellow
+        case 3...Int.max: return .cyberpunkError
+        default: return .cyberpunkTextSecondary
+        }
+    }
+
+    private var questStatusText: String {
+        switch quest.status {
+        case "available": return "AVAILABLE"
+        case "active": return "ACTIVE"
+        case "completed": return quest.rewardClaimed ? "CLAIMED" : "COMPLETE"
+        default: return "UNKNOWN"
+        }
+    }
+
+    private var questStatusColor: Color {
+        switch quest.status {
+        case "available": return .cyberpunkGreen
+        case "active": return .cyberpunkCyan
+        case "completed": return quest.rewardClaimed ? .cyberpunkTextSecondary : .cyberpunkGold
+        default: return .cyberpunkTextSecondary
+        }
+    }
+
+    private var progressPercentage: Double {
+        guard quest.maxProgress > 0 else { return 0.0 }
+        return Double(quest.currentProgress) / Double(quest.maxProgress)
+    }
+
+    private var actionButtonText: String {
+        if isProcessing {
+            return "PROCESSING..."
+        }
+
+        switch quest.status {
+        case "available": return "ACCEPT_MISSION"
+        case "active": return "IN_PROGRESS"
+        case "completed": return quest.rewardClaimed ? "CLAIMED" : "CLAIM_REWARD"
+        default: return "UNAVAILABLE"
+        }
+    }
+
+    private var buttonStyle: CyberpunkButtonStyle {
+        switch quest.status {
+        case "available": return .primary
+        case "active": return .secondary
+        case "completed": return quest.rewardClaimed ? .disabled : .success
+        default: return .disabled
+        }
+    }
+
+    private var canPerformAction: Bool {
+        if isProcessing {
+            return false
+        }
+
+        switch quest.status {
+        case "available": return true
+        case "active": return false
+        case "completed": return !quest.rewardClaimed
+        default: return false
+        }
+    }
+
+    private var rewardDisplayString: String {
+        var rewardStrings: [String] = []
+
+        if quest.rewards.money > 0 {
+            rewardStrings.append("₩\(quest.rewards.money)")
+        }
+        if quest.rewards.experience > 0 {
+            rewardStrings.append("EXP +\(quest.rewards.experience)")
+        }
+        if quest.rewards.trustPoints > 0 {
+            rewardStrings.append("TRUST +\(quest.rewards.trustPoints)")
+        }
+        if let items = quest.rewards.items, !items.isEmpty {
+            for item in items {
+                rewardStrings.append("\(item.itemId) x\(item.quantity)")
+            }
+        }
+
+        return rewardStrings.isEmpty ? "NO_REWARD" : rewardStrings.joined(separator: " | ")
+    }
+
+    private var alertTitle: String {
+        switch quest.status {
+        case "available": return "ACCEPT_MISSION?"
+        case "completed": return "CLAIM_REWARD?"
+        default: return "CONFIRM_ACTION"
+        }
+    }
+
+    private var alertMessage: String {
+        switch quest.status {
+        case "available": return "Accept mission '\(quest.title)'? Time limit will be enforced."
+        case "completed": return "Claim reward: \(rewardDisplayString)"
+        default: return ""
+        }
+    }
+
+    // MARK: - Actions
+    private func performAction() {
+        isProcessing = true
+
+        Task {
+            // UI 피드백을 위한 약간의 지연
+            try? await Task.sleep(nanoseconds: 300_000_000)
+
+            await MainActor.run {
+                onAction()
+                isProcessing = false
+            }
         }
     }
 }
@@ -175,7 +266,6 @@ struct CyberpunkMissionStatusIndicator: View {
             Circle()
                 .fill(isActive ? Color.cyberpunkGreen : Color.cyberpunkError)
                 .frame(width: 8, height: 8)
-                .animation(CyberpunkAnimations.slowGlow, value: isActive)
 
             Text(isActive ? "MISSION_SYSTEM_ACTIVE" : "DAILY_LIMIT_REACHED")
                 .font(.cyberpunkTechnical())
@@ -191,7 +281,7 @@ struct CyberpunkMissionStatusIndicator: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .background(Color.cyberpunkPanelBg)
+        .cyberpunkPanel()
         .overlay(
             Rectangle()
                 .stroke(isActive ? Color.cyberpunkGreen : Color.cyberpunkError, lineWidth: 1)

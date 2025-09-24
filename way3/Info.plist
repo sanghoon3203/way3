@@ -4,6 +4,8 @@
 <dict>
 	<key>MBXAccessToken</key>
 	<string>pk.eyJ1IjoicmVhbGlzaG9vbnNhbmciLCJhIjoiY21kY21yczI0MTh3MzJtcHp0NGE3MWk5YSJ9.00GBYK0KsKv-hETMITcWzw</string>
+	<key>API_BASE_URL</key>
+	<string>https://way3-production.up.railway.app</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
@@ -31,6 +33,13 @@
 				<array>
 					<integer>3000</integer>
 				</array>
+			</dict>
+			<key>way3-production.up.railway.app</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<false/>
+				<key>NSExceptionMinimumTLSVersion</key>
+				<string>TLSv1.2</string>
 			</dict>
 		</dict>
 	</dict>

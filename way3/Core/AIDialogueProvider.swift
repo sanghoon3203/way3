@@ -94,7 +94,7 @@ struct RelationshipContext {
     let friendshipLevel: Int
     let trustLevel: Int
     let sharedHistory: [String]
-    let lastInteraction: Date?
+    let lastInteraction: String?
 }
 
 struct EnvironmentContext {
@@ -202,7 +202,7 @@ class AIDialogueManager: ObservableObject {
         }
 
         // 모델 준비 확인
-        guard await provider.isReady else {
+        if !await provider.isReady {
             isInitializing = true
             defer { isInitializing = false }
             try await provider.initialize()
@@ -249,7 +249,7 @@ class AIDialogueManager: ObservableObject {
 
         currentProvider = provider
 
-        if !await provider.isReady {
+        if !(await provider.isReady) {
             isInitializing = true
             defer { isInitializing = false }
             try await provider.initialize()
@@ -459,14 +459,19 @@ class HybridAIProvider: AIDialogueProvider {
             } catch {
                 // 실패시 클라우드 폴백
                 if let fallback = fallbackProvider {
-                    var response = try await fallback.generateDialogue(context: context)
-                    response.metadata = AIResponseMetadata(
-                        modelUsed: .hybrid,
-                        processingTime: response.metadata.processingTime,
-                        tokens: response.metadata.tokens,
-                        fallbackUsed: true
+                    let fallbackResponse = try await fallback.generateDialogue(context: context)
+                    return AIDialogueResponse(
+                        generatedText: fallbackResponse.generatedText,
+                        confidence: fallbackResponse.confidence,
+                        emotion: fallbackResponse.emotion,
+                        suggestedActions: fallbackResponse.suggestedActions,
+                        metadata: AIResponseMetadata(
+                            modelUsed: .hybrid,
+                            processingTime: fallbackResponse.metadata.processingTime,
+                            tokens: fallbackResponse.metadata.tokens,
+                            fallbackUsed: true
+                        )
                     )
-                    return response
                 }
                 throw error
             }

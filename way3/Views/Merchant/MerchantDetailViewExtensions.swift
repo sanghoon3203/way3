@@ -15,11 +15,11 @@ class CartManager: ObservableObject {
         items.reduce(0) { $0 + ($1.item.currentPrice * $1.quantity) }
     }
 
-    func addItem(_ item: TradeItem, quantity: Int) {
-        if let existingIndex = items.firstIndex(where: { $0.item.id == item.id }) {
+    func addItem(_ item: TradeItem, quantity: Int, type: TradeType = .buy) {
+        if let existingIndex = items.firstIndex(where: { $0.item.id == item.id && $0.type == type }) {
             items[existingIndex].quantity += quantity
         } else {
-            items.append(CartItem(item: item, quantity: quantity))
+            items.append(CartItem(item: item, quantity: quantity, type: type))
         }
     }
 
@@ -37,8 +37,13 @@ class CartManager: ObservableObject {
         }
     }
 
-    func clear() {
+    func clearCart() {
         items.removeAll()
+    }
+
+    // TradeManager 호환성을 위한 메서드
+    func clear() {
+        clearCart()
     }
 }
 
@@ -46,6 +51,7 @@ struct CartItem: Identifiable {
     let id = UUID()
     let item: TradeItem
     var quantity: Int
+    var type: TradeType = .buy  // 구매/판매 타입 추가
 }
 
 // MARK: - MerchantDetailView 로직 확장

@@ -63,7 +63,6 @@ extension QuestData {
     }
 
     var locationText: String {
-        // TODO: 서버에서 상인 위치 정보를 제공하면 업데이트
         return "근처 상인"
     }
 }
@@ -103,228 +102,6 @@ extension QuestView {
     }
 }
 
-// MARK: - Cyberpunk Quest Card Component
-struct CyberpunkQuestCard: View {
-    let quest: QuestData
-    let onAction: () -> Void
-    @State private var showActionAlert = false
-    @State private var isProcessing = false
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            // Quest Header with status
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(quest.title)
-                        .font(.chosunH3)
-                        .fontWeight(.bold)
-                        .foregroundColor(.cyberpunkPrimary)
-
-                    Text(quest.locationText)
-                        .font(.chosunCaption)
-                        .foregroundColor(.cyberpunkSecondary)
-                }
-
-                Spacer()
-
-                // Status Badge
-                HStack(spacing: 8) {
-                    // Difficulty Badge
-                    Text(quest.difficultyText)
-                        .font(.chosunSmall)
-                        .fontWeight(.medium)
-                        .foregroundColor(.black)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(quest.difficultyColor)
-                        .cornerRadius(8)
-
-                    // Status Badge
-                    Text(questStatusText)
-                        .font(.chosunSmall)
-                        .fontWeight(.medium)
-                        .foregroundColor(.black)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(questStatusColor)
-                        .cornerRadius(8)
-                }
-            }
-
-            // Quest Description
-            Text(quest.description)
-                .font(.chosunBody)
-                .foregroundColor(.cyberpunkText)
-                .lineLimit(3)
-                .multilineTextAlignment(.leading)
-
-            // Progress (for active quests)
-            if quest.status == "active" {
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text("진행도")
-                            .font(.chosunCaption)
-                            .foregroundColor(.cyberpunkSecondary)
-
-                        Spacer()
-
-                        Text("\(quest.currentProgress)/\(quest.maxProgress)")
-                            .font(.chosunCaption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.cyberpunkCyan)
-                    }
-
-                    ProgressView(value: quest.progressPercentage)
-                        .progressViewStyle(LinearProgressViewStyle(tint: .cyberpunkCyan))
-                        .scaleEffect(x: 1, y: 2, anchor: .center)
-                }
-            }
-
-            // Reward Info
-            HStack {
-                Image(systemName: "gift.fill")
-                    .foregroundColor(.cyberpunkGold)
-                    .font(.system(size: 16))
-
-                Text("보상:")
-                    .font(.chosunCaption)
-                    .foregroundColor(.cyberpunkSecondary)
-
-                Text(quest.rewardDisplayString)
-                    .font(.chosunCaption)
-                    .fontWeight(.medium)
-                    .foregroundColor(.cyberpunkGold)
-                    .lineLimit(1)
-            }
-
-            // Action Button
-            Button(action: {
-                showActionAlert = true
-            }) {
-                HStack {
-                    if isProcessing {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                            .scaleEffect(0.8)
-                    }
-
-                    Text(actionButtonText)
-                        .font(.chosunButton)
-                        .fontWeight(.semibold)
-                }
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: 44)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(
-                            LinearGradient(
-                                colors: actionButtonColors,
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                        )
-                )
-            }
-            .disabled(isProcessing || !canPerformAction)
-            .alert(alertTitle, isPresented: $showActionAlert) {
-                Button("취소", role: .cancel) { }
-                Button("확인") {
-                    performAction()
-                }
-            } message: {
-                Text(alertMessage)
-            }
-        }
-        .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.cyberpunkCardBg)
-                .stroke(Color.cyberpunkBorder, lineWidth: 1)
-        )
-        .shadow(color: .cyberpunkGlow.opacity(0.3), radius: 8, x: 0, y: 4)
-    }
-
-    // MARK: - Computed Properties
-    private var questStatusText: String {
-        switch quest.status {
-        case "available": return "사용 가능"
-        case "active": return "진행 중"
-        case "completed": return quest.rewardClaimed ? "완료됨" : "보상 대기"
-        default: return "알 수 없음"
-        }
-    }
-
-    private var questStatusColor: Color {
-        switch quest.status {
-        case "available": return .cyberpunkGreen
-        case "active": return .cyberpunkCyan
-        case "completed": return quest.rewardClaimed ? .cyberpunkSecondary : .cyberpunkGold
-        default: return .gray
-        }
-    }
-
-    private var actionButtonText: String {
-        switch quest.status {
-        case "available": return "수락"
-        case "active": return "진행 중"
-        case "completed": return quest.rewardClaimed ? "완료됨" : "보상 수령"
-        default: return "사용 불가"
-        }
-    }
-
-    private var actionButtonColors: [Color] {
-        switch quest.status {
-        case "available": return [.cyberpunkPrimary, .cyberpunkPrimary.opacity(0.8)]
-        case "active": return [.cyberpunkSecondary, .cyberpunkSecondary.opacity(0.8)]
-        case "completed":
-            return quest.rewardClaimed ?
-                [.cyberpunkSecondary, .cyberpunkSecondary.opacity(0.8)] :
-                [.cyberpunkGold, .cyberpunkGold.opacity(0.8)]
-        default: return [.gray, .gray.opacity(0.8)]
-        }
-    }
-
-    private var canPerformAction: Bool {
-        switch quest.status {
-        case "available": return true
-        case "active": return false
-        case "completed": return quest.canClaimReward
-        default: return false
-        }
-    }
-
-    private var alertTitle: String {
-        switch quest.status {
-        case "available": return "\(quest.title)을 수락하시겠습니까?"
-        case "completed": return "퀘스트 보상을 수령하시겠습니까?"
-        default: return "작업 확인"
-        }
-    }
-
-    private var alertMessage: String {
-        switch quest.status {
-        case "available": return "퀘스트를 수락하면 제한 시간 내에 완료해야 합니다."
-        case "completed": return "보상: \(quest.rewardDisplayString)"
-        default: return ""
-        }
-    }
-
-    // MARK: - Actions
-    private func performAction() {
-        isProcessing = true
-
-        Task {
-            // 약간의 지연으로 UI 피드백 제공
-            try? await Task.sleep(nanoseconds: 300_000_000)
-
-            await MainActor.run {
-                onAction()
-                isProcessing = false
-            }
-        }
-    }
-}
 
 // MARK: - Main Quest View
 struct QuestView: View {
@@ -369,10 +146,10 @@ struct QuestView: View {
                         case .refreshing:
                             QuestRefreshingContent()
 
-                        case .acceptingQuest(let quest):
+                        case .accepting(let quest):
                             QuestActionContent(actionText: "퀘스트 '\(quest.title)' 수락 중...")
 
-                        case .claimingReward(let quest):
+                        case .claiming(let quest):
                             QuestActionContent(actionText: "'\(quest.title)' 보상 수령 중...")
                         }
 
@@ -404,8 +181,8 @@ struct QuestView: View {
         case .loaded: return "READY"
         case .error: return "ERROR"
         case .refreshing: return "REFRESHING..."
-        case .acceptingQuest: return "ACCEPTING..."
-        case .claimingReward: return "CLAIMING..."
+        case .accepting: return "ACCEPTING..."
+        case .claiming: return "CLAIMING..."
         }
     }
 
@@ -466,12 +243,12 @@ struct QuestView: View {
     private func QuestLoadingView() -> some View {
         VStack(spacing: 24) {
             ProgressView()
-                .progressViewStyle(CircularProgressViewStyle(tint: .cyberpunkPrimary))
+                .progressViewStyle(CircularProgressViewStyle(tint: .cyberpunkCyan))
                 .scaleEffect(1.5)
 
             Text("LOADING_MISSIONS")
                 .font(.chosunH3)
-                .foregroundColor(.cyberpunkPrimary)
+                .foregroundColor(.cyberpunkTextPrimary)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 60)
@@ -490,7 +267,7 @@ struct QuestView: View {
 
             Text(message)
                 .font(.chosunBody)
-                .foregroundColor(.cyberpunkText)
+                .foregroundColor(.cyberpunkTextPrimary)
                 .multilineTextAlignment(.center)
 
             CyberpunkButton(
@@ -512,10 +289,10 @@ struct QuestView: View {
                     Spacer()
                     HStack {
                         ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .cyberpunkPrimary))
+                            .progressViewStyle(CircularProgressViewStyle(tint: .cyberpunkCyan))
                         Text("REFRESHING...")
                             .font(.chosunCaption)
-                            .foregroundColor(.cyberpunkPrimary)
+                            .foregroundColor(.cyberpunkTextPrimary)
                     }
                     .padding()
                     .background(Color.cyberpunkCardBg)
@@ -596,20 +373,20 @@ struct QuestSection: View {
                 Text(title)
                     .font(.chosunH2)
                     .fontWeight(.bold)
-                    .foregroundColor(.cyberpunkPrimary)
+                    .foregroundColor(.cyberpunkTextPrimary)
 
                 Spacer()
 
                 Text("\(quests.count)")
                     .font(.chosunH3)
                     .fontWeight(.medium)
-                    .foregroundColor(.cyberpunkSecondary)
+                    .foregroundColor(.cyberpunkTextSecondary)
             }
             .padding(.horizontal, CyberpunkLayout.screenPadding)
 
             // Quest Cards
             LazyVStack(spacing: 16) {
-                ForEach(quests) { quest in
+                ForEach(quests, id: \.id) { quest in
                     CyberpunkQuestCard(quest: quest) {
                         onQuestAction(quest)
                     }

@@ -7,12 +7,10 @@
 //
 
 import SwiftUI
-import Foundation
-import Darwin
 
 // MARK: - Cyberpunk Profile Header
 struct CyberpunkProfileHeader: View {
-    let profile: PlayerProfile
+    let profile: Player
     let onEditProfile: () -> Void
     @State private var scanLineOffset: CGFloat = 0
     @State private var statusPulse = false
@@ -77,13 +75,13 @@ struct CyberpunkProfileHeader: View {
                             .font(.cyberpunkTechnical())
                             .foregroundColor(.cyberpunkTextSecondary)
 
-                        Text("KR-2025-\(String(profile.name.prefix(4)).uppercased())")
+                        Text("KR-2025-\(String(profile.core.name.prefix(4)).uppercased())")
                             .font(.cyberpunkTechnical())
                             .foregroundColor(.cyberpunkYellow)
                     }
 
                     // Name Display
-                    Text(profile.name.uppercased())
+                    Text(profile.core.name.uppercased())
                         .font(.cyberpunkHeading())
                         .foregroundColor(.cyberpunkTextPrimary)
                         .fontWeight(.bold)
@@ -92,13 +90,13 @@ struct CyberpunkProfileHeader: View {
                     HStack(spacing: 12) {
                         CyberpunkDataDisplay(
                             label: "AGE",
-                            value: "\(profile.age)",
+                            value: "\(profile.core.age)",
                             valueColor: .cyberpunkCyan
                         )
 
                         CyberpunkDataDisplay(
                             label: "LVL",
-                            value: String(format: "%02d", profile.tradeLevel),
+                            value: String(format: "%02d", profile.core.level),
                             valueColor: .cyberpunkGreen
                         )
                     }
@@ -137,7 +135,7 @@ struct CyberpunkProfileHeader: View {
 
 // MARK: - Cyberpunk Trading Dashboard
 struct CyberpunkTradingDashboard: View {
-    let profile: PlayerProfile
+    let profile: Player
     @State private var dataRefreshAnimation = false
 
     var body: some View {
@@ -153,7 +151,7 @@ struct CyberpunkTradingDashboard: View {
                 HStack(spacing: 16) {
                     CyberpunkMetricCard(
                         label: "TOTAL_PROFIT",
-                        value: "₩\(formatCurrency(profile.totalEarnings))",
+                        value: "₩\(formatCurrency(profile.core.money))",
                         trend: "+2.3%",
                         trendPositive: true,
                         icon: "chart.line.uptrend.xyaxis"
@@ -161,7 +159,7 @@ struct CyberpunkTradingDashboard: View {
 
                     CyberpunkMetricCard(
                         label: "OPERATION_DAYS",
-                        value: String(format: "%03d", profile.tradingDays),
+                        value: String(format: "%03d", daysSinceCreated(profile.core.createdAt)),
                         trend: "ACTIVE",
                         trendPositive: true,
                         icon: "calendar.badge.clock"
@@ -180,7 +178,7 @@ struct CyberpunkTradingDashboard: View {
 
                     CyberpunkMetricCard(
                         label: "MARKET_RANK",
-                        value: "LVL_\(String(format: "%02d", profile.tradeLevel))",
+                        value: "LVL_\(String(format: "%02d", profile.core.level))",
                         trend: "ASCENDING",
                         trendPositive: true,
                         icon: "star.fill"
@@ -743,4 +741,12 @@ struct CyberpunkEmergencyButton: View {
             }
         }
     }
+}
+
+// MARK: - Helper Functions
+private func daysSinceCreated(_ createdAt: Date) -> Int {
+    let calendar = Calendar.current
+    let now = Date()
+    let components = calendar.dateComponents([.day], from: createdAt, to: now)
+    return max(1, components.day ?? 1) // 최소 1일로 표시
 }

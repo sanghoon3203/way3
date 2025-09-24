@@ -61,7 +61,7 @@ class TradeManager: ObservableObject {
         selectedItems.count
     }
     
-    // MARK: - 아이템 선택/해제
+    // MARK: - 레거시 UI 지원 (기존 거래 UI용)
     func toggleItem(_ item: TradeItem, type: TradeType) {
         if let index = selectedItems.firstIndex(where: { $0.id == item.id }) {
             selectedItems.remove(at: index)
@@ -69,11 +69,11 @@ class TradeManager: ObservableObject {
             selectedItems.append(item)
         }
     }
-    
+
     func clearSelection() {
         selectedItems.removeAll()
     }
-    
+
     func updateItemQuantity(_ itemId: String, quantity: Int) {
         if let index = selectedItems.firstIndex(where: { $0.id == itemId }) {
             var updatedItem = selectedItems[index]
@@ -94,6 +94,23 @@ class TradeManager: ObservableObject {
     }
     
     // MARK: - 거래 실행
+    /// CartItem 배열을 사용한 거래 실행 (MerchantDetailViewModel용)
+    func executeTrade(with merchantId: String, cartItems: [CartItem]) async throws -> TradeResult {
+        let tradeRequest = TradeRequest(
+            merchantId: merchantId,
+            items: cartItems.map { cartItem in
+                TradeItemRequest(
+                    itemId: cartItem.item.id,
+                    quantity: cartItem.quantity,
+                    action: cartItem.type
+                )
+            }
+        )
+
+        return try await performTradeRequest(tradeRequest)
+    }
+
+    /// 기존 방식의 거래 실행 (기존 UI용)
     func executeTrade(with merchant: Merchant) async {
         await MainActor.run {
             isLoading = true
@@ -198,7 +215,7 @@ class TradeManager: ObservableObject {
     }
     
     // MARK: - 햅틱 피드백
-    private func triggerSuccessHaptic() {
+    func triggerSuccessHaptic() {
         let impactGenerator = UIImpactFeedbackGenerator(style: .medium)
         impactGenerator.impactOccurred()
         
@@ -207,6 +224,33 @@ class TradeManager: ObservableObject {
     }
     
     // MARK: - 거래 유효성 검사
+    /// CartItem 배열 거래 검증 (MerchantDetailViewModel용)
+    func validateTrade(cartItems: [CartItem], playerMoney: Int, playerInventory: [TradeItem]) -> (isValid: Bool, message: String) {
+        guard !cartItems.isEmpty else {
+            return (false, "거래할 아이템을 선택해주세요.")
+        }
+
+        // 구매 검증
+        let buyItems = cartItems.filter { $0.type == .buy }
+        let totalBuyCost = buyItems.reduce(0) { $0 + ($1.item.currentPrice * $1.quantity) }
+
+        if totalBuyCost > playerMoney {
+            return (false, "보유 금액이 부족합니다. (필요: ₩\(totalBuyCost), 보유: ₩\(playerMoney))")
+        }
+
+        // 판매 검증
+        let sellItems = cartItems.filter { $0.type == .sell }
+        for sellItem in sellItems {
+            let availableQuantity = playerInventory.first { $0.id == sellItem.item.id }?.quantity ?? 0
+            if sellItem.quantity > availableQuantity {
+                return (false, "\(sellItem.item.name) 재고가 부족합니다. (필요: \(sellItem.quantity)개, 보유: \(availableQuantity)개)")
+            }
+        }
+
+        return (true, "거래 가능")
+    }
+
+    /// 기존 방식의 거래 검증 (기존 UI용)
     func validateTrade(with merchant: Merchant) -> (isValid: Bool, message: String) {
         guard !selectedItems.isEmpty else {
             return (false, "거래할 아이템을 선택해주세요.")
@@ -228,6 +272,17 @@ class TradeManager: ObservableObject {
     }
     
     // MARK: - 거래 통계
+    /// CartItem 배열 기반 예상 수익 계산
+    func calculatePotentialProfit(cartItems: [CartItem]) -> Int {
+        return cartItems.reduce(into: 0) { total, cartItem in
+            if cartItem.type == .buy {
+                let estimatedSellPrice = Int(Double(cartItem.item.currentPrice) * 1.2) // 20% 마진 가정
+                total += (estimatedSellPrice - cartItem.item.currentPrice) * cartItem.quantity
+            }
+        }
+    }
+
+    /// 기존 방식의 예상 수익 계산
     func calculatePotentialProfit() -> Int {
         // 구매 후 다른 상인에게 판매했을 때의 예상 수익
         return selectedItems.reduce(into: 0) { total, item in

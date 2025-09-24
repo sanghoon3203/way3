@@ -9,7 +9,7 @@ import Combine
 class MerchantDetailViewModel: ObservableObject {
 
     // MARK: - Published Properties
-    @Published var merchantProfile: MerchantProfile?
+    @Published var merchantDetail: MerchantDetailResponse?
     @Published var inventory: [TradeItem] = []
     @Published var relationship: MerchantRelationship?
     @Published var currentDialogue: String = ""
@@ -34,20 +34,23 @@ class MerchantDetailViewModel: ObservableObject {
     private let dataManager = MerchantDataManager.shared
     private let dialogueManager = DialogueDataManager.shared
     @StateObject private var cartManager = CartManager()
+    @StateObject private var gameManager = GameManager.shared
 
     private var cancellables = Set<AnyCancellable>()
     private var currentMerchantId: String?
 
     // MARK: - Computed Properties
     var playerInventory: [TradeItem] {
-        // TODO: GameManager에서 플레이어 인벤토리 가져오기
-        return []
+        return gameManager.currentPlayer?.inventory.inventory ?? []
     }
 
     var canTrade: Bool {
-        guard let profile = merchantProfile else { return false }
+        guard let profile = merchantDetail else { return false }
+        guard let player = gameManager.currentPlayer else { return false }
+
         // TODO: 플레이어 라이센스/평판 확인
-        return true
+        // 기본 거래 가능성 체크
+        return player.core.money > 0 && player.core.currentLicense.rawValue >= 0
     }
 
     // MARK: - 초기화
@@ -64,6 +67,15 @@ class MerchantDetailViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+
+        // 플레이어 인벤토리 변경 감지
+        gameManager.$currentPlayer
+            .compactMap { $0?.inventory.inventory }
+            .sink { [weak self] _ in
+                // UI 업데이트 트리거
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: - 상인 데이터 로딩
@@ -78,15 +90,15 @@ class MerchantDetailViewModel: ObservableObject {
 
         do {
             // 병렬로 데이터 로딩
-            async let profile = dataManager.fetchMerchantProfile(merchantId: id)
+            async let detail = dataManager.fetchMerchantDetail(merchantId: id)
             async let inventory = dataManager.fetchMerchantInventory(merchantId: id)
             async let relationship = dataManager.fetchMerchantRelationship(merchantId: id)
 
             // 결과 받기
-            let (loadedProfile, loadedInventory, loadedRelationship) = try await (profile, inventory, relationship)
+            let (loadedDetail, loadedInventory, loadedRelationship) = try await (detail, inventory, relationship)
 
             // UI 업데이트
-            self.merchantProfile = loadedProfile
+            self.merchantDetail = loadedDetail
             self.inventory = loadedInventory
             self.relationship = loadedRelationship
 
@@ -104,7 +116,7 @@ class MerchantDetailViewModel: ObservableObject {
     // MARK: - 대화 시스템
     /// 대화 시작 (JSON 및 컨텍스트 기반 시스템)
     func startDialogue() {
-        guard let merchantId = merchantProfile?.id else { return }
+        guard let merchantId = merchantDetail?.id else { return }
 
         Task {
             let greeting = await dialogueManager.getDialogue(
@@ -120,7 +132,7 @@ class MerchantDetailViewModel: ObservableObject {
     }
 
     func continueDialogue() {
-        guard let merchantId = merchantProfile?.id else { return }
+        guard let merchantId = merchantDetail?.id else { return }
 
         Task {
             let dialogue = await dialogueManager.getDialogue(
@@ -150,9 +162,9 @@ class MerchantDetailViewModel: ObservableObject {
         return DialogueContext(
             playerRelationshipLevel: relationship?.friendshipPoints ?? 0,
             timeOfDay: timeOfDay,
-            lastInteractionTime: nil, // TODO: 실제 마지막 상호작용 시간
-            currentMood: nil,
-            recentPurchases: [] // TODO: 최근 구매 이력
+            lastInteractionTime: relationship?.lastInteraction,
+            currentMood: nil, // MerchantRelationship에 mood 필드 없음
+            recentPurchases: [] // TODO: 최근 구매 이력 - TradeHistory에서 가져오기
         )
     }
 
@@ -206,6 +218,25 @@ class MerchantDetailViewModel: ObservableObject {
 
     /// 장바구니에 아이템 추가
     func addToCart(item: TradeItem, quantity: Int) {
+        // 판매 시 플레이어 인벤토리 확인
+        if selectedTradeType == .sell {
+            let availableQuantity = playerInventory.first { $0.id == item.id }?.quantity ?? 0
+            guard quantity <= availableQuantity else {
+                error = .insufficientItems
+                return
+            }
+        }
+
+        // 구매 시 플레이어 자금 확인
+        if selectedTradeType == .buy {
+            let totalCost = item.basePrice * quantity
+            let playerMoney = gameManager.currentPlayer?.core.money ?? 0
+            guard totalCost <= playerMoney else {
+                error = .insufficientFunds
+                return
+            }
+        }
+
         cartManager.addItem(item, quantity: quantity, type: selectedTradeType)
         showQuantityPopup = false
         selectedItem = nil
@@ -214,21 +245,47 @@ class MerchantDetailViewModel: ObservableObject {
     /// 거래 실행
     func executeTrade() async {
         guard !cartManager.items.isEmpty else { return }
+        guard let merchantId = currentMerchantId else { return }
 
         isLoading = true
 
         do {
-            // TODO: 서버에 거래 요청 전송
-            // let tradeResult = try await TradeManager.shared.executeTrade(cartManager.items)
+            // 거래 유효성 검증
+            let playerMoney = gameManager.currentPlayer?.core.money ?? 0
+            let validation = TradeManager.shared.validateTrade(
+                cartItems: cartManager.items,
+                playerMoney: playerMoney,
+                playerInventory: playerInventory
+            )
 
-            // 성공 시 인벤토리 갱신
-            if let merchantId = currentMerchantId {
-                inventory = try await dataManager.fetchMerchantInventory(merchantId: merchantId)
+            guard validation.isValid else {
+                self.error = .tradeValidationFailed(validation.message)
+                isLoading = false
+                return
             }
 
-            // 장바구니 비우기
-            cartManager.clearCart()
-            showPurchaseConfirmation = true
+            // 서버에 거래 요청 전송
+            let tradeResult = try await TradeManager.shared.executeTrade(
+                with: merchantId,
+                cartItems: cartManager.items
+            )
+
+            if tradeResult.success {
+                // 거래 성공 시 플레이어 데이터 갱신
+                await gameManager.refreshPlayerData()
+
+                // 상인 인벤토리 갱신
+                inventory = try await dataManager.fetchMerchantInventory(merchantId: merchantId)
+
+                // 장바구니 비우기
+                cartManager.clearCart()
+                showPurchaseConfirmation = true
+
+                // 성공 피드백
+                TradeManager.shared.triggerSuccessHaptic()
+            } else {
+                self.error = .tradeExecutionFailed(tradeResult.message)
+            }
 
         } catch {
             self.error = .networkError(error)
@@ -251,23 +308,3 @@ class MerchantDetailViewModel: ObservableObject {
 }
 
 
-// MARK: - 에러 타입
-enum MerchantDataError: LocalizedError {
-    case networkError(Error)
-    case invalidData
-    case merchantNotFound
-    case tradeFailed
-
-    var errorDescription: String? {
-        switch self {
-        case .networkError(let error):
-            return "네트워크 오류: \(error.localizedDescription)"
-        case .invalidData:
-            return "데이터가 유효하지 않습니다"
-        case .merchantNotFound:
-            return "상인을 찾을 수 없습니다"
-        case .tradeFailed:
-            return "거래에 실패했습니다"
-        }
-    }
-}

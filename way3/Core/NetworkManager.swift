@@ -296,7 +296,7 @@ extension NetworkManager {
 // MARK: - Network Request Methods
 extension NetworkManager {
     // ✅ 개선된 네트워크 요청 메서드
-    private func makeRequest<T: Codable>(
+    func makeRequest<T: Codable>(
         endpoint: String,
         method: HTTPMethod = .GET,
         body: [String: Any]? = nil,
@@ -1029,7 +1029,7 @@ struct QuestSummary: Codable {
     let claimed: Int
 }
 
-struct QuestData: Codable {
+struct QuestData: Codable, Identifiable, Equatable {
     let id: String
     let title: String
     let description: String
@@ -1049,19 +1049,19 @@ struct QuestData: Codable {
     let rewardClaimed: Bool
 }
 
-struct QuestRewards: Codable {
+struct QuestRewards: Codable, Equatable {
     let experience: Int
     let money: Int
     let trustPoints: Int
     let items: [QuestRewardItem]?
 }
 
-struct QuestRewardItem: Codable {
+struct QuestRewardItem: Codable, Equatable {
     let itemId: String
     let quantity: Int
 }
 
-struct QuestRequirements: Codable {
+struct QuestRequirements: Codable, Equatable {
     let minLevel: Int?
     let requiredLicense: Int?
     let requiredItems: [String]?

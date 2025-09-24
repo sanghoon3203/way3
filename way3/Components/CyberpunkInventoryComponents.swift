@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import Foundation
 
 // MARK: - Cyberpunk Trade Good Card
 struct CyberpunkTradeGoodCard: View {
@@ -96,79 +95,6 @@ struct CyberpunkTradeGoodCard: View {
     }
 }
 
-// MARK: - Cyberpunk Player Inventory Card
-struct CyberpunkPlayerInventoryCard: View {
-    let inventoryItem: PlayerInventoryItem
-
-    var body: some View {
-        HStack(spacing: 12) {
-            // Item Image
-            ZStack {
-                Rectangle()
-                    .fill(inventoryItem.grade.cyberpunkColor.opacity(0.1))
-                    .frame(width: 60, height: 60)
-                    .overlay(
-                        Rectangle()
-                            .stroke(inventoryItem.grade.cyberpunkColor.opacity(0.6), lineWidth: 1)
-                    )
-
-                Image(systemName: inventoryItem.imageName)
-                    .font(.system(size: 24))
-                    .foregroundColor(inventoryItem.grade.cyberpunkColor)
-            }
-
-            // Item Info
-            VStack(alignment: .leading, spacing: 6) {
-                HStack {
-                    Text(inventoryItem.name.uppercased())
-                        .font(.cyberpunkHeading(size: 16))
-                        .foregroundColor(.cyberpunkTextPrimary)
-                        .fontWeight(.semibold)
-
-                    Spacer()
-
-                    // Grade badge
-                    Text(inventoryItem.grade.displayName.uppercased())
-                        .font(.cyberpunkTechnical())
-                        .foregroundColor(inventoryItem.grade.cyberpunkColor)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 2)
-                        .background(
-                            Rectangle()
-                                .fill(inventoryItem.grade.cyberpunkColor.opacity(0.2))
-                                .overlay(
-                                    Rectangle()
-                                        .stroke(inventoryItem.grade.cyberpunkColor.opacity(0.6), lineWidth: 0.5)
-                                )
-                        )
-                }
-
-                // Effect description
-                HStack {
-                    Text("EFFECT:")
-                        .font(.cyberpunkTechnical())
-                        .foregroundColor(.cyberpunkTextSecondary)
-
-                    Text(inventoryItem.effect.uppercased())
-                        .font(.cyberpunkCaption())
-                        .foregroundColor(.cyberpunkCyan)
-                        .fontWeight(.medium)
-                }
-
-                // Technical ID
-                Text("ID: PI_\(String(inventoryItem.id.uuidString.prefix(6)))")
-                    .font(.cyberpunkTechnical())
-                    .foregroundColor(.cyberpunkTextSecondary)
-            }
-
-            Spacer()
-        }
-        .padding(12)
-        .frame(maxWidth: .infinity)
-        .frame(height: 80)
-        .cyberpunkCard()
-    }
-}
 
 // MARK: - Cyberpunk Trade Good Detail Sheet
 struct CyberpunkTradeGoodDetailSheet: View {
@@ -266,16 +192,9 @@ struct CyberpunkTradeGoodDetailSheet: View {
     }
 }
 
-// MARK: - Extensions for TradeGood and PlayerInventoryItem
+// MARK: - Extensions for TradeGood
 extension TradeGood {
     // 기존 TradeGood에 사이버펑크 색상 지원 추가
-    var cyberpunkColor: Color {
-        return grade.cyberpunkColor
-    }
-}
-
-extension PlayerInventoryItem {
-    // 기존 PlayerInventoryItem에 사이버펑크 색상 지원 추가
     var cyberpunkColor: Color {
         return grade.cyberpunkColor
     }

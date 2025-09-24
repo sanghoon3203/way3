@@ -10,7 +10,7 @@ import SwiftUI
 
 // MARK: - Trade Goods Model
 struct TradeGood: Identifiable, Codable {
-    let id = UUID()
+    var id = UUID()
     let serverItemId: String?
     let name: String
     let category: String
@@ -50,10 +50,10 @@ struct TradeGood: Identifiable, Codable {
             serverItemId: inventoryItem.id,
             name: inventoryItem.name,
             category: inventoryItem.category,
-            grade: ItemGrade.fromServerGrade(inventoryItem.grade),
+            grade: ItemGrade.fromServerGrade(Int(inventoryItem.grade) ?? 1),
             basePrice: inventoryItem.basePrice,
-            quantity: inventoryItem.quantity,
-            purchasePrice: inventoryItem.purchasePrice
+            quantity: 1, // 기본값 설정 (개별 아이템)
+            purchasePrice: inventoryItem.currentPrice // 현재 가격을 구매가로 사용
         )
     }
 
@@ -73,17 +73,6 @@ struct TradeGood: Identifiable, Codable {
     }
 }
 
-// 서버 API 응답 모델
-struct InventoryItem: Codable {
-    let id: String
-    let itemTemplateId: String
-    let name: String
-    let category: String
-    let grade: Int
-    let basePrice: Int
-    let quantity: Int
-    let purchasePrice: Int?
-}
 
 // MARK: - Personal Items Views
 
@@ -95,7 +84,7 @@ struct PersonalItemsLoadingView: View {
                 .scaleEffect(0.8)
 
             Text("개인 아이템 로딩 중...")
-                .font(.cyberpunkCaption)
+                .font(.cyberpunkCaption())
                 .foregroundColor(.cyberpunkTextSecondary)
         }
         .frame(maxWidth: .infinity)
@@ -108,10 +97,10 @@ struct EmptyPersonalItemsView: View {
         VStack(spacing: 16) {
             Image(systemName: "cube.box")
                 .font(.largeTitle)
-                .foregroundColor(.cyberpunkTextTertiary)
+                .foregroundColor(.cyberpunkTextSecondary)
 
             Text("보유한 개인 아이템이 없습니다")
-                .font(.cyberpunkBody)
+                .font(.cyberpunkBody())
                 .foregroundColor(.cyberpunkTextSecondary)
         }
         .frame(maxWidth: .infinity)
@@ -126,14 +115,14 @@ struct PersonalItemsErrorView: View {
         VStack(spacing: 16) {
             Image(systemName: "exclamationmark.triangle")
                 .font(.largeTitle)
-                .foregroundColor(.cyberpunkRed)
+                .foregroundColor(.red)
 
             Text("개인 아이템 로딩 실패")
-                .font(.cyberpunkBody)
+                .font(.cyberpunkBody())
                 .foregroundColor(.cyberpunkTextPrimary)
 
             Text(message)
-                .font(.cyberpunkCaption)
+                .font(.cyberpunkCaption())
                 .foregroundColor(.cyberpunkTextSecondary)
                 .multilineTextAlignment(.center)
         }
@@ -214,7 +203,7 @@ struct PersonalItemCard: View {
                 // 아이템 정보
                 VStack(spacing: 4) {
                     Text(item.name)
-                        .font(.cyberpunkCaption)
+                        .font(.cyberpunkCaption())
                         .foregroundColor(.cyberpunkTextPrimary)
                         .lineLimit(1)
 
@@ -235,7 +224,7 @@ struct PersonalItemCard: View {
                         } else {
                             Text("미장착")
                                 .font(.system(size: 10))
-                                .foregroundColor(.cyberpunkTextTertiary)
+                                .foregroundColor(.cyberpunkTextSecondary)
                         }
                     }
                 }
@@ -512,13 +501,13 @@ struct InventoryLoadingView: View {
                 .scaleEffect(1.5)
 
             Text("LOADING_INVENTORY...")
-                .font(.cyberpunkBody)
+                .font(.cyberpunkBody())
                 .foregroundColor(.cyberpunkTextSecondary)
                 .tracking(2)
 
             Text("서버에서 인벤토리 데이터를 불러오는 중입니다")
-                .font(.cyberpunkCaption)
-                .foregroundColor(.cyberpunkTextTertiary)
+                .font(.cyberpunkCaption())
+                .foregroundColor(.cyberpunkTextSecondary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -540,12 +529,12 @@ struct InventoryErrorView: View {
 
             VStack(spacing: 12) {
                 Text("INVENTORY_ERROR")
-                    .font(.cyberpunkTitle)
+                    .font(.cyberpunkTitle())
                     .foregroundColor(.cyberpunkTextPrimary)
                     .tracking(2)
 
                 Text(message)
-                    .font(.cyberpunkBody)
+                    .font(.cyberpunkBody())
                     .foregroundColor(.cyberpunkTextSecondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
@@ -557,7 +546,7 @@ struct InventoryErrorView: View {
                     Image(systemName: "arrow.clockwise")
                     Text("다시 시도")
                 }
-                .font(.cyberpunkButton)
+                .font(.cyberpunkButton())
                 .foregroundColor(.cyberpunkDarkBg)
                 .padding(.horizontal, 24)
                 .padding(.vertical, 12)
@@ -583,7 +572,7 @@ struct EmptyInventoryView: View {
                 .foregroundColor(.cyberpunkTextSecondary)
 
             Text(message)
-                .font(.cyberpunkBody)
+                .font(.cyberpunkBody())
                 .foregroundColor(.cyberpunkTextSecondary)
                 .multilineTextAlignment(.center)
         }
@@ -592,253 +581,5 @@ struct EmptyInventoryView: View {
     }
 }
 
-// MARK: - Trade Good Box Component (320x160)
-struct TradeGoodBoxView: View {
-    let tradeGood: TradeGood
-    let onTap: () -> Void
 
-    var body: some View {
-        Button(action: onTap) {
-            VStack(spacing: 0) {
-                // Top Row: Image, Name, Price
-                HStack(spacing: 30) {
-                    // Image
-                    Image(systemName: tradeGood.imageName)
-                        .font(.system(size: 40))
-                        .foregroundColor(tradeGood.grade.color)
-                        .frame(width: 50, height: 50)
 
-                    // Name
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(tradeGood.name)
-                            .font(.chosunH3)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.primary)
-                            .multilineTextAlignment(.leading)
-
-                        Text(tradeGood.category)
-                            .font(.chosunCaption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    // Price
-                    Text("₩\(tradeGood.basePrice)")
-                        .font(.chosunSubhead)
-                        .fontWeight(.bold)
-                        .foregroundColor(.green)
-                }
-                .padding(.horizontal, 16)
-                .padding(.top, 16)
-
-                Spacer()
-                    .frame(height: 50)
-
-                // Bottom Row: Grade, Quantity
-                HStack(spacing: 110) {
-                    // Grade Badge
-                    Text(tradeGood.grade.displayName)
-                        .font(.chosunSmall)
-                        .fontWeight(.medium)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(
-                            RoundedRectangle(cornerRadius: 30)
-                                .fill(tradeGood.grade.color)
-                        )
-
-                    Spacer()
-
-                    // Quantity
-                    Text("\(tradeGood.quantity)개")
-                        .font(.chosunSubhead)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.primary)
-                }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 16)
-            }
-        }
-        .frame(width: 320, height: 160)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color(.systemBackground))
-                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
-        )
-        .buttonStyle(PlainButtonStyle())
-    }
-}
-
-// MARK: - Inventory Item Box Component
-struct PlayerInventoryItemBoxView: View {
-    let inventoryItem: PlayerInventoryItem
-
-    var body: some View {
-        HStack(spacing: 0) {
-            // Image
-            Image(systemName: inventoryItem.imageName)
-                .font(.system(size: 30))
-                .foregroundColor(inventoryItem.grade.color)
-                .frame(width: 60, height: 60)
-
-            Spacer()
-                .frame(width: 110)
-
-            // Name and Details
-            VStack(alignment: .leading, spacing: 8) {
-                Text(inventoryItem.name)
-                    .font(.chosunH3)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.primary)
-
-                // Grade Badge
-                Text(inventoryItem.grade.displayName)
-                    .font(.chosunSmall)
-                    .fontWeight(.medium)
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 4)
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(inventoryItem.grade.color)
-                    )
-
-                // Effect
-                Text(inventoryItem.effect)
-                    .font(.chosunCaption)
-                    .foregroundColor(.blue)
-                    .fontWeight(.medium)
-            }
-
-            Spacer()
-        }
-        .padding(16)
-        .frame(maxWidth: .infinity)
-        .frame(height: 100)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color(.systemBackground))
-                .shadow(color: .black.opacity(0.08), radius: 6, x: 0, y: 3)
-        )
-    }
-}
-
-// MARK: - Trade Good Detail Sheet
-struct TradeGoodDetailSheet: View {
-    let tradeGood: TradeGood
-    @Environment(\.presentationMode) var presentationMode
-
-    var body: some View {
-        NavigationView {
-            VStack(spacing: 24) {
-                // Item Image
-                Image(systemName: tradeGood.imageName)
-                    .font(.system(size: 80))
-                    .foregroundColor(tradeGood.grade.color)
-                    .frame(width: 120, height: 120)
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(tradeGood.grade.color.opacity(0.1))
-                    )
-
-                // Item Details
-                VStack(spacing: 16) {
-                    Text(tradeGood.name)
-                        .font(.chosunTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.primary)
-
-                    HStack(spacing: 40) {
-                        VStack {
-                            Text("등급")
-                                .font(.chosunCaption)
-                                .foregroundColor(.secondary)
-                            Text(tradeGood.grade.displayName)
-                                .font(.chosunSubhead)
-                                .fontWeight(.semibold)
-                                .foregroundColor(tradeGood.grade.color)
-                        }
-
-                        VStack {
-                            Text("수량")
-                                .font(.chosunCaption)
-                                .foregroundColor(.secondary)
-                            Text("\(tradeGood.quantity)개")
-                                .font(.chosunSubhead)
-                                .fontWeight(.semibold)
-                        }
-
-                        VStack {
-                            Text("가격")
-                                .font(.chosunCaption)
-                                .foregroundColor(.secondary)
-                            Text("₩\(tradeGood.basePrice)")
-                                .font(.chosunSubhead)
-                                .fontWeight(.bold)
-                                .foregroundColor(.green)
-                        }
-                    }
-
-                    Divider()
-
-                    HStack {
-                        Text("총 가치:")
-                            .font(.chosunBody)
-                        Spacer()
-                        Text("₩\(tradeGood.basePrice * tradeGood.quantity)")
-                            .font(.chosunH2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.green)
-                    }
-                }
-
-                Spacer()
-
-                // Action Buttons
-                VStack(spacing: 12) {
-                    Button(action: {
-                        // Sell action
-                    }) {
-                        Text("전체 판매")
-                            .font(.chosunButton)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color.green)
-                            )
-                    }
-
-                    Button(action: {
-                        // Partial sell action
-                    }) {
-                        Text("부분 판매")
-                            .font(.chosunButton)
-                            .fontWeight(.medium)
-                            .foregroundColor(.green)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.green, lineWidth: 2)
-                            )
-                    }
-                }
-            }
-            .padding(20)
-            .navigationTitle("상품 상세")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("닫기") {
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                }
-            }
-        }
-    }
-}

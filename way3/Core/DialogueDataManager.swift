@@ -1,6 +1,54 @@
 // 📁 Core/DialogueDataManager.swift - 대화 데이터 관리자
 import Foundation
 import Combine
+import CoreLocation
+
+// MARK: - Local MerchantProfile for AI compatibility
+struct MerchantProfile {
+    let id: String
+    let name: String
+    let title: String?
+    let type: MerchantType
+    let personality: PersonalityType
+    let district: SeoulDistrict
+    let coordinate: CLLocationCoordinate2D
+    let requiredLicense: LicenseLevel
+    let reputationRequirement: Int
+    let priceModifier: Double
+    let negotiationDifficulty: Int
+    let preferredCategories: [String]
+    let dislikedCategories: [String]
+
+    init(
+        id: String,
+        name: String,
+        title: String? = nil,
+        type: MerchantType,
+        personality: PersonalityType,
+        district: SeoulDistrict,
+        coordinate: CLLocationCoordinate2D,
+        requiredLicense: LicenseLevel = .beginner,
+        reputationRequirement: Int = 0,
+        priceModifier: Double = 1.0,
+        negotiationDifficulty: Int = 3,
+        preferredCategories: [String] = [],
+        dislikedCategories: [String] = []
+    ) {
+        self.id = id
+        self.name = name
+        self.title = title
+        self.type = type
+        self.personality = personality
+        self.district = district
+        self.coordinate = coordinate
+        self.requiredLicense = requiredLicense
+        self.reputationRequirement = reputationRequirement
+        self.priceModifier = priceModifier
+        self.negotiationDifficulty = negotiationDifficulty
+        self.preferredCategories = preferredCategories
+        self.dislikedCategories = dislikedCategories
+    }
+}
 
 /// JSON 및 서버 대화 데이터를 통합 관리하는 매니저
 /// Phase 3: 로컬 JSON 대화 + 향후 AI 확장 준비
@@ -131,8 +179,32 @@ class DialogueDataManager: ObservableObject {
         context: DialogueContext?
     ) async -> String {
         do {
-            // 상인 프로필 생성 (임시 - 실제로는 MerchantProfile 사용)
-            let merchantProfile = createMockMerchantProfile(from: dialogueSet)
+            // 실제 상인 데이터를 서버에서 가져오기
+            guard let merchantDetail = await createMerchantProfileFromServer(merchantId: dialogueSet.merchantId) else {
+                // 서버 데이터 가져오기 실패시 기존 방식으로 폴백
+                return selectAppropriateDialogue(
+                    from: dialogueSet,
+                    category: category,
+                    context: context
+                )
+            }
+
+            // MerchantDetailResponse를 MerchantProfile로 변환 (AI 시스템 호환성)
+            let merchantProfile = MerchantProfile(
+                id: merchantDetail.id,
+                name: merchantDetail.name,
+                title: merchantDetail.title,
+                type: merchantDetail.merchantType,
+                personality: merchantDetail.personalityType,
+                district: merchantDetail.seoulDistrict,
+                coordinate: merchantDetail.coordinate,
+                requiredLicense: merchantDetail.licenseLevel,
+                reputationRequirement: merchantDetail.reputationRequirement,
+                priceModifier: merchantDetail.priceModifier,
+                negotiationDifficulty: merchantDetail.negotiationDifficulty,
+                preferredCategories: merchantDetail.preferredCategories,
+                dislikedCategories: merchantDetail.dislikedCategories
+            )
 
             let aiContext = AIDialogueContext(
                 merchantProfile: merchantProfile,
@@ -159,16 +231,14 @@ class DialogueDataManager: ObservableObject {
     }
 
     // MARK: - AI 컨텍스트 생성 헬퍼
-    private func createMockMerchantProfile(from dialogueSet: MerchantDialogueSet) -> MerchantProfile {
-        // 임시 구현 - 실제로는 MerchantDataManager에서 가져와야 함
-        return MerchantProfile(
-            id: dialogueSet.merchantId,
-            name: dialogueSet.merchantName,
-            type: .retail,
-            personality: PersonalityType(rawValue: dialogueSet.personality) ?? .neutral,
-            district: .jung,
-            coordinate: CLLocationCoordinate2D(latitude: 37.5636, longitude: 126.9979)
-        )
+    private func createMerchantProfileFromServer(merchantId: String) async -> MerchantDetailResponse? {
+        // MerchantDataManager에서 실제 서버 데이터 가져오기
+        do {
+            return try await MerchantDataManager.shared.fetchMerchantDetail(merchantId: merchantId)
+        } catch {
+            print("❌ DialogueDataManager: Failed to fetch merchant detail: \(error)")
+            return nil
+        }
     }
 
     private func createPlayerContext(from context: DialogueContext?) -> PlayerDialogueContext {
@@ -320,14 +390,14 @@ struct MerchantDialogueSet {
 struct DialogueContext {
     let playerRelationshipLevel: Int
     let timeOfDay: String
-    let lastInteractionTime: Date?
+    let lastInteractionTime: String?
     let currentMood: String?
     let recentPurchases: [String]
 
     init(
         playerRelationshipLevel: Int = 0,
         timeOfDay: String = "morning",
-        lastInteractionTime: Date? = nil,
+        lastInteractionTime: String? = nil,
         currentMood: String? = nil,
         recentPurchases: [String] = []
     ) {
