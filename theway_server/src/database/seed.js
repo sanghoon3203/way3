@@ -104,147 +104,138 @@ async function seedMerchants() {
     logger.info('상인 데이터 생성...');
     
     const merchants = [
-        // 강남구 - IT & 금융
+        // 네오 시부야 - 사이버펑크 스타일
         {
-            name: '김테크',
-            title: '전자제품 전문가',
-            type: 'electronics',
-            personality: 'professional',
-            district: 'gangnam',
-            lat: 37.4979,
-            lng: 127.0276,
-            priceModifier: 1.2,
+            name: '서예나',
+            title: '네오-시티 스타일리스트',
+            type: 'fashion',
+            personality: 'cold',
+            district: 'neo_shibuya',
+            lat: 37.5665,
+            lng: 126.9780,
+            priceModifier: 1.3,
             negotiationDifficulty: 4,
-            reputationRequirement: 50
+            reputationRequirement: 100,
+            imageFileName: 'Seoyena.png'
         },
+
+        // 마포 크레이티브 허브 - 천사혈통 염력 전문가
         {
-            name: '이금융',
-            title: '투자 상담사',
-            type: 'financial',
-            personality: 'analytical',
-            district: 'gangnam',
-            lat: 37.5012,
-            lng: 127.0396,
-            priceModifier: 1.5,
-            negotiationDifficulty: 5,
-            reputationRequirement: 100
-        },
-        
-        // 중구 - 전통문화
-        {
-            name: '박전통',
-            title: '한국 문화 전문가',
-            type: 'cultural',
-            personality: 'wise',
-            district: 'jung',
-            lat: 37.5636,
-            lng: 126.9970,
-            priceModifier: 1.1,
-            negotiationDifficulty: 2,
-            reputationRequirement: 0
-        },
-        {
-            name: '최골동',
-            title: '골동품 감정사',
-            type: 'antique',
-            personality: 'meticulous',
-            district: 'jung',
-            lat: 37.5658,
-            lng: 126.9895,
-            priceModifier: 2.0,
-            negotiationDifficulty: 5,
-            reputationRequirement: 200,
-            requiredLicense: 2
-        },
-        
-        // 마포구 - 예술
-        {
-            name: '한예술',
-            title: '화가',
-            type: 'artist',
-            personality: 'creative',
+            name: '마리',
+            title: '염력 부여 전문가',
+            type: 'enhancement',
+            personality: 'cheerful',
             district: 'mapo',
             lat: 37.5219,
             lng: 126.8954,
-            priceModifier: 1.3,
-            negotiationDifficulty: 2,
-            reputationRequirement: 25
-        },
-        {
-            name: '장공예',
-            title: '전통 공예가',
-            type: 'craftsman',
-            personality: 'patient',
-            district: 'mapo',
-            lat: 37.5384,
-            lng: 126.9094,
             priceModifier: 1.4,
-            negotiationDifficulty: 3,
-            reputationRequirement: 75
+            negotiationDifficulty: 2,
+            reputationRequirement: 0,
+            imageFileName: 'Mari.png'
         },
-        
-        // 종로구 - 역사
+
+        // 아카데믹 가든 - 과학 임플란트 전문가
         {
-            name: '윤학자',
-            title: '역사학 교수',
-            type: 'scholar',
+            name: '김세휘',
+            title: '임플란트 연구자',
+            type: 'technology',
             personality: 'intellectual',
-            district: 'jongno',
-            lat: 37.5729,
-            lng: 126.9794,
+            district: 'academic',
+            lat: 37.5636,
+            lng: 126.9970,
+            priceModifier: 2.5,
+            negotiationDifficulty: 3,
+            reputationRequirement: 50,
+            requiredLicense: 1,
+            imageFileName: 'Kimsehwui.png'
+        },
+
+        // 레이크사이드 원더랜드 - 드림크리스탈 전문가
+        {
+            name: '애니박',
+            title: '드림크리스탈 공주',
+            type: 'fantasy',
+            personality: 'dreamy',
+            district: 'lakeside',
+            lat: 37.5311,
+            lng: 127.1011,
+            priceModifier: 3.0,
+            negotiationDifficulty: 2,
+            reputationRequirement: 200,
+            requiredLicense: 2,
+            imageFileName: 'Anipark.png'
+        },
+
+        // 메트로 폴리스 - 성스러운 아이템 전문가
+        {
+            name: '카타리나 최',
+            title: '성당 프리스트',
+            type: 'religious',
+            personality: 'protective',
+            district: 'metro',
+            lat: 37.5012,
+            lng: 127.0396,
+            priceModifier: 1.8,
+            negotiationDifficulty: 1,
+            reputationRequirement: 25,
+            imageFileName: 'Catarinachoi.png'
+        },
+
+        // 이스트리버빌리지 - 커피하우스 운영
+        {
+            name: '진백호',
+            title: '테라 커피하우스 주인',
+            type: 'beverages',
+            personality: 'cunning',
+            district: 'eastriver',
+            lat: 37.5384,
+            lng: 127.0594,
             priceModifier: 1.6,
             negotiationDifficulty: 4,
-            reputationRequirement: 150,
-            requiredLicense: 1
+            reputationRequirement: 75,
+            imageFileName: 'Jinbaekho.png'
         },
+
+        // 이스트리버빌리지 - 대장장이 무기 제작
         {
-            name: '서음식',
-            title: '전통 음식 전문가',
-            type: 'food_master',
-            personality: 'friendly',
-            district: 'jongno',
-            lat: 37.5836,
-            lng: 126.9830,
-            priceModifier: 0.9,
-            negotiationDifficulty: 1,
-            reputationRequirement: 0
-        },
-        
-        // 용산구 - 무역/수입
-        {
-            name: '조무역',
-            title: '국제 무역상',
-            type: 'trader',
-            personality: 'ambitious',
-            district: 'yongsan',
-            lat: 37.5311,
-            lng: 126.9810,
-            priceModifier: 1.8,
-            negotiationDifficulty: 4,
-            reputationRequirement: 100,
-            requiredLicense: 1
-        },
-        {
-            name: '강수입',
-            title: '수입품 전문가',
-            type: 'importer',
-            personality: 'worldly',
-            district: 'yongsan',
+            name: '주불수',
+            title: '크래프트타운 대장장이',
+            type: 'weapons',
+            personality: 'tough',
+            district: 'eastriver',
             lat: 37.5249,
-            lng: 126.9895,
-            priceModifier: 1.7,
-            negotiationDifficulty: 3,
-            reputationRequirement: 50
+            lng: 127.0512,
+            priceModifier: 2.2,
+            negotiationDifficulty: 5,
+            reputationRequirement: 150,
+            requiredLicense: 1,
+            imageFileName: 'Jubulsu.png'
+        },
+
+        // 시간의 회랑 - 시간 보안 장비
+        {
+            name: '기주리',
+            title: '시간 보안관',
+            type: 'temporal',
+            personality: 'strict',
+            district: 'time_corridor',
+            lat: 37.5729,
+            lng: 126.9794,
+            priceModifier: 2.8,
+            negotiationDifficulty: 5,
+            reputationRequirement: 300,
+            requiredLicense: 2,
+            imageFileName: 'Kijuri.png'
         }
     ];
     
     for (const merchant of merchants) {
         await DatabaseManager.run(`
             INSERT INTO merchants (
-                id, name, title, merchant_type, personality, district, 
-                lat, lng, required_license, price_modifier, negotiation_difficulty, 
-                reputation_requirement, is_active, last_restocked
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                id, name, title, merchant_type, personality, district,
+                lat, lng, required_license, price_modifier, negotiation_difficulty,
+                reputation_requirement, image_filename, is_active, last_restocked
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
         `, [
             randomUUID(),
             merchant.name,
@@ -258,6 +249,7 @@ async function seedMerchants() {
             merchant.priceModifier,
             merchant.negotiationDifficulty,
             merchant.reputationRequirement,
+            merchant.imageFileName,
             1
         ]);
     }
