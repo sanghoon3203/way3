@@ -50,6 +50,14 @@ async function startServer() {
         // 데이터베이스 연결 및 테이블 생성
         await DatabaseManager.initialize();
         logger.info('데이터베이스 초기화 완료');
+
+        // 환경변수로 시드 실행 제어
+        if (process.env.RUN_SEED === 'true') {
+            logger.info('시드 데이터 실행 중...');
+            const { seedDatabase } = require('./database/seed');
+            await seedDatabase();
+            logger.info('시드 데이터 실행 완료');
+        }
         
         // 서버 시작
         server.listen(PORT, () => {
