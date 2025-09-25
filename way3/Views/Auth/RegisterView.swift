@@ -11,13 +11,14 @@ import AVKit
 
 struct RegisterView: View {
     @Binding var isPresented: Bool
+    @EnvironmentObject private var authManager: AuthManager
 
     // 폼 데이터
     @State private var name = ""
     @State private var username = ""
     @State private var password = ""
     @State private var passwordConfirm = ""
-    @State private var recoveryEmail = ""
+    @State private var email = ""
     @State private var termsAccepted = false
 
     // 유효성 검사 상태
@@ -128,7 +129,7 @@ extension RegisterView {
             PasswordConfirmField
 
             // 복구 이메일 필드
-            RecoveryEmailField
+            EmailField
 
             // 개인정보 약관 체크박스
             TermsCheckbox
@@ -285,19 +286,19 @@ extension RegisterView {
         }
     }
 
-    // MARK: - Recovery Email Field
-    var RecoveryEmailField: some View {
+    // MARK: - Email Field
+    var EmailField: some View {
         VStack(alignment: .leading, spacing: 5) {
             IDTextField(
-                text: $recoveryEmail,
-                placeholder: "복구 이메일",
+                text: $email,
+                placeholder: "이메일",
                 icon: "envelope.fill"
             )
-            .onChange(of: recoveryEmail) { _ in
+            .onChange(of: email) { _ in
                 validateEmail()
             }
 
-            if !recoveryEmail.isEmpty && !emailValid {
+            if !email.isEmpty && !emailValid {
                 Text("올바른 이메일 형식을 입력해주세요")
                     .font(.chosunOrFallback(size: 12))
                     .foregroundColor(.red)
@@ -379,8 +380,6 @@ extension RegisterView {
 extension RegisterView {
     private var isFormValid: Bool {
         return nameValid &&
-               usernameValid &&
-               usernameAvailable == true &&
                passwordValid &&
                passwordsMatch &&
                emailValid &&
@@ -388,7 +387,7 @@ extension RegisterView {
     }
 
     private func validateName() {
-        let nameRegex = "^[가-힣a-zA-Z]{2,10}$"
+        let nameRegex = "^[가-힣a-zA-Z]{2,20}$"
         nameValid = NSPredicate(format: "SELF MATCHES %@", nameRegex).evaluate(with: name)
     }
 
@@ -408,7 +407,7 @@ extension RegisterView {
 
     private func validateEmail() {
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        emailValid = NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: recoveryEmail)
+        emailValid = NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
     }
 
     private func checkUsernameAvailability() async {
@@ -424,16 +423,29 @@ extension RegisterView {
     }
 
     private func performRegistration() async {
-        isRegistering = true
-        errorMessage = ""
+        guard !isRegistering else { return }
 
-        // TODO: 실제 서버 API 호출
-        // 임시로 딜레이 추가
-        try? await Task.sleep(nanoseconds: 2_000_000_000)
+        await MainActor.run {
+            isRegistering = true
+            errorMessage = ""
+        }
 
-        // 임시 성공 처리
-        isRegistering = false
-        showSuccessModal = true
+        await authManager.register(email: email.trimmingCharacters(in: .whitespacesAndNewlines),
+                                    password: password,
+                                    playerName: name.trimmingCharacters(in: .whitespacesAndNewlines))
+
+        await MainActor.run {
+            isRegistering = false
+
+            if authManager.isAuthenticated {
+                errorMessage = ""
+                showSuccessModal = true
+            } else {
+                errorMessage = authManager.errorMessage.isEmpty
+                    ? "회원가입에 실패했습니다. 잠시 후 다시 시도해주세요."
+                    : authManager.errorMessage
+            }
+        }
     }
 }
 
@@ -501,7 +513,7 @@ extension RegisterView {
                     - 고객 지원 및 문의 응답
 
                     2. 수집하는 개인정보 항목
-                    - 필수: 이름, 아이디, 비밀번호, 복구 이메일
+                    - 필수: 이름, 비밀번호, 이메일
                     - 선택: 게임 플레이 기록, 위치 정보
 
                     3. 개인정보의 보유 및 이용 기간
@@ -564,4 +576,5 @@ extension RegisterView {
 
 #Preview {
     RegisterView(isPresented: .constant(true))
+        .environmentObject(AuthManager.shared)
 }

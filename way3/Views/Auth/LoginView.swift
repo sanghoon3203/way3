@@ -226,6 +226,7 @@ extension LoginView {
         .padding(.horizontal, 20)
         .fullScreenCover(isPresented: $showRegisterView) {
             RegisterView(isPresented: $showRegisterView)
+                .environmentObject(authManager)
         }
         .fullScreenCover(isPresented: $showForgotPasswordView) {
             ForgotPasswordView(isPresented: $showForgotPasswordView)
