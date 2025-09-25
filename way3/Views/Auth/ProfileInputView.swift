@@ -327,7 +327,7 @@ extension ProfileInputView {
     }
 
     private func startTypingDialogue() {
-        typeDialogue(currentStep.dialogueText)
+        typeDialogue(currentStep.dialogueText(playerName: playerName))
     }
 
     private func typeDialogue(_ text: String) {
@@ -682,7 +682,7 @@ enum ProfileStep: CaseIterable {
     case profileImage
     case completion
 
-    var dialogueText: String {
+    func dialogueText(playerName: String = "") -> String {
         switch self {
         case .name:
             return "안녕! 난 해치야. 네오-서울의 세계에 온 걸 환영해!\n\n이곳은 미래의 도시, 온갖 상인들이 모여 거래하는 곳이지. 너도 이제 우리 중 하나가 되는 거야.\n\n먼저, 너의 이름은 뭐야?"

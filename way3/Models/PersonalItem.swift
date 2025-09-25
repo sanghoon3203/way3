@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 // MARK: - Personal Item Model
-struct PersonalItem: Identifiable, Codable {
+struct PersonalItem: Identifiable, Codable, Equatable {
     let id: String
     let itemTemplateId: String
     let name: String
@@ -102,7 +102,7 @@ enum PersonalItemType: String, Codable, CaseIterable {
 }
 
 // MARK: - Item Effect
-struct ItemEffect: Codable {
+struct ItemEffect: Codable, Equatable {
     let type: EffectType
     let value: Int
     let duration: TimeInterval
@@ -190,7 +190,7 @@ enum EffectType: String, Codable, CaseIterable {
 }
 
 // MARK: - Active Effect (지속 효과)
-struct ActiveEffect: Identifiable, Codable {
+struct ActiveEffect: Identifiable, Codable, Equatable {
     let id: Int
     let itemTemplateId: String
     let itemName: String
@@ -226,7 +226,7 @@ struct ActiveEffect: Identifiable, Codable {
 }
 
 // MARK: - Permanent Effect (영구 효과)
-struct PermanentEffect: Codable {
+struct PermanentEffect: Codable, Equatable {
     let itemTemplateId: String
     let itemName: String
     let effectType: EffectType
@@ -241,7 +241,8 @@ struct PermanentEffect: Codable {
 // MARK: - Server Response Models
 struct PersonalItemsResponse: Codable {
     let success: Bool
-    let data: PersonalItemsData
+    let data: PersonalItemsData?
+    let error: String?
 }
 
 struct PersonalItemsData: Codable {
@@ -279,7 +280,8 @@ struct ItemEffectServerData: Codable {
 
 struct ActiveEffectsResponse: Codable {
     let success: Bool
-    let data: ActiveEffectsData
+    let data: ActiveEffectsData?
+    let error: String?
 }
 
 struct ActiveEffectsData: Codable {
@@ -305,6 +307,20 @@ struct PermanentEffectServerData: Codable {
     let effectType: String
     let effectValue: Int
     let isPermanent: Bool
+}
+
+// MARK: - Personal Item Action Response
+struct PersonalItemActionResponse: Codable {
+    let success: Bool
+    let data: PersonalItemActionData?
+    let message: String?
+    let error: String?
+}
+
+struct PersonalItemActionData: Codable {
+    let itemId: String
+    let action: String
+    let effects: [String]?
 }
 
 // MARK: - Data Conversion Extensions
@@ -377,3 +393,6 @@ extension PermanentEffect {
         )
     }
 }
+
+// MARK: - ItemGrade Extension for Personal Items
+// fromServerGrade method is already defined in GameEnums.swift

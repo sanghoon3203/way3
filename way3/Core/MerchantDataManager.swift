@@ -218,7 +218,12 @@ struct MerchantPreviewResponse: Codable {
     let location: LocationResponse
     let distance: Int
     let canTrade: Bool
+    let requiredLicense: Int
+    let reputationRequirement: Int
+    let priceModifier: Double
+    let negotiationDifficulty: Int
     let inventoryCount: Int
+    let lastRestocked: String
 }
 
 

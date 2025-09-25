@@ -1146,19 +1146,7 @@ struct QuestHistoryItem: Codable {
 }
 
 // MARK: - Personal Items Response Models
-struct PersonalItemActionResponse: Codable {
-    let success: Bool
-    let data: PersonalItemActionData?
-    let message: String?
-    let error: String?
-}
-
-struct PersonalItemActionData: Codable {
-    let item: PersonalItemServerData
-    let effectsApplied: [ItemEffectServerData]?
-    let activeEffects: [ActiveEffectServerData]?
-    let message: String?
-}
+// PersonalItemActionResponse and PersonalItemActionData are defined in PersonalItem.swift
 
 // MARK: - Profile Response Models
 struct ProfileCreationResponse: Codable {

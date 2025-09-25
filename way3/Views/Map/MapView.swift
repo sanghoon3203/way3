@@ -147,8 +147,8 @@ struct MapView: View {
             // 서버에서 상인 목록 가져오기
             let networkManager = NetworkManager.shared
             let response = try await networkManager.getNearbyMerchants(
-                latitude: gameManager.currentPlayer?.currentLat ?? 37.5665,
-                longitude: gameManager.currentPlayer?.currentLng ?? 126.9780,
+                latitude: gameManager.currentPlayer?.currentLocation?.latitude ?? 37.5665,
+                longitude: gameManager.currentPlayer?.currentLocation?.longitude ?? 126.9780,
                 radius: 10000 // 10km 반경
             )
 
@@ -158,21 +158,23 @@ struct MapView: View {
                     id: merchantData.id,
                     name: merchantData.name,
                     type: convertServerTypeToMerchantType(merchantData.type),
+                    district: SeoulDistrict.fromCoordinate(lat: merchantData.location.lat, lng: merchantData.location.lng),
                     coordinate: CLLocationCoordinate2D(
                         latitude: merchantData.location.lat,
                         longitude: merchantData.location.lng
                     ),
+                    requiredLicense: LicenseLevel(rawValue: merchantData.requiredLicense) ?? .beginner,
                     isActive: merchantData.canTrade,
-                    imageFileName: merchantData.imageFileName
+                    imageFileName: generateImageFileName(from: merchantData.name)
                 )
             }
 
             // UI 업데이트
             serverMerchants = merchants
-            GameLogger.shared.logDebug("서버에서 \(merchants.count)명의 상인 데이터 로드 완료", category: .networking)
+            GameLogger.shared.logDebug("서버에서 \(merchants.count)명의 상인 데이터 로드 완료", category: .network)
 
         } catch {
-            GameLogger.shared.logError("상인 데이터 로드 실패: \(error)", category: .networking)
+            GameLogger.shared.logError("상인 데이터 로드 실패: \(error)", category: .network)
             // 오류 시 빈 배열 유지 (fallback은 서버에서 처리됨)
         }
 
@@ -325,9 +327,7 @@ struct MapView: View {
     private func createModelWithOptimization(url: URL) -> Model {
         return Model(
             uri: url,
-            orientation: [0, 0, 180],
-            scale: playerModelScale,
-            opacity: playerModelOpacity
+            orientation: [0, 0, 180]
         )
     }
 
@@ -348,6 +348,31 @@ struct MapView: View {
         case 11...20: return "expert"  // 전문가: 정장, 브리프케이스
         default: return "master"       // 마스터: 화려한 복장
         }
+    }
+
+    // MARK: - 상인 이미지 파일명 생성
+    private func generateImageFileName(from merchantName: String) -> String {
+        // 서버에서 받은 상인 이름을 Resources 폴더 구조에 맞게 변환
+        // 예: "서예나" -> "Seoyena"
+        let imageFileName = convertKoreanNameToFileName(merchantName)
+        return imageFileName
+    }
+
+    private func convertKoreanNameToFileName(_ koreanName: String) -> String {
+        // 한국 이름 -> 영어 파일명 매핑
+        let nameMapping: [String: String] = [
+            "서예나": "Seoyena",
+            "알리스강": "Alicegang",
+            "아니박": "Anipark",
+            "카타리나최": "Catarinachoi",
+            "진백호": "Jinbaekho",
+            "주불수": "Jubulsu",
+            "기주리": "Kijuri",
+            "김세휘": "Kimsehwui",
+            "마리": "Mari"
+        ]
+
+        return nameMapping[koreanName] ?? koreanName
     }
 
     // 📦 기본 빈 모델 (로컬 모델 없을 때 사용)

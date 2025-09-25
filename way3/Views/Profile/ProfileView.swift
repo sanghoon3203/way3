@@ -154,7 +154,7 @@ struct ProfileContentView: View {
                     )
 
                     // Cyberpunk Trading Dashboard
-                    CyberpunkTradingDashboard(player: player)
+                    CyberpunkTradingDashboard(profile: player)
 
                     // Cyberpunk Control Panel (Settings)
                     CyberpunkControlPanel()

@@ -66,7 +66,7 @@ class DialogueDataManager: ObservableObject {
 
     // MARK: - Dependencies
     private let networkManager = NetworkManager.shared
-    private let aiManager = AIDialogueManager(configuration: .fromEnvironment())
+    private let aiProvider = AIDialogueProvider.shared
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - 대화 데이터 로딩
@@ -172,119 +172,51 @@ class DialogueDataManager: ObservableObject {
         }
     }
 
-    // MARK: - AI 기반 대화 생성
+    // MARK: - AI 기반 대화 생성 (간단한 버전)
     private func generateAIDialogue(
         dialogueSet: MerchantDialogueSet,
         category: DialogueCategory,
         context: DialogueContext?
     ) async -> String {
-        do {
-            // 실제 상인 데이터를 서버에서 가져오기
-            guard let merchantDetail = await createMerchantProfileFromServer(merchantId: dialogueSet.merchantId) else {
-                // 서버 데이터 가져오기 실패시 기존 방식으로 폴백
-                return selectAppropriateDialogue(
-                    from: dialogueSet,
-                    category: category,
-                    context: context
-                )
-            }
+        // 간단한 AI 대화 생성
+        let situationContext = mapCategoryToSituation(category)
+        let mood = mapPersonalityToMood(dialogueSet.personality)
 
-            // MerchantDetailResponse를 MerchantProfile로 변환 (AI 시스템 호환성)
-            let merchantProfile = MerchantProfile(
-                id: merchantDetail.id,
-                name: merchantDetail.name,
-                title: merchantDetail.title,
-                type: merchantDetail.merchantType,
-                personality: merchantDetail.personalityType,
-                district: merchantDetail.seoulDistrict,
-                coordinate: merchantDetail.coordinate,
-                requiredLicense: merchantDetail.licenseLevel,
-                reputationRequirement: merchantDetail.reputationRequirement,
-                priceModifier: merchantDetail.priceModifier,
-                negotiationDifficulty: merchantDetail.negotiationDifficulty,
-                preferredCategories: merchantDetail.preferredCategories,
-                dislikedCategories: merchantDetail.dislikedCategories
-            )
+        return aiProvider.generateContextualDialogue(
+            merchantName: dialogueSet.merchantName,
+            playerName: "플레이어", // TODO: 실제 플레이어 이름
+            situation: situationContext,
+            mood: mood
+        )
+    }
 
-            let aiContext = AIDialogueContext(
-                merchantProfile: merchantProfile,
-                playerContext: createPlayerContext(from: context),
-                situationContext: createSituationContext(category: category),
-                relationshipContext: createRelationshipContext(from: context),
-                environmentContext: createEnvironmentContext(from: context),
-                existingDialogues: dialogueSet.dialogues[category.rawValue] ?? [],
-                requestedCategory: category,
-                conversationHistory: []
-            )
-
-            let response = try await aiManager.generateAIDialogue(context: aiContext)
-            return response.generatedText
-
-        } catch {
-            // AI 실패시 기존 방식으로 폴백
-            return selectAppropriateDialogue(
-                from: dialogueSet,
-                category: category,
-                context: context
-            )
+    // MARK: - 헬퍼 메서드
+    private func mapCategoryToSituation(_ category: DialogueCategory) -> DialogueSituation {
+        switch category {
+        case .greeting:
+            return .firstMeeting
+        case .trading:
+            return .negotiation
+        case .goodbye:
+            return .completedTrade
+        case .relationship:
+            return .regularCustomer
+        case .special:
+            return .browsingOnly
         }
     }
 
-    // MARK: - AI 컨텍스트 생성 헬퍼
-    private func createMerchantProfileFromServer(merchantId: String) async -> MerchantDetailResponse? {
-        // MerchantDataManager에서 실제 서버 데이터 가져오기
-        do {
-            return try await MerchantDataManager.shared.fetchMerchantDetail(merchantId: merchantId)
-        } catch {
-            print("❌ DialogueDataManager: Failed to fetch merchant detail: \(error)")
-            return nil
+    private func mapPersonalityToMood(_ personality: String) -> DialogueMood {
+        switch personality.lowercased() {
+        case "friendly", "친절":
+            return .friendly
+        case "energetic", "젊은":
+            return .happy
+        case "cold", "차가운":
+            return .serious
+        default:
+            return .neutral
         }
-    }
-
-    private func createPlayerContext(from context: DialogueContext?) -> PlayerDialogueContext {
-        return PlayerDialogueContext(
-            playerName: "플레이어",  // TODO: 실제 플레이어 이름
-            playerLevel: 1,
-            playerReputation: context?.playerRelationshipLevel ?? 0,
-            recentActions: context?.recentPurchases ?? [],
-            preferredStyle: nil
-        )
-    }
-
-    private func createSituationContext(category: DialogueCategory) -> SituationContext {
-        let action: DialogueAction = {
-            switch category {
-            case .greeting: return .greeting
-            case .trading: return .trading
-            case .goodbye: return .leaving
-            default: return .browsing
-            }
-        }()
-
-        return SituationContext(
-            currentAction: action,
-            urgency: .normal,
-            mood: nil,
-            constraints: []
-        )
-    }
-
-    private func createRelationshipContext(from context: DialogueContext?) -> RelationshipContext {
-        return RelationshipContext(
-            friendshipLevel: context?.playerRelationshipLevel ?? 0,
-            trustLevel: context?.playerRelationshipLevel ?? 0,
-            sharedHistory: [],
-            lastInteraction: context?.lastInteractionTime
-        )
-    }
-
-    private func createEnvironmentContext(from context: DialogueContext?) -> EnvironmentContext {
-        return EnvironmentContext(
-            timeOfDay: context?.timeOfDay ?? "day",
-            weather: nil,
-            crowdLevel: "normal",
-            marketConditions: nil
-        )
     }
 
     private func selectAppropriateDialogue(
