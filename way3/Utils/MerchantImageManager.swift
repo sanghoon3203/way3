@@ -8,6 +8,7 @@
 
 import SwiftUI
 import UIKit
+import Foundation
 
 // MARK: - 상인 이미지 관리자
 class MerchantImageManager: ObservableObject {
@@ -16,13 +17,14 @@ class MerchantImageManager: ObservableObject {
     // MARK: - 이미지 캐시
     @Published private var imageCache: [String: UIImage] = [:]
     private var loadingImages: Set<String> = []
+    private var failedRemoteImages: Set<String> = []
 
     private init() {
         preloadCommonImages()
     }
 
     // MARK: - 상인 이미지 이름 매칭
-    static func getImageName(for merchantName: String) -> String {
+    static func getImageName(for merchantName: String, imageFileName: String?) -> String? {
         // 1. 기본 변환: 공백 제거, 특수문자 정리
         let cleanName = merchantName
             .replacingOccurrences(of: " ", with: "")
@@ -30,29 +32,43 @@ class MerchantImageManager: ObservableObject {
             .replacingOccurrences(of: "_", with: "")
             .lowercased()
 
-        // 2. 가능한 이미지 파일명 패턴들
-        let possibleNames = [
-            // 직접 매칭
-            merchantName,                           // "Alice Gang"
-            cleanName,                             // "alicegang"
-            merchantName.replacingOccurrences(of: " ", with: ""), // "AliceGang"
+        // 서버에서 제공한 파일명이 있다면 우선적으로 후보에 포함
+        var possibleNames: [String] = []
+        if let imageFileName,
+           !imageFileName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            let sanitized = imageFileName
+                .replacingOccurrences(of: "\\", with: "/")
+                .components(separatedBy: "/")
+                .last ?? imageFileName
 
-            // Asset 폴더명 기반 매칭
-            "\(cleanName)/image",                  // "alicegang/image"
-            "\(cleanName)/portrait",               // "alicegang/portrait"
-            "\(cleanName)/character",              // "alicegang/character"
-            "\(cleanName)/merchant",               // "alicegang/merchant"
+            let baseName = sanitized
+                .replacingOccurrences(of: ".png", with: "")
+                .replacingOccurrences(of: ".jpg", with: "")
+                .replacingOccurrences(of: ".jpeg", with: "")
 
-            // 소문자 변형
-            cleanName.lowercased(),                // "alicegang"
+            possibleNames.append(contentsOf: [
+                baseName,
+                baseName.replacingOccurrences(of: " ", with: ""),
+                baseName.lowercased()
+            ])
+        }
+
+        // 2. 기존 이름 기반 패턴
+        possibleNames.append(contentsOf: [
+            merchantName,
+            cleanName,
+            merchantName.replacingOccurrences(of: " ", with: ""),
+            "\(cleanName)/image",
+            "\(cleanName)/portrait",
+            "\(cleanName)/character",
+            "\(cleanName)/merchant",
+            cleanName.lowercased(),
             merchantName.lowercased().replacingOccurrences(of: " ", with: ""),
-
-            // Prefix/Suffix 패턴
-            "merchant_\(cleanName)",               // "merchant_alicegang"
-            "\(cleanName)_merchant",               // "alicegang_merchant"
-            "char_\(cleanName)",                   // "char_alicegang"
-            "\(cleanName)_char"                    // "alicegang_char"
-        ]
+            "merchant_\(cleanName)",
+            "\(cleanName)_merchant",
+            "char_\(cleanName)",
+            "\(cleanName)_char"
+        ])
 
         // 3. 이미지 존재 확인
         for imageName in possibleNames {
@@ -69,11 +85,8 @@ class MerchantImageManager: ObservableObject {
             return assetImageName
         }
 
-        // 5. 기본 이미지 반환
-        #if DEBUG
-        print("⚠️ No image found for merchant: \(merchantName), using default")
-        #endif
-        return "default_merchant"
+        // 기본값 없음 (플레이스홀더로 처리)
+        return nil
     }
 
     // MARK: - Asset 폴더 내 이미지 탐색
@@ -108,35 +121,78 @@ class MerchantImageManager: ObservableObject {
     }
 
     // MARK: - 비동기 이미지 로드
-    func loadImage(for merchantName: String) -> UIImage? {
-        let imageName = Self.getImageName(for: merchantName)
+    func loadImage(for merchantName: String, imageFileName: String?) -> UIImage? {
+        if let assetName = Self.getImageName(for: merchantName, imageFileName: imageFileName) {
+            if let cachedImage = imageCache[assetName] {
+                return cachedImage
+            }
 
-        // 캐시에서 확인
-        if let cachedImage = imageCache[imageName] {
-            return cachedImage
-        }
+            guard !loadingImages.contains(assetName) else {
+                return nil
+            }
 
-        // 이미 로딩 중인지 확인
-        guard !loadingImages.contains(imageName) else {
+            loadingImages.insert(assetName)
+
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                if let image = UIImage(named: assetName) {
+                    DispatchQueue.main.async {
+                        self?.imageCache[assetName] = image
+                        self?.loadingImages.remove(assetName)
+                        self?.objectWillChange.send()
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self?.loadingImages.remove(assetName)
+                    }
+                }
+            }
+
             return nil
         }
 
-        // 로딩 시작
-        loadingImages.insert(imageName)
-
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            if let image = UIImage(named: imageName) {
-                DispatchQueue.main.async {
-                    self?.imageCache[imageName] = image
-                    self?.loadingImages.remove(imageName)
-                    self?.objectWillChange.send()
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self?.loadingImages.remove(imageName)
-                }
-            }
+        guard let imageFileName,
+              !imageFileName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            return nil
         }
+
+        let cacheKey = "remote::\(imageFileName)"
+
+        if let cachedImage = imageCache[cacheKey] {
+            return cachedImage
+        }
+
+        guard !loadingImages.contains(cacheKey), !failedRemoteImages.contains(cacheKey) else {
+            return nil
+        }
+
+        guard let remoteURL = Self.remoteImageURL(for: imageFileName) else {
+            failedRemoteImages.insert(cacheKey)
+            return nil
+        }
+
+        loadingImages.insert(cacheKey)
+
+        let request = URLRequest(url: remoteURL, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 15)
+
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            DispatchQueue.main.async {
+                self?.loadingImages.remove(cacheKey)
+            }
+
+            guard error == nil,
+                  let data,
+                  let image = UIImage(data: data) else {
+                DispatchQueue.main.async {
+                    self?.failedRemoteImages.insert(cacheKey)
+                }
+                return
+            }
+
+            DispatchQueue.main.async {
+                self?.imageCache[cacheKey] = image
+                self?.objectWillChange.send()
+            }
+        }.resume()
 
         return nil
     }
@@ -156,6 +212,7 @@ class MerchantImageManager: ObservableObject {
     func clearCache() {
         imageCache.removeAll()
         loadingImages.removeAll()
+        failedRemoteImages.removeAll()
     }
 
     func getCachedImage(name: String) -> UIImage? {
@@ -172,16 +229,40 @@ class MerchantImageManager: ObservableObject {
     }
 }
 
+// MARK: - Remote Utilities
+private extension MerchantImageManager {
+    static func remoteImageURL(for fileName: String) -> URL? {
+        let trimmed = fileName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+
+        let sanitized = trimmed.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? trimmed
+
+        // 서버에서 절대 경로를 내려주지 않는다면 기본 public 경로를 사용
+        let baseURL = NetworkConfiguration.baseURL
+
+        if sanitized.hasPrefix("http://") || sanitized.hasPrefix("https://") {
+            return URL(string: sanitized)
+        }
+
+        if sanitized.hasPrefix("/") {
+            return URL(string: "\(baseURL)\(sanitized)")
+        }
+
+        return URL(string: "\(baseURL)/public/merchants/\(sanitized)")
+    }
+}
+
 // MARK: - SwiftUI View Extension
 extension View {
     func merchantImage(merchantName: String, width: CGFloat = 120, height: CGFloat = 120) -> some View {
-        MerchantImageView(merchantName: merchantName, width: width, height: height)
+        MerchantImageView(merchantName: merchantName, imageFileName: nil, width: width, height: height)
     }
 }
 
 // MARK: - 상인 이미지 뷰 컴포넌트
 struct MerchantImageView: View {
     let merchantName: String
+    let imageFileName: String?
     let width: CGFloat
     let height: CGFloat
 
@@ -189,7 +270,7 @@ struct MerchantImageView: View {
 
     var body: some View {
         Group {
-            if let image = imageManager.loadImage(for: merchantName) {
+            if let image = imageManager.loadImage(for: merchantName, imageFileName: imageFileName) {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -259,4 +340,3 @@ struct JRPGMerchantPlaceholder: View {
         }
     }
 }
-

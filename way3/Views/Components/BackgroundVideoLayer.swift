@@ -46,6 +46,7 @@ struct BackgroundVideoLayer: View {
                 )
             }
         }
+        .ignoresSafeArea()
         .onAppear {
             setupVideo()
         }
@@ -55,20 +56,11 @@ struct BackgroundVideoLayer: View {
     }
 
     private func setupVideo() {
-        let videoPath: String?
-
-        if let directory = directory {
-            videoPath = Bundle.main.path(forResource: videoName, ofType: videoExtension, inDirectory: directory)
-        } else {
-            videoPath = Bundle.main.path(forResource: videoName, ofType: videoExtension)
-        }
-
-        guard let path = videoPath else {
+        guard let videoURL = locateVideoURL(named: videoName, withExtension: videoExtension, directory: directory) else {
             print("⚠️ 배경 영상을 찾을 수 없습니다: \(directory ?? "")/\(videoName).\(videoExtension)")
             return
         }
 
-        let videoURL = URL(fileURLWithPath: path)
         player = AVPlayer(url: videoURL)
         player?.isMuted = true
 
@@ -82,6 +74,28 @@ struct BackgroundVideoLayer: View {
         }
 
         player?.play()
+    }
+
+    private func locateVideoURL(named name: String, withExtension ext: String, directory: String?) -> URL? {
+        if let directory = directory,
+           let url = Bundle.main.url(forResource: name, withExtension: ext, subdirectory: directory) {
+            return url
+        }
+
+        if let url = Bundle.main.url(forResource: name, withExtension: ext) {
+            return url
+        }
+
+        if let directory = directory,
+           let path = Bundle.main.path(forResource: name, ofType: ext, inDirectory: directory) {
+            return URL(fileURLWithPath: path)
+        }
+
+        if let path = Bundle.main.path(forResource: name, ofType: ext) {
+            return URL(fileURLWithPath: path)
+        }
+
+        return nil
     }
 }
 
@@ -122,6 +136,7 @@ struct StartViewBackgroundLayer: View {
                 }
             }
         }
+        .ignoresSafeArea()
         .onAppear {
             setupRandomVideo()
         }
@@ -137,14 +152,13 @@ struct StartViewBackgroundLayer: View {
         // 선택된 비디오에 따라 배경 이미지 설정
         currentBackgroundImage = selectedVideoName == "bgmv1" ? "bg1" : "bg2"
 
-        guard let videoPath = Bundle.main.path(forResource: selectedVideoName, ofType: "mp4", inDirectory: "Bgmv") else {
+        guard let videoURL = resolveVideoURL(for: selectedVideoName) else {
             print("⚠️ 배경 영상을 찾을 수 없습니다: Bgmv/\(selectedVideoName).mp4")
             // 비디오가 없으면 바로 이미지로 전환
             showVideo = false
             return
         }
 
-        let videoURL = URL(fileURLWithPath: videoPath)
         player = AVPlayer(url: videoURL)
         player?.isMuted = true
 
@@ -161,6 +175,26 @@ struct StartViewBackgroundLayer: View {
 
         player?.play()
         print("🎥 랜덤 선택된 비디오: \(selectedVideoName) → 이후 배경: \(currentBackgroundImage)")
+    }
+
+    private func resolveVideoURL(for name: String) -> URL? {
+        if let url = Bundle.main.url(forResource: name, withExtension: "mp4", subdirectory: "Bgmv") {
+            return url
+        }
+
+        if let url = Bundle.main.url(forResource: name, withExtension: "mp4") {
+            return url
+        }
+
+        if let path = Bundle.main.path(forResource: name, ofType: "mp4", inDirectory: "Bgmv") {
+            return URL(fileURLWithPath: path)
+        }
+
+        if let path = Bundle.main.path(forResource: name, ofType: "mp4") {
+            return URL(fileURLWithPath: path)
+        }
+
+        return nil
     }
 
     private func FallbackGradient() -> some View {

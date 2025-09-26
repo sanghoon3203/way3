@@ -33,8 +33,8 @@ class MerchantDetailViewModel: ObservableObject {
     // MARK: - Dependencies
     private let dataManager = MerchantDataManager.shared
     private let dialogueManager = DialogueDataManager.shared
-    @StateObject private var cartManager = CartManager()
-    @StateObject private var gameManager = GameManager.shared
+    private var cartManager = CartManager()
+    private let gameManager = GameManager.shared
 
     private var cancellables = Set<AnyCancellable>()
     private var currentMerchantId: String?
@@ -56,6 +56,10 @@ class MerchantDetailViewModel: ObservableObject {
     // MARK: - 초기화
     init() {
         setupBindings()
+    }
+
+    func attachCartManager(_ manager: CartManager) {
+        self.cartManager = manager
     }
 
     private func setupBindings() {
@@ -143,6 +147,22 @@ class MerchantDetailViewModel: ObservableObject {
 
             await MainActor.run {
                 startTypingAnimation(text: dialogue)
+            }
+        }
+    }
+
+    func showThankYouDialogue() {
+        guard let merchantId = merchantDetail?.id else { return }
+
+        Task {
+            let farewell = await dialogueManager.getDialogue(
+                merchantId: merchantId,
+                category: .goodbye,
+                context: createDialogueContext()
+            )
+
+            await MainActor.run {
+                startTypingAnimation(text: farewell)
             }
         }
     }
@@ -306,5 +326,3 @@ class MerchantDetailViewModel: ObservableObject {
         }
     }
 }
-
-

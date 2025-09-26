@@ -11,8 +11,8 @@ import Foundation
 // MARK: - Standard API Response
 struct APIResponse<T: Codable>: Codable {
     let success: Bool
-    let timestamp: String
-    let statusCode: Int
+    let timestamp: String?
+    let statusCode: Int?
     let message: String?
     let data: T?
     let meta: ResponseMeta?
@@ -266,7 +266,7 @@ extension Result where Success: Codable, Failure == NetworkError {
         if response.isSuccess, let data = response.data {
             return .success(data)
         } else if let apiError = response.error {
-            return .failure(NetworkError.fromAPIError(apiError, statusCode: response.statusCode))
+            return .failure(NetworkError.fromAPIError(apiError, statusCode: response.statusCode ?? 400))
         } else {
             return .failure(.custom("Unknown API error"))
         }

@@ -56,104 +56,26 @@ struct CartItem: Identifiable {
 
 // MARK: - MerchantDetailView 로직 확장
 extension MerchantDetailView {
-    // 임시 상인 대화 데이터 (나중에 merchant 폴더별로 구성)
-    public var merchantDialogues: [String] {
-        [
-            "안녕하세요! \(merchant.name)입니다. 오늘 좋은 거래를 하러 오셨나요?",
-            "저희 상점은 \(merchant.district.displayName)에서 가장 오래된 곳이에요.",
-            "신선하고 좋은 상품만 골라서 준비했습니다!",
-            "혹시 특별히 찾으시는 물건이 있으신가요?"
-        ]
-    }
-
-    // 구매 후 감사 대화
-    public var thankYouMessages: [String] {
-        [
-            "좋은 거래였습니다! 감사합니다!",
-            "또 언제든 오세요. 항상 환영입니다!",
-            "좋은 상품 잘 선택하셨어요. 만족하실 거예요!",
-            "다음에도 좋은 상품으로 기다리고 있겠습니다!"
-        ]
-    }
-
-    // 대화 시작
     func startDialogue() {
-        if !merchantDialogues.isEmpty {
-            typeDialogue(merchantDialogues[0])
-        }
+        viewModel.startDialogue()
     }
 
-    // 타이핑 애니메이션
-    private func typeDialogue(_ text: String) {
-        displayedText = ""
-        isTypingComplete = false
-        showNextArrow = false
-
-        let characters = Array(text)
-        var currentIndex = 0
-
-        Timer.scheduledTimer(withTimeInterval: 0.08, repeats: true) { timer in
-            if currentIndex < characters.count {
-                displayedText += String(characters[currentIndex])
-                currentIndex += 1
-
-                // 타이핑 효과 햅틱
-                if currentIndex % 4 == 0 {
-                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                    impactFeedback.impactOccurred()
-                }
-            } else {
-                timer.invalidate()
-                isTypingComplete = true
-
-                // 잠시 후 화살표 표시
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        showNextArrow = true
-                    }
-                }
-            }
-        }
-    }
-
-    // 다음 대화로 진행
-    func proceedToNextDialogue() {
-        currentDialogueIndex += 1
-        if currentDialogueIndex < merchantDialogues.count {
-            typeDialogue(merchantDialogues[currentDialogueIndex])
-        } else {
-            // 대화 끝 - 선택지만 표시
-            showNextArrow = false
-        }
-    }
-
-    // 대화 계속하기
     func continueDialogue() {
-        if currentDialogueIndex >= merchantDialogues.count - 1 {
-            // 처음부터 다시 시작
-            currentDialogueIndex = 0
-            typeDialogue(merchantDialogues[0])
-        } else {
-            proceedToNextDialogue()
-        }
+        viewModel.continueDialogue()
     }
 
-    // 나가기
     func exitMerchant() {
         isPresented = false
     }
 
-    // 아이템 선택 시 수량 팝업 표시
     func selectItem(_ item: TradeItem) {
         selectedItem = item
         showQuantityPopup = true
     }
 
-    // 구매 완료 후 감사 대화
     func showThankYouDialogue() {
         currentMode = .dialogue
-        let randomMessage = thankYouMessages.randomElement() ?? "감사합니다!"
-        typeDialogue(randomMessage)
+        viewModel.showThankYouDialogue()
     }
 }
 
@@ -603,4 +525,3 @@ struct CartItemRow: View {
         )
     }
 }
-

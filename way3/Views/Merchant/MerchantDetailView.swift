@@ -14,7 +14,7 @@ struct MerchantDetailView: View {
     @EnvironmentObject var gameManager: GameManager
 
     // 🚀 하드코딩 제거: ViewModel 사용
-    @StateObject private var viewModel = MerchantDetailViewModel()
+    @StateObject var viewModel = MerchantDetailViewModel()
     
     // 대화 상태
     @State var currentMode: MerchantInteractionMode = .dialogue
@@ -108,10 +108,15 @@ struct MerchantDetailView: View {
         .clipped()
         .navigationBarHidden(true)
         .onAppear {
+            viewModel.attachCartManager(cartManager)
             Task {
                 await viewModel.loadMerchant(id: merchant.id)
             }
         }
+        .onReceive(viewModel.$displayedText) { displayedText = $0 }
+        .onReceive(viewModel.$isTypingComplete) { isTypingComplete = $0 }
+        .onReceive(viewModel.$showNextArrow) { showNextArrow = $0 }
+        .onReceive(viewModel.$currentDialogueIndex) { currentDialogueIndex = $0 }
     }
 }
 
@@ -217,7 +222,11 @@ extension MerchantDetailView {
 
     // MARK: - 사이버펑크 스타일 상인 캐릭터 (JRPG 애니메이션 유지)
     var CyberpunkMerchantCharacter: some View {
-        ZStack {
+        let baseWidth: CGFloat = JRPGScreenManager.isLargeScreen ? 270 : 220
+        let baseHeight: CGFloat = baseWidth * (16.0 / 9.0)
+        let cornerRadius: CGFloat = 12
+
+        return ZStack {
             // 사이버펑크 캐릭터 홀로그램 배경
             Rectangle()
                 .fill(
@@ -228,20 +237,20 @@ extension MerchantDetailView {
                         endRadius: 80
                     )
                 )
-                .frame(width: 160, height: 160)
-                .clipShape(RoundedRectangle(cornerRadius: 4)) // 각진 사이버펑크 스타일
-                .scaleEffect(JRPGScreenManager.isLargeScreen ? 1.2 : 1.0)
+                .frame(width: baseWidth, height: baseHeight)
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius)) // 각진 사이버펑크 스타일
                 .overlay(
                     // 홀로그램 효과 테두리
-                    RoundedRectangle(cornerRadius: 4)
-                        .stroke(Color.cyberpunkCyan.opacity(0.6), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .stroke(Color.cyberpunkCyan.opacity(0.6), lineWidth: 1.2)
                 )
 
             // 동적 상인 이미지 (Asset 폴더 자동 매칭) - 기존 시스템 유지
             MerchantImageView(
                 merchantName: merchant.name,
-                width: JRPGScreenManager.isLargeScreen ? 140 : 120,
-                height: JRPGScreenManager.isLargeScreen ? 140 : 120
+                imageFileName: merchant.imageFileName,
+                width: baseWidth * 0.9,
+                height: baseHeight * 0.9
             )
             // 캐릭터 살랑살랑 애니메이션 유지
             .offset(y: sin(Date().timeIntervalSince1970) * 3)
@@ -252,8 +261,8 @@ extension MerchantDetailView {
             )
             .overlay(
                 // 홀로그램 글리치 효과
-                RoundedRectangle(cornerRadius: 4)
-                    .stroke(Color.cyberpunkYellow.opacity(0.3), lineWidth: 0.5)
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .stroke(Color.cyberpunkYellow.opacity(0.3), lineWidth: 0.6)
                     .opacity(sin(Date().timeIntervalSince1970 * 8) * 0.5 + 0.5)
             )
         }
@@ -488,17 +497,11 @@ extension MerchantDetailView {
 
     // MARK: - 선택지 액션들
     func startTrading() {
+        viewModel.startTrading()
         withAnimation(.easeInOut(duration: 0.5)) {
             currentMode = .trading
         }
     }
-
-
-    // Extensions에 정의된 함수들과 연결하기 위한 래퍼
-    func getDialogues() -> [String] {
-        return merchantDialogues
-    }
-
     func closeDialogue() {
         withAnimation(.easeInOut(duration: 0.5)) {
             isPresented = false

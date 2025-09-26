@@ -1,6 +1,7 @@
 import SwiftUI
 @_spi(Experimental) import MapboxMaps
 import CoreLocation
+import UIKit
 
 /**
  * 🎯 3D Player Puck 사용 가이드:
@@ -51,6 +52,9 @@ struct MapView: View {
 
     // 플레이어 위치를 동기화하기 위한 computed property
     private var synchronizedLocation: CLLocationCoordinate2D? {
+        if let currentGameLocation = gameManager.currentLocation {
+            return currentGameLocation
+        }
         if let playerLocation = gameManager.currentPlayer?.currentLocation {
             return playerLocation
         }
@@ -61,6 +65,9 @@ struct MapView: View {
     private let merchantDataManager = MerchantDataManager.shared
     @State private var serverMerchants: [Merchant] = []
     @State private var isLoadingMerchants = false
+    @State private var lastMerchantRequestLocation: CLLocationCoordinate2D?
+    private let merchantSearchRadius: Double = 2000
+    private let defaultMerchantCoordinate = CLLocationCoordinate2D(latitude: 37.5665, longitude: 126.9780)
 
     // ⚡ 성능 최적화: 화면에 보이는 상인만 표시
     private var allMerchants: [Merchant] {
@@ -130,6 +137,31 @@ struct MapView: View {
         .onAppear {
             setupGameEnvironment()
         }
+        .onReceive(locationManager.$currentLocation.compactMap { $0 }) { latestLocation in
+            userLocation = latestLocation
+            withViewportAnimation(.default(maxDuration: 1.0)) {
+                viewport = .camera(
+                    center: latestLocation,
+                    zoom: 16,
+                    bearing: 45,
+                    pitch: 65
+                )
+            }
+
+            let shouldReloadMerchants: Bool
+            if let previousLocation = lastMerchantRequestLocation {
+                let distance = calculateDistance(from: previousLocation, to: latestLocation)
+                shouldReloadMerchants = distance >= 200
+            } else {
+                shouldReloadMerchants = true
+            }
+
+            if shouldReloadMerchants {
+                Task {
+                    await loadMerchantsFromServer()
+                }
+            }
+        }
         .task {
             // 서버에서 상인 데이터 로드
             await loadMerchantsFromServer()
@@ -146,14 +178,16 @@ struct MapView: View {
         do {
             // 서버에서 상인 목록 가져오기
             let networkManager = NetworkManager.shared
+            let currentCoordinate = synchronizedLocation ?? defaultMerchantCoordinate
+            let clampedRadius = min(max(merchantSearchRadius, 100), 5000)
             let response = try await networkManager.getNearbyMerchants(
-                latitude: gameManager.currentPlayer?.currentLocation?.latitude ?? 37.5665,
-                longitude: gameManager.currentPlayer?.currentLocation?.longitude ?? 126.9780,
-                radius: 10000 // 10km 반경
+                latitude: currentCoordinate.latitude,
+                longitude: currentCoordinate.longitude,
+                radius: clampedRadius
             )
 
             // 서버 응답을 Merchant 모델로 변환
-            let merchants = response.merchants.map { merchantData in
+            var merchants = response.merchants.map { merchantData in
                 Merchant(
                     id: merchantData.id,
                     name: merchantData.name,
@@ -169,8 +203,43 @@ struct MapView: View {
                 )
             }
 
+            var coordinateUsed = currentCoordinate
+
+            // 근처 상인이 없으면 서울 중심 좌표로 폴백
+            if merchants.isEmpty {
+                let fallbackRadius = 5000.0
+                let fallbackResponse = try await networkManager.getNearbyMerchants(
+                    latitude: defaultMerchantCoordinate.latitude,
+                    longitude: defaultMerchantCoordinate.longitude,
+                    radius: fallbackRadius
+                )
+
+                let fallbackMerchants = fallbackResponse.merchants.map { merchantData in
+                    Merchant(
+                        id: merchantData.id,
+                        name: merchantData.name,
+                        type: convertServerTypeToMerchantType(merchantData.type),
+                        district: SeoulDistrict.fromCoordinate(lat: merchantData.location.lat, lng: merchantData.location.lng),
+                        coordinate: CLLocationCoordinate2D(
+                            latitude: merchantData.location.lat,
+                            longitude: merchantData.location.lng
+                        ),
+                        requiredLicense: LicenseLevel(rawValue: merchantData.requiredLicense) ?? .beginner,
+                        isActive: merchantData.canTrade,
+                        imageFileName: generateImageFileName(from: merchantData.name)
+                    )
+                }
+
+                if !fallbackMerchants.isEmpty {
+                    merchants = fallbackMerchants
+                    coordinateUsed = defaultMerchantCoordinate
+                    GameLogger.shared.logInfo("실제 위치 주변에 상인이 없어 서울 좌표로 폴백했습니다", category: .network)
+                }
+            }
+
             // UI 업데이트
             serverMerchants = merchants
+            lastMerchantRequestLocation = coordinateUsed
             GameLogger.shared.logDebug("서버에서 \(merchants.count)명의 상인 데이터 로드 완료", category: .network)
 
         } catch {
@@ -507,7 +576,14 @@ struct MapView: View {
 
     private func centerOnPlayerLocation() {
         if let location = synchronizedLocation {
-            focusCamera(on: location, zoom: 16)
+            withViewportAnimation(.default(maxDuration: 1.0)) {
+                viewport = .camera(
+                    center: location,
+                    zoom: 16,
+                    bearing: 45,
+                    pitch: 65
+                )
+            }
         }
     }
 
@@ -558,17 +634,7 @@ struct OptimizedMerchantPinView: View {
 
     @State private var animationScale: CGFloat = 1.0
     @State private var pulseOpacity: Double = 0.7
-
-    // 상인 이미지 이름 추출 (서버에서 받아온 imageFileName 사용)
-    private var merchantImageName: String {
-        // 서버에서 imageFileName이 있으면 사용, 없으면 이름 기반으로 생성
-        if let imageFileName = merchant.imageFileName, !imageFileName.isEmpty {
-            return imageFileName.replacingOccurrences(of: ".png", with: "")
-        } else {
-            // 폴백: 상인 이름에서 공백 제거
-            return merchant.name.replacingOccurrences(of: " ", with: "")
-        }
-    }
+    @StateObject private var imageManager = MerchantImageManager.shared
 
     private var isNearby: Bool {
         guard let userLoc = userLocation else { return false }
@@ -611,8 +677,8 @@ struct OptimizedMerchantPinView: View {
                 .overlay(
                     // 실제 상인 이미지 사용
                     Group {
-                        if let _ = UIImage(named: merchantImageName) {
-                            Image(merchantImageName)
+                        if let image = imageManager.loadImage(for: merchant.name, imageFileName: merchant.imageFileName) {
+                            Image(uiImage: image)
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 32, height: 32)

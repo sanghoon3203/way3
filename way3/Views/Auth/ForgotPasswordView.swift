@@ -73,7 +73,7 @@ struct ForgotPasswordView: View {
 // MARK: - Content Layer
 extension ForgotPasswordView {
     var ContentLayer1: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             VStack(spacing: 30) {
                 // 헤더
                 HeaderComponent
@@ -84,10 +84,11 @@ extension ForgotPasswordView {
                 } else {
                     Step2Component
                 }
-
-                Spacer(minLength: 40)
             }
-            .padding(.top, 20)
+            .frame(maxWidth: 420)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 48)
+            .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 

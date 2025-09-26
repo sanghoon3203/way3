@@ -43,5 +43,9 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>ChosunCentennial_otf.otf</string>
+	</array>
 </dict>
 </plist>

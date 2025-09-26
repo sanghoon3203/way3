@@ -67,17 +67,18 @@ struct RegisterView: View {
 // MARK: - Content Layer
 extension RegisterView {
     var ContentLayer2: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             VStack(spacing: 30) {
                 // 뒤로가기 + 헤더
                 HeaderComponent
 
                 // 회원가입 폼
                 RegisterFormComponent
-
-                Spacer(minLength: 40)
             }
-            .padding(.top, 20)
+            .frame(maxWidth: 420)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 48)
+            .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 

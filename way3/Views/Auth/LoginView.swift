@@ -68,10 +68,8 @@ struct BlurOverlayLayer: View {
 // MARK: - Content Layer
 extension LoginView {
     func ContentLayer() -> some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             VStack(spacing: 40) {
-                Spacer(minLength: 60)
-
                 // 로고 컴포넌트
                 LogoComponent
 
@@ -80,9 +78,11 @@ extension LoginView {
 
                 // 액션 버튼들
                 ActionButtonsComponent
-
-                Spacer(minLength: 40)
             }
+            .frame(maxWidth: 420)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 48)
+            .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 

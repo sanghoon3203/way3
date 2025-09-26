@@ -231,6 +231,7 @@ class AuthManager: ObservableObject {
         self.currentPlayer = nil
         self.isAuthenticated = false
         NetworkManager.shared.applyAuthTokens(accessToken: nil, refreshToken: nil)
+        NetworkManager.shared.applyAuthTokens(accessToken: nil, refreshToken: nil)
 
         GameLogger.shared.logInfo("모든 인증 정보 삭제됨", category: .authentication)
     }

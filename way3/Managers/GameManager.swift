@@ -1339,11 +1339,13 @@ class GameManager: ObservableObject {
         player.inventory.maxInventorySize = detail.maxInventorySize
 
         // 위치 정보 업데이트
-        if detail.location.lat != 0 && detail.location.lng != 0 {
-            player.currentLocation = CLLocationCoordinate2D(
-                latitude: detail.location.lat,
-                longitude: detail.location.lng
-            )
+        if let location = detail.currentLocation {
+            if location.lat != 0 && location.lng != 0 {
+                player.currentLocation = CLLocationCoordinate2D(
+                    latitude: location.lat,
+                    longitude: location.lng
+                )
+            }
         }
 
         // 인벤토리 업데이트 (기존 인벤토리 클리어 후 서버 데이터로 대체)
@@ -1358,6 +1360,19 @@ class GameManager: ObservableObject {
                 basePrice: inventoryItem.basePrice
             )
             player.inventory.inventory.append(tradeItem)
+        }
+
+        player.inventory.storageItems.removeAll()
+        for storageItem in detail.storageItems {
+            let tradeItem = TradeItem(
+                itemId: storageItem.id,
+                name: storageItem.name,
+                category: storageItem.category,
+                grade: ItemGrade(rawValue: storageItem.grade == "common" ? 0 : storageItem.grade == "intermediate" ? 1 : storageItem.grade == "advanced" ? 2 : storageItem.grade == "rare" ? 3 : 4) ?? .common,
+                requiredLicense: LicenseLevel(rawValue: storageItem.requiredLicense) ?? .beginner,
+                basePrice: storageItem.basePrice
+            )
+            player.inventory.storageItems.append(tradeItem)
         }
 
         // 캐시에 저장

@@ -414,20 +414,23 @@ extension NetworkManager {
             }
             
             // ✅ HTTP 상태 코드 처리
-            switch httpResponse.statusCode {
-            case 200...299:
-                break
-            case 401:
-                await MainActor.run {
-                    self.logout() // 자동 로그아웃
-                }
-                throw NetworkError.unauthorized
-            case 400...499:
-                // 클라이언트 오류는 응답 본문에서 상세 정보 추출 시도
-                if let errorData = try? JSONDecoder().decode(APIResponse<EmptyData>.self, from: data),
-                   let apiError = errorData.error {
-                    throw NetworkError.fromAPIError(apiError)
-                } else {
+        switch httpResponse.statusCode {
+        case 200...299:
+            break
+        case 401:
+            await MainActor.run {
+                self.logout() // 자동 로그아웃
+            }
+            throw NetworkError.unauthorized
+        case 400...499:
+            if let bodyString = String(data: data, encoding: .utf8) {
+                GameLogger.shared.logDebug("클라이언트 오류 응답: \(bodyString)", category: .network)
+            }
+            // 클라이언트 오류는 응답 본문에서 상세 정보 추출 시도
+            if let errorData = try? JSONDecoder().decode(APIResponse<EmptyData>.self, from: data),
+               let apiError = errorData.error {
+                throw NetworkError.fromAPIError(apiError)
+            } else {
                     throw NetworkError.clientError(httpResponse.statusCode)
                 }
             case 500...599:
@@ -940,26 +943,140 @@ struct PlayerInfo: Codable {
 struct PlayerDetail: Codable {
     let id: String
     let name: String
+    let level: Int
+    let experience: Int
     let money: Int
     let trustPoints: Int
+    let reputation: Int
     let currentLicense: Int
     let maxInventorySize: Int
-    let location: LocationData
-    let inventory: [InventoryItem]
+    let maxStorageSize: Int
+    let statPoints: Int
+    let skillPoints: Int
+    let strength: Int
+    let intelligence: Int
+    let charisma: Int
+    let luck: Int
+    let tradingSkill: Int
+    let negotiationSkill: Int
+    let appraisalSkill: Int
+    let currentLocation: LocationData?
+    let totalTrades: Int
+    let totalProfit: Int
+    let createdAt: String
+    let lastActive: String
+    let totalPlayTime: Int
     let inventoryCount: Int
+    let storageCount: Int
+    let inventory: [InventoryItem]
+    let storageItems: [InventoryItem]
+    let recentTrades: [RecentTrade]
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, level, experience, money
+        case trustPoints = "trustPoints"
+        case reputation
+        case currentLicense = "currentLicense"
+        case maxInventorySize = "maxInventorySize"
+        case maxStorageSize = "maxStorageSize"
+        case statPoints = "statPoints"
+        case skillPoints = "skillPoints"
+        case strength, intelligence, charisma, luck
+        case tradingSkill = "tradingSkill"
+        case negotiationSkill = "negotiationSkill"
+        case appraisalSkill = "appraisalSkill"
+        case currentLocation = "currentLocation"
+        case totalTrades = "totalTrades"
+        case totalProfit = "totalProfit"
+        case createdAt = "createdAt"
+        case lastActive = "lastActive"
+        case totalPlayTime = "totalPlayTime"
+        case inventoryCount = "inventoryCount"
+        case storageCount = "storageCount"
+        case inventory
+        case storageItems
+        case recentTrades
+    }
 }
 
 // LocationData는 APIResponse.swift에 정의됨
 
 struct InventoryItem: Codable {
     let id: String
+    let itemTemplateId: String?
     let name: String
     let category: String
     let basePrice: Int
-    let currentPrice: Int
+    let currentPrice: Int?
     let grade: String
     let requiredLicense: Int
-    let acquiredAt: String
+    let quantity: Int
+    let acquiredAt: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case itemTemplateId = "item_template_id"
+        case name
+        case category
+        case basePrice = "base_price"
+        case currentPrice = "current_price"
+        case grade
+        case requiredLicense = "required_license"
+        case quantity
+        case acquiredAt = "acquired_at"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        itemTemplateId = try container.decodeIfPresent(String.self, forKey: .itemTemplateId)
+        name = try container.decodeIfPresent(String.self, forKey: .name) ?? ""
+        category = try container.decodeIfPresent(String.self, forKey: .category) ?? ""
+        basePrice = try container.decodeIfPresent(Int.self, forKey: .basePrice) ?? 0
+        currentPrice = try container.decodeIfPresent(Int.self, forKey: .currentPrice)
+        requiredLicense = try container.decodeIfPresent(Int.self, forKey: .requiredLicense) ?? 0
+        quantity = try container.decodeIfPresent(Int.self, forKey: .quantity) ?? 0
+        acquiredAt = try container.decodeIfPresent(String.self, forKey: .acquiredAt)
+
+        if let gradeInt = try? container.decode(Int.self, forKey: .grade) {
+            grade = InventoryItem.gradeName(for: gradeInt)
+        } else if let gradeString = try? container.decode(String.self, forKey: .grade) {
+            grade = gradeString
+        } else {
+            grade = "common"
+        }
+    }
+
+    private static func gradeName(for value: Int) -> String {
+        switch value {
+        case 0: return "common"
+        case 1: return "intermediate"
+        case 2: return "advanced"
+        case 3: return "rare"
+        case 4: return "legendary"
+        default: return "common"
+        }
+    }
+}
+
+struct RecentTrade: Codable {
+    let id: String
+    let tradeType: String?
+    let itemName: String?
+    let merchantName: String?
+    let quantity: Int?
+    let totalPrice: Int?
+    let createdAt: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case tradeType = "trade_type"
+        case itemName = "item_name"
+        case merchantName = "merchant_name"
+        case quantity
+        case totalPrice = "total_price"
+        case createdAt = "created_at"
+    }
 }
 
 struct MarketPrice: Codable {
