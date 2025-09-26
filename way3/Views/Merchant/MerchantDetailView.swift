@@ -40,18 +40,20 @@ struct MerchantDetailView: View {
     var merchantInventoryGridView: some View {
         MerchantInventoryView(
             merchant: merchant,
-            tradeManager: cartManager as! TradeManager,
+            cartManager: cartManager,
             viewModel: viewModel,
-            tradeType: .buy
+            tradeType: .buy,
+            onItemTap: selectItem
         )
     }
 
     var playerInventoryGridView: some View {
         PlayerInventoryView(
             merchant: merchant,
-            tradeManager: cartManager as! TradeManager,
+            cartManager: cartManager,
             viewModel: viewModel,
-            tradeType: .sell
+            tradeType: .sell,
+            onItemTap: selectItem
         )
     }
     
@@ -724,10 +726,11 @@ struct TabSelectionView: View {
 // MARK: - 상인 인벤토리 (구매 탭) - 🚀 하드코딩 제거 완료!
 struct MerchantInventoryView: View {
     let merchant: Merchant
-    @ObservedObject var tradeManager: TradeManager
+    @ObservedObject var cartManager: CartManager
     @ObservedObject var viewModel: MerchantDetailViewModel
     let tradeType: TradeType
-    
+    let onItemTap: (TradeItem) -> Void
+
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [
@@ -738,9 +741,11 @@ struct MerchantInventoryView: View {
                     TradeItemCard(
                         item: item,
                         tradeType: tradeType,
-                        isSelected: tradeManager.selectedItems.contains { $0.id == item.id },
+                        isSelected: cartManager.items.contains { cartItem in
+                            cartItem.item.id == item.id && cartItem.type == tradeType
+                        },
                         onTap: {
-                            tradeManager.toggleItem(item, type: tradeType)
+                            onItemTap(item)
                         }
                     )
                 }
@@ -753,10 +758,11 @@ struct MerchantInventoryView: View {
 // MARK: - 플레이어 인벤토리 (판매 탭) - 🚀 하드코딩 제거 완료!
 struct PlayerInventoryView: View {
     let merchant: Merchant
-    @ObservedObject var tradeManager: TradeManager
+    @ObservedObject var cartManager: CartManager
     @ObservedObject var viewModel: MerchantDetailViewModel
     let tradeType: TradeType
-    
+    let onItemTap: (TradeItem) -> Void
+
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [
@@ -767,9 +773,11 @@ struct PlayerInventoryView: View {
                     TradeItemCard(
                         item: item,
                         tradeType: tradeType,
-                        isSelected: tradeManager.selectedItems.contains { $0.id == item.id },
+                        isSelected: cartManager.items.contains { cartItem in
+                            cartItem.item.id == item.id && cartItem.type == tradeType
+                        },
                         onTap: {
-                            tradeManager.toggleItem(item, type: tradeType)
+                            onItemTap(item)
                         }
                     )
                 }

@@ -18,17 +18,20 @@ enum TradeType: String, Codable {
     case exchange = "exchange"
 }
 
+/// 서버 거래 API 요청 시 발생할 수 있는 오류
+enum TradeRequestError: Error {
+    case emptyCart
+    case unsupportedTradeType
+}
+
 // TradeItem is defined in Models/TradeItem.swift
 
 struct TradeRequest: Codable {
     let merchantId: String
-    let items: [TradeItemRequest]
-}
-
-struct TradeItemRequest: Codable {
-    let itemId: String
+    let itemTemplateId: String
+    let tradeType: TradeType
     let quantity: Int
-    let action: TradeType
+    let proposedPrice: Int
 }
 
 struct TradeResult: Codable {
@@ -96,18 +99,50 @@ class TradeManager: ObservableObject {
     // MARK: - 거래 실행
     /// CartItem 배열을 사용한 거래 실행 (MerchantDetailViewModel용)
     func executeTrade(with merchantId: String, cartItems: [CartItem]) async throws -> TradeResult {
-        let tradeRequest = TradeRequest(
-            merchantId: merchantId,
-            items: cartItems.map { cartItem in
-                TradeItemRequest(
-                    itemId: cartItem.item.id,
-                    quantity: cartItem.quantity,
-                    action: cartItem.type
-                )
-            }
-        )
+        guard !cartItems.isEmpty else {
+            throw TradeRequestError.emptyCart
+        }
 
-        return try await performTradeRequest(tradeRequest)
+        var totalAmount = 0
+        var totalExperience = 0
+        var purchasedIds: [String] = []
+        var soldIds: [String] = []
+        var lastMessage = ""
+
+        for cartItem in cartItems {
+            guard cartItem.type != .exchange else {
+                throw TradeRequestError.unsupportedTradeType
+            }
+
+            let request = TradeRequest(
+                merchantId: merchantId,
+                itemTemplateId: cartItem.item.itemId,
+                tradeType: cartItem.type,
+                quantity: cartItem.quantity,
+                proposedPrice: calculateProposedPrice(for: cartItem.item, quantity: cartItem.quantity, tradeType: cartItem.type)
+            )
+
+            let result = try await performTradeRequest(request)
+
+            guard result.success else {
+                return result
+            }
+
+            totalAmount += result.totalAmount
+            totalExperience += result.experienceGained
+            purchasedIds.append(contentsOf: result.purchasedItemIds)
+            soldIds.append(contentsOf: result.soldItemIds)
+            lastMessage = result.message
+        }
+
+        return TradeResult(
+            success: true,
+            message: lastMessage.isEmpty ? "거래가 완료되었습니다." : lastMessage,
+            totalAmount: totalAmount,
+            experienceGained: totalExperience,
+            purchasedItemIds: purchasedIds,
+            soldItemIds: soldIds
+        )
     }
 
     /// 기존 방식의 거래 실행 (기존 UI용)
@@ -118,18 +153,19 @@ class TradeManager: ObservableObject {
         }
         
         do {
-            let tradeRequest = TradeRequest(
-                merchantId: merchant.id,
-                items: selectedItems.map { item in
-                    TradeItemRequest(
-                        itemId: item.id,
-                        quantity: item.quantity,
-                        action: .buy // 현재는 구매만 구현
-                    )
+            guard !selectedItems.isEmpty else {
+                await MainActor.run {
+                    errorMessage = "거래할 아이템을 선택해주세요."
+                    isLoading = false
                 }
-            )
-            
-            let result = try await performTradeRequest(tradeRequest)
+                return
+            }
+
+            let cartItems = selectedItems.map { selection in
+                CartItem(item: selection, quantity: selection.quantity, type: .buy)
+            }
+
+            let result = try await executeTrade(with: merchant.id, cartItems: cartItems)
             
             await MainActor.run {
                 if result.success {
@@ -188,7 +224,7 @@ class TradeManager: ObservableObject {
         guard let url = URL(string: baseURL + "/execute") else {
             throw URLError(.badURL)
         }
-        
+
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
         urlRequest.allHTTPHeaderFields = AuthManager.shared.getAuthHeaders()
@@ -212,6 +248,24 @@ class TradeManager: ObservableObject {
         }
         
         return try JSONDecoder().decode(TradeResult.self, from: data)
+    }
+
+    // MARK: - 제안 가격 계산
+    private func calculateProposedPrice(for item: TradeItem, quantity: Int, tradeType: TradeType) -> Int {
+        let totalPrice = item.currentPrice * quantity
+
+        switch tradeType {
+        case .buy:
+            return totalPrice
+        case .sell:
+            if let purchasePrice = item.purchasePrice {
+                let desired = Int(Double(purchasePrice) * Double(quantity) * 1.1)
+                return max(totalPrice, desired)
+            }
+            return totalPrice
+        case .exchange:
+            return totalPrice
+        }
     }
     
     // MARK: - 햅틱 피드백

@@ -88,7 +88,7 @@ extension MerchantDetailView {
                     GridItem(.flexible(minimum: 120, maximum: 200)),
                     GridItem(.flexible(minimum: 120, maximum: 200))
                 ], spacing: 15) {
-                    ForEach(sampleMerchantItems) { item in
+                    ForEach(viewModel.inventory) { item in
                         SimpleTradeItemCard(item: item) {
                             selectItem(item)
                         }
@@ -107,7 +107,7 @@ extension MerchantDetailView {
                     GridItem(.flexible(minimum: 120, maximum: 200)),
                     GridItem(.flexible(minimum: 120, maximum: 200))
                 ], spacing: 15) {
-                    ForEach(samplePlayerItems) { item in
+                    ForEach(viewModel.playerInventory) { item in
                         SimpleTradeItemCard(item: item) {
                             selectItem(item)
                         }
@@ -117,25 +117,6 @@ extension MerchantDetailView {
                 .padding(.vertical, 16)
             }
         }
-    }
-
-    // 임시 상인 아이템들
-    private var sampleMerchantItems: [TradeItem] {
-        [
-            TradeItem(itemId: "m1", name: "고급 쌀", category: "food", grade: .common, requiredLicense: .beginner, basePrice: 2500, description: "고품질 쌀"),
-            TradeItem(itemId: "m2", name: "한우", category: "food", grade: .rare, requiredLicense: .intermediate, basePrice: 15000, description: "최고급 한우"),
-            TradeItem(itemId: "m3", name: "인삼", category: "food", grade: .intermediate, requiredLicense: .intermediate, basePrice: 8000, description: "6년근 인삼"),
-            TradeItem(itemId: "m4", name: "전통차", category: "food", grade: .common, requiredLicense: .beginner, basePrice: 4500, description: "전통 한국차")
-        ]
-    }
-
-    // 임시 플레이어 아이템들
-    private var samplePlayerItems: [TradeItem] {
-        [
-            TradeItem(itemId: "p1", name: "사과", category: "food", grade: .common, requiredLicense: .beginner, basePrice: 800, description: "신선한 사과"),
-            TradeItem(itemId: "p2", name: "배", category: "food", grade: .common, requiredLicense: .beginner, basePrice: 1200, description: "달콤한 배"),
-            TradeItem(itemId: "p3", name: "고구마", category: "food", grade: .common, requiredLicense: .beginner, basePrice: 600, description: "고구마")
-        ]
     }
 
     // 장바구니 상세 화면

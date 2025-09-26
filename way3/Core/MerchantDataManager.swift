@@ -38,7 +38,7 @@ class MerchantDataManager: ObservableObject {
 
         // 서버 응답을 TradeItem으로 변환
         let tradeItems = response.inventory.map { serverItem in
-            TradeItem(
+            var item = TradeItem(
                 itemId: serverItem.itemTemplateId,
                 name: serverItem.name,
                 category: serverItem.category,
@@ -50,6 +50,8 @@ class MerchantDataManager: ObservableObject {
                 description: serverItem.description,
                 iconId: serverItem.iconId
             )
+            item.quantity = serverItem.quantity
+            return item
         }
 
         // 캐시 저장
