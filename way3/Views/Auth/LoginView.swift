@@ -8,13 +8,14 @@
 
 import SwiftUI
 import AVKit
+import UIKit
 
 struct LoginView: View {
     @Binding var showLoginView: Bool
     @EnvironmentObject var authManager: AuthManager
 
     // 폼 상태
-    @State private var username = ""
+    @State private var email = ""
     @State private var password = ""
     @State private var isAutoLoginEnabled = false
     @State private var showPassword = false
@@ -23,6 +24,7 @@ struct LoginView: View {
     @State private var loginState: LoginState = .idle
     @State private var showRegisterView = false
     @State private var showForgotPasswordView = false
+    @State private var errorMessage = ""
 
     var body: some View {
         ZStack {
@@ -103,12 +105,16 @@ extension LoginView {
     // MARK: - Login Form Component
     var LoginFormComponent: some View {
         VStack(spacing: 20) {
-            // 아이디 입력 필드
+            // 이메일 입력 필드
             IDTextField(
-                text: $username,
-                placeholder: "아이디",
-                icon: "person.fill"
+                text: $email,
+                placeholder: "이메일",
+                icon: "envelope.fill",
+                keyboardType: .emailAddress
             )
+            .onChange(of: email) { _ in
+                clearLoginError()
+            }
 
             // 비밀번호 입력 필드
             NeoSeoulSecureField(
@@ -116,9 +122,20 @@ extension LoginView {
                 placeholder: "비밀번호",
                 showPassword: $showPassword
             )
+            .onChange(of: password) { _ in
+                clearLoginError()
+            }
 
             // 자동 로그인 체크박스
             AutoLoginToggle
+
+            if !errorMessage.isEmpty {
+                Text(errorMessage)
+                    .font(.chosunOrFallback(size: 14))
+                    .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 8)
+            }
 
             // 로그인 버튼
             LoginButton
@@ -230,6 +247,7 @@ extension LoginView {
         }
         .fullScreenCover(isPresented: $showForgotPasswordView) {
             ForgotPasswordView(isPresented: $showForgotPasswordView)
+                .environmentObject(authManager)
         }
     }
 }
@@ -239,6 +257,7 @@ struct IDTextField: View {
     @Binding var text: String
     let placeholder: String
     let icon: String
+    var keyboardType: UIKeyboardType = .default
 
     var body: some View {
         HStack(spacing: 12) {
@@ -250,8 +269,10 @@ struct IDTextField: View {
             TextField(placeholder, text: $text)
                 .font(.chosunOrFallback(size: 16))
                 .foregroundColor(.white)
+                .textInputAutocapitalization(.never)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
+                .keyboardType(keyboardType)
                 .textFieldStyle(PlainTextFieldStyle())
         }
         .padding(.horizontal, 16)
@@ -367,7 +388,9 @@ extension LoginView {
     }
 
     private var isLoginButtonActive: Bool {
-        !username.isEmpty && !password.isEmpty && loginState != .authenticating
+        !email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        !password.isEmpty &&
+        loginState != .authenticating
     }
 
     private var loginButtonText: String {
@@ -385,29 +408,38 @@ extension LoginView {
 
     private func performLogin() async {
         loginState = .authenticating
+        errorMessage = ""
 
-        // TODO: 실제 서버 API 호출
-        // 임시로 딜레이 추가
-        try? await Task.sleep(nanoseconds: 1_500_000_000)
+        let sanitizedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
 
-        // 로그인 성공 시
-        if username == "test" && password == "test" {
-            loginState = .success
+        await authManager.login(email: sanitizedEmail, password: password)
 
-            // 자동 로그인 설정 저장
-            if isAutoLoginEnabled {
-                UserDefaults.standard.set(true, forKey: "autoLogin")
-                UserDefaults.standard.set(username, forKey: "savedUsername")
-            }
+        await MainActor.run {
+            if authManager.isAuthenticated {
+                loginState = .success
 
-            // LoginView 닫기
-            showLoginView = false
-        } else {
-            loginState = .failed("아이디 또는 비밀번호가 올바르지 않습니다.")
+                if isAutoLoginEnabled {
+                    UserDefaults.standard.set(true, forKey: "autoLogin")
+                    UserDefaults.standard.set(sanitizedEmail, forKey: "savedEmail")
+                } else {
+                    UserDefaults.standard.removeObject(forKey: "savedEmail")
+                }
 
-            // 2초 후 상태 초기화
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                loginState = .idle
+                showLoginView = false
+            } else {
+                let message = authManager.errorMessage.isEmpty
+                    ? "이메일 또는 비밀번호가 올바르지 않습니다."
+                    : authManager.errorMessage
+                errorMessage = message
+                loginState = .failed(message)
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    Task { @MainActor in
+                        if loginState == .failed(message) {
+                            loginState = .idle
+                        }
+                    }
+                }
             }
         }
     }
@@ -415,15 +447,30 @@ extension LoginView {
     private func loadAutoLoginPreference() {
         isAutoLoginEnabled = UserDefaults.standard.bool(forKey: "autoLogin")
         if isAutoLoginEnabled {
-            username = UserDefaults.standard.string(forKey: "savedUsername") ?? ""
+            if let savedEmail = UserDefaults.standard.string(forKey: "savedEmail") {
+                email = savedEmail
+            } else if let legacy = UserDefaults.standard.string(forKey: "savedUsername") {
+                email = legacy
+            }
         }
     }
 
     private func saveAutoLoginPreference() {
         UserDefaults.standard.set(isAutoLoginEnabled, forKey: "autoLogin")
-        if !isAutoLoginEnabled {
+        if isAutoLoginEnabled {
+            let sanitizedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            UserDefaults.standard.set(sanitizedEmail, forKey: "savedEmail")
+        } else {
+            UserDefaults.standard.removeObject(forKey: "savedEmail")
             UserDefaults.standard.removeObject(forKey: "savedUsername")
         }
+    }
+    
+    private func clearLoginError() {
+        if case .failed = loginState {
+            loginState = .idle
+        }
+        errorMessage = ""
     }
 }
 

@@ -11,13 +11,14 @@ import AVKit
 
 struct ForgotPasswordView: View {
     @Binding var isPresented: Bool
+    @EnvironmentObject private var authManager: AuthManager
 
     // 현재 단계
     @State private var currentStep: ForgotPasswordStep = .accountVerification
 
     // Step 1 데이터
     @State private var username = ""
-    @State private var recoveryEmail = ""
+    @State private var email = ""
 
     // Step 2 데이터
     @State private var verificationCode = ""
@@ -32,6 +33,7 @@ struct ForgotPasswordView: View {
     @State private var resendCooldown = 0
     @State private var resendCount = 0
     @State private var showSuccessModal = false
+    @State private var cooldownTimer: Timer? = nil
 
     // 유효성 검사
     @State private var passwordValid = false
@@ -60,6 +62,10 @@ struct ForgotPasswordView: View {
         .navigationBarHidden(true)
         .onAppear {
             startCooldownTimer()
+        }
+        .onDisappear {
+            cooldownTimer?.invalidate()
+            cooldownTimer = nil
         }
     }
 }
@@ -171,9 +177,10 @@ extension ForgotPasswordView {
 
                 // 복구 이메일 입력
                 IDTextField(
-                    text: $recoveryEmail,
+                    text: $email,
                     placeholder: "가입 시 등록한 복구 이메일",
-                    icon: "envelope.fill"
+                    icon: "envelope.fill",
+                    keyboardType: .emailAddress
                 )
 
                 // 에러 메시지
@@ -443,7 +450,8 @@ extension ForgotPasswordView {
     }
 
     private var isStep1Valid: Bool {
-        !username.isEmpty && !recoveryEmail.isEmpty && recoveryEmail.contains("@")
+        let sanitizedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
+        return !username.isEmpty && !sanitizedEmail.isEmpty && sanitizedEmail.contains("@")
     }
 
     private var isStep2Valid: Bool {
@@ -464,44 +472,114 @@ extension ForgotPasswordView {
     }
 
     private func sendVerificationCode() async {
-        isLoading = true
-        errorMessage = ""
+        guard !isLoading else { return }
 
-        // TODO: 실제 서버 API 호출
-        try? await Task.sleep(nanoseconds: 2_000_000_000)
+        let sanitizedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        // 임시 성공 처리
-        isLoading = false
-        currentStep = .passwordReset
-        maskedEmail = maskEmail(recoveryEmail)
-        resendCooldown = 30
-        resendCount = 1
+        await MainActor.run {
+            isLoading = true
+            errorMessage = ""
+        }
+
+        do {
+            let response = try await authManager.requestPasswordReset(email: sanitizedEmail)
+
+            await MainActor.run {
+                isLoading = false
+
+                if response.success {
+                    currentStep = .passwordReset
+                    maskedEmail = response.data?.maskedEmail ?? maskEmail(sanitizedEmail)
+                    if let devCode = response.data?.verificationCode {
+                        verificationCode = devCode
+                    } else {
+                        verificationCode = ""
+                    }
+                    resendCooldown = 30
+                    resendCount = 1
+                    startCooldownTimer()
+                } else {
+                    let validationMessage = response.details?.first?.msg
+                    errorMessage = validationMessage ?? response.error ?? response.message ?? "인증번호 전송에 실패했습니다."
+                }
+            }
+        } catch {
+            await MainActor.run {
+                isLoading = false
+                errorMessage = "네트워크 오류: \(error.localizedDescription)"
+            }
+        }
     }
 
     private func resendVerificationCode() async {
         if !canResend { return }
 
-        isLoading = true
-        errorMessage = ""
+        let sanitizedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        // TODO: 실제 서버 API 호출
-        try? await Task.sleep(nanoseconds: 1_500_000_000)
+        await MainActor.run {
+            isLoading = true
+            errorMessage = ""
+        }
 
-        isLoading = false
-        resendCount += 1
-        resendCooldown = 30
+        do {
+            let response = try await authManager.requestPasswordReset(email: sanitizedEmail)
+
+            await MainActor.run {
+                isLoading = false
+
+                if response.success {
+                    resendCount += 1
+                    resendCooldown = 30
+                    startCooldownTimer()
+                    if let devCode = response.data?.verificationCode {
+                        verificationCode = devCode
+                    }
+                } else {
+                    let validationMessage = response.details?.first?.msg
+                    errorMessage = validationMessage ?? response.error ?? response.message ?? "인증번호 재전송에 실패했습니다."
+                }
+            }
+        } catch {
+            await MainActor.run {
+                isLoading = false
+                errorMessage = "네트워크 오류: \(error.localizedDescription)"
+            }
+        }
     }
 
     private func resetPassword() async {
-        isLoading = true
-        errorMessage = ""
+        guard !isLoading else { return }
 
-        // TODO: 실제 서버 API 호출
-        try? await Task.sleep(nanoseconds: 2_000_000_000)
+        let sanitizedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        // 임시 성공 처리
-        isLoading = false
-        showSuccessModal = true
+        await MainActor.run {
+            isLoading = true
+            errorMessage = ""
+        }
+
+        do {
+            let response = try await authManager.verifyPasswordReset(
+                email: sanitizedEmail,
+                code: verificationCode,
+                newPassword: newPassword
+            )
+
+            await MainActor.run {
+                isLoading = false
+
+                if response.success {
+                    showSuccessModal = true
+                } else {
+                    let validationMessage = response.details?.first?.msg
+                    errorMessage = validationMessage ?? response.error ?? response.message ?? "비밀번호 변경에 실패했습니다."
+                }
+            }
+        } catch {
+            await MainActor.run {
+                isLoading = false
+                errorMessage = "네트워크 오류: \(error.localizedDescription)"
+            }
+        }
     }
 
     private func maskEmail(_ email: String) -> String {
@@ -519,12 +597,19 @@ extension ForgotPasswordView {
     }
 
     private func startCooldownTimer() {
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            if resendCooldown > 0 {
-                resendCooldown -= 1
-            } else {
-                timer.invalidate()
+        cooldownTimer?.invalidate()
+        cooldownTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            DispatchQueue.main.async {
+                if resendCooldown > 0 {
+                    resendCooldown -= 1
+                } else {
+                    timer.invalidate()
+                    cooldownTimer = nil
+                }
             }
+        }
+        if let cooldownTimer {
+            RunLoop.main.add(cooldownTimer, forMode: .common)
         }
     }
 }
@@ -600,4 +685,5 @@ extension ForgotPasswordView {
 
 #Preview {
     ForgotPasswordView(isPresented: .constant(true))
+        .environmentObject(AuthManager.shared)
 }

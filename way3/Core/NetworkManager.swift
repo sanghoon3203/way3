@@ -275,6 +275,14 @@ extension NetworkManager {
             }
         }
     }
+
+    // MARK: - Auth Token Sync
+    func applyAuthTokens(accessToken: String?, refreshToken: String?) {
+        requestQueue.async(flags: .barrier) {
+            self.authToken = accessToken
+            self.refreshToken = refreshToken
+        }
+    }
     
     private func getCachedResponse(for key: String) -> Data? {
         return requestQueue.sync {
@@ -600,7 +608,7 @@ extension NetworkManager {
 extension NetworkManager {
     func getPlayerData() async throws -> PlayerDataResponse {
         return try await makeRequest(
-            endpoint: "/game/player/data",
+            endpoint: "/player/data",
             requiresAuth: true,
             responseType: PlayerDataResponse.self,
             useCache: true
@@ -659,7 +667,7 @@ extension NetworkManager {
         ]
         
         return try await makeRequest(
-            endpoint: "/game/player/location",
+            endpoint: "/player/location",
             method: .PUT,
             body: body,
             requiresAuth: true,
@@ -669,14 +677,15 @@ extension NetworkManager {
     
     func getMarketPrices() async throws -> MarketPricesResponse {
         return try await makeRequest(
-            endpoint: "/game/market/prices",
+            endpoint: "/market/prices",
+            requiresAuth: true,
             responseType: MarketPricesResponse.self,
             useCache: true
         )
     }
     
     func getMerchants(latitude: Double? = nil, longitude: Double? = nil) async throws -> MerchantsResponse {
-        var endpoint = "/game/merchants"
+        var endpoint = "/merchants"
 
         if let lat = latitude, let lng = longitude {
             endpoint += "?lat=\(lat)&lng=\(lng)"
@@ -684,6 +693,7 @@ extension NetworkManager {
 
         return try await makeRequest(
             endpoint: endpoint,
+            requiresAuth: true,
             responseType: MerchantsResponse.self,
             useCache: true
         )
@@ -691,7 +701,7 @@ extension NetworkManager {
 
     func getMerchantDetail(merchantId: String) async throws -> MerchantDetailResponse {
         return try await makeRequest(
-            endpoint: "/game/merchants/\(merchantId)",
+            endpoint: "/merchants/\(merchantId)",
             requiresAuth: true,
             responseType: MerchantDetailResponse.self,
             useCache: true
@@ -700,7 +710,8 @@ extension NetworkManager {
 
     func getNearbyMerchants(latitude: Double, longitude: Double, radius: Double = 1000) async throws -> NearbyMerchantsResponse {
         return try await makeRequest(
-            endpoint: "/game/merchants/nearby?lat=\(latitude)&lng=\(longitude)&radius=\(radius)",
+            endpoint: "/merchants/nearby?lat=\(latitude)&lng=\(longitude)&radius=\(radius)",
+            requiresAuth: true,
             responseType: NearbyMerchantsResponse.self,
             useCache: true
         )
@@ -714,7 +725,7 @@ extension NetworkManager {
         ]
         
         return try await makeRequest(
-            endpoint: "/game/trade/buy",
+            endpoint: "/trade/buy",
             method: .POST,
             body: body,
             requiresAuth: true,
@@ -729,7 +740,7 @@ extension NetworkManager {
         ]
         
         return try await makeRequest(
-            endpoint: "/game/trade/sell",
+            endpoint: "/trade/sell",
             method: .POST,
             body: body,
             requiresAuth: true,
@@ -739,7 +750,7 @@ extension NetworkManager {
     
     func getTradeHistory(limit: Int = 20, offset: Int = 0) async throws -> TradeHistoryResponse {
         return try await makeRequest(
-            endpoint: "/game/trade/history?limit=\(limit)&offset=\(offset)",
+            endpoint: "/trade/history?limit=\(limit)&offset=\(offset)",
             requiresAuth: true,
             responseType: TradeHistoryResponse.self,
             useCache: true
@@ -749,7 +760,7 @@ extension NetworkManager {
     // MARK: - Quest API Methods
     func getQuests() async throws -> QuestListResponse {
         return try await makeRequest(
-            endpoint: "/game/quests",
+            endpoint: "/quests",
             method: .GET,
             requiresAuth: true,
             responseType: QuestListResponse.self,
@@ -759,7 +770,7 @@ extension NetworkManager {
     
     func acceptQuest(questId: String) async throws -> QuestActionResponse {
         return try await makeRequest(
-            endpoint: "/game/quests/\(questId)/accept",
+            endpoint: "/quests/\(questId)/accept",
             method: .POST,
             requiresAuth: true,
             responseType: QuestActionResponse.self
@@ -768,7 +779,7 @@ extension NetworkManager {
     
     func claimQuestReward(questId: String) async throws -> QuestRewardResponse {
         return try await makeRequest(
-            endpoint: "/game/quests/\(questId)/claim",
+            endpoint: "/quests/\(questId)/claim",
             method: .POST,
             requiresAuth: true,
             responseType: QuestRewardResponse.self
@@ -782,7 +793,7 @@ extension NetworkManager {
         ]
         
         return try await makeRequest(
-            endpoint: "/game/quests/progress",
+            endpoint: "/quests/progress",
             method: .POST,
             body: body,
             requiresAuth: true,
@@ -792,7 +803,7 @@ extension NetworkManager {
     
     func getQuestHistory(limit: Int = 20, offset: Int = 0) async throws -> QuestHistoryResponse {
         return try await makeRequest(
-            endpoint: "/game/quests/history?limit=\(limit)&offset=\(offset)",
+            endpoint: "/quests/history?limit=\(limit)&offset=\(offset)",
             requiresAuth: true,
             responseType: QuestHistoryResponse.self,
             useCache: true

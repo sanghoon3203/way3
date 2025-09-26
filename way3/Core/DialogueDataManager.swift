@@ -251,7 +251,7 @@ class DialogueDataManager: ObservableObject {
         // 현재는 단순 랜덤, 향후 AI 기반 선택으로 확장
         // TODO: AI 모델을 통한 컨텍스트 기반 대화 선택
         return dialogues.randomElement() ?? getFallbackDialogue(category: .greeting)
-    }
+    }   
 
     // MARK: - 대화 생성 헬퍼
     private func generateTradingDialogues(from profile: String) -> [String] {
@@ -370,7 +370,7 @@ enum DialogueError: LocalizedError {
 extension NetworkManager {
     func getMerchantDialogues(merchantId: String) async throws -> MerchantDialogueResponse {
         return try await makeRequest(
-            endpoint: "/game/merchants/\(merchantId)/dialogues",
+            endpoint: "/merchants/\(merchantId)/dialogues",
             requiresAuth: true,
             responseType: MerchantDialogueResponse.self,
             useCache: true

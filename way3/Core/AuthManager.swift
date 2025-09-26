@@ -45,6 +45,35 @@ struct PlayerData: Codable {
     let currentLicense: Int
 }
 
+struct PasswordResetData: Codable {
+    let maskedEmail: String?
+    let expiresIn: Int?
+    let verificationCode: String?
+}
+
+struct PasswordResetResponse: Codable {
+    let success: Bool
+    let message: String?
+    let data: PasswordResetData?
+    let error: String?
+    let details: [ValidationErrorDetail]?
+}
+
+struct ValidationErrorDetail: Codable {
+    let msg: String?
+    let param: String?
+}
+
+private struct PasswordResetRequestBody: Codable {
+    let email: String
+}
+
+private struct PasswordResetVerifyBody: Codable {
+    let email: String
+    let verificationCode: String
+    let newPassword: String
+}
+
 // MARK: - 인증 매니저
 class AuthManager: ObservableObject {
     static let shared = AuthManager()
@@ -87,6 +116,7 @@ class AuthManager: ObservableObject {
                let playerData = UserDefaults.standard.data(forKey: Keys.playerData) {
 
                 self.authToken = token
+                NetworkManager.shared.applyAuthTokens(accessToken: token, refreshToken: nil)
 
                 do {
                     self.currentPlayer = try JSONDecoder().decode(PlayerData.self, from: playerData)
@@ -111,6 +141,7 @@ class AuthManager: ObservableObject {
            let playerData = UserDefaults.standard.data(forKey: Keys.playerData) {
 
             self.authToken = token
+            NetworkManager.shared.applyAuthTokens(accessToken: token, refreshToken: nil)
 
             do {
                 self.currentPlayer = try JSONDecoder().decode(PlayerData.self, from: playerData)
@@ -148,6 +179,7 @@ class AuthManager: ObservableObject {
             self.authToken = authData.token
             self.refreshToken = authData.refreshToken
             self.currentPlayer = authData.player
+            NetworkManager.shared.applyAuthTokens(accessToken: authData.token, refreshToken: authData.refreshToken)
 
             GameLogger.shared.logInfo("인증 정보가 SecureStorage에 저장됨", category: .authentication)
 
@@ -175,6 +207,7 @@ class AuthManager: ObservableObject {
         self.authToken = authData.token
         self.refreshToken = authData.refreshToken
         self.currentPlayer = authData.player
+        NetworkManager.shared.applyAuthTokens(accessToken: authData.token, refreshToken: authData.refreshToken)
 
         GameLogger.shared.logInfo("레거시 방식으로 인증 정보 저장됨", category: .authentication)
     }
@@ -197,6 +230,7 @@ class AuthManager: ObservableObject {
         self.refreshToken = nil
         self.currentPlayer = nil
         self.isAuthenticated = false
+        NetworkManager.shared.applyAuthTokens(accessToken: nil, refreshToken: nil)
 
         GameLogger.shared.logInfo("모든 인증 정보 삭제됨", category: .authentication)
     }
@@ -319,6 +353,25 @@ class AuthManager: ObservableObject {
                 isLoading = false
             }
         }
+    }
+    
+    // MARK: - 비밀번호 재설정
+    func requestPasswordReset(email: String) async throws -> PasswordResetResponse {
+        let request = PasswordResetRequestBody(email: email)
+        return try await performRequest(
+            endpoint: "/password/reset/request",
+            method: "POST",
+            body: request
+        )
+    }
+    
+    func verifyPasswordReset(email: String, code: String, newPassword: String) async throws -> PasswordResetResponse {
+        let request = PasswordResetVerifyBody(email: email, verificationCode: code, newPassword: newPassword)
+        return try await performRequest(
+            endpoint: "/password/reset/verify",
+            method: "POST",
+            body: request
+        )
     }
     
     // MARK: - 로그아웃
