@@ -514,121 +514,237 @@ extension MerchantDetailView {
 
 
 
-// MARK: - 거래 화면
+// MARK: - 사이버펑크 거래 화면
 extension MerchantDetailView {
     var tradingView: some View {
         VStack(spacing: 0) {
-            // 상인 헤더
-            tradingHeaderView
+            // 사이버펑크 상인 헤더
+            cyberpunkTradingHeaderView
 
-            // 탭 선택 (구매/판매)
-            tradeTabSelectionView
+            // 사이버펑크 탭 선택 (구매/판매)
+            cyberpunkTradeTabSelectionView
 
-            // 아이템 그리드
+            // 아이템 그리드 (기존 데이터 구조 유지)
             if selectedTradeType == .buy {
                 merchantInventoryGridView
+                    .cyberpunkStatusBar(title: "MERCHANT_INVENTORY", status: "ONLINE")
             } else {
                 playerInventoryGridView
+                    .cyberpunkStatusBar(title: "PLAYER_INVENTORY", status: "ONLINE")
             }
 
-            // 장바구니 푸터
+            // 사이버펑크 장바구니 푸터
             if !cartManager.items.isEmpty {
-                cartFooterView
+                cyberpunkCartFooterView
             }
         }
-        .background(Color.black.opacity(0.9))
+        .background(Color.cyberpunkDarkBg) // 사이버펑크 배경
     }
 
-    var tradingHeaderView: some View {
+    // 사이버펑크 거래 헤더
+    var cyberpunkTradingHeaderView: some View {
         HStack {
-            // 뒤로가기 버튼
+            // 사이버펑크 뒤로가기 버튼
             Button(action: { currentMode = .dialogue }) {
-                HStack {
-                    Image(systemName: "arrow.left")
-                    Text("대화로 돌아가기")
+                HStack(spacing: 6) {
+                    Image(systemName: "chevron.left")
+                        .font(.cyberpunkCaption())
+                    Text("RETURN_TO_DIALOGUE")
+                        .font(.cyberpunkTechnical())
                 }
-                .font(.chosunOrFallback(size: 16))
-                .foregroundColor(.cyan)
+                .foregroundColor(.cyberpunkCyan)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(
+                    Rectangle()
+                        .fill(Color.cyberpunkCyan.opacity(0.1))
+                        .overlay(
+                            Rectangle()
+                                .stroke(Color.cyberpunkCyan, lineWidth: 1)
+                        )
+                )
             }
 
             Spacer()
 
-            // 상인 정보
-            HStack {
-                // 상인 이미지 (작게)
-                Group {
-                    if let _ = UIImage(named: merchantImageName) {
-                        Image(merchantImageName)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 40, height: 40)
-                            .clipShape(Circle())
-                    } else {
-                        Circle()
-                            .fill(self.merchant.type.color)
-                            .frame(width: 40, height: 40)
-                            .overlay(
-                                Image(systemName: self.merchant.type.iconName)
-                                    .foregroundColor(.white)
-                            )
+            // 사이버펑크 상인 정보 패널
+            HStack(spacing: 12) {
+                // 홀로그램 상인 이미지
+                ZStack {
+                    Rectangle()
+                        .fill(Color.cyberpunkCyan.opacity(0.1))
+                        .frame(width: 50, height: 50)
+                        .overlay(
+                            Rectangle()
+                                .stroke(Color.cyberpunkCyan.opacity(0.6), lineWidth: 1.2)
+                        )
+
+                    Group {
+                        if let _ = UIImage(named: merchantImageName) {
+                            Image(merchantImageName)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 44, height: 44)
+                                .clipShape(Rectangle())
+                        } else {
+                            Rectangle()
+                                .fill(self.merchant.type.color.opacity(0.3))
+                                .frame(width: 44, height: 44)
+                                .overlay(
+                                    Image(systemName: self.merchant.type.iconName)
+                                        .foregroundColor(.cyberpunkYellow)
+                                        .font(.title2)
+                                )
+                        }
                     }
+                    .opacity(0.9)
+                    .overlay(
+                        // 홀로그램 글리치 효과
+                        Rectangle()
+                            .stroke(Color.cyberpunkYellow.opacity(0.4), lineWidth: 0.5)
+                            .opacity(sin(Date().timeIntervalSince1970 * 6) * 0.3 + 0.7)
+                    )
                 }
 
-                Text(self.merchant.name)
-                    .font(.chosunOrFallback(size: 18, weight: .bold))
-                    .foregroundColor(.white)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("MERCHANT_ID")
+                        .font(.cyberpunkTechnical())
+                        .foregroundColor(.cyberpunkTextSecondary)
+
+                    Text(self.merchant.name.uppercased())
+                        .font(.cyberpunkHeading(size: 16))
+                        .foregroundColor(.cyberpunkYellow)
+                        .fontWeight(.bold)
+
+                    HStack(spacing: 4) {
+                        Circle()
+                            .fill(Color.cyberpunkGreen)
+                            .frame(width: 6, height: 6)
+                        Text("TRADE_READY")
+                            .font(.cyberpunkTechnical())
+                            .foregroundColor(.cyberpunkGreen)
+                    }
+                }
             }
         }
-        .padding()
-        .background(Color.black.opacity(0.8))
+        .padding(.horizontal, CyberpunkLayout.screenPadding)
+        .padding(.vertical, 12)
+        .background(Color.cyberpunkPanelBg)
+        .overlay(
+            Rectangle()
+                .fill(Color.cyberpunkBorder)
+                .frame(height: 1),
+            alignment: .bottom
+        )
     }
 
-    var tradeTabSelectionView: some View {
-        HStack {
-            TradeTabButton(
-                title: "구매",
+    // 사이버펑크 탭 선택
+    var cyberpunkTradeTabSelectionView: some View {
+        HStack(spacing: 0) {
+            CyberpunkTradeTabButton(
+                title: "BUY_MODE",
+                subtitle: "구매",
                 isSelected: selectedTradeType == .buy,
-                action: { selectedTradeType = .buy }
+                action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        selectedTradeType = .buy
+                    }
+                }
             )
 
-            TradeTabButton(
-                title: "판매",
+            Rectangle()
+                .fill(Color.cyberpunkBorder)
+                .frame(width: 1)
+
+            CyberpunkTradeTabButton(
+                title: "SELL_MODE",
+                subtitle: "판매",
                 isSelected: selectedTradeType == .sell,
-                action: { selectedTradeType = .sell }
+                action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        selectedTradeType = .sell
+                    }
+                }
             )
         }
-        .padding(.horizontal)
-        .padding(.vertical, 10)
+        .background(Color.cyberpunkPanelBg)
+        .overlay(
+            Rectangle()
+                .fill(Color.cyberpunkBorder)
+                .frame(height: 1),
+            alignment: .bottom
+        )
     }
 
-    var cartFooterView: some View {
-        VStack(spacing: 12) {
+    // 사이버펑크 장바구니 푸터
+    var cyberpunkCartFooterView: some View {
+        VStack(spacing: 8) {
+            // 상단 정보 패널
             HStack {
-                Text("장바구니: \(cartManager.items.count)개")
-                    .font(.chosunOrFallback(size: 16))
-                    .foregroundColor(.white)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("CART_ITEMS")
+                        .font(.cyberpunkTechnical())
+                        .foregroundColor(.cyberpunkTextSecondary)
+                    Text("\(cartManager.items.count) UNITS")
+                        .font(.cyberpunkCaption())
+                        .foregroundColor(.cyberpunkTextPrimary)
+                }
 
                 Spacer()
 
-                Text("총액: ₩\(cartManager.totalAmount)")
-                    .font(.chosunOrFallback(size: 18, weight: .bold))
-                    .foregroundColor(.cyan)
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text("TOTAL_VALUE")
+                        .font(.cyberpunkTechnical())
+                        .foregroundColor(.cyberpunkTextSecondary)
+                    Text("₩\(cartManager.totalAmount)")
+                        .font(.cyberpunkHeading(size: 16))
+                        .foregroundColor(.cyberpunkYellow)
+                        .fontWeight(.bold)
+                }
             }
-
-            Button("장바구니 보기") {
-                currentMode = .cart
-            }
-            .font(.chosunOrFallback(size: 16, weight: .semibold))
-            .foregroundColor(.black)
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(
-                RoundedRectangle(cornerRadius: 25)
-                    .fill(Color.cyan)
+            .padding(.horizontal, CyberpunkLayout.screenPadding)
+            .padding(.vertical, 8)
+            .background(Color.cyberpunkCardBg)
+            .overlay(
+                Rectangle()
+                    .stroke(Color.cyberpunkBorder, lineWidth: 1)
             )
+
+            // 사이버펑크 액션 버튼
+            Button(action: { currentMode = .cart }) {
+                HStack {
+                    Image(systemName: "cart.fill")
+                        .font(.cyberpunkCaption())
+                    Text("CART_REVIEW")
+                        .font(.cyberpunkButton())
+                        .fontWeight(.semibold)
+
+                    Spacer()
+
+                    Text(">>")
+                        .font(.cyberpunkCaption())
+                        .opacity(0.8)
+                }
+                .foregroundColor(.cyberpunkDarkBg)
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(Color.cyberpunkYellow)
+                .overlay(
+                    Rectangle()
+                        .stroke(Color.cyberpunkGold, lineWidth: 2)
+                )
+            }
+            .buttonStyle(PlainButtonStyle())
+            .padding(.horizontal, CyberpunkLayout.screenPadding)
         }
-        .padding()
-        .background(Color.black.opacity(0.9))
+        .padding(.vertical, 12)
+        .background(Color.cyberpunkPanelBg)
+        .overlay(
+            Rectangle()
+                .fill(Color.cyberpunkBorder)
+                .frame(height: 1),
+            alignment: .top
+        )
     }
 }
 
@@ -662,6 +778,40 @@ struct DialogueChoiceButton: View {
                     )
             )
         }
+    }
+}
+
+// MARK: - 사이버펑크 탭 버튼
+struct CyberpunkTradeTabButton: View {
+    let title: String
+    let subtitle: String
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 4) {
+                Text(title)
+                    .font(.cyberpunkTechnical())
+                    .foregroundColor(isSelected ? .cyberpunkYellow : .cyberpunkTextSecondary)
+                    .fontWeight(.semibold)
+
+                Text(subtitle)
+                    .font(.cyberpunkCaption())
+                    .foregroundColor(isSelected ? .cyberpunkTextPrimary : .cyberpunkTextSecondary)
+
+                Rectangle()
+                    .frame(height: 2)
+                    .foregroundColor(isSelected ? .cyberpunkYellow : .clear)
+                    .animation(.easeInOut(duration: 0.2), value: isSelected)
+            }
+            .padding(.vertical, 12)
+        }
+        .frame(maxWidth: .infinity)
+        .background(
+            Rectangle()
+                .fill(isSelected ? Color.cyberpunkYellow.opacity(0.1) : Color.clear)
+        )
     }
 }
 
@@ -723,7 +873,7 @@ struct TabSelectionView: View {
     }
 }
 
-// MARK: - 상인 인벤토리 (구매 탭) - 🚀 하드코딩 제거 완료!
+// MARK: - 사이버펑크 상인 인벤토리 (구매 탭) - 🚀 하드코딩 제거 완료!
 struct MerchantInventoryView: View {
     let merchant: Merchant
     @ObservedObject var cartManager: CartManager
@@ -734,9 +884,9 @@ struct MerchantInventoryView: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ], spacing: 15) {
+                GridItem(.flexible(), spacing: CyberpunkLayout.gridSpacing),
+                GridItem(.flexible(), spacing: CyberpunkLayout.gridSpacing)
+            ], spacing: CyberpunkLayout.gridSpacing) {
                 ForEach(viewModel.inventory) { item in
                     TradeItemCard(
                         item: item,
@@ -750,12 +900,13 @@ struct MerchantInventoryView: View {
                     )
                 }
             }
-            .padding()
+            .padding(CyberpunkLayout.screenPadding)
         }
+        .background(Color.cyberpunkDarkBg)
     }
 }
 
-// MARK: - 플레이어 인벤토리 (판매 탭) - 🚀 하드코딩 제거 완료!
+// MARK: - 사이버펑크 플레이어 인벤토리 (판매 탭) - 🚀 하드코딩 제거 완료!
 struct PlayerInventoryView: View {
     let merchant: Merchant
     @ObservedObject var cartManager: CartManager
@@ -766,9 +917,9 @@ struct PlayerInventoryView: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ], spacing: 15) {
+                GridItem(.flexible(), spacing: CyberpunkLayout.gridSpacing),
+                GridItem(.flexible(), spacing: CyberpunkLayout.gridSpacing)
+            ], spacing: CyberpunkLayout.gridSpacing) {
                 ForEach(viewModel.playerInventory) { item in
                     TradeItemCard(
                         item: item,
@@ -782,8 +933,9 @@ struct PlayerInventoryView: View {
                     )
                 }
             }
-            .padding()
+            .padding(CyberpunkLayout.screenPadding)
         }
+        .background(Color.cyberpunkDarkBg)
     }
 }
 
@@ -904,55 +1056,84 @@ struct StatRow: View {
     }
 }
 
-// MARK: - 거래 아이템 카드
+// MARK: - 사이버펑크 거래 아이템 카드
 struct TradeItemCard: View {
     let item: TradeItem
     let tradeType: TradeType
     let isSelected: Bool
     let onTap: () -> Void
-    
+
     var body: some View {
         Button(action: onTap) {
-            VStack(spacing: 12) {
-                // 아이템 이미지
+            VStack(spacing: 8) {
+                // 사이버펑크 아이템 이미지 영역
                 ZStack {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(item.grade.color.opacity(0.2))
+                    Rectangle()
+                        .fill(item.grade.color.opacity(0.1))
                         .frame(height: 80)
-                    
+                        .overlay(
+                            Rectangle()
+                                .stroke(item.grade.color.opacity(0.4), lineWidth: 1)
+                        )
+
                     Image(systemName: item.iconName)
-                        .font(.system(size: 30))
+                        .font(.system(size: 28))
                         .foregroundColor(item.grade.color)
+
+                    // 홀로그램 효과
+                    Rectangle()
+                        .stroke(Color.cyberpunkCyan.opacity(0.3), lineWidth: 0.5)
+                        .frame(height: 80)
+                        .opacity(isSelected ? 1.0 : 0.0)
+                        .animation(.easeInOut(duration: 0.3), value: isSelected)
                 }
-                
-                VStack(spacing: 4) {
-                    Text(item.name)
-                        .font(.custom("ChosunCentennial", size: 16))
+
+                // 사이버펑크 아이템 정보
+                VStack(spacing: 2) {
+                    Text(item.name.uppercased())
+                        .font(.cyberpunkCaption())
                         .fontWeight(.semibold)
+                        .foregroundColor(.cyberpunkTextPrimary)
                         .lineLimit(1)
-                    
-                    Text("₩\(item.currentPrice)")
-                        .font(.custom("ChosunCentennial", size: 14))
-                        .foregroundColor(.blue)
-                        .fontWeight(.medium)
-                    
-                    Text("재고: \(item.quantity)개")
-                        .font(.custom("ChosunCentennial", size: 12))
-                        .foregroundColor(.secondary)
+
+                    HStack {
+                        Text("PRICE")
+                            .font(.cyberpunkTechnical())
+                            .foregroundColor(.cyberpunkTextSecondary)
+                        Spacer()
+                        Text("₩\(item.currentPrice)")
+                            .font(.cyberpunkCaption())
+                            .foregroundColor(.cyberpunkYellow)
+                            .fontWeight(.semibold)
+                    }
+
+                    HStack {
+                        Text("STOCK")
+                            .font(.cyberpunkTechnical())
+                            .foregroundColor(.cyberpunkTextSecondary)
+                        Spacer()
+                        Text("\(item.quantity)")
+                            .font(.cyberpunkCaption())
+                            .foregroundColor(item.quantity > 0 ? .cyberpunkGreen : .cyberpunkError)
+                            .fontWeight(.medium)
+                    }
                 }
             }
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 15)
-                    .fill(Color(.systemBackground))
-                    .strokeBorder(
-                        isSelected ? Color.blue : Color.clear,
-                        lineWidth: 2
+            .padding(12)
+            .background(Color.cyberpunkCardBg)
+            .overlay(
+                Rectangle()
+                    .stroke(
+                        isSelected ? Color.cyberpunkActiveBorder : Color.cyberpunkBorder,
+                        lineWidth: isSelected ? 2 : 1
                     )
-                    .shadow(radius: isSelected ? 8 : 4)
             )
-            .scaleEffect(isSelected ? 1.05 : 1.0)
-            .animation(.spring(response: 0.3), value: isSelected)
+            .shadow(
+                color: isSelected ? Color.cyberpunkGlowBorder : Color.black.opacity(0.3),
+                radius: isSelected ? 8 : 4
+            )
+            .scaleEffect(isSelected ? 1.02 : 1.0)
+            .animation(.easeInOut(duration: 0.2), value: isSelected)
         }
         .buttonStyle(PlainButtonStyle())
     }

@@ -611,7 +611,7 @@ extension NetworkManager {
 extension NetworkManager {
     func getPlayerData() async throws -> PlayerDataResponse {
         return try await makeRequest(
-            endpoint: "/player/data",
+            endpoint: "/player/profile",
             requiresAuth: true,
             responseType: PlayerDataResponse.self,
             useCache: true
