@@ -34,6 +34,11 @@ struct Merchant: Identifiable {
 
     // 거리 (계산된 값, 옵셔널)
     var distance: Double = 0.0
+
+    // 🆕 Story system fields
+    let storyRole: StoryRole?
+    let hasActiveStory: Bool
+    let initialStoryNode: String?
     
     // MARK: - 초기화
     init(
@@ -52,7 +57,10 @@ struct Merchant: Identifiable {
         dislikedItems: [String] = [],
         reputationRequirement: Int = 0,
         isActive: Bool = true,
-        imageFileName: String? = nil
+        imageFileName: String? = nil,
+        storyRole: StoryRole? = nil,
+        hasActiveStory: Bool = false,
+        initialStoryNode: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -71,6 +79,9 @@ struct Merchant: Identifiable {
         self.isActive = isActive
         self.imageFileName = imageFileName
         self.lastRestocked = Date()
+        self.storyRole = storyRole
+        self.hasActiveStory = hasActiveStory
+        self.initialStoryNode = initialStoryNode
     }
     
     // MARK: - 서버 응답용 초기화
@@ -95,6 +106,11 @@ struct Merchant: Identifiable {
         self.isActive = serverMerchant.isActive
         self.imageFileName = serverMerchant.imageFileName
         self.lastRestocked = Date(timeIntervalSince1970: serverMerchant.lastRestocked)
+
+        // 🆕 Story system fields
+        self.storyRole = serverMerchant.storyRole.flatMap { StoryRole(rawValue: $0) }
+        self.hasActiveStory = serverMerchant.hasActiveStory ?? false
+        self.initialStoryNode = serverMerchant.initialStoryNode
     }
     
     // MARK: - 계산된 속성들 (호환성을 위해)
@@ -186,6 +202,13 @@ struct Merchant: Identifiable {
     
 }
 
+// MARK: - Story System Types
+enum StoryRole: String, Codable {
+    case main = "main"           // 메인 스토리 상인
+    case side = "side"           // 사이드 스토리 상인
+    case vendorOnly = "vendor_only" // 거래만 가능
+}
+
 // MARK: - Codable Implementation
 extension Merchant: Codable {
     enum CodingKeys: String, CodingKey {
@@ -194,6 +217,7 @@ extension Merchant: Codable {
         case requiredLicense, inventory, priceModifier, negotiationDifficulty
         case preferredItems, dislikedItems, reputationRequirement
         case isActive, lastRestocked, imageFileName, distance
+        case storyRole, hasActiveStory, initialStoryNode
     }
     
     init(from decoder: Decoder) throws {
@@ -221,6 +245,11 @@ extension Merchant: Codable {
         lastRestocked = try container.decode(Date.self, forKey: .lastRestocked)
         imageFileName = try container.decodeIfPresent(String.self, forKey: .imageFileName)
         distance = try container.decodeIfPresent(Double.self, forKey: .distance) ?? 0.0
+
+        // 🆕 Story fields
+        storyRole = try container.decodeIfPresent(StoryRole.self, forKey: .storyRole)
+        hasActiveStory = try container.decodeIfPresent(Bool.self, forKey: .hasActiveStory) ?? false
+        initialStoryNode = try container.decodeIfPresent(String.self, forKey: .initialStoryNode)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -245,6 +274,11 @@ extension Merchant: Codable {
         try container.encode(lastRestocked, forKey: .lastRestocked)
         try container.encodeIfPresent(imageFileName, forKey: .imageFileName)
         try container.encode(distance, forKey: .distance)
+
+        // 🆕 Story fields
+        try container.encodeIfPresent(storyRole, forKey: .storyRole)
+        try container.encode(hasActiveStory, forKey: .hasActiveStory)
+        try container.encodeIfPresent(initialStoryNode, forKey: .initialStoryNode)
     }
 }
 
@@ -396,6 +430,11 @@ struct ServerMerchantResponse: Codable {
     let isActive: Bool
     let lastRestocked: TimeInterval
     let imageFileName: String?
+
+    // 🆕 Story system fields
+    let storyRole: String?
+    let hasActiveStory: Bool?
+    let initialStoryNode: String?
 }
 
 // 기존 GameEnums.swift에 정의된 enum들을 사용

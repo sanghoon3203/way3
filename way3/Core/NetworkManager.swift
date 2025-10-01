@@ -759,7 +759,34 @@ extension NetworkManager {
             useCache: true
         )
     }
-    
+
+    // MARK: - Story API Methods
+    /// Get story dialogue for a merchant
+    func getMerchantStory(merchantId: String) async throws -> StoryDialogueResponse {
+        return try await makeRequest(
+            endpoint: "/api/merchants/\(merchantId)/story",
+            requiresAuth: true,
+            responseType: StoryDialogueResponse.self,
+            useCache: false  // Story progress shouldn't be cached
+        )
+    }
+
+    /// Progress through story dialogue with choice
+    func progressMerchantStory(merchantId: String, nodeId: String, choiceId: String?) async throws -> StoryProgressResponse {
+        var body: [String: Any] = ["nodeId": nodeId]
+        if let choice = choiceId {
+            body["choiceId"] = choice
+        }
+
+        return try await makeRequest(
+            endpoint: "/api/merchants/\(merchantId)/story/progress",
+            method: .POST,
+            body: body,
+            requiresAuth: true,
+            responseType: StoryProgressResponse.self
+        )
+    }
+
     // MARK: - Quest API Methods
     func getQuests() async throws -> QuestListResponse {
         return try await makeRequest(
@@ -1310,4 +1337,64 @@ struct PlayerProfileResponse: Codable {
     let success: Bool
     let data: PlayerDetail?
     let error: String?
+}
+
+// MARK: - Story Response Models
+struct StoryDialogueResponse: Codable {
+    let success: Bool
+    let data: StoryDialogueData?
+    let error: String?
+}
+
+struct StoryDialogueData: Codable {
+    let node: StoryNode
+    let merchantName: String
+}
+
+struct StoryNode: Codable {
+    let id: String
+    let type: String  // dialogue, decision, quest_gate
+    let content: StoryNodeContent
+    let choices: [StoryChoice]?
+}
+
+struct StoryNodeContent: Codable {
+    let speaker: String
+    let text: String
+    let emotion: String?
+}
+
+struct StoryChoice: Codable {
+    let id: String
+    let text: String
+    let nextNode: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id, text
+        case nextNode = "next_node"
+    }
+}
+
+struct StoryProgressResponse: Codable {
+    let success: Bool
+    let data: StoryProgressData?
+    let error: String?
+}
+
+struct StoryProgressData: Codable {
+    let completedNode: String
+    let rewards: StoryRewards?
+    let nextNode: StoryNode?
+
+    enum CodingKeys: String, CodingKey {
+        case completedNode = "completedNode"
+        case rewards
+        case nextNode
+    }
+}
+
+struct StoryRewards: Codable {
+    let exp: Int?
+    let reputation: Int?
+    let money: Int?
 }
