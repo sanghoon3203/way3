@@ -1,0 +1,258 @@
+{
+  "districts": [
+    {
+      "district_id": "gangnam_gu",
+      "chapter_id": "ch1_gangnam",
+      "name": "강남구",
+      "merchant": {
+        "merchant_id": "merchant_seoyena",
+        "name": "서예나",
+        "location": {
+          "latitude": 37.5172,
+          "longitude": 127.0473,
+          "radius": 500
+        },
+        "main_story_id": "gangnam_seoyena_main",
+        "sub_quests": [
+          {
+            "quest_id": "seoyena_sub_01",
+            "title": "서예나의 첫 거래",
+            "type": "trading",
+            "verification": "receipt_ocr",
+            "requirements": {
+              "location": {
+                "latitude": 37.5172,
+                "longitude": 127.0473,
+                "radius": 100
+              },
+              "min_purchase": 5000,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": null
+            },
+            "rewards": {
+              "money": 10000,
+              "exp": 100,
+              "item_id": "story_piece_seoyena_01",
+              "relationship_change": {
+                "merchant_id": "merchant_seoyena",
+                "trust": 5
+              }
+            }
+          },
+          {
+            "quest_id": "seoyena_sub_02",
+            "title": "강남의 비밀 장소",
+            "type": "delivery",
+            "verification": "gps_location",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": {
+                "latitude": 37.5200,
+                "longitude": 127.0500,
+                "radius": 50
+              },
+              "time_limit": 3600,
+              "story_node_complete": null
+            },
+            "rewards": {
+              "money": 15000,
+              "exp": 150,
+              "item_id": "story_piece_seoyena_02",
+              "relationship_change": {
+                "merchant_id": "merchant_seoyena",
+                "trust": 10
+              }
+            }
+          },
+          {
+            "quest_id": "seoyena_sub_03",
+            "title": "서예나와의 대화",
+            "type": "dialogue",
+            "verification": "story_completion",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": "seoyena_dialogue_end"
+            },
+            "rewards": {
+              "money": 20000,
+              "exp": 200,
+              "item_id": "story_piece_seoyena_03",
+              "relationship_change": {
+                "merchant_id": "merchant_seoyena",
+                "trust": 15
+              }
+            }
+          }
+        ]
+      },
+      "unlock_condition": "story_tab_always_visible"
+    },
+    {
+      "district_id": "seocho_gu",
+      "chapter_id": "ch1_gangnam",
+      "name": "서초구",
+      "merchant": {
+        "merchant_id": "merchant_jihoon",
+        "name": "박지훈",
+        "location": {
+          "latitude": 37.4837,
+          "longitude": 127.0324,
+          "radius": 500
+        },
+        "main_story_id": "seocho_jihoon_main",
+        "sub_quests": [
+          {
+            "quest_id": "jihoon_sub_01",
+            "title": "박지훈의 부탁",
+            "type": "trading",
+            "verification": "receipt_ocr",
+            "requirements": {
+              "location": {
+                "latitude": 37.4837,
+                "longitude": 127.0324,
+                "radius": 100
+              },
+              "min_purchase": 10000,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": null
+            },
+            "rewards": {
+              "money": 12000,
+              "exp": 120,
+              "item_id": "story_piece_jihoon_01",
+              "relationship_change": {
+                "merchant_id": "merchant_jihoon",
+                "trust": 5
+              }
+            }
+          },
+          {
+            "quest_id": "jihoon_sub_02",
+            "title": "서초의 숨겨진 길",
+            "type": "delivery",
+            "verification": "gps_location",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": {
+                "latitude": 37.4900,
+                "longitude": 127.0350,
+                "radius": 50
+              },
+              "time_limit": 1800,
+              "story_node_complete": null
+            },
+            "rewards": {
+              "money": 18000,
+              "exp": 180,
+              "item_id": "story_piece_jihoon_02",
+              "relationship_change": {
+                "merchant_id": "merchant_jihoon",
+                "trust": 10
+              }
+            }
+          }
+        ]
+      },
+      "unlock_condition": "story_tab_always_visible"
+    },
+    {
+      "district_id": "jongno_gu",
+      "chapter_id": "ch2_northwest",
+      "name": "종로구",
+      "merchant": {
+        "merchant_id": "merchant_minji",
+        "name": "이민지",
+        "location": {
+          "latitude": 37.5735,
+          "longitude": 126.9788,
+          "radius": 500
+        },
+        "main_story_id": "jongno_minji_main",
+        "sub_quests": [
+          {
+            "quest_id": "minji_sub_01",
+            "title": "이민지의 역사 탐방",
+            "type": "dialogue",
+            "verification": "story_completion",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": "minji_dialogue_01_end"
+            },
+            "rewards": {
+              "money": 15000,
+              "exp": 150,
+              "item_id": "story_piece_minji_01",
+              "relationship_change": {
+                "merchant_id": "merchant_minji",
+                "trust": 10
+              }
+            }
+          },
+          {
+            "quest_id": "minji_sub_02",
+            "title": "종로의 전통 시장",
+            "type": "trading",
+            "verification": "receipt_ocr",
+            "requirements": {
+              "location": {
+                "latitude": 37.5735,
+                "longitude": 126.9788,
+                "radius": 100
+              },
+              "min_purchase": 8000,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": null
+            },
+            "rewards": {
+              "money": 20000,
+              "exp": 200,
+              "item_id": "story_piece_minji_02",
+              "relationship_change": {
+                "merchant_id": "merchant_minji",
+                "trust": 15
+              }
+            }
+          },
+          {
+            "quest_id": "minji_sub_03",
+            "title": "경복궁 앞 배달",
+            "type": "delivery",
+            "verification": "gps_location",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": {
+                "latitude": 37.5796,
+                "longitude": 126.9770,
+                "radius": 30
+              },
+              "time_limit": 2400,
+              "story_node_complete": null
+            },
+            "rewards": {
+              "money": 25000,
+              "exp": 250,
+              "item_id": "story_piece_minji_03",
+              "relationship_change": {
+                "merchant_id": "merchant_minji",
+                "trust": 20
+              }
+            }
+          }
+        ]
+      },
+      "unlock_condition": "story_tab_always_visible"
+    }
+  ]
+}

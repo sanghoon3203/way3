@@ -1,0 +1,83 @@
+{
+  "chapters": [
+    {
+      "chapter_id": "ch1_gangnam",
+      "title": "강남권: 번영의 그림자",
+      "order": 1,
+      "districts": [
+        {
+          "district_id": "gangnam_gu",
+          "name": "강남구",
+          "episodes": [
+            {
+              "episode_id": "gangnam_1_1",
+              "title": "서예나 - 황금탑의 빙산",
+              "story_node_id": "gangnam_1_1_start",
+              "order": 1,
+              "unlock_conditions": [],
+              "post_quest_id": "mainquest_gangnam_1_1"
+            },
+            {
+              "episode_id": "gangnam_1_2",
+              "title": "서예나 - 첫 거래의 진실",
+              "story_node_id": "gangnam_1_2_start",
+              "order": 2,
+              "unlock_conditions": [
+                { "type": "episode", "value": "gangnam_1_1" }
+              ],
+              "post_quest_id": "mainquest_gangnam_1_2"
+            },
+            {
+              "episode_id": "gangnam_1_3",
+              "title": "서예나 - 숨겨진 네트워크",
+              "story_node_id": "gangnam_1_3_start",
+              "order": 3,
+              "unlock_conditions": [
+                { "type": "episode", "value": "gangnam_1_2" },
+                { "type": "quest", "value": "seoyena_sub_02" }
+              ],
+              "post_quest_id": "mainquest_gangnam_1_3"
+            }
+          ]
+        },
+        {
+          "district_id": "seocho_gu",
+          "name": "서초구",
+          "episodes": [
+            {
+              "episode_id": "seocho_1_1",
+              "title": "서초 - 프티 프랑스의 비밀",
+              "story_node_id": "seocho_1_1_start",
+              "order": 1,
+              "unlock_conditions": [],
+              "post_quest_id": "mainquest_seocho_1_1"
+            }
+          ]
+        }
+      ],
+      "completion_reward": {
+        "key_item": "key_item_gangnam",
+        "money": 50000,
+        "exp": 1000
+      }
+    },
+    {
+      "chapter_id": "ch6_final",
+      "title": "최종장: 서울의 진실",
+      "order": 6,
+      "districts": [],
+      "unlock_conditions": [
+        { "type": "key_item", "value": "key_item_gangnam" },
+        { "type": "key_item", "value": "key_item_northwest" },
+        { "type": "key_item", "value": "key_item_northeast" },
+        { "type": "key_item", "value": "key_item_southwest" },
+        { "type": "key_item", "value": "key_item_eastwest" }
+      ],
+      "completion_reward": {
+        "key_item": "final_key",
+        "money": 500000,
+        "exp": 10000
+      }
+    }
+  ]
+}

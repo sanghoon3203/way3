@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter1_02",
+  "background_image": "bg_alice_herb_shop.jpg",
+  "character_id": "alice",
+  "character_sprite": "sprite_alice_amazed.png",
+  "dialogue_text": "이거... 진짜예요. 정말 진짜 시간 크리스탈...",
+  "dialogue_sound_id": "chapter1_02",
+  "sound_effect": "sfx_crystal_hum.mp3",
+  "next_node_id": "chapter1_03"
+}

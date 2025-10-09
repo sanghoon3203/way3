@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_03",
+  "background_image": "bg_subway_crowded.jpg",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_curious.png",
+  "dialogue_text": "커넥트:서울... 뭐지, 이거? AR 게임인가?",
+  "dialogue_sound_id": "prologue_03",
+  "sound_effect": "sfx_subway_rumble.mp3",
+  "next_node_id": "prologue_04"
+}

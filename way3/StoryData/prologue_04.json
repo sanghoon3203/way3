@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_04",
+  "background_image": "bg_subway_crowded.jpg",
+  "character_id": null,
+  "character_sprite": "sprite_player_uniform_curious.png",
+  "dialogue_text": "화면이 켜지자 서울 지도가 떴다. 하지만... 강남구가 '황금탑 지구', 종로구가 '시간의 회랑'?",
+  "dialogue_sound_id": null,
+  "sound_effect": "sfx_phone_ui_beep.mp3",
+  "next_node_id": "prologue_05"
+}

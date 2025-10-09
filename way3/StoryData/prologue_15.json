@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_15",
+  "background_image": "bg_neo_subway_station.jpg",
+  "character_id": "gijuri",
+  "character_sprite": "sprite_gijuri_default.png",
+  "dialogue_text": "현실 서울에서 왔군요. 고등학생.",
+  "dialogue_sound_id": "prologue_15",
+  "sound_effect": null,
+  "next_node_id": "prologue_16"
+}

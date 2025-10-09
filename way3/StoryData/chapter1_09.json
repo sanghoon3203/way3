@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter1_09",
+  "background_image": "bg_alice_herb_shop.jpg",
+  "character_id": "alice",
+  "character_sprite": "sprite_alice_smiling.png",
+  "dialogue_text": "첫 거래 기념이에요. 제가 좋아하는 빵집에서 사온 거예요. 같이 드실래요?",
+  "dialogue_sound_id": "chapter1_09",
+  "sound_effect": null,
+  "next_node_id": "chapter1_10"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_01",
+  "background_image": "bg_player_room_morning.jpg",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_rushed.png",
+  "dialogue_text": "아, 진짜 늦었다!",
+  "dialogue_sound_id": "prologue_01",
+  "sound_effect": "sfx_alarm_beep.mp3",
+  "next_node_id": "prologue_02"
+}

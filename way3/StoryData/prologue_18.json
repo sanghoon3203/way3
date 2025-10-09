@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_18",
+  "background_image": "bg_neo_subway_station.jpg",
+  "character_id": "gijuri",
+  "character_sprite": "sprite_gijuri_disappearing.png",
+  "dialogue_text": "당신이 선택받은 이유를 생각해보세요. 평범함 지수 94.7%. 그게 뭘 의미하는지.",
+  "dialogue_sound_id": "prologue_18",
+  "sound_effect": "sfx_teleport_out.mp3",
+  "next_node_id": "chapter1_01"
+}

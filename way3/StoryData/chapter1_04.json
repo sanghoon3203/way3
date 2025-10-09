@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter1_04",
+  "background_image": "bg_alice_herb_shop.jpg",
+  "character_id": "poppy",
+  "character_sprite": "sprite_poppy_barking.png",
+  "dialogue_text": "왈왈! 주인님이 3년 동안 연구한 거라구! 근데 시간 크리스탈이 없어서 못 만들었어!",
+  "dialogue_sound_id": null,
+  "sound_effect": "sfx_dog_bark_happy.mp3",
+  "next_node_id": "chapter1_05"
+}

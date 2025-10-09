@@ -1,0 +1,6 @@
+{
+  "player":         { "gender": "male" },
+  "Kijuri":     { "gender": "female" },
+  "blacksmith_lee": { "gender": "male" },
+  "pharmacist_choi":{ "gender": "female" }
+}

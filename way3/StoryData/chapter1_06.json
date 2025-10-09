@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter1_06",
+  "background_image": "bg_alice_herb_shop.jpg",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "음... 5만 골드코인이요.",
+  "dialogue_sound_id": "chapter1_06",
+  "sound_effect": null,
+  "next_node_id": "chapter1_07"
+}

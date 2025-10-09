@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_14",
+  "background_image": "bg_neo_subway_station_cracked.jpg",
+  "character_id": "gijuri",
+  "character_sprite": "sprite_gijuri_serious.png",
+  "dialogue_text": "시간 위반. 무단 침입. 공공장소 파괴. 형량 72시간. 시간 감옥 수감.",
+  "dialogue_sound_id": "prologue_14",
+  "sound_effect": "sfx_time_lock.mp3",
+  "next_node_id": "prologue_15"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_17",
+  "background_image": "bg_neo_subway_station.jpg",
+  "character_id": "gijuri",
+  "character_sprite": "sprite_gijuri_default.png",
+  "dialogue_text": "골드코인 만 원. 그리고 임시 상인 허가증. 이걸로 장사하세요.",
+  "dialogue_sound_id": "prologue_17",
+  "sound_effect": "sfx_item_get.mp3",
+  "next_node_id": "prologue_18"
+}

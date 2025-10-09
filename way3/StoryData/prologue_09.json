@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_09",
+  "background_image": "bg_neo_subway_station.jpg",
+  "character_id": null,
+  "character_sprite": "sprite_player_uniform_confused.png",
+  "dialogue_text": "[커넥트:서울] 네오서울에 오신 것을 환영합니다. 당신의 역할: 수호자 후보.",
+  "dialogue_sound_id": null,
+  "sound_effect": "sfx_app_notification.mp3",
+  "next_node_id": "prologue_10"
+}

@@ -1,0 +1,111 @@
+{
+  "quests": [
+    {
+      "quest_id": "mainquest_gangnam_1_1",
+      "title": "서예나의 부탁",
+      "type": "story_main",
+      "chapter_id": "ch1_gangnam",
+      "district_id": "gangnam_gu",
+      "description": "서예나가 강남권의 균형을 되찾기 위한 첫 거래를 부탁합니다.",
+      "requirements": {
+        "required_episodes": ["gangnam_1_1"],
+        "required_items": [],
+        "required_level": 1,
+        "required_sub_quests": []
+      },
+      "objectives": [
+        {
+          "type": "delivery",
+          "target_location": {
+            "latitude": 37.5178,
+            "longitude": 127.0455,
+            "radius": 50
+          },
+          "description": "서예나가 지정한 비밀 창고로 이동하세요."
+        }
+      ],
+      "rewards": {
+        "money": 20000,
+        "exp": 250,
+        "inventory_items": ["item_gangnam_network_key"],
+        "story_piece_ids": ["story_piece_seoyena_04"],
+        "key_items": [],
+        "relationship_change": {
+          "merchant_id": "merchant_seoyena",
+          "trust": 20
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_gangnam_1_2",
+      "title": "숨겨진 데이터 회수",
+      "type": "story_main",
+      "chapter_id": "ch1_gangnam",
+      "district_id": "gangnam_gu",
+      "description": "서예나의 네트워크에 잠입한 정체불명의 침투자를 추적하세요.",
+      "requirements": {
+        "required_episodes": ["gangnam_1_2"],
+        "required_items": ["item_gangnam_network_key"],
+        "required_level": 5,
+        "required_sub_quests": ["seoyena_sub_02"]
+      },
+      "objectives": [
+        {
+          "type": "trading",
+          "store_id": "real_store_coex_001",
+          "merchant_id": "merchant_seoyena",
+          "min_purchase": 10000,
+          "description": "코엑스 크리스탈 팰리스에서 단서를 구매하세요."
+        },
+        {
+          "type": "dialogue",
+          "story_node_id": "gangnam_1_2_confront",
+          "description": "침투자와 대면하여 진실을 밝혀내세요."
+        }
+      ],
+      "rewards": {
+        "money": 30000,
+        "exp": 350,
+        "inventory_items": ["item_gangnam_encrypted_data"],
+        "story_piece_ids": ["story_piece_seoyena_05"],
+        "key_items": [],
+        "relationship_change": {
+          "merchant_id": "merchant_seoyena",
+          "trust": 30
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_gangnam_1_3",
+      "title": "강남의 증표",
+      "type": "story_main",
+      "chapter_id": "ch1_gangnam",
+      "district_id": "gangnam_gu",
+      "description": "서예나와 강남권 네트워크를 정화하여 증표를 획득하세요.",
+      "requirements": {
+        "required_episodes": ["gangnam_1_3"],
+        "required_items": ["item_gangnam_encrypted_data"],
+        "required_level": 10,
+        "required_sub_quests": ["seoyena_sub_03", "seoyena_sub_02"]
+      },
+      "objectives": [
+        {
+          "type": "dialogue",
+          "story_node_id": "gangnam_1_3_final",
+          "description": "서예나와의 최종 대화를 완료하세요."
+        }
+      ],
+      "rewards": {
+        "money": 50000,
+        "exp": 500,
+        "inventory_items": [],
+        "story_piece_ids": ["story_piece_seoyena_final"],
+        "key_items": ["key_item_gangnam"],
+        "relationship_change": {
+          "merchant_id": "merchant_seoyena",
+          "trust": 40
+        }
+      }
+    }
+  ]
+}

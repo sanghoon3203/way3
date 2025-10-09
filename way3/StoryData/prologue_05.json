@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_05",
+  "background_image": "bg_subway_crowded.jpg",
+  "character_id": null,
+  "character_sprite": "sprite_player_uniform_surprised.png",
+  "dialogue_text": "그때, 스마트폰이 미친 듯이 진동하기 시작했다. [경고: 네오서울 균형 붕괴 임박]",
+  "dialogue_sound_id": null,
+  "sound_effect": "sfx_phone_vibrate_intense.mp3",
+  "next_node_id": "prologue_06"
+}

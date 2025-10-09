@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_08",
+  "background_image": "bg_neo_subway_station.jpg",
+  "character_id": null,
+  "character_sprite": "sprite_player_uniform_confused.png",
+  "dialogue_text": "황금빛 마천루, 날아다니는 사람들... 여긴 내가 알던 강남역이 아니었다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "prologue_09"
+}
