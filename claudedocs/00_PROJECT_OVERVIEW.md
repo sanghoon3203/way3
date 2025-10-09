@@ -223,7 +223,6 @@ WAY-SERVER/
 - **런타임**: Node.js 18+
 - **프레임워크**: Express.js 4.18+
 - **데이터베이스**: SQLite3 5.1+
-- **실시간 통신**: Socket.IO 4.7+
 - **인증**: JWT (jsonwebtoken 9.0+)
   - Access Token: 15분
   - Refresh Token: 7일
@@ -284,20 +283,6 @@ WAY-SERVER/
   POST /crud/*     # CRUD 작업
 ```
 
-### Socket.IO 이벤트
-```javascript
-// 클라이언트 → 서버
-'trade:request'      // 거래 요청
-'location:update'    // 위치 업데이트
-'chat:message'       // 채팅 (미구현)
-
-// 서버 → 클라이언트
-'trade:response'     // 거래 응답
-'location:nearby'    // 근처 플레이어
-'market:update'      // 시장 가격 업데이트
-```
-
----
 
 ## 📊 데이터베이스 스키마
 
@@ -524,16 +509,8 @@ npm run dev      # 개발 (nodemon)
 - [ ] 메인 스토리 작성 (챕터 1-6)
 - [ ] 서브퀘스트 작성 (상인별 2-3개)
 - [ ] Personal Items 시스템 (장비 효과)
-- [ ] 업적 시스템 (50+ 업적)
-- [ ] 스킬 트리 (스킬 업그레이드)
 
-### Phase 4: 소셜 기능 🔮 미정
-- [ ] 채팅 시스템 (플레이어 간 채팅)
-- [ ] 거래소 (플레이어 간 거래)
-- [ ] 길드 시스템 (협동 퀘스트)
-- [ ] 랭킹 시스템 (레벨, 수익, 거래량)
 
----
 
 ## 👥 팀 및 연락처
 
