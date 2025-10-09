@@ -1,218 +1,227 @@
-# Way3 Documentation
+# WAY3 프로젝트 문서
 
-Complete technical documentation for the Way3 location-based trading game project.
+이 디렉토리는 WAY3 게임 프로젝트의 공식 문서를 포함하고 있습니다.
 
-## 📚 Documentation Index
+## 📚 문서 목록
 
-### Core Documentation (Read in Order)
+### 주요 문서
+- **[00_PROJECT_OVERVIEW.md](./00_PROJECT_OVERVIEW.md)** - 프로젝트 전체 개요
+  - 게임 컨셉 및 핵심 특징
+  - 프로젝트 구조 (클라이언트 + 서버)
+  - 주요 게임 시스템 설명
+  - 데이터베이스 스키마
+  - 보안 및 배포 환경
+  - 개발 로드맵
 
-1. **[00_PROJECT_OVERVIEW.md](00_PROJECT_OVERVIEW.md)** - Start here!
-   - High-level project overview
-   - Tech stack and dependencies
-   - Key features and gameplay mechanics
-   - Project structure
-
-2. **[01_ARCHITECTURE.md](01_ARCHITECTURE.md)** - System Design
-   - Client architecture patterns (MVVM)
-   - Component interactions and data flow
-   - Design patterns used throughout
-   - State management approach
-
-3. **[02_PLAYER_SYSTEM.md](02_PLAYER_SYSTEM.md)** - Player Model Deep Dive
-   - Modular 5-component player system
-   - PlayerCore, Stats, Inventory, Relationships, Achievements
-   - Cross-component operations
-   - Data persistence
-
-4. **[03_GAME_FEATURES.md](03_GAME_FEATURES.md)** - Gameplay Mechanics
-   - Trading system (buy/sell/exchange)
-   - Progression (level, license, skills)
-   - Achievement system
-   - Location-based features
-   - Auction system
-
-5. **[04_NETWORK_REALTIME.md](04_NETWORK_REALTIME.md)** - Networking
-   - Socket.IO integration
-   - Real-time multiplayer features
-   - Connection management
-   - Event handling (location, trade, chat)
-
-6. **[05_UI_DESIGN_SYSTEM.md](05_UI_DESIGN_SYSTEM.md)** - UI/UX Design
-   - Cyberpunk design system
-   - Color palette and typography
-   - Reusable components
-   - Styling guidelines
-
-7. **[06_DATA_MODELS.md](06_DATA_MODELS.md)** - Data Reference
-   - Complete enum reference
-   - Data structures and models
-   - API response formats
-   - Codable implementations
-
-8. **[07_DEVELOPER_GUIDE.md](07_DEVELOPER_GUIDE.md)** - Development Setup
-   - Project setup instructions
-   - Development workflow
-   - Testing strategies
-   - Build and deployment
-   - Troubleshooting
-
-### Backend Documentation
-
-9. **[08_SERVER_ARCHITECTURE.md](08_SERVER_ARCHITECTURE.md)** - Server System
-   - Node.js/Express backend architecture
-   - Database schema (SQLite)
-   - Socket.IO server setup
-   - Admin panel features
-   - Security and monitoring
-
-10. **[09_SERVER_API_REFERENCE.md](09_SERVER_API_REFERENCE.md)** - API Endpoints
-    - Complete REST API reference
-    - Authentication flows
-    - Request/response formats
-    - WebSocket events
-    - Error codes and rate limits
-
-### Specialized Documentation
-
-The following documents cover specific features or implementation details:
-
-- **[story-system-design.md](story-system-design.md)** - Story/dialogue system architecture
-- **[Asset_Checklist_Seoyena.md](Asset_Checklist_Seoyena.md)** - Asset checklist for merchant Seoyena
-- **[MOV_Migration_Summary.md](MOV_Migration_Summary.md)** - Video file migration summary
-- **[MerchantDetailView_Cyberpunk_Enhancement.md](MerchantDetailView_Cyberpunk_Enhancement.md)** - UI enhancement notes
-- **[MerchantHeroView_Implementation_Summary.md](MerchantHeroView_Implementation_Summary.md)** - Hero view implementation
-- **[MerchantHeroView_VisualNovel_Redesign.md](MerchantHeroView_VisualNovel_Redesign.md)** - Visual novel style design
-- **[Midjourney_Background_Prompts.md](Midjourney_Background_Prompts.md)** - AI art generation prompts
-- **[iPhone_Layout_Validation.md](iPhone_Layout_Validation.md)** - Layout testing notes
-
-## 🎯 Quick Start Guide
-
-### For New Developers
-
-1. Read **00_PROJECT_OVERVIEW.md** to understand the project
-2. Follow **07_DEVELOPER_GUIDE.md** to set up your environment
-3. Review **01_ARCHITECTURE.md** to understand the system design
-4. Explore **02_PLAYER_SYSTEM.md** and **03_GAME_FEATURES.md** for game logic
-5. Reference **09_SERVER_API_REFERENCE.md** when integrating with the backend
-
-### For Designers
-
-1. **05_UI_DESIGN_SYSTEM.md** - Complete design system reference
-2. **MerchantHeroView_VisualNovel_Redesign.md** - Visual novel UI patterns
-3. **Midjourney_Background_Prompts.md** - Art generation guidelines
-
-### For Backend Developers
-
-1. **08_SERVER_ARCHITECTURE.md** - Server system overview
-2. **09_SERVER_API_REFERENCE.md** - API endpoint specifications
-3. **04_NETWORK_REALTIME.md** - Client-side Socket.IO integration
-
-### For QA/Testers
-
-1. **00_PROJECT_OVERVIEW.md** - Feature overview
-2. **03_GAME_FEATURES.md** - Detailed gameplay mechanics
-3. **07_DEVELOPER_GUIDE.md** - Setup and testing instructions
-
-## 📖 Documentation Standards
-
-### File Naming Convention
-
-- **Numbered docs (00-09)**: Core documentation, read sequentially
-- **Descriptive names**: Feature-specific or implementation-specific docs
-- **Markdown format**: All documentation uses `.md` format for version control
-
-### Documentation Style
-
-- **Code examples**: Real code snippets from the actual codebase
-- **Diagrams**: ASCII art for system architecture visualization
-- **Cross-references**: Links to related documentation sections
-- **Version info**: Last updated dates and version numbers included
-
-## 🔄 Keeping Documentation Updated
-
-### When to Update Documentation
-
-- **New features**: Update relevant feature documentation
-- **Architecture changes**: Update architecture and design pattern docs
-- **API changes**: Update API reference immediately
-- **Breaking changes**: Update all affected documentation sections
-
-### Documentation Ownership
-
-| Document | Primary Owner | Update Frequency |
-|----------|--------------|------------------|
-| 00-03 | iOS Team | When features change |
-| 04 | iOS + Backend | When network protocol changes |
-| 05 | Design Team | When design system evolves |
-| 06 | iOS Team | When data models change |
-| 07 | DevOps | When setup/build process changes |
-| 08-09 | Backend Team | When server architecture/APIs change |
-
-## 🤝 Contributing to Documentation
-
-1. Keep documentation **up-to-date** with code changes
-2. Use **clear, concise** language
-3. Include **code examples** when explaining concepts
-4. Add **cross-references** to related documentation
-5. Update **README.md** when adding new documentation files
-
-## 📊 Documentation Coverage
-
-**Core Systems**: ✅ Complete
-- iOS Client Architecture
-- Player System
-- Game Features
-- Networking
-- UI/UX Design
-- Data Models
-- Backend Server
-- API Reference
-
-**Development Workflows**: ✅ Complete
-- Setup and Installation
-- Development Guidelines
-- Testing Strategies
-- Deployment Procedures
-
-**Specialized Features**: ⚠️ Partial
-- Story system (documented separately)
-- Merchant character system (partial)
-- Asset management (checklists available)
-
-## 🔗 External Resources
-
-### Official Documentation
-
-- [SwiftUI Documentation](https://developer.apple.com/documentation/swiftui)
-- [MapboxMaps for iOS](https://docs.mapbox.com/ios/maps/guides/)
-- [Socket.IO Client](https://socket.io/docs/v4/client-api/)
-- [Node.js Documentation](https://nodejs.org/docs/)
-- [Express.js Guide](https://expressjs.com/)
-
-### Design Resources
-
-- [SF Symbols](https://developer.apple.com/sf-symbols/)
-- [iOS Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
-
-## 📅 Documentation Changelog
-
-### 2025-10-05
-- ✨ **Created comprehensive documentation suite (00-09)**
-- 🗑️ **Removed outdated architecture documents**
-  - Removed `Way3_Client_Analysis_and_Plan.md` (replaced by 00-03)
-  - Removed `Way3_iOS_Architecture_Guide.md` (replaced by 01)
-  - Removed `Way3_iOS_Onboarding.md` (replaced by 07)
-- 🧹 **Cleaned up screenshot files** (moved to separate assets)
-- 📝 **Added README.md** for documentation navigation
-
-### Previous Versions
-- Various feature-specific documentation created during development
-- Story system design documentation
-- Merchant UI implementation notes
+- **[Game_System_Restructure_Plan.md](./Game_System_Restructure_Plan.md)** - 게임 시스템 재구조화 계획
+  - 로컬 우선 아키텍처 설계
+  - 챕터 기반 스토리 시스템
+  - 퀘스트 및 진행도 관리
+  - 위치 인증 시스템 (GPS, OCR)
+  - 구현 단계별 계획
 
 ---
 
-**Project**: Way3 - Location-Based Trading Game
-**Platform**: iOS 16.0+ / Node.js 18+
-**Documentation Version**: 1.0
-**Last Updated**: 2025-10-05
+## 🚀 빠른 시작
+
+### 클라이언트 (iOS)
+```bash
+# Xcode에서 프로젝트 열기
+open way3.xcodeproj
+
+# 또는
+1. Xcode 실행
+2. way3.xcodeproj 열기
+3. Cmd+R로 빌드 및 실행
+```
+
+### 서버 (Node.js)
+```bash
+cd WAY-SERVER
+npm install
+npm run migrate  # DB 초기화
+npm run seed     # 초기 데이터
+npm start        # 서버 시작
+```
+
+---
+
+## 📖 문서 읽는 순서
+
+프로젝트를 처음 접하는 경우 다음 순서로 문서를 읽는 것을 권장합니다:
+
+1. **00_PROJECT_OVERVIEW.md** (필수)
+   - 프로젝트 전체 구조 파악
+   - 게임 시스템 이해
+   - 기술 스택 확인
+
+2. **Game_System_Restructure_Plan.md** (선택)
+   - 향후 구현 계획 확인
+   - 로컬 우선 아키텍처 이해
+   - Phase별 개발 로드맵
+
+---
+
+## 🏗 프로젝트 구조
+
+```
+프로젝트 루트/
+├── WAY3/              # iOS 클라이언트
+│   ├── way3/          # SwiftUI 소스 코드
+│   └── claudedocs/    # 📍 이 디렉토리
+│
+└── WAY-SERVER/        # Node.js 서버
+    └── src/           # 서버 소스 코드
+```
+
+---
+
+## 🎮 게임 개요
+
+**WAY3 (The Way Trading Game)**는 서울시를 무대로 한 위치 기반 거래 시뮬레이션 게임입니다.
+
+### 핵심 특징
+- 🗺 **위치 기반 게임플레이**: GPS를 활용한 상인 발견
+- 📖 **스토리 중심**: 6개 챕터의 메인 스토리
+- 💰 **거래 시뮬레이션**: 아이템 매입/매도로 수익 창출
+- 🎭 **Visual Novel**: 텍스트 기반 대화 및 선택지
+- 📈 **캐릭터 성장**: 레벨, 스킬, 라이선스 시스템
+
+### 게임 플로우
+```
+로그인 → 프로필 생성 → 맵에서 상인 발견 → 거래 →
+퀘스트 완료 → 경험치 획득 → 레벨업 → 새 지역 언락
+```
+
+---
+
+## 🛠 기술 스택
+
+### 클라이언트 (iOS)
+- **언어**: Swift 5.9+
+- **프레임워크**: SwiftUI
+- **최소 버전**: iOS 17.0+
+- **주요 기능**: GPS, Keychain, UserDefaults
+
+### 서버 (Node.js)
+- **런타임**: Node.js 18+
+- **프레임워크**: Express.js 4.18+
+- **데이터베이스**: SQLite3 5.1+
+- **실시간 통신**: Socket.IO 4.7+
+- **인증**: JWT (Access + Refresh Token)
+
+---
+
+## 📊 주요 시스템
+
+### 1. 플레이어 시스템
+- 레벨, 경험치, 돈, 스탯
+- 스킬 (거래, 협상, 감정)
+- 라이선스 (초보상인 → 전설의 상인)
+- 인벤토리 (5칸) + 창고 (50칸)
+
+### 2. 거래 시스템
+- 매입: 상인으로부터 아이템 구매
+- 매도: 보유 아이템 판매
+- 동적 가격 변동
+- 협상 시스템 (스킬 기반)
+
+### 3. 스토리 시스템
+- Visual Novel 형식
+- JSON 기반 스토리 노드
+- 선택지 및 분기
+- 챕터 진행 (6개 챕터)
+
+### 4. 위치 시스템
+- GPS 기반 실시간 추적
+- 서울시 25개 구역
+- 상인 발견 (반경 500m)
+- Haversine 거리 계산
+
+### 5. 퀘스트 시스템
+- 거래 퀘스트 (영수증 OCR)
+- 배달 퀘스트 (GPS 인증)
+- 대화 퀘스트 (스토리 완료)
+
+---
+
+## 🔒 보안
+
+### 클라이언트
+- iOS Keychain (토큰 저장)
+- SecureStorage 클래스
+- HTTPS 통신
+
+### 서버
+- bcrypt 비밀번호 해싱
+- JWT 토큰 (Access 15분, Refresh 7일)
+- Rate Limiting (15분/100회)
+- CORS 설정
+- Helmet 보안 헤더
+
+---
+
+## 🚀 배포
+
+### 개발 환경
+- **클라이언트**: Xcode Simulator
+- **서버**: localhost:3000
+
+### 프로덕션
+- **클라이언트**: App Store (예정)
+- **서버**: Railway.app
+  - URL: https://way3-production.up.railway.app
+  - DB: SQLite (영구 볼륨)
+
+---
+
+## 📝 개발 로드맵
+
+### Phase 1: 기본 시스템 ✅
+- 인증, 프로필, UI/UX
+- 위치 기반 상인 발견
+- 거래 시스템
+- 인벤토리 관리
+
+### Phase 2: 스토리 시스템 ⏳
+- Visual Novel 엔진
+- 챕터 시스템
+- 퀘스트 시스템
+- 위치 인증 (GPS, OCR)
+
+### Phase 3: 게임 콘텐츠 📋
+- 25개 구역 상인 데이터
+- 메인 스토리 (챕터 1-6)
+- 서브퀘스트 (상인별 2-3개)
+- Personal Items
+- 업적 시스템
+
+### Phase 4: 소셜 기능 🔮
+- 채팅
+- 거래소
+- 길드
+- 랭킹
+
+---
+
+## 👥 기여 및 연락처
+
+- **프로젝트 리드**: 김상훈
+- **개발**: iOS (SwiftUI) + Node.js (Express)
+- **스토리**: 메인 및 서브 스토리 기획
+- **디자인**: Cyberpunk/JRPG 테마
+
+---
+
+## 📌 중요 링크
+
+- [WAY3 GitHub Repository](https://github.com/yourusername/WAY3)
+- [WAY-SERVER GitHub Repository](https://github.com/yourusername/WAY-SERVER)
+- [Railway 배포 서버](https://way3-production.up.railway.app)
+
+---
+
+**문서 버전**: 1.0.0
+**최종 업데이트**: 2025-01-09
+**작성자**: Claude Code
+**라이선스**: MIT

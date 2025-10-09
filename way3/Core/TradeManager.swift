@@ -22,6 +22,8 @@ enum TradeType: String, Codable {
 enum TradeRequestError: Error {
     case emptyCart
     case unsupportedTradeType
+    case requirementsNotMet(String)
+    case serverMessage(String)
 }
 
 // TradeItem is defined in Models/TradeItem.swift
@@ -98,9 +100,13 @@ class TradeManager: ObservableObject {
     
     // MARK: - 거래 실행
     /// CartItem 배열을 사용한 거래 실행 (MerchantDetailViewModel용)
-    func executeTrade(with merchantId: String, cartItems: [CartItem]) async throws -> TradeResult {
+    func executeTrade(with merchant: Merchant, cartItems: [CartItem]) async throws -> TradeResult {
         guard !cartItems.isEmpty else {
             throw TradeRequestError.emptyCart
+        }
+
+        if let requirementMessage = requirementFailureMessage(for: merchant) {
+            throw TradeRequestError.requirementsNotMet(requirementMessage)
         }
 
         var totalAmount = 0
@@ -115,7 +121,7 @@ class TradeManager: ObservableObject {
             }
 
             let request = TradeRequest(
-                merchantId: merchantId,
+                merchantId: merchant.id,
                 itemTemplateId: cartItem.item.itemId,
                 tradeType: cartItem.type,
                 quantity: cartItem.quantity,
@@ -144,7 +150,7 @@ class TradeManager: ObservableObject {
             soldItemIds: soldIds
         )
 
-        QuestManager.shared.recordTradeEvent(merchantId: merchantId, storeId: nil, amount: totalAmount)
+        QuestManager.shared.recordTradeEvent(merchantId: merchant.id, storeId: nil, amount: totalAmount)
         return result
     }
 
@@ -168,7 +174,7 @@ class TradeManager: ObservableObject {
                 CartItem(item: selection, quantity: selection.quantity, type: .buy)
             }
 
-            let result = try await executeTrade(with: merchant.id, cartItems: cartItems)
+            let result = try await executeTrade(with: merchant, cartItems: cartItems)
             
             await MainActor.run {
                 if result.success {
@@ -185,7 +191,18 @@ class TradeManager: ObservableObject {
             
         } catch {
             await MainActor.run {
-                errorMessage = "거래 실패: \(error.localizedDescription)"
+                if let tradeError = error as? TradeRequestError {
+                    switch tradeError {
+                    case .emptyCart:
+                        errorMessage = "거래할 아이템을 선택해주세요."
+                    case .unsupportedTradeType:
+                        errorMessage = "현재 거래 타입은 지원되지 않습니다."
+                    case .requirementsNotMet(let message), .serverMessage(let message):
+                        errorMessage = message
+                    }
+                } else {
+                    errorMessage = "거래 실패: \(error.localizedDescription)"
+                }
                 isLoading = false
             }
         }
@@ -244,13 +261,34 @@ class TradeManager: ObservableObject {
             if await AuthManager.shared.refreshAuthToken() {
                 urlRequest.allHTTPHeaderFields = AuthManager.shared.getAuthHeaders()
                 let (retryData, _) = try await URLSession.shared.data(for: urlRequest)
-                return try JSONDecoder().decode(TradeResult.self, from: retryData)
+                return try decodeTradeResult(from: retryData, for: request)
             } else {
                 throw URLError(.userAuthenticationRequired)
             }
         }
+
+        struct TradeErrorResponse: Decodable {
+            let success: Bool?
+            let error: String?
+            let message: String?
+        }
+
+        if (400...499).contains(httpResponse.statusCode) {
+            let errorResponse = try? JSONDecoder().decode(TradeErrorResponse.self, from: data)
+            let message = errorResponse?.error ?? errorResponse?.message ?? "거래 요청을 처리할 수 없습니다 (코드: \(httpResponse.statusCode))"
+            if httpResponse.statusCode == 403 {
+                throw TradeRequestError.requirementsNotMet(message)
+            } else {
+                throw TradeRequestError.serverMessage(message)
+            }
+        }
+
+        if (500...599).contains(httpResponse.statusCode) {
+            let message = String(data: data, encoding: .utf8) ?? "알 수 없는 서버 오류"
+            throw TradeRequestError.serverMessage("서버 오류: \(message)")
+        }
         
-        return try JSONDecoder().decode(TradeResult.self, from: data)
+        return try decodeTradeResult(from: data, for: request)
     }
 
     // MARK: - 제안 가격 계산
@@ -324,8 +362,55 @@ class TradeManager: ObservableObject {
         if merchant.distance > 100 {
             return (false, "상인과의 거리가 너무 멉니다.")
         }
+
+        if let requirementMessage = requirementFailureMessage(for: merchant) {
+            return (false, requirementMessage)
+        }
         
         return (true, "거래 가능")
+    }
+
+    // MARK: - 내부 헬퍼
+    private func decodeTradeResult(from data: Data, for request: TradeRequest) throws -> TradeResult {
+        let response = try JSONDecoder().decode(TradeExecuteResponse.self, from: data)
+
+        guard response.success else {
+            let message = response.error ?? response.message ?? "거래에 실패했습니다."
+            throw TradeRequestError.serverMessage(message)
+        }
+
+        let finalPrice = response.data?.finalPrice ?? 0
+        let experience = response.data?.experienceGained ?? 0
+        let message = response.message ?? "거래가 완료되었습니다."
+
+        let purchasedIds = request.tradeType == .buy ? [request.itemTemplateId] : []
+        let soldIds = request.tradeType == .sell ? [request.itemTemplateId] : []
+
+        return TradeResult(
+            success: true,
+            message: message,
+            totalAmount: finalPrice,
+            experienceGained: experience,
+            purchasedItemIds: purchasedIds,
+            soldItemIds: soldIds
+        )
+    }
+
+    // MARK: - 요구 조건 검증
+    func requirementFailureMessage(for merchant: Merchant) -> String? {
+        guard let player = GameManager.shared.currentPlayer else { return nil }
+
+        let playerLicense = player.core.currentLicense
+        if playerLicense.rawValue < merchant.requiredLicense.rawValue {
+            return "거래를 위해서는 \(merchant.requiredLicense.displayName) 라이센스가 필요합니다. 현재 라이센스: \(playerLicense.displayName)."
+        }
+
+        let playerReputation = player.core.reputation
+        if playerReputation < merchant.reputationRequirement {
+            return "거래를 위해서는 평판 \(merchant.reputationRequirement) 이상이 필요합니다. 현재 평판: \(playerReputation)."
+        }
+
+        return nil
     }
     
     // MARK: - 거래 통계

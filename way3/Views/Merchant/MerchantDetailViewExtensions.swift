@@ -127,6 +127,13 @@ extension MerchantDetailView {
     }
 
     private func executeTradeForCart() async {
+        if let requirementMessage = TradeManager.shared.requirementFailureMessage(for: merchant) {
+            await MainActor.run {
+                viewModel.error = MerchantDataError.tradeValidationFailed(requirementMessage)
+            }
+            return
+        }
+
         let merchantId = merchant.id
 
         let totalBuy = cartManager.totalBuyCost
@@ -174,6 +181,19 @@ extension MerchantDetailView {
             await MainActor.run {
                 viewModel.error = MerchantDataError.tradeExecutionFailed(tradeError.message)
                 viewModel.isLoading = false
+            }
+        } catch let networkError as NetworkManager.NetworkError {
+            if case .clientError(let statusCode, _) = networkError, statusCode == 403 {
+                let message = TradeManager.shared.requirementFailureMessage(for: merchant) ?? "거래 조건을 충족하지 못했습니다."
+                await MainActor.run {
+                    viewModel.error = MerchantDataError.tradeExecutionFailed(message)
+                    viewModel.isLoading = false
+                }
+            } else {
+                await MainActor.run {
+                    viewModel.error = MerchantDataError.networkError(networkError)
+                    viewModel.isLoading = false
+                }
             }
         } catch {
             await MainActor.run {
