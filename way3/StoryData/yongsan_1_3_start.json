@@ -1,0 +1,10 @@
+{
+  "node_id": "yongsan_1_3_start",
+  "background_image": "bg_yongsan_night.jpg",
+  "character_id": "jiyoung",
+  "character_sprite": "sprite_jiyoung_resolve.png",
+  "dialogue_text": "전략 회의 결과가 전 지역에 파장을 줄 거야.",
+  "dialogue_sound_id": "yongsan_1_3_start",
+  "sound_effect": "",
+  "next_node_id": "yongsan_1_3_final"
+}

@@ -8,7 +8,9 @@
       "district_id": "gangnam_gu",
       "description": "서예나가 강남권의 균형을 되찾기 위한 첫 거래를 부탁합니다.",
       "requirements": {
-        "required_episodes": ["gangnam_1_1"],
+        "required_episodes": [
+          "gangnam_1_1"
+        ],
         "required_items": [],
         "required_level": 1,
         "required_sub_quests": []
@@ -27,8 +29,12 @@
       "rewards": {
         "money": 20000,
         "exp": 250,
-        "inventory_items": ["item_gangnam_network_key"],
-        "story_piece_ids": ["story_piece_seoyena_04"],
+        "inventory_items": [
+          "item_gangnam_network_key"
+        ],
+        "story_piece_ids": [
+          "story_piece_seoyena_04"
+        ],
         "key_items": [],
         "relationship_change": {
           "merchant_id": "merchant_seoyena",
@@ -44,10 +50,16 @@
       "district_id": "gangnam_gu",
       "description": "서예나의 네트워크에 잠입한 정체불명의 침투자를 추적하세요.",
       "requirements": {
-        "required_episodes": ["gangnam_1_2"],
-        "required_items": ["item_gangnam_network_key"],
+        "required_episodes": [
+          "gangnam_1_2"
+        ],
+        "required_items": [
+          "item_gangnam_network_key"
+        ],
         "required_level": 5,
-        "required_sub_quests": ["seoyena_sub_02"]
+        "required_sub_quests": [
+          "seoyena_sub_02"
+        ]
       },
       "objectives": [
         {
@@ -66,8 +78,12 @@
       "rewards": {
         "money": 30000,
         "exp": 350,
-        "inventory_items": ["item_gangnam_encrypted_data"],
-        "story_piece_ids": ["story_piece_seoyena_05"],
+        "inventory_items": [
+          "item_gangnam_encrypted_data"
+        ],
+        "story_piece_ids": [
+          "story_piece_seoyena_05"
+        ],
         "key_items": [],
         "relationship_change": {
           "merchant_id": "merchant_seoyena",
@@ -83,10 +99,17 @@
       "district_id": "gangnam_gu",
       "description": "서예나와 강남권 네트워크를 정화하여 증표를 획득하세요.",
       "requirements": {
-        "required_episodes": ["gangnam_1_3"],
-        "required_items": ["item_gangnam_encrypted_data"],
+        "required_episodes": [
+          "gangnam_1_3"
+        ],
+        "required_items": [
+          "item_gangnam_encrypted_data"
+        ],
         "required_level": 10,
-        "required_sub_quests": ["seoyena_sub_03", "seoyena_sub_02"]
+        "required_sub_quests": [
+          "seoyena_sub_03",
+          "seoyena_sub_02"
+        ]
       },
       "objectives": [
         {
@@ -99,11 +122,658 @@
         "money": 50000,
         "exp": 500,
         "inventory_items": [],
-        "story_piece_ids": ["story_piece_seoyena_final"],
-        "key_items": ["key_item_gangnam"],
+        "story_piece_ids": [
+          "story_piece_seoyena_final"
+        ],
+        "key_items": [
+          "key_item_gangnam"
+        ],
         "relationship_change": {
           "merchant_id": "merchant_seoyena",
           "trust": 40
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_jongno_1_1",
+      "title": "종로의 봉인 해제",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "jongno_gu",
+      "description": "경복궁 인근에서 발견된 봉인 장치를 조사하고 기록을 회수하세요.",
+      "requirements": {
+        "required_episodes": [
+          "jongno_1_1"
+        ],
+        "required_items": [],
+        "required_level": 8,
+        "required_sub_quests": []
+      },
+      "objectives": [
+        {
+          "type": "delivery",
+          "description": "경복궁 서측 봉인 장치에 접근",
+          "target_location": {
+            "latitude": 37.5759,
+            "longitude": 126.9769,
+            "radius": 40
+          }
+        }
+      ],
+      "rewards": {
+        "money": 26000,
+        "exp": 320,
+        "inventory_items": [
+          "item_jongno_seal_fragment"
+        ],
+        "story_piece_ids": [
+          "story_piece_minji_04"
+        ],
+        "key_items": [],
+        "relationship_change": {
+          "merchant_id": "merchant_minji",
+          "trust": 18
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_jongno_1_2",
+      "title": "숨은 칙령 해독",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "jongno_gu",
+      "description": "이민지와 함께 봉인 장치에 남겨진 칙령을 해독하세요.",
+      "requirements": {
+        "required_episodes": [
+          "jongno_1_2"
+        ],
+        "required_items": [
+          "item_jongno_seal_fragment"
+        ],
+        "required_level": 10,
+        "required_sub_quests": [
+          "minji_sub_01"
+        ]
+      },
+      "objectives": [
+        {
+          "type": "dialogue",
+          "description": "이민지와 칙령을 해독하기 위한 대화",
+          "story_node_id": "jongno_1_2_confront"
+        }
+      ],
+      "rewards": {
+        "money": 32000,
+        "exp": 380,
+        "inventory_items": [
+          "item_jongno_cipher_plate"
+        ],
+        "story_piece_ids": [
+          "story_piece_minji_05"
+        ],
+        "key_items": [],
+        "relationship_change": {
+          "merchant_id": "merchant_minji",
+          "trust": 22
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_jongno_1_3",
+      "title": "종로 결의식",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "jongno_gu",
+      "description": "종로 상인 연합의 결의를 다지고 지역 증표를 확보하세요.",
+      "requirements": {
+        "required_episodes": [
+          "jongno_1_3"
+        ],
+        "required_items": [
+          "item_jongno_cipher_plate"
+        ],
+        "required_level": 12,
+        "required_sub_quests": [
+          "minji_sub_02",
+          "minji_sub_03"
+        ]
+      },
+      "objectives": [
+        {
+          "type": "dialogue",
+          "description": "결의식에서 최종 결정을 내린다",
+          "story_node_id": "jongno_1_3_final"
+        }
+      ],
+      "rewards": {
+        "money": 42000,
+        "exp": 550,
+        "inventory_items": [],
+        "story_piece_ids": [
+          "story_piece_minji_final"
+        ],
+        "key_items": [
+          "key_item_jongno"
+        ],
+        "relationship_change": {
+          "merchant_id": "merchant_minji",
+          "trust": 26
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_jung_1_1",
+      "title": "명동 고객 리스트 복구",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "jung_gu",
+      "description": "정해린이 분실한 VIP 고객 리스트를 복구하세요.",
+      "requirements": {
+        "required_episodes": [
+          "jung_1_1"
+        ],
+        "required_items": [],
+        "required_level": 8,
+        "required_sub_quests": []
+      },
+      "objectives": [
+        {
+          "type": "trading",
+          "description": "명동 상권에서 VIP 고객 데이터 구매",
+          "store_id": "store_myeongdong_001",
+          "merchant_id": "merchant_haerin",
+          "min_purchase": 9000
+        }
+      ],
+      "rewards": {
+        "money": 25000,
+        "exp": 310,
+        "inventory_items": [
+          "item_jung_vip_ledger"
+        ],
+        "story_piece_ids": [
+          "story_piece_haerin_04"
+        ],
+        "key_items": [],
+        "relationship_change": {
+          "merchant_id": "merchant_haerin",
+          "trust": 16
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_jung_1_2",
+      "title": "을지로 네트워크 연결",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "jung_gu",
+      "description": "을지로 공방들과의 네트워크를 연결하여 데이터를 수집하세요.",
+      "requirements": {
+        "required_episodes": [
+          "jung_1_2"
+        ],
+        "required_items": [
+          "item_jung_vip_ledger"
+        ],
+        "required_level": 11,
+        "required_sub_quests": [
+          "haerin_sub_01"
+        ]
+      },
+      "objectives": [
+        {
+          "type": "delivery",
+          "description": "을지로 공방 네트워크 허브 방문",
+          "target_location": {
+            "latitude": 37.5664,
+            "longitude": 126.9912,
+            "radius": 50
+          }
+        }
+      ],
+      "rewards": {
+        "money": 31000,
+        "exp": 360,
+        "inventory_items": [
+          "item_jung_signal_hub"
+        ],
+        "story_piece_ids": [
+          "story_piece_haerin_05"
+        ],
+        "key_items": [],
+        "relationship_change": {
+          "merchant_id": "merchant_haerin",
+          "trust": 20
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_jung_1_3",
+      "title": "중구 연합 전략회의",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "jung_gu",
+      "description": "정해린과 함께 연합 전략회의를 주도하세요.",
+      "requirements": {
+        "required_episodes": [
+          "jung_1_3"
+        ],
+        "required_items": [
+          "item_jung_signal_hub"
+        ],
+        "required_level": 13,
+        "required_sub_quests": [
+          "haerin_sub_02",
+          "haerin_sub_03"
+        ]
+      },
+      "objectives": [
+        {
+          "type": "dialogue",
+          "description": "정해린과 회의를 마무리한다",
+          "story_node_id": "jung_1_3_final"
+        }
+      ],
+      "rewards": {
+        "money": 45000,
+        "exp": 540,
+        "inventory_items": [],
+        "story_piece_ids": [
+          "story_piece_haerin_final"
+        ],
+        "key_items": [
+          "key_item_junggu"
+        ],
+        "relationship_change": {
+          "merchant_id": "merchant_haerin",
+          "trust": 28
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_mapo_1_1",
+      "title": "합정 라인 부팅",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "mapo_gu",
+      "description": "강선우의 합정 라인 음악 서버를 재가동하세요.",
+      "requirements": {
+        "required_episodes": [
+          "mapo_1_1"
+        ],
+        "required_items": [],
+        "required_level": 9,
+        "required_sub_quests": []
+      },
+      "objectives": [
+        {
+          "type": "trading",
+          "description": "합정 오디오 스튜디오에서 부품 구매",
+          "store_id": "store_hapjeong_audio",
+          "merchant_id": "merchant_sunwoo",
+          "min_purchase": 10000
+        }
+      ],
+      "rewards": {
+        "money": 27000,
+        "exp": 330,
+        "inventory_items": [
+          "item_mapo_audio_core"
+        ],
+        "story_piece_ids": [
+          "story_piece_sunwoo_04"
+        ],
+        "key_items": [],
+        "relationship_change": {
+          "merchant_id": "merchant_sunwoo",
+          "trust": 17
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_mapo_1_2",
+      "title": "홍대 스트림 안정화",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "mapo_gu",
+      "description": "홍대 야시장 스트리밍을 안정화하세요.",
+      "requirements": {
+        "required_episodes": [
+          "mapo_1_2"
+        ],
+        "required_items": [
+          "item_mapo_audio_core"
+        ],
+        "required_level": 11,
+        "required_sub_quests": [
+          "sunwoo_sub_01"
+        ]
+      },
+      "objectives": [
+        {
+          "type": "delivery",
+          "description": "홍대 스트리밍 관제 포인트 방문",
+          "target_location": {
+            "latitude": 37.5563,
+            "longitude": 126.9235,
+            "radius": 55
+          }
+        }
+      ],
+      "rewards": {
+        "money": 32000,
+        "exp": 390,
+        "inventory_items": [
+          "item_mapo_stream_key"
+        ],
+        "story_piece_ids": [
+          "story_piece_sunwoo_05"
+        ],
+        "key_items": [],
+        "relationship_change": {
+          "merchant_id": "merchant_sunwoo",
+          "trust": 21
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_mapo_1_3",
+      "title": "새벽 믹스 퍼포먼스",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "mapo_gu",
+      "description": "강선우와 함께 새벽 믹스 퍼포먼스를 완성하세요.",
+      "requirements": {
+        "required_episodes": [
+          "mapo_1_3"
+        ],
+        "required_items": [
+          "item_mapo_stream_key"
+        ],
+        "required_level": 13,
+        "required_sub_quests": [
+          "sunwoo_sub_02",
+          "sunwoo_sub_03"
+        ]
+      },
+      "objectives": [
+        {
+          "type": "dialogue",
+          "description": "새벽 퍼포먼스를 마무리한다",
+          "story_node_id": "mapo_1_3_final"
+        }
+      ],
+      "rewards": {
+        "money": 48000,
+        "exp": 560,
+        "inventory_items": [],
+        "story_piece_ids": [
+          "story_piece_sunwoo_final"
+        ],
+        "key_items": [
+          "key_item_mapo"
+        ],
+        "relationship_change": {
+          "merchant_id": "merchant_sunwoo",
+          "trust": 27
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_seodaemun_1_1",
+      "title": "서대문 기록 복원",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "seodaemun_gu",
+      "description": "조중기가 모은 역사 기록을 디지털화하세요.",
+      "requirements": {
+        "required_episodes": [
+          "seodaemun_1_1"
+        ],
+        "required_items": [],
+        "required_level": 9,
+        "required_sub_quests": []
+      },
+      "objectives": [
+        {
+          "type": "delivery",
+          "description": "서대문형무소 역사관 데이터센터 방문",
+          "target_location": {
+            "latitude": 37.572,
+            "longitude": 126.9595,
+            "radius": 45
+          }
+        }
+      ],
+      "rewards": {
+        "money": 24000,
+        "exp": 320,
+        "inventory_items": [
+          "item_seodaemun_archival_core"
+        ],
+        "story_piece_ids": [
+          "story_piece_joongi_04"
+        ],
+        "key_items": [],
+        "relationship_change": {
+          "merchant_id": "merchant_joongi",
+          "trust": 15
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_seodaemun_1_2",
+      "title": "독립문 감시망 구축",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "seodaemun_gu",
+      "description": "독립문 주변 감시망을 구축하고 데이터 흐름을 제어하세요.",
+      "requirements": {
+        "required_episodes": [
+          "seodaemun_1_2"
+        ],
+        "required_items": [
+          "item_seodaemun_archival_core"
+        ],
+        "required_level": 11,
+        "required_sub_quests": [
+          "joongi_sub_01"
+        ]
+      },
+      "objectives": [
+        {
+          "type": "trading",
+          "description": "감시망 구성을 위한 센서 구매",
+          "store_id": "store_seodaemun_sensor",
+          "merchant_id": "merchant_joongi",
+          "min_purchase": 7000
+        }
+      ],
+      "rewards": {
+        "money": 30000,
+        "exp": 370,
+        "inventory_items": [
+          "item_seodaemun_sensor_array"
+        ],
+        "story_piece_ids": [
+          "story_piece_joongi_05"
+        ],
+        "key_items": [],
+        "relationship_change": {
+          "merchant_id": "merchant_joongi",
+          "trust": 19
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_seodaemun_1_3",
+      "title": "서대문 야간 지휘",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "seodaemun_gu",
+      "description": "야간 브리핑을 주도하여 서대문 연합을 안정화하세요.",
+      "requirements": {
+        "required_episodes": [
+          "seodaemun_1_3"
+        ],
+        "required_items": [
+          "item_seodaemun_sensor_array"
+        ],
+        "required_level": 14,
+        "required_sub_quests": [
+          "joongi_sub_02",
+          "joongi_sub_03"
+        ]
+      },
+      "objectives": [
+        {
+          "type": "dialogue",
+          "description": "야간 브리핑에서 결론을 내린다",
+          "story_node_id": "seodaemun_1_3_final"
+        }
+      ],
+      "rewards": {
+        "money": 47000,
+        "exp": 560,
+        "inventory_items": [],
+        "story_piece_ids": [
+          "story_piece_joongi_final"
+        ],
+        "key_items": [
+          "key_item_seodaemun"
+        ],
+        "relationship_change": {
+          "merchant_id": "merchant_joongi",
+          "trust": 25
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_yongsan_1_1",
+      "title": "전자상가 보안 점검",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "yongsan_gu",
+      "description": "배지영의 전자상가 보안망을 점검하세요.",
+      "requirements": {
+        "required_episodes": [
+          "yongsan_1_1"
+        ],
+        "required_items": [],
+        "required_level": 9,
+        "required_sub_quests": []
+      },
+      "objectives": [
+        {
+          "type": "trading",
+          "description": "전자상가 보안 모듈 구매",
+          "store_id": "store_yongsan_security",
+          "merchant_id": "merchant_jiyoung",
+          "min_purchase": 12000
+        }
+      ],
+      "rewards": {
+        "money": 28000,
+        "exp": 340,
+        "inventory_items": [
+          "item_yongsan_security_core"
+        ],
+        "story_piece_ids": [
+          "story_piece_jiyoung_04"
+        ],
+        "key_items": [],
+        "relationship_change": {
+          "merchant_id": "merchant_jiyoung",
+          "trust": 18
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_yongsan_1_2",
+      "title": "용산 특송 조율",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "yongsan_gu",
+      "description": "용산역 특송 네트워크를 조율하세요.",
+      "requirements": {
+        "required_episodes": [
+          "yongsan_1_2"
+        ],
+        "required_items": [
+          "item_yongsan_security_core"
+        ],
+        "required_level": 12,
+        "required_sub_quests": [
+          "jiyoung_sub_01"
+        ]
+      },
+      "objectives": [
+        {
+          "type": "delivery",
+          "description": "용산역 특송 관제실 방문",
+          "target_location": {
+            "latitude": 37.5293,
+            "longitude": 126.9649,
+            "radius": 50
+          }
+        }
+      ],
+      "rewards": {
+        "money": 34000,
+        "exp": 400,
+        "inventory_items": [
+          "item_yongsan_dispatch_token"
+        ],
+        "story_piece_ids": [
+          "story_piece_jiyoung_05"
+        ],
+        "key_items": [],
+        "relationship_change": {
+          "merchant_id": "merchant_jiyoung",
+          "trust": 22
+        }
+      }
+    },
+    {
+      "quest_id": "mainquest_yongsan_1_3",
+      "title": "전략 회의 시뮬레이션",
+      "type": "story_main",
+      "chapter_id": "ch2_northwest",
+      "district_id": "yongsan_gu",
+      "description": "배지영과 함께 전략 회의 시뮬레이션을 완성하세요.",
+      "requirements": {
+        "required_episodes": [
+          "yongsan_1_3"
+        ],
+        "required_items": [
+          "item_yongsan_dispatch_token"
+        ],
+        "required_level": 14,
+        "required_sub_quests": [
+          "jiyoung_sub_02",
+          "jiyoung_sub_03"
+        ]
+      },
+      "objectives": [
+        {
+          "type": "dialogue",
+          "description": "전략 회의를 마무리한다",
+          "story_node_id": "yongsan_1_3_final"
+        }
+      ],
+      "rewards": {
+        "money": 50000,
+        "exp": 580,
+        "inventory_items": [],
+        "story_piece_ids": [
+          "story_piece_jiyoung_final"
+        ],
+        "key_items": [
+          "key_item_yongsan"
+        ],
+        "relationship_change": {
+          "merchant_id": "merchant_jiyoung",
+          "trust": 29
         }
       }
     }

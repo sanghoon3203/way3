@@ -1,0 +1,10 @@
+{
+  "node_id": "seodaemun_1_3_end",
+  "background_image": "bg_seodaemun_office.jpg",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_confident.png",
+  "dialogue_text": "우리가 뿌리 삼은 이야기가 새벽을 열 거야.",
+  "dialogue_sound_id": "seodaemun_1_3_end",
+  "sound_effect": "",
+  "next_node_id": ""
+}

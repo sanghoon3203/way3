@@ -133,6 +133,7 @@ struct QuestRequirements: Codable, Hashable {
 
     // Dialogue 퀘스트용
     let story_node_complete: String?
+    let story_node_start: String?
 
     // 공통 요구 조건
     let required_items: [String]
@@ -147,6 +148,7 @@ struct QuestRequirements: Codable, Hashable {
         target_location: QuestLocation? = nil,
         time_limit: Int? = nil,
         story_node_complete: String? = nil,
+        story_node_start: String? = nil,
         required_items: [String] = [],
         required_story_pieces: [String] = [],
         required_main_quests: [String] = [],
@@ -158,6 +160,7 @@ struct QuestRequirements: Codable, Hashable {
         self.target_location = target_location
         self.time_limit = time_limit
         self.story_node_complete = story_node_complete
+        self.story_node_start = story_node_start
         self.required_items = required_items
         self.required_story_pieces = required_story_pieces
         self.required_main_quests = required_main_quests
@@ -171,6 +174,7 @@ struct QuestRequirements: Codable, Hashable {
         case target_location
         case time_limit
         case story_node_complete
+        case story_node_start
         case required_items
         case required_story_pieces
         case required_main_quests
@@ -186,6 +190,7 @@ struct QuestRequirements: Codable, Hashable {
         target_location = try container.decodeIfPresent(QuestLocation.self, forKey: .target_location)
         time_limit = try container.decodeIfPresent(Int.self, forKey: .time_limit)
         story_node_complete = try container.decodeIfPresent(String.self, forKey: .story_node_complete)
+        story_node_start = try container.decodeIfPresent(String.self, forKey: .story_node_start)
         required_items = try container.decodeIfPresent([String].self, forKey: .required_items) ?? []
         required_story_pieces = try container.decodeIfPresent([String].self, forKey: .required_story_pieces) ?? []
         required_main_quests = try container.decodeIfPresent([String].self, forKey: .required_main_quests) ?? []
@@ -200,6 +205,7 @@ struct QuestRequirements: Codable, Hashable {
         try container.encodeIfPresent(target_location, forKey: .target_location)
         try container.encodeIfPresent(time_limit, forKey: .time_limit)
         try container.encodeIfPresent(story_node_complete, forKey: .story_node_complete)
+        try container.encodeIfPresent(story_node_start, forKey: .story_node_start)
         if !required_items.isEmpty { try container.encode(required_items, forKey: .required_items) }
         if !required_story_pieces.isEmpty { try container.encode(required_story_pieces, forKey: .required_story_pieces) }
         if !required_main_quests.isEmpty { try container.encode(required_main_quests, forKey: .required_main_quests) }
@@ -428,6 +434,8 @@ extension QuestRequirements {
     var requiredStoryPieces: [String] { required_story_pieces }
     var requiredMainQuests: [String] { required_main_quests }
     var requiredSubQuests: [String] { required_sub_quests }
+    var storyNodeStart: String? { story_node_start }
+    var storyNodeComplete: String? { story_node_complete }
 
     func meetsMetaRequirements(progress: PlayerProgress, playerLevel: Int) -> Bool {
         if let requiredLevel = required_level, playerLevel < requiredLevel {

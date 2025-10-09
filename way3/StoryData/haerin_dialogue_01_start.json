@@ -1,0 +1,10 @@
+{
+  "node_id": "haerin_dialogue_01_start",
+  "background_image": "bg_myeongdong_evening.jpg",
+  "character_id": "haerin",
+  "character_sprite": "sprite_haerin_smile.png",
+  "dialogue_text": "명동 밤공기, 네 마음에 쌓아 둬.",
+  "dialogue_sound_id": "haerin_dialogue_01_start",
+  "sound_effect": "",
+  "next_node_id": "haerin_dialogue_01_end"
+}

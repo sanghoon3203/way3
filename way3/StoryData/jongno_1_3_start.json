@@ -1,0 +1,10 @@
+{
+  "node_id": "jongno_1_3_start",
+  "background_image": "bg_jongno_plaza_evening.jpg",
+  "character_id": "minji",
+  "character_sprite": "sprite_minji_resolve.png",
+  "dialogue_text": "모두의 시선이 우리를 향하고 있어.",
+  "dialogue_sound_id": "jongno_1_3_start",
+  "sound_effect": "",
+  "next_node_id": "jongno_1_3_final"
+}

@@ -1,6 +1,32 @@
 {
-  "player":         { "gender": "male" },
-  "Kijuri":     { "gender": "female" },
-  "blacksmith_lee": { "gender": "male" },
-  "pharmacist_choi":{ "gender": "female" }
+  "player": {
+    "gender": "male"
+  },
+  "Kijuri": {
+    "gender": "female"
+  },
+  "blacksmith_lee": {
+    "gender": "male"
+  },
+  "pharmacist_choi": {
+    "gender": "female"
+  },
+  "seoyena": {
+    "gender": "female"
+  },
+  "minji": {
+    "gender": "female"
+  },
+  "haerin": {
+    "gender": "female"
+  },
+  "joongi": {
+    "gender": "male"
+  },
+  "sunwoo": {
+    "gender": "male"
+  },
+  "jiyoung": {
+    "gender": "female"
+  }
 }

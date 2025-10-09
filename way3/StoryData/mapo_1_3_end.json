@@ -1,0 +1,10 @@
+{
+  "node_id": "mapo_1_3_end",
+  "background_image": "bg_hapjeong_studio.jpg",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_confident.png",
+  "dialogue_text": "새벽을 깨우는 리듬, 같이 완성하자.",
+  "dialogue_sound_id": "mapo_1_3_end",
+  "sound_effect": "",
+  "next_node_id": ""
+}

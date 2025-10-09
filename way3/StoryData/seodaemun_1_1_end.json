@@ -1,0 +1,10 @@
+{
+  "node_id": "seodaemun_1_1_end",
+  "background_image": "bg_independence_gate.jpg",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "디지털화해서 흔적을 남기지 않게 보호할게.",
+  "dialogue_sound_id": "seodaemun_1_1_end",
+  "sound_effect": "",
+  "next_node_id": ""
+}

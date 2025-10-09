@@ -1,0 +1,10 @@
+{
+  "node_id": "seodaemun_1_2_end",
+  "background_image": "bg_independence_gate_night.jpg",
+  "character_id": "joongi",
+  "character_sprite": "sprite_joongi_proud.png",
+  "dialogue_text": "역사도, 현재도 동시에 지킬 수 있겠군.",
+  "dialogue_sound_id": "seodaemun_1_2_end",
+  "sound_effect": "",
+  "next_node_id": ""
+}

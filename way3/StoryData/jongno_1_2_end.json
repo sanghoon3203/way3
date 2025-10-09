@@ -1,0 +1,10 @@
+{
+  "node_id": "jongno_1_2_end",
+  "background_image": "bg_jongno_archive.jpg",
+  "character_id": "minji",
+  "character_sprite": "sprite_minji_focus.png",
+  "dialogue_text": "조금만 더 버티면 돼. 마지막 열쇠가 보일 거야.",
+  "dialogue_sound_id": "jongno_1_2_end",
+  "sound_effect": "",
+  "next_node_id": ""
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "mapo_1_3_final",
+  "background_image": "bg_hapjeong_studio.jpg",
+  "character_id": "sunwoo",
+  "character_sprite": "sprite_sunwoo_resolve.png",
+  "dialogue_text": "이 새벽을 함께 공유하자.",
+  "dialogue_sound_id": "mapo_1_3_final",
+  "sound_effect": "",
+  "next_node_id": "mapo_1_3_end"
+}

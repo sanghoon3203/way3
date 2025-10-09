@@ -1,0 +1,10 @@
+{
+  "node_id": "minji_dialogue_01_start",
+  "background_image": "bg_gyeongbokgung_night.jpg",
+  "character_id": "minji",
+  "character_sprite": "sprite_minji_calm.png",
+  "dialogue_text": "종로의 숨결을 느껴봐. 조용하지만 강하지.",
+  "dialogue_sound_id": "minji_dialogue_01_start",
+  "sound_effect": "",
+  "next_node_id": "minji_dialogue_01_end"
+}

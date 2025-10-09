@@ -1,0 +1,10 @@
+{
+  "node_id": "jung_1_3_end",
+  "background_image": "bg_junggu_rooftop_night.jpg",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_confident.png",
+  "dialogue_text": "모든 상인들이 네 신호를 기다리고 있어.",
+  "dialogue_sound_id": "jung_1_3_end",
+  "sound_effect": "",
+  "next_node_id": ""
+}

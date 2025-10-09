@@ -1,0 +1,10 @@
+{
+  "node_id": "jiyoung_dialogue_01_start",
+  "background_image": "bg_yongsan_terminal.jpg",
+  "character_id": "jiyoung",
+  "character_sprite": "sprite_jiyoung_serious.png",
+  "dialogue_text": "네 판단은 늘 냉정하면서도 따뜻해.",
+  "dialogue_sound_id": "jiyoung_dialogue_01_start",
+  "sound_effect": "",
+  "next_node_id": "jiyoung_dialogue_01_end"
+}

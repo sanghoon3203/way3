@@ -20,7 +20,16 @@ struct StoryHubTabView: View {
 
     @EnvironmentObject private var progressManager: ProgressManager
 
-    private var knownMerchantIds: [String] { ["grocer_kim", "blacksmith_lee", "pharmacist_choi"] }
+    private var knownMerchantIds: [String] {
+        [
+            "merchant_seoyena",
+            "merchant_minji",
+            "merchant_haerin",
+            "merchant_joongi",
+            "merchant_sunwoo",
+            "merchant_jiyoung"
+        ]
+    }
 
     var body: some View {
         NavigationStack {

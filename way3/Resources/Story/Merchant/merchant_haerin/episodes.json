@@ -1,0 +1,9 @@
+[
+  {
+    "episode_id": "haerin_memory_01",
+    "merchant_id": "merchant_haerin",
+    "title": "명동 빛의 지도",
+    "entry_node": "haerin_dialogue_01_start",
+    "locked": false
+  }
+]

@@ -10,6 +10,10 @@ import SwiftUI
 import CoreLocation
 import PhotosUI
 
+private struct StoryLaunchKey: Identifiable {
+    let id: String
+}
+
 struct QuestDetailView: View {
     let quest: SubQuest
     let merchantId: String
@@ -28,6 +32,8 @@ struct QuestDetailView: View {
 
     @State private var currentDistance: Double = 0
     @State private var distanceTimer: Timer?
+    @State private var activeStory: StoryLaunchKey?
+    @State private var isStoryCompleting = false
 
     @Environment(\.dismiss) private var dismiss
 
@@ -58,6 +64,12 @@ struct QuestDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showImagePicker) {
             ImagePicker(image: $selectedImage)
+        }
+        .fullScreenCover(item: $activeStory) { launch in
+            StoryView(startNodeID: launch.id) {
+                Task { await completeDialogueQuest() }
+            }
+            .background(Color.black.ignoresSafeArea())
         }
         .onChange(of: selectedImage) { _, newImage in
             if let image = newImage {
@@ -314,20 +326,28 @@ struct QuestDetailView: View {
     }
 
     private var dialogueVerificationButton: some View {
-        NavigationLink(destination: Text("스토리 플레이 예정")) {
+        Button {
+            launchDialogueStory()
+        } label: {
             HStack {
-                Image(systemName: "play.fill")
-                    .font(.system(size: 20))
-                Text("대화 시작하기")
+                if isStoryCompleting {
+                    ProgressView()
+                        .tint(.black)
+                } else {
+                    Image(systemName: "play.fill")
+                        .font(.system(size: 20))
+                }
+                Text(isStoryCompleting ? "검증 처리 중..." : "대화 시작하기")
                     .font(.system(size: 16, weight: .bold, design: .monospaced))
             }
             .foregroundColor(.black)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(Color.cyberpunkYellow)
+            .background(dialogueButtonAvailable ? Color.cyberpunkYellow : Color.cyberpunkCardBg)
             .clipShape(RoundedRectangle(cornerRadius: 12))
         }
-        .disabled(questManager.isQuestCompleted(quest.quest_id))
+        .buttonStyle(.plain)
+        .disabled(!dialogueButtonAvailable)
     }
 
     private var resultCard: some View {
@@ -387,6 +407,17 @@ struct QuestDetailView: View {
         return quest.requirements.meetsMetaRequirements(progress: progressManager.progress, playerLevel: playerLevel)
     }
 
+    private var dialogueButtonAvailable: Bool {
+        guard !questManager.isQuestCompleted(quest.quest_id),
+              !isProcessing,
+              !isStoryCompleting else { return false }
+        return dialogueStartNode != nil
+    }
+
+    private var dialogueStartNode: String? {
+        quest.requirements.storyNodeStart ?? quest.requirements.storyNodeComplete
+    }
+
     private func rewardRow(icon: String, text: String) -> some View {
         HStack(spacing: 8) {
             Image(systemName: icon)
@@ -398,6 +429,16 @@ struct QuestDetailView: View {
     }
 
     // MARK: - Quest Execution
+
+    private func launchDialogueStory() {
+        guard let startNode = dialogueStartNode else {
+            isSuccess = false
+            resultMessage = "스토리 노드 정보가 정의되지 않았습니다."
+            showResult = true
+            return
+        }
+        activeStory = StoryLaunchKey(id: startNode)
+    }
 
     private func executeTrading(image: UIImage) {
         guard !questManager.isQuestCompleted(quest.quest_id) else { return }
@@ -486,6 +527,47 @@ struct QuestDetailView: View {
     private func stopDistanceTracking() {
         distanceTimer?.invalidate()
         distanceTimer = nil
+    }
+
+    // MARK: - Dialogue Completion
+
+    private func completeDialogueQuest() async {
+        guard !questManager.isQuestCompleted(quest.quest_id) else { return }
+        guard let completionNode = quest.requirements.storyNodeComplete else {
+            await MainActor.run {
+                isSuccess = false
+                resultMessage = "스토리 완료 노드가 설정되어 있지 않습니다."
+                showResult = true
+            }
+            return
+        }
+
+        await MainActor.run {
+            isStoryCompleting = true
+            showResult = false
+        }
+
+        do {
+            let result = try await questManager.executeDialogueQuest(
+                quest: quest,
+                completedStoryNode: completionNode
+            )
+            await MainActor.run {
+                isSuccess = result.success
+                resultMessage = result.message
+                showResult = true
+            }
+        } catch {
+            await MainActor.run {
+                isSuccess = false
+                resultMessage = error.localizedDescription
+                showResult = true
+            }
+        }
+
+        await MainActor.run {
+            isStoryCompleting = false
+        }
     }
 }
 

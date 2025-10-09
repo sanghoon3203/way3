@@ -1,0 +1,10 @@
+{
+  "node_id": "jung_1_1_end",
+  "background_image": "bg_myeongdong_evening.jpg",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "VIP 데이터를 다시 묶어야 흐름을 되찾을 수 있겠네.",
+  "dialogue_sound_id": "jung_1_1_end",
+  "sound_effect": "",
+  "next_node_id": ""
+}
