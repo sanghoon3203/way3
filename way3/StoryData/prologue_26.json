@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_26",
+  "background_image": "bg_neo_subway_station.jpg",
+  "character_id": "",
+  "character_sprite": "",
+  "dialogue_text": "*(마치 폭죽이 터지는듯한 소리)*",
+  "dialogue_sound_id": "prologue_18",
+  "sound_effect": "",
+  "next_node_id": "prologue_27.json"
+}

@@ -94,7 +94,7 @@ final class QuestManager: ObservableObject {
 
         return finalizeSubQuest(
             quest,
-            message: "목표 지점에 도착했습니다! (\(String(format: \"%.1f\", verificationResult.distance))m)",
+            message: "목표 지점에 도착했습니다! (\(String(format: "%.1f", verificationResult.distance))m)",
             verificationData: verificationResult
         )
     }

@@ -184,13 +184,14 @@ class ProgressManager: ObservableObject {
     private let logger = Logger(subsystem: "com.way3.progress", category: "ProgressManager")
 
     private init() {
-        // UserDefaults에서 로드
-        if let current = loadProgress(forKey: userDefaultsKey) {
-            self.progress = current.migrated()
+        if let current = ProgressManager.loadProgress(forKey: userDefaultsKey) {
+            let migrated = current.migrated()
+            self.progress = migrated
             logger.info("✅ 저장된 진행 상태 로드 완료 (버전 \(self.progress.version))")
-        } else if let legacy = loadLegacyProgress() {
-            self.progress = legacy.migrated()
-            logger.info("♻️ 레거시 진행 상태 변환 완료 (버전 \(self.progress.version))")
+        } else if let legacyResult = ProgressManager.loadLegacyProgress(keys: legacyKeys) {
+            let migrated = legacyResult.progress.migrated()
+            self.progress = migrated
+            logger.info("♻️ 레거시 진행 상태 변환 완료 (key: \(legacyResult.key), 버전 \(self.progress.version))")
             save()
         } else {
             self.progress = PlayerProgress()
@@ -454,16 +455,15 @@ class ProgressManager: ObservableObject {
 
     // MARK: - Private Helpers
 
-    private func loadProgress(forKey key: String) -> PlayerProgress? {
+    private static func loadProgress(forKey key: String) -> PlayerProgress? {
         guard let data = UserDefaults.standard.data(forKey: key) else { return nil }
         return try? JSONDecoder().decode(PlayerProgress.self, from: data)
     }
 
-    private func loadLegacyProgress() -> PlayerProgress? {
-        for key in legacyKeys {
+    private static func loadLegacyProgress(keys: [String]) -> (progress: PlayerProgress, key: String)? {
+        for key in keys {
             if let legacy = loadProgress(forKey: key) {
-                logger.info("📦 레거시 진행 상태 발견 (key: \(key))")
-                return legacy
+                return (legacy, key)
             }
         }
         return nil

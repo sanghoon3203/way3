@@ -3,7 +3,7 @@
   "background_image": "bg_neo_subway.jpg",
   "character_id": "player",
   "character_sprite": "sprite_player_uniform_confused.png",
-  "dialogue_text": "......어?",
+  "dialogue_text": "<t>(대충 옷을 갈아입고 근처 지하철로 향했다)",
   "dialogue_sound_id": "prologue_07",
   "sound_effect": null,
   "next_node_id": "prologue_08"

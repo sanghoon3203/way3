@@ -13,15 +13,314 @@ enum AppLog {
 
 // MARK: - Node Model
 
+enum VNNodeType: String, Decodable {
+    case dialogue
+    case decision
+    case conditional
+    case questGate = "quest_gate"
+}
+
+struct VNDialogueContent: Decodable {
+    let text: String
+    let speakerId: String?
+    let speakerName: String?
+    let backgroundImage: String?
+    let characterSprite: String?
+    let soundEffect: String?
+    let dialogueSoundId: String?
+    let nextNodeId: String?
+
+    enum CodingKeys: String, CodingKey {
+        case text
+        case speakerId = "speaker_id"
+        case speakerName = "speaker_name"
+        case backgroundImage = "background_image"
+        case characterSprite = "character_sprite"
+        case soundEffect = "sound_effect"
+        case dialogueSoundId = "dialogue_sound_id"
+        case nextNodeId = "next_node_id"
+    }
+
+    init(
+        text: String,
+        speakerId: String?,
+        speakerName: String?,
+        backgroundImage: String?,
+        characterSprite: String?,
+        soundEffect: String?,
+        dialogueSoundId: String?,
+        nextNodeId: String?
+    ) {
+        self.text = text
+        self.speakerId = speakerId
+        self.speakerName = speakerName
+        self.backgroundImage = backgroundImage
+        self.characterSprite = characterSprite
+        self.soundEffect = soundEffect
+        self.dialogueSoundId = dialogueSoundId
+        self.nextNodeId = nextNodeId
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        text = try container.decodeIfPresent(String.self, forKey: .text) ?? ""
+        speakerId = try container.decodeIfPresent(String.self, forKey: .speakerId)
+        speakerName = try container.decodeIfPresent(String.self, forKey: .speakerName)
+        backgroundImage = try container.decodeIfPresent(String.self, forKey: .backgroundImage)
+        characterSprite = try container.decodeIfPresent(String.self, forKey: .characterSprite)
+        soundEffect = try container.decodeIfPresent(String.self, forKey: .soundEffect)
+        dialogueSoundId = try container.decodeIfPresent(String.self, forKey: .dialogueSoundId)
+        nextNodeId = try container.decodeIfPresent(String.self, forKey: .nextNodeId)
+    }
+
+    func mergingLegacyDefaults(
+        speakerId legacySpeakerId: String?,
+        speakerName legacySpeakerName: String?,
+        backgroundImage legacyBackgroundImage: String?,
+        characterSprite legacyCharacterSprite: String?,
+        soundEffect legacySoundEffect: String?,
+        dialogueSoundId legacyDialogueSoundId: String?,
+        nextNodeId legacyNextNodeId: String?,
+        fallbackText: String?
+    ) -> VNDialogueContent {
+        VNDialogueContent(
+            text: text.isEmpty ? (fallbackText ?? "") : text,
+            speakerId: speakerId ?? legacySpeakerId,
+            speakerName: speakerName ?? legacySpeakerName,
+            backgroundImage: backgroundImage ?? legacyBackgroundImage,
+            characterSprite: characterSprite ?? legacyCharacterSprite,
+            soundEffect: soundEffect ?? legacySoundEffect,
+            dialogueSoundId: dialogueSoundId ?? legacyDialogueSoundId,
+            nextNodeId: nextNodeId ?? legacyNextNodeId
+        )
+    }
+
+    var displaySpeaker: String? {
+        if let name = speakerName, !name.isEmpty {
+            return name
+        }
+        return speakerId
+    }
+}
+
+struct VNChoice: Decodable, Identifiable {
+    let id: String
+    let text: String
+    let nextNodeId: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case text
+        case nextNodeId = "next_node_id"
+    }
+}
+
+struct VNDecisionContent: Decodable {
+    let prompt: String?
+    let speakerId: String?
+    let speakerName: String?
+    let choices: [VNChoice]
+
+    enum CodingKeys: String, CodingKey {
+        case prompt
+        case speakerId = "speaker_id"
+        case speakerName = "speaker_name"
+        case choices
+    }
+
+    init(prompt: String?, speakerId: String?, speakerName: String?, choices: [VNChoice]) {
+        self.prompt = prompt
+        self.speakerId = speakerId
+        self.speakerName = speakerName
+        self.choices = choices
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        prompt = try container.decodeIfPresent(String.self, forKey: .prompt)
+        speakerId = try container.decodeIfPresent(String.self, forKey: .speakerId)
+        speakerName = try container.decodeIfPresent(String.self, forKey: .speakerName)
+        choices = try container.decodeIfPresent([VNChoice].self, forKey: .choices) ?? []
+    }
+
+    var speakerDisplayName: String? {
+        if let name = speakerName, !name.isEmpty { return name }
+        return speakerId
+    }
+}
+
+struct VNConditionalContent: Decodable {
+    let condition: StoryUnlockCondition
+    let successNodeId: String
+    let failureNodeId: String
+
+    enum CodingKeys: String, CodingKey {
+        case condition
+        case successNodeId = "on_success"
+        case failureNodeId = "on_failure"
+    }
+}
+
+struct VNQuestGateContent: Decodable {
+    let questId: String
+    let autoStart: Bool
+    let nextNodeId: String?
+
+    enum CodingKeys: String, CodingKey {
+        case questId = "quest_id"
+        case autoStart = "auto_start"
+        case nextNodeId = "next_node_id"
+    }
+}
+
 struct VNNode: Decodable {
-    let node_id: String
-    let background_image: String?
-    let character_id: String?
-    let character_sprite: String?
-    let dialogue_text: String
-    let dialogue_sound_id: String?   // ← (미사용/역호환)
-    let sound_effect: String?        // ← (미사용/역호환)
-    let next_node_id: String?
+    let nodeId: String
+    let type: VNNodeType
+    let dialogue: VNDialogueContent?
+    let decision: VNDecisionContent?
+    let conditional: VNConditionalContent?
+    let questGate: VNQuestGateContent?
+
+    enum CodingKeys: String, CodingKey {
+        case nodeId = "node_id"
+        case type
+        case backgroundImage = "background_image"
+        case characterId = "character_id"
+        case characterSprite = "character_sprite"
+        case dialogueText = "dialogue_text"
+        case dialogueSoundId = "dialogue_sound_id"
+        case soundEffect = "sound_effect"
+        case nextNodeId = "next_node_id"
+        case speakerName = "speaker_name"
+        case dialogue
+        case decision
+        case choices
+        case prompt
+        case conditional
+        case condition
+        case successNodeId = "on_success"
+        case failureNodeId = "on_failure"
+        case questGate = "quest_gate"
+        case questId = "quest_id"
+        case autoStart = "auto_start"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        nodeId = try container.decode(String.self, forKey: .nodeId)
+
+        let legacyBackground = try container.decodeIfPresent(String.self, forKey: .backgroundImage)
+        let legacyCharacterId = try container.decodeIfPresent(String.self, forKey: .characterId)
+        let legacyCharacterSprite = try container.decodeIfPresent(String.self, forKey: .characterSprite)
+        let legacyDialogueText = try container.decodeIfPresent(String.self, forKey: .dialogueText)
+        let legacyDialogueSoundId = try container.decodeIfPresent(String.self, forKey: .dialogueSoundId)
+        let legacySoundEffect = try container.decodeIfPresent(String.self, forKey: .soundEffect)
+        let legacyNextNodeId = try container.decodeIfPresent(String.self, forKey: .nextNodeId)
+        let legacySpeakerName = try container.decodeIfPresent(String.self, forKey: .speakerName)
+
+        if let explicitType = try container.decodeIfPresent(VNNodeType.self, forKey: .type) {
+            type = explicitType
+        } else if container.contains(.decision) || container.contains(.choices) {
+            type = .decision
+        } else if container.contains(.conditional) || container.contains(.condition) || container.contains(.successNodeId) {
+            type = .conditional
+        } else if container.contains(.questGate) || container.contains(.questId) {
+            type = .questGate
+        } else {
+            type = .dialogue
+        }
+
+        switch type {
+        case .dialogue:
+            if let payload = try container.decodeIfPresent(VNDialogueContent.self, forKey: .dialogue) {
+                dialogue = payload.mergingLegacyDefaults(
+                    speakerId: legacyCharacterId,
+                    speakerName: legacySpeakerName,
+                    backgroundImage: legacyBackground,
+                    characterSprite: legacyCharacterSprite,
+                    soundEffect: legacySoundEffect,
+                    dialogueSoundId: legacyDialogueSoundId,
+                    nextNodeId: legacyNextNodeId,
+                    fallbackText: legacyDialogueText
+                )
+            } else {
+                dialogue = VNDialogueContent(
+                    text: legacyDialogueText ?? "",
+                    speakerId: legacyCharacterId,
+                    speakerName: legacySpeakerName,
+                    backgroundImage: legacyBackground,
+                    characterSprite: legacyCharacterSprite,
+                    soundEffect: legacySoundEffect,
+                    dialogueSoundId: legacyDialogueSoundId,
+                    nextNodeId: legacyNextNodeId
+                )
+            }
+            decision = nil
+            conditional = nil
+            questGate = nil
+        case .decision:
+            if let payload = try? container.decodeIfPresent(VNDecisionContent.self, forKey: .decision) {
+                decision = payload
+            } else {
+                let choices = (try? container.decodeIfPresent([VNChoice].self, forKey: .choices)) ?? []
+                let promptText = legacyDialogueText ?? (try? container.decodeIfPresent(String.self, forKey: .prompt))
+                decision = VNDecisionContent(
+                    prompt: promptText,
+                    speakerId: legacyCharacterId,
+                    speakerName: legacySpeakerName,
+                    choices: choices
+                )
+            }
+            dialogue = nil
+            conditional = nil
+            questGate = nil
+        case .conditional:
+            if let payload = try container.decodeIfPresent(VNConditionalContent.self, forKey: .conditional) {
+                conditional = payload
+            } else {
+                let condition = try container.decode(StoryUnlockCondition.self, forKey: .condition)
+                let success = try container.decode(String.self, forKey: .successNodeId)
+                let failure = try container.decode(String.self, forKey: .failureNodeId)
+                conditional = VNConditionalContent(condition: condition, successNodeId: success, failureNodeId: failure)
+            }
+            dialogue = nil
+            decision = nil
+            questGate = nil
+        case .questGate:
+            if let payload = try container.decodeIfPresent(VNQuestGateContent.self, forKey: .questGate) {
+                questGate = payload
+            } else {
+                let questId = try container.decode(String.self, forKey: .questId)
+                let autoStart = try container.decodeIfPresent(Bool.self, forKey: .autoStart) ?? false
+                questGate = VNQuestGateContent(questId: questId, autoStart: autoStart, nextNodeId: legacyNextNodeId)
+            }
+            dialogue = nil
+            decision = nil
+            conditional = nil
+        }
+    }
+}
+
+extension VNNode {
+    var primaryNextNodeId: String? {
+        switch type {
+        case .dialogue:
+            return dialogue?.nextNodeId
+        case .decision:
+            return nil
+        case .conditional:
+            return nil
+        case .questGate:
+            return questGate?.nextNodeId
+        }
+    }
+
+    var displaySpeaker: String? {
+        if let decisionSpeaker = decision?.speakerDisplayName {
+            return decisionSpeaker
+        }
+        return dialogue?.displaySpeaker
+    }
 }
 
 // MARK: - Loader
@@ -30,44 +329,53 @@ enum VNLoader {
     /// Flexible story node loader - searches multiple locations
     static func loadNode(id: String) -> VNNode? {
         let name = id.replacingOccurrences(of: ".json", with: "")
-
-        // Strategy 1: Try direct bundle lookup (no subdirectory)
-        if let path = Bundle.main.path(forResource: name, ofType: "json") {
-            return decodeNode(from: path, filename: "\(name).json")
+        guard let url = nodeURL(for: name) else {
+            AppLog.loader.error("❌ file not found: \(name).json in bundle")
+            AppLog.loader.error("   searched: main bundle + subdirs: \(searchDirectories.joined(separator: ", "))")
+            return nil
         }
 
-        // Strategy 2: Try common subdirectories
-        let searchDirs = ["StoryData", "Resources/Story", "Resources/StoryData", "Story"]
-        for dir in searchDirs {
-            if let path = Bundle.main.path(forResource: name, ofType: "json", inDirectory: dir) {
-                AppLog.loader.debug("➡️ found \(name).json in \(dir)")
-                return decodeNode(from: path, filename: "\(name).json")
-            }
-        }
-
-        // Strategy 3: Try URL-based search in all bundle resources
-        if let url = Bundle.main.url(forResource: name, withExtension: "json") {
-            AppLog.loader.debug("➡️ found \(name).json via URL search")
-            return decodeNode(from: url.path, filename: "\(name).json")
-        }
-
-        AppLog.loader.error("❌ file not found: \(name).json in bundle")
-        AppLog.loader.error("   searched: main bundle + subdirs: \(searchDirs.joined(separator: ", "))")
-        return nil
+        return decodeNode(from: url)
     }
 
-    private static func decodeNode(from path: String, filename: String) -> VNNode? {
+    static func canLoadNode(id: String) -> Bool {
+        let name = id.replacingOccurrences(of: ".json", with: "")
+        return nodeURL(for: name) != nil
+    }
+
+    private static func decodeNode(from url: URL) -> VNNode? {
         do {
-            let url = URL(fileURLWithPath: path)
             let data = try Data(contentsOf: url)
             AppLog.loader.debug("📦 data bytes: \(data.count)")
             let node = try JSONDecoder().decode(VNNode.self, from: data)
-            AppLog.loader.info("✅ decoded node_id=\(node.node_id, privacy: .public) next=\(node.next_node_id ?? "nil", privacy: .public)")
+            AppLog.loader.info("✅ decoded node_id=\(node.nodeId, privacy: .public) type=\(node.type.rawValue, privacy: .public) next=\(node.primaryNextNodeId ?? "nil", privacy: .public)")
             return node
         } catch {
-            AppLog.loader.error("❌ decode error for \(filename): \(error.localizedDescription, privacy: .public)")
+            AppLog.loader.error("❌ decode error for \(url.lastPathComponent): \(error.localizedDescription, privacy: .public)")
             return nil
         }
+    }
+
+    private static let searchDirectories = ["StoryData", "Resources/Story", "Resources/StoryData/prologue", "Story"]
+
+    private static func nodeURL(for name: String) -> URL? {
+        if let path = Bundle.main.path(forResource: name, ofType: "json") {
+            return URL(fileURLWithPath: path)
+        }
+
+        for dir in searchDirectories {
+            if let path = Bundle.main.path(forResource: name, ofType: "json", inDirectory: dir) {
+                AppLog.loader.debug("➡️ found \(name).json in \(dir)")
+                return URL(fileURLWithPath: path)
+            }
+        }
+
+        if let url = Bundle.main.url(forResource: name, withExtension: "json") {
+            AppLog.loader.debug("➡️ found \(name).json via URL search")
+            return url
+        }
+
+        return nil
     }
 }
 

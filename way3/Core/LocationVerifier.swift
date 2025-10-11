@@ -197,47 +197,56 @@ class LocationVerifier: NSObject, ObservableObject {
 // MARK: - CLLocationManagerDelegate
 
 extension LocationVerifier: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let currentLocation = locations.last,
-              let target = targetLocation else { return }
+    nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        Task { @MainActor [weak self] in
+            guard let self,
+                  let currentLocation = locations.last,
+                  let target = self.targetLocation else { return }
 
-        let distance = currentLocation.coordinate.distance(to: target)
-        currentDistance = distance
+            let distance = currentLocation.coordinate.distance(to: target)
+            self.currentDistance = distance
 
-        logger.debug("📍 현재 거리: \(String(format: "%.1f", distance))m")
+            self.logger.debug("📍 현재 거리: \(String(format: "%.1f", distance))m")
 
-        // 목표 지점 도달 확인
-        if distance <= targetRadius {
-            do {
-                let result = try verifyLocationWithAccuracy(
-                    userLocation: currentLocation,
-                    targetLocation: target,
-                    radius: targetRadius
-                )
+            if distance <= self.targetRadius {
+                do {
+                    let result = try self.verifyLocationWithAccuracy(
+                        userLocation: currentLocation,
+                        targetLocation: target,
+                        radius: self.targetRadius
+                    )
 
-                onArrival?(result)
-                stopLocationTracking()
-            } catch {
-                logger.error("❌ 위치 검증 실패: \(error.localizedDescription)")
+                    self.onArrival?(result)
+                    self.stopLocationTracking()
+                } catch {
+                    self.logger.error("❌ 위치 검증 실패: \(error.localizedDescription)")
+                }
             }
         }
     }
 
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        logger.error("❌ 위치 업데이트 실패: \(error.localizedDescription)")
+    nonisolated func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        Task { @MainActor [weak self] in
+            self?.logger.error("❌ 위치 업데이트 실패: \(error.localizedDescription)")
+        }
     }
 
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        checkLocationAuthorization()
+    nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        Task { @MainActor [weak self] in
+            self?.checkLocationAuthorization()
+        }
     }
 
-    // Geofencing delegate
-    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        logger.info("🎯 Geofence 진입: \(region.identifier)")
+    nonisolated func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        Task { @MainActor [weak self] in
+            self?.logger.info("🎯 Geofence 진입: \(region.identifier)")
+        }
     }
 
-    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        logger.info("🚪 Geofence 이탈: \(region.identifier)")
+    nonisolated func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        Task { @MainActor [weak self] in
+            self?.logger.info("🚪 Geofence 이탈: \(region.identifier)")
+        }
     }
 }
 

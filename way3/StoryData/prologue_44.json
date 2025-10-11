@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_44",
+  "background_image": "",
+  "character_id": "기주리",
+  "character_sprite": "Kijuri.png",
+  "dialogue_text": "그것 떄문에 너는 여기로 넘어온거야.. 나도 잘은 모르는데, 아마?",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_45.json"
+}

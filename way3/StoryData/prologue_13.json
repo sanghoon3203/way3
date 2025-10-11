@@ -1,9 +1,9 @@
 {
   "node_id": "prologue_13",
   "background_image": "bg_neo_subway_station_cracked.jpg",
-  "character_id": "gijuri",
-  "character_sprite": "sprite_gijuri_default.png",
-  "dialogue_text": "시간 보안관 기주리입니다.",
+  "character_id": "NPC",
+  "character_sprite": "",
+  "dialogue_text": "[커넥션: 서울에서 알려드립니다]",
   "dialogue_sound_id": "prologue_13",
   "sound_effect": "sfx_whoosh_appear.mp3",
   "next_node_id": "prologue_14"

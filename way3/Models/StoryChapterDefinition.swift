@@ -14,6 +14,8 @@ struct StoryChapterDefinition: Codable, Identifiable, Hashable {
     let title: String
     let order: Int
     let region: String?
+    let summary: String?
+    let mainStoryEntry: String?
     let districts: [StoryDistrictDefinition]
     let unlockConditions: [StoryUnlockCondition]
     let completionReward: StoryCompletionReward?
@@ -25,6 +27,8 @@ struct StoryChapterDefinition: Codable, Identifiable, Hashable {
         case title
         case order
         case region
+        case summary
+        case mainStoryEntry
         case districts
         case unlockConditions
         case completionReward
@@ -35,6 +39,8 @@ struct StoryChapterDefinition: Codable, Identifiable, Hashable {
         title: String,
         order: Int,
         region: String?,
+        summary: String?,
+        mainStoryEntry: String?,
         districts: [StoryDistrictDefinition],
         unlockConditions: [StoryUnlockCondition] = [],
         completionReward: StoryCompletionReward?
@@ -43,6 +49,8 @@ struct StoryChapterDefinition: Codable, Identifiable, Hashable {
         self.title = title
         self.order = order
         self.region = region
+        self.summary = summary
+        self.mainStoryEntry = mainStoryEntry
         self.districts = districts
         self.unlockConditions = unlockConditions
         self.completionReward = completionReward
@@ -54,6 +62,8 @@ struct StoryChapterDefinition: Codable, Identifiable, Hashable {
         title = try container.decode(String.self, forKey: .title)
         order = try container.decode(Int.self, forKey: .order)
         region = try container.decodeIfPresent(String.self, forKey: .region)
+        summary = try container.decodeIfPresent(String.self, forKey: .summary)
+        mainStoryEntry = try container.decodeIfPresent(String.self, forKey: .mainStoryEntry)
         districts = try container.decode([StoryDistrictDefinition].self, forKey: .districts)
         unlockConditions = try container.decodeIfPresent([StoryUnlockCondition].self, forKey: .unlockConditions) ?? []
         completionReward = try container.decodeIfPresent(StoryCompletionReward.self, forKey: .completionReward)
@@ -63,6 +73,8 @@ struct StoryChapterDefinition: Codable, Identifiable, Hashable {
 struct StoryDistrictDefinition: Codable, Identifiable, Hashable {
     let districtId: String
     let name: String
+    let merchantId: String?
+    let synopsis: String?
     let episodes: [StoryEpisodeDefinition]
 
     var id: String { districtId }

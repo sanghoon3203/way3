@@ -3,7 +3,7 @@
   "background_image": "bg_neo_subway_station_cracked.jpg",
   "character_id": "player",
   "character_sprite": "sprite_player_uniform_scared.png",
-  "dialogue_text": "으악!",
+  "dialogue_text": "*(핸드폰 진동음)*",
   "dialogue_sound_id": "prologue_12",
   "sound_effect": null,
   "next_node_id": "prologue_13"

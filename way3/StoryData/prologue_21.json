@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_21",
+  "background_image": "bg_neo_subway_station.jpg",
+  "character_id": "NPC",
+  "character_sprite": "",
+  "dialogue_text": "[불안정성: 91%...]",
+  "dialogue_sound_id": "prologue_18",
+  "sound_effect": "sfx_teleport_out.mp3",
+  "next_node_id": "prologue_22.json"
+}

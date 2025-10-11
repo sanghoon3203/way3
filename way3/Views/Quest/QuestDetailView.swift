@@ -238,13 +238,13 @@ struct QuestDetailView: View {
                 rewardRow(icon: "star.circle.fill", text: "EXP +\(exp)")
             }
             if !quest.rewards.storyPieceIds.isEmpty {
-                rewardRow(icon: "doc.text.circle.fill", text: "스토리 조각: \(quest.rewards.storyPieceIds.joined(separator: \", \"))")
+                rewardRow(icon: "doc.text.circle.fill", text: "스토리 조각: \(quest.rewards.storyPieceIds.joined(separator: ", "))")
             }
             if !quest.rewards.inventoryItems.isEmpty {
-                rewardRow(icon: "shippingbox.fill", text: "아이템: \(quest.rewards.inventoryItems.joined(separator: \", \"))")
+                rewardRow(icon: "shippingbox.fill", text: "아이템: \(quest.rewards.inventoryItems.joined(separator: ", "))")
             }
             if !quest.rewards.keyItems.isEmpty {
-                rewardRow(icon: "key.fill", text: "증표/키 아이템: \(quest.rewards.keyItems.joined(separator: \", \"))")
+                rewardRow(icon: "key.fill", text: "증표/키 아이템: \(quest.rewards.keyItems.joined(separator: ", "))")
             }
             if let relationship = quest.rewards.relationshipChange {
                 rewardRow(icon: "heart.circle.fill", text: "신뢰도 +\(relationship.trust)")

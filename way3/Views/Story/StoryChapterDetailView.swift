@@ -12,6 +12,8 @@ struct StoryChapterDetailView: View {
     let onStartEpisode: (StoryEpisodeDefinition) -> Void
 
     @EnvironmentObject private var progressManager: ProgressManager
+    @State private var introStartNode: String?
+    @State private var showIntroMissingAlert = false
 
     var body: some View {
         ScrollView {
@@ -28,6 +30,18 @@ struct StoryChapterDetailView: View {
         .navigationTitle(chapter.title)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: autoUnlockEpisodesIfNeeded)
+        .fullScreenCover(item: Binding(
+            get: { introStartNode.map { IntroLaunchKey(id: $0) } },
+            set: { _ in introStartNode = nil }
+        )) { key in
+            StoryView(startNodeID: key.id)
+                .background(Color.black.ignoresSafeArea())
+        }
+        .alert("스토리 노드를 찾을 수 없어요", isPresented: $showIntroMissingAlert) {
+            Button("확인", role: .cancel) { }
+        } message: {
+            Text("선택한 인트로 노드가 아직 번들에 포함되지 않았습니다.")
+        }
     }
 
     // MARK: - Sections
@@ -54,8 +68,31 @@ struct StoryChapterDetailView: View {
                 .foregroundColor(.cyberpunkTextPrimary)
                 .multilineTextAlignment(.leading)
 
+            if let summary = chapter.summary, !summary.isEmpty {
+                Text(summary)
+                    .font(.cyberpunkBody())
+                    .foregroundColor(.cyberpunkTextSecondary)
+                    .multilineTextAlignment(.leading)
+            }
+
             if let reward = chapter.completionReward {
                 StoryRewardView(reward: reward)
+            }
+
+            if let intro = chapter.mainStoryEntry, !intro.isEmpty {
+                let introAvailable = VNLoader.canLoadNode(id: intro)
+                Button {
+                    handleIntroPlayback(intro)
+                } label: {
+                    HStack {
+                        Image(systemName: "play.rectangle.fill")
+                        Text("인트로 재생")
+                    }
+                    .font(.system(size: 14, weight: .bold, design: .monospaced))
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(!introAvailable)
+                .opacity(introAvailable ? 1.0 : 0.5)
             }
         }
         .padding(20)
@@ -152,7 +189,17 @@ struct StoryChapterDetailView: View {
             progressManager.unlockEpisode(episode.episodeId)
         }
     }
+
+    private func handleIntroPlayback(_ nodeId: String) {
+        if VNLoader.canLoadNode(id: nodeId) {
+            introStartNode = nodeId
+        } else {
+            showIntroMissingAlert = true
+        }
+    }
 }
+
+private struct IntroLaunchKey: Identifiable { let id: String }
 
 // MARK: - Reward View
 

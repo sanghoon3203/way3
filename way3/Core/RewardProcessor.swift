@@ -8,12 +8,13 @@
 import Foundation
 import os
 
+@MainActor
 struct RewardProcessor {
     private let progressManager: ProgressManager
     private let logger = Logger(subsystem: "com.way3.quest", category: "RewardProcessor")
 
-    init(progressManager: ProgressManager = .shared) {
-        self.progressManager = progressManager
+    init(progressManager: ProgressManager? = nil) {
+        self.progressManager = progressManager ?? ProgressManager.shared
     }
 
     func apply(rewards: QuestRewards, questId: String) {

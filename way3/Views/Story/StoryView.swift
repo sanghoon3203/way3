@@ -83,6 +83,63 @@ struct BottomProceedBar: View {
     }
 }
 
+struct DecisionChoiceList: View {
+    let decision: VNDecisionContent
+    let onChoice: (VNChoice) -> Void
+
+    var body: some View {
+        VStack(spacing: 12) {
+            ForEach(decision.choices) { choice in
+                Button(action: { onChoice(choice) }) {
+                    HStack {
+                        Text(choice.text)
+                            .font(.system(size: 15, weight: .semibold, design: .rounded))
+                            .foregroundColor(.black)
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(.black.opacity(0.6))
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 14)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.cyberpunkYellow.opacity(0.9))
+                    )
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.bottom, 28)
+    }
+}
+
+struct PendingNodeOverlay: View {
+    let message: String
+
+    var body: some View {
+        Text(message)
+            .font(.system(size: 14, weight: .semibold, design: .rounded))
+            .foregroundColor(.cyberpunkTextSecondary)
+            .multilineTextAlignment(.center)
+            .padding(18)
+            .frame(maxWidth: .infinity)
+            .background(
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(Color.cyberpunkPanelBg)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14)
+                            .stroke(Color.cyberpunkBorder, lineWidth: 1)
+                    )
+            )
+            .padding(.horizontal, 16)
+            .padding(.bottom, 28)
+    }
+}
+
 // MARK: - StoryView
 
 struct StoryView: View {
@@ -90,30 +147,79 @@ struct StoryView: View {
     @State private var node: VNNode?
     @StateObject private var engine = TypewriterEngine()   // ✅ 안정화
     @Environment(\.dismiss) private var dismiss
+    @State private var showExitConfirmation = false
 
+    let returnToMapOnCompletion: Bool
     let onStoryComplete: (() -> Void)?
 
-    init(startNodeID: String = "prologue_01", onComplete: (() -> Void)? = nil) {
+    init(startNodeID: String = "prologue_01", returnToMapOnCompletion: Bool = false, onComplete: (() -> Void)? = nil) {
         _currentNodeID = State(initialValue: startNodeID)
+        self.returnToMapOnCompletion = returnToMapOnCompletion
         self.onStoryComplete = onComplete
     }
 
     var body: some View {
         ZStack {
-            // 1) 배경
-            if let bg = node?.background_image, let ui = UIImage(named: bg) {
+            backgroundLayer
+            characterLayer
+            VStack(spacing: 0) {
+                Spacer()
+                nodeInteractionLayer
+            }
+        }
+        .toolbar(.hidden, for: .navigationBar)
+        .overlay(alignment: .topTrailing) {
+            ExitButton {
+                if engine.isCompleted {
+                    showExitConfirmation = true
+                } else {
+                    showExitConfirmation = true
+                }
+            }
+            .padding(.top, 12)
+            .padding(.trailing, 12)
+        }
+        .onAppear {
+            AppLog.story.info("📺 StoryView appear startNode=\(self.currentNodeID, privacy: .public)")
+            loadNodeAndStart(id: currentNodeID)
+        }
+
+        // (선택) 상단 디버그 HUD
+        .overlay(alignment: .topLeading) {
+            debugHUD
+        }
+        .alert("스토리를 종료할까요?", isPresented: $showExitConfirmation) {
+            Button("취소", role: .cancel) { }
+            Button("종료", role: .destructive) {
+                finishStory()
+            }
+        } message: {
+            Text("진행 중인 스토리를 종료하면 현재 노드에서 종료됩니다.")
+        }
+    }
+
+    private var backgroundLayer: some View {
+        Group {
+            if let name = currentDialogue?.backgroundImage,
+               let ui = UIImage(named: name) {
                 Image(uiImage: ui)
                     .resizable()
                     .scaledToFill()
-                    .ignoresSafeArea()
             } else {
-                LinearGradient(colors: [.black, .black.opacity(0.8)],
-                               startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
+                LinearGradient(
+                    colors: [.black, .black.opacity(0.8)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
             }
+        }
+        .ignoresSafeArea()
+    }
 
-            // 2) 캐릭터 스프라이트
-            if let sprite = node?.character_sprite, let ui = UIImage(named: sprite) {
+    private var characterLayer: some View {
+        Group {
+            if let sprite = currentDialogue?.characterSprite,
+               let ui = UIImage(named: sprite) {
                 VStack {
                     Spacer()
                     Image(uiImage: ui)
@@ -124,36 +230,35 @@ struct StoryView: View {
                 }
                 .padding(.bottom, 140)
             }
+        }
+    }
 
-            // 3) 대사 + 하단 진행 바
-            VStack(spacing: 0) {
-                Spacer()
-                HeroDialogueOverlay(speaker: node?.character_id, engine: engine)
-                BottomProceedBar(isCompleted: engine.isCompleted) { nextPressed() }
+    @ViewBuilder
+    private var nodeInteractionLayer: some View {
+        switch node?.type ?? .dialogue {
+        case .dialogue:
+            HeroDialogueOverlay(speaker: currentSpeakerName, engine: engine)
+            BottomProceedBar(isCompleted: engine.isCompleted) { nextPressed() }
+        case .decision:
+            if let decision = node?.decision {
+                HeroDialogueOverlay(speaker: decision.speakerDisplayName ?? currentSpeakerName, engine: engine)
+                DecisionChoiceList(decision: decision, onChoice: handleDecisionChoice)
+            } else {
+                PendingNodeOverlay(message: "선택지가 준비되지 않았습니다.")
             }
+        case .conditional:
+            PendingNodeOverlay(message: "조건을 확인하는 중입니다...")
+        case .questGate:
+            PendingNodeOverlay(message: "퀘스트 게이트를 처리하는 중입니다...")
         }
-        .toolbar(.hidden, for: .navigationBar)
-        .onAppear {
-            AppLog.story.info("📺 StoryView appear startNode=\(self.currentNodeID, privacy: .public)")
-            loadNodeAndStart(id: currentNodeID)
-        }
+    }
 
-        // (선택) 상단 디버그 HUD
-        .overlay(alignment: .topLeading) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("node: \(node?.node_id ?? "nil")")
-                Text("next: \(node?.next_node_id ?? "nil")")
-                Text("speaker: \(node?.character_id ?? "nil")")
-                Text("done: \(engine.isCompleted.description)")
-            }
-            .font(.system(size: 10, weight: .regular, design: .monospaced))
-            .foregroundColor(.white.opacity(0.8))
-            .padding(8)
-            .background(Color.black.opacity(0.35))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .padding(.top, 8)
-            .padding(.leading, 8)
-        }
+    private var currentDialogue: VNDialogueContent? {
+        node?.dialogue
+    }
+
+    private var currentSpeakerName: String? {
+        node?.displaySpeaker
     }
 
     private func loadNodeAndStart(id: String) {
@@ -162,21 +267,22 @@ struct StoryView: View {
             AppLog.story.error("❌ failed to load node id=\(id, privacy: .public)")
             return
         }
-        self.node = n
-        AppLog.story.info("✅ node loaded: \(n.node_id, privacy: .public) next=\(n.next_node_id ?? "nil", privacy: .public) speaker=\(n.character_id ?? "nil", privacy: .public)")
+        currentNodeID = id
+        node = n
+        AppLog.story.info("✅ node loaded: \(n.nodeId, privacy: .public) type=\(n.type.rawValue, privacy: .public) next=\(n.primaryNextNodeId ?? "nil", privacy: .public)")
 
-        // 정책상 효과음 미사용이면 주석 유지/삭제
-        /*
-        if let sfx = n.sound_effect {
-            AppLog.story.debug("🔔 one-shot sfx=\(sfx, privacy: .public)")
-            SFXManager.shared.play(sfx)
+        engine.stop()
+
+        switch n.type {
+        case .dialogue:
+            configureDialogueNode(n)
+        case .decision:
+            configureDecisionNode(n)
+        case .conditional:
+            resolveConditionalNode(n)
+        case .questGate:
+            handleQuestGateNode(n)
         }
-        */
-
-        let blip = CharacterBlip.blipKey(for: n.character_id)
-        AppLog.story.info("🔊 blipKey=\(blip ?? "nil", privacy: .public)")
-        engine.configure(text: n.dialogue_text, blipKey: (blip?.isEmpty == true) ? nil : blip)
-        engine.start()
     }
 
     private func nextPressed() {
@@ -187,18 +293,135 @@ struct StoryView: View {
             return
         }
 
-        if let currentNode = node?.node_id {
-            QuestManager.shared.recordDialogueEvent(nodeId: currentNode)
+        if let node {
+            QuestManager.shared.recordDialogueEvent(nodeId: node.nodeId)
         }
 
-        if let next = node?.next_node_id, !next.isEmpty {
+        if let next = node?.dialogue?.nextNodeId, !next.isEmpty {
             AppLog.story.info("➡️ go next node=\(next, privacy: .public)")
-            currentNodeID = next
-            loadNodeAndStart(id: next)
+            advance(to: next)
         } else {
             AppLog.story.info("🏁 no next node. end of story.")
-            onStoryComplete?()
-            dismiss()
+            finishStory()
         }
+    }
+
+    private func configureDialogueNode(_ node: VNNode) {
+        guard let dialogue = node.dialogue else {
+            engine.configure(text: "", blipKey: nil)
+            engine.start()
+            return
+        }
+
+        if let sfx = dialogue.soundEffect, !sfx.isEmpty {
+            AppLog.story.debug("🔔 one-shot sfx=\(sfx, privacy: .public)")
+            SFXManager.shared.play(sfx)
+        }
+
+        let blip = CharacterBlip.blipKey(for: dialogue.speakerId)
+        AppLog.story.info("🔊 blipKey=\(blip ?? "nil", privacy: .public)")
+        engine.configure(text: dialogue.text, blipKey: (blip?.isEmpty == true) ? nil : blip)
+        engine.start()
+    }
+
+    private func configureDecisionNode(_ node: VNNode) {
+        let promptText = node.decision?.prompt ?? node.dialogue?.text ?? ""
+        if promptText.isEmpty {
+            engine.configure(text: "", blipKey: nil)
+        } else {
+            engine.configure(text: promptText, blipKey: nil)
+            engine.start()
+        }
+    }
+
+    private func handleDecisionChoice(_ choice: VNChoice) {
+        AppLog.story.info("🧭 decision choice=\(choice.id, privacy: .public) next=\(choice.nextNodeId ?? "nil", privacy: .public)")
+        if let node {
+            QuestManager.shared.recordDialogueEvent(nodeId: node.nodeId)
+        }
+        guard let next = choice.nextNodeId, !next.isEmpty else {
+            finishStory()
+            return
+        }
+        advance(to: next)
+    }
+
+    private func resolveConditionalNode(_ node: VNNode) {
+        guard let conditional = node.conditional else { return }
+        let progress = ProgressManager.shared.progress
+        let satisfied = conditional.condition.isSatisfied(by: progress)
+        AppLog.story.info("🔀 conditional \(node.nodeId, privacy: .public) result=\(satisfied)")
+        let next = satisfied ? conditional.successNodeId : conditional.failureNodeId
+        advance(to: next)
+    }
+
+    private func handleQuestGateNode(_ node: VNNode) {
+        guard let gate = node.questGate else { return }
+        AppLog.story.info("🛰️ quest gate node=\(node.nodeId, privacy: .public) quest=\(gate.questId, privacy: .public)")
+        if gate.autoStart, let quest = MainQuestRepository.quest(withId: gate.questId) {
+            QuestManager.shared.enqueueMainQuest(quest)
+        }
+        if let next = gate.nextNodeId, !next.isEmpty {
+            advance(to: next)
+        } else {
+            finishStory()
+        }
+    }
+
+    private func advance(to nextId: String) {
+        currentNodeID = nextId
+        DispatchQueue.main.async {
+            self.loadNodeAndStart(id: nextId)
+        }
+    }
+
+    private func finishStory() {
+        onStoryComplete?()
+        if returnToMapOnCompletion {
+            GameManager.shared.activeMainTab = 0
+        }
+        dismiss()
+    }
+
+    private var debugHUD: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("node: \(node?.nodeId ?? "nil")")
+            Text("type: \(node?.type.rawValue ?? "nil")")
+            Text("next: \(node?.primaryNextNodeId ?? "nil")")
+            Text("speaker: \(currentSpeakerName ?? "nil")")
+            Text("done: \(engine.isCompleted.description)")
+        }
+        .font(.system(size: 10, weight: .regular, design: .monospaced))
+        .foregroundColor(.white.opacity(0.8))
+        .padding(8)
+        .background(Color.black.opacity(0.35))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .padding(.top, 8)
+        .padding(.leading, 8)
+    }
+}
+
+// MARK: - Exit Button
+
+private struct ExitButton: View {
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "xmark")
+                .font(.system(size: 12, weight: .black, design: .monospaced))
+                .foregroundColor(.black)
+                .frame(width: 36, height: 36)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.cyberpunkYellow)
+                        .shadow(color: .cyberpunkYellow.opacity(0.35), radius: 8, x: 0, y: 3)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.cyberpunkBorder, lineWidth: 1)
+                )
+        }
+        .buttonStyle(.plain)
     }
 }

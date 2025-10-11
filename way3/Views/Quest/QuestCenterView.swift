@@ -341,6 +341,10 @@ private struct MainQuestDetailView: View {
         quest.requirements.isSatisfied(by: progressManager.progress, playerLevel: playerLevel)
     }
 
+    private var completedObjectiveIndices: Set<Int> {
+        Set(progressManager.completedObjectives(for: quest.questId))
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -540,22 +544,6 @@ private extension MainQuestObjective {
         case .trading: return "creditcard.fill"
         case .dialogue: return "bubble.left.and.bubble.right.fill"
         case .interact: return "hand.tap.fill"
-        }
-    }
-
-            return "배달 목표지 방문"
-        case .trading:
-            if let storeId = storeId {
-                return "실제 상점 거래 (\(storeId))"
-            }
-            return "거래 수행"
-        case .dialogue:
-            if let node = storyNodeId {
-                return "스토리 노드 완료 (\(node))"
-            }
-            return "대화 완료"
-        case .interact:
-            return description ?? "특정 상호작용 수행"
         }
     }
 }

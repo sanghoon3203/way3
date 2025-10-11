@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_42",
+  "background_image": "",
+  "character_id": "기주리",
+  "character_sprite": "Kijuri.png",
+  "dialogue_text": "음 다 말할려면 귀찮긴한데 말해줄게",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_43.json"
+}

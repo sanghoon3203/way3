@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_55",
+  "background_image": "",
+  "character_id": "기주리",
+  "character_sprite": "Kijuri.png",
+  "dialogue_text": "우리 내부적으로는 너가 온 원인이 네오-서울이 혼란에 빠져있어서 그럴거라고 추정하고있거든 \n 너가 그걸 없애면 되지않을까?",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_56.json"
+}

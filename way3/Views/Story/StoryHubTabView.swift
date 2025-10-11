@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 // MARK: - Story Hub
 
@@ -13,23 +14,12 @@ private struct NodeKey: Identifiable { let id: String }
 
 struct StoryHubTabView: View {
     @State private var filter: StoryHubFilter = .main
-    @State private var storyChapters: [StoryChapterDefinition] = []
-    @State private var merchantEpisodes: [MerchantEpisodeMeta] = []
+    @State private var chapterSnapshots: [StoryHubChapterSnapshot] = []
+    @State private var merchantSnapshots: [StoryHubMerchantStorySnapshot] = []
     @State private var startNode: String?
     @State private var selectedEpisode: StoryEpisodeDefinition?
 
     @EnvironmentObject private var progressManager: ProgressManager
-
-    private var knownMerchantIds: [String] {
-        [
-            "merchant_seoyena",
-            "merchant_minji",
-            "merchant_haerin",
-            "merchant_joongi",
-            "merchant_sunwoo",
-            "merchant_jiyoung"
-        ]
-    }
 
     var body: some View {
         NavigationStack {
@@ -57,14 +47,18 @@ struct StoryHubTabView: View {
                 selectedEpisode = nil
             }
         )) { key in
-            StoryView(startNodeID: key.id) {
-                if let episode = selectedEpisode {
-                    StoryFlowManager.shared.handleEpisodeCompletion(episode)
-                }
-            }
+            let episode = selectedEpisode
+            StoryView(
+                startNodeID: key.id,
+                returnToMapOnCompletion: true,
+                onComplete: StoryFlowManager.shared.makeCompletionHandler(for: episode)
+            )
             .background(Color.black.ignoresSafeArea())
         }
         .onAppear(perform: loadData)
+        .onReceive(progressManager.$progress) { _ in
+            loadData()
+        }
     }
 
     // MARK: - Header
@@ -117,8 +111,9 @@ struct StoryHubTabView: View {
     private var mainList: some View {
         ScrollView {
             LazyVStack(spacing: 16) {
-                ForEach(storyChapters) { chapter in
-                    let isLocked = !chapter.isUnlocked(progress: progressManager.progress)
+                ForEach(chapterSnapshots) { snapshot in
+                    let chapter = snapshot.definition
+                    let isLocked = !snapshot.isUnlocked
 
                     NavigationLink {
                         StoryChapterDetailView(chapter: chapter) { episode in
@@ -128,9 +123,7 @@ struct StoryHubTabView: View {
                         .environmentObject(progressManager)
                     } label: {
                         StoryChapterCard(
-                            chapter: chapter,
-                            progress: progressManager.progress,
-                            isLocked: isLocked
+                            snapshot: snapshot
                         )
                     }
                     .disabled(isLocked)
@@ -149,18 +142,17 @@ struct StoryHubTabView: View {
     private var merchantList: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
-                ForEach(merchantEpisodes) { episode in
-                    let locked = episode.locked ?? false
+                ForEach(merchantSnapshots) { snapshot in
                     StoryCard(
-                        title: episode.title,
-                        subtitle: "@\(episode.merchant_id) • \(episode.episode_id)",
+                        title: snapshot.title,
+                        subtitle: "@\(snapshot.merchantId) • \(snapshot.id)",
                         tagLeft: "EP",
-                        tagRight: locked ? "LOCKED" : "READY",
-                        tagRightColor: locked ? .cyberpunkError : .cyberpunkYellow,
-                        primaryTitle: locked ? "잠금" : "시작",
+                        tagRight: snapshot.isUnlocked ? "READY" : "LOCKED",
+                        tagRightColor: snapshot.isUnlocked ? .cyberpunkYellow : .cyberpunkError,
+                        primaryTitle: snapshot.isUnlocked ? "시작" : "잠금",
                         secondaryTitle: "처음부터",
-                        onPrimary: { if !locked { startNode = episode.entry_node } },
-                        onSecondary: { startNode = episode.entry_node }
+                        onPrimary: { if snapshot.isUnlocked { startNode = snapshot.entryNodeId } },
+                        onSecondary: { startNode = snapshot.entryNodeId }
                     )
                 }
             }
@@ -172,25 +164,26 @@ struct StoryHubTabView: View {
     // MARK: - Data
 
     private func loadData() {
-        storyChapters = StoryChapterRepository.loadChapters()
-        merchantEpisodes = StoryLibrary.loadMerchantEpisodes(merchantIds: knownMerchantIds)
-            .sorted { ($0.merchant_id, $0.episode_id) < ($1.merchant_id, $1.episode_id) }
+        let snapshot = StoryHubDataProvider.shared.makeSnapshot(progress: progressManager.progress)
+        chapterSnapshots = snapshot.chapters
+        merchantSnapshots = snapshot.merchantStories
     }
 }
 
 // MARK: - Chapter Card
 
 private struct StoryChapterCard: View {
-    let chapter: StoryChapterDefinition
-    let progress: PlayerProgress
-    let isLocked: Bool
+    let snapshot: StoryHubChapterSnapshot
+
+    private var chapter: StoryChapterDefinition { snapshot.definition }
+    private var isLocked: Bool { !snapshot.isUnlocked }
 
     private var totalEpisodes: Int {
-        max(chapter.totalEpisodeCount(), 1)
+        snapshot.totalEpisodes
     }
 
     private var completedEpisodes: Int {
-        chapter.completedEpisodeCount(progress: progress)
+        snapshot.completedEpisodes
     }
 
     private var progressRatio: Double {
@@ -198,14 +191,14 @@ private struct StoryChapterCard: View {
     }
 
     private var statusText: String {
-        if chapter.isCompleted(progress: progress) {
+        if snapshot.isCompleted {
             return "CLEAR"
         }
         return isLocked ? "LOCKED" : "ACTIVE"
     }
 
     private var statusColor: Color {
-        if chapter.isCompleted(progress: progress) { return .green }
+        if snapshot.isCompleted { return .green }
         return isLocked ? .cyberpunkError : .cyberpunkYellow
     }
 
@@ -236,6 +229,13 @@ private struct StoryChapterCard: View {
                 .foregroundColor(.cyberpunkTextPrimary)
                 .lineLimit(2)
 
+            if let summary = chapter.summary, !summary.isEmpty {
+                Text(summary)
+                    .font(.cyberpunkCaption())
+                    .foregroundColor(.cyberpunkTextSecondary)
+                    .lineLimit(3)
+            }
+
             Text("\(completedEpisodes)/\(totalEpisodes) 에피소드 완료")
                 .font(.cyberpunkCaption())
                 .foregroundColor(.cyberpunkTextSecondary)
@@ -260,7 +260,7 @@ private struct StoryChapterCard: View {
         .overlay(
             RoundedRectangle(cornerRadius: 14)
                 .stroke(
-                    chapter.isCompleted(progress: progress) ? Color.green.opacity(0.4) : Color.cyberpunkBorder,
+                    snapshot.isCompleted ? Color.green.opacity(0.4) : Color.cyberpunkBorder,
                     lineWidth: 1
                 )
         )

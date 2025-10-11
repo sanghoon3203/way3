@@ -1,9 +1,9 @@
 {
   "node_id": "prologue_16",
   "background_image": "bg_neo_subway_station.jpg",
-  "character_id": "gijuri",
-  "character_sprite": "sprite_gijuri_serious.png",
-  "dialogue_text": "돌아갈 수 없습니다. 당신은 상인이 되어야 합니다. 네오서울의 균형은 무역을 통해 유지됩니다.",
+  "character_id": "player",
+  "character_sprite": "",
+  "dialogue_text": "커넥션:서울? 아 어제 내가 할려다가 잠들어버린 게임이구나",
   "dialogue_sound_id": "prologue_16",
   "sound_effect": null,
   "next_node_id": "prologue_17"

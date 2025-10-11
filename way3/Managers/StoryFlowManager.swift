@@ -17,11 +17,11 @@ final class StoryFlowManager: ObservableObject {
     private let logger = Logger(subsystem: "com.way3.story", category: "StoryFlowManager")
 
     private init(
-        progressManager: ProgressManager = .shared,
-        questManager: QuestManager = .shared
+        progressManager: ProgressManager? = nil,
+        questManager: QuestManager? = nil
     ) {
-        self.progressManager = progressManager
-        self.questManager = questManager
+        self.progressManager = progressManager ?? ProgressManager.shared
+        self.questManager = questManager ?? QuestManager.shared
     }
 
     // MARK: - Episode Completion
@@ -29,7 +29,13 @@ final class StoryFlowManager: ObservableObject {
     func handleEpisodeCompletion(_ episode: StoryEpisodeDefinition) {
         logger.info("🎬 에피소드 완료 처리: \(episode.episodeId)")
 
+        let alreadyCompleted = progressManager.isEpisodeCompleted(episode.episodeId)
         progressManager.completeEpisode(episode.episodeId)
+
+        guard !alreadyCompleted else {
+            logger.debug("⏭️ 에피소드 \(episode.episodeId) 이미 완료 상태 - 보상 스킵")
+            return
+        }
 
         if let questId = episode.postQuestId,
            let mainQuest = MainQuestRepository.quest(withId: questId) {
@@ -38,6 +44,15 @@ final class StoryFlowManager: ObservableObject {
 
         unlockNextEpisodes(after: episode)
         handleChapterCompletionIfNeeded(for: episode)
+    }
+
+    func makeCompletionHandler(for episode: StoryEpisodeDefinition?) -> () -> Void {
+        { [weak self] in
+            guard let self = self else { return }
+            if let episode = episode {
+                self.handleEpisodeCompletion(episode)
+            }
+        }
     }
 
     private func unlockNextEpisodes(after episode: StoryEpisodeDefinition) {

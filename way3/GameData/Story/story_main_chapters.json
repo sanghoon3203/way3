@@ -1,17 +1,37 @@
 {
-  "chapters": [
+  "chapters": [{
+    "chapter_id": "ch0_prologue",
+    "title": "프롤로그: 이상한 세계로 떨어지다",
+    "order": 1,
+    "region": "seoul",
+    "summary": "'커넥트: 서울'을 통해서 다른 세계에 와버린 나, 앞으로 어떻게 나아가야할까?",
+    "main_story_entry": "prologue_01",
+    "unlock_conditions": [],
+    "districts": [],
+    "completion_reward": {
+      "key_item": "임시 상인증",
+      "money": 50000,
+      "exp": 1000
+    }
+  },
     {
       "chapter_id": "ch1_gangnam",
       "title": "강남권: 번영의 그림자",
       "order": 1,
+      "region": "gangnam",
+      "summary": "강남권 전역에서 발생한 탐욕의 폭발을 추적하며 다섯 상인과 공조한다.",
+      "main_story_entry": "prologue_01",
+      "unlock_conditions": [],
       "districts": [
         {
           "district_id": "gangnam_gu",
           "name": "강남구",
+          "merchant_id": "merchant_Seoyena",
+          "synopsis": "압구정 로데오의 황금 가면 사건을 조사한다.",
           "episodes": [
             {
               "episode_id": "gangnam_1_1",
-              "title": "서예나 - 황금탑의 빙산",
+              "title": "서예나 - 황금탑의 균열",
               "story_node_id": "gangnam_1_1_start",
               "order": 1,
               "unlock_conditions": [],
@@ -19,7 +39,7 @@
             },
             {
               "episode_id": "gangnam_1_2",
-              "title": "서예나 - 첫 거래의 진실",
+              "title": "서예나 - 욕망의 경매장",
               "story_node_id": "gangnam_1_2_start",
               "order": 2,
               "unlock_conditions": [
@@ -32,7 +52,7 @@
             },
             {
               "episode_id": "gangnam_1_3",
-              "title": "서예나 - 숨겨진 네트워크",
+              "title": "서예나 - 황금 폭주의 근원",
               "story_node_id": "gangnam_1_3_start",
               "order": 3,
               "unlock_conditions": [
@@ -52,14 +72,161 @@
         {
           "district_id": "seocho_gu",
           "name": "서초구",
+          "merchant_id": "merchant_Alicegang",
+          "synopsis": "서래마을에서 사라진 마법 생명수를 찾아낸다.",
           "episodes": [
             {
               "episode_id": "seocho_1_1",
-              "title": "서초 - 프티 프랑스의 비밀",
+              "title": "앨리스 강 - 사라진 정원",
               "story_node_id": "seocho_1_1_start",
               "order": 1,
-              "unlock_conditions": [],
+              "unlock_conditions": [
+                {
+                  "type": "episode",
+                  "value": "gangnam_1_1"
+                }
+              ],
               "post_quest_id": "mainquest_seocho_1_1"
+            },
+            {
+              "episode_id": "seocho_1_2",
+              "title": "앨리스 강- 마법 공명의 비밀",
+              "story_node_id": "seocho_1_2_start",
+              "order": 2,
+              "unlock_conditions": [
+                {
+                  "type": "episode",
+                  "value": "seocho_1_1"
+                },
+                {
+                  "type": "subQuest",
+                  "value": "sunwoo_sub_01"
+                }
+              ],
+              "post_quest_id": "mainquest_seocho_1_2"
+            }
+          ]
+        },
+        {
+          "district_id": "songpa_gu",
+          "name": "송파구",
+          "merchant_id": "merchant_Anipark",
+          "synopsis": "석촌호수에서 악몽에 잠식된 주민을 구출한다.",
+          "episodes": [
+            {
+              "episode_id": "songpa_1_1",
+              "title": "애니 박- 악몽의 파문",
+              "story_node_id": "songpa_1_1_start",
+              "order": 1,
+              "unlock_conditions": [
+                {
+                  "type": "episode",
+                  "value": "seocho_1_1"
+                }
+              ],
+              "post_quest_id": "mainquest_songpa_1_1"
+            },
+            {
+              "episode_id": "songpa_1_2",
+              "title": "애니 박- 꿈결의 단서",
+              "story_node_id": "songpa_1_2_start",
+              "order": 2,
+              "unlock_conditions": [
+                {
+                  "type": "episode",
+                  "value": "songpa_1_1"
+                }
+              ],
+              "post_quest_id": "mainquest_songpa_1_2"
+            }
+          ]
+        },
+        {
+          "district_id": "gangdong_gu",
+          "name": "강동구",
+          "merchant_id": "merchant_Jinbeakho",
+          "synopsis": "천호동 장인 실종 사건으로 오염원을 추적한다.",
+          "episodes": [
+            {
+              "episode_id": "gangdong_1_1",
+              "title": "진백호 - 강의 붉은 흔적",
+              "story_node_id": "gangdong_1_1_start",
+              "order": 1,
+              "unlock_conditions": [
+                {
+                  "type": "episode",
+                  "value": "songpa_1_1"
+                }
+              ],
+              "post_quest_id": "mainquest_gangdong_1_1"
+            },
+            {
+              "episode_id": "gangdong_1_2",
+              "title": "진백호 - 실종된 장인의 암호",
+              "story_node_id": "gangdong_1_2_start",
+              "order": 2,
+              "unlock_conditions": [
+                {
+                  "type": "episode",
+                  "value": "gangdong_1_1"
+                },
+                {
+                  "type": "quest",
+                  "value": "joongi_sub_01"
+                }
+              ],
+              "post_quest_id": "mainquest_gangdong_1_2"
+            }
+          ]
+        },
+        {
+          "district_id": "gwanak_gu",
+          "name": "관악구",
+          "merchant_id": "merchant_Kimsehwui",
+          "synopsis": "서울대 연구구역에서 기억 소멸 현상을 분석한다.",
+          "episodes": [
+            {
+              "episode_id": "gwanak_1_1",
+              "title": "김세휘 - 차원의 흔적",
+              "story_node_id": "gwanak_1_1_start",
+              "order": 1,
+              "unlock_conditions": [
+                {
+                  "type": "episode",
+                  "value": "gangdong_1_1"
+                }
+              ],
+              "post_quest_id": "mainquest_gwanak_1_1"
+            },
+            {
+              "episode_id": "gwanak_1_2",
+              "title": "김세휘 - 붕괴되는 실험실",
+              "story_node_id": "gwanak_1_2_start",
+              "order": 2,
+              "unlock_conditions": [
+                {
+                  "type": "episode",
+                  "value": "gwanak_1_1"
+                },
+                {
+                  "type": "quest",
+                  "value": "jiyoung_sub_02"
+                }
+              ],
+              "post_quest_id": "mainquest_gwanak_1_2"
+            },
+            {
+              "episode_id": "gwanak_1_3",
+              "title": "김세휘 - 탐욕의 정점",
+              "story_node_id": "gwanak_1_3_start",
+              "order": 3,
+              "unlock_conditions": [
+                {
+                  "type": "episode",
+                  "value": "gwanak_1_2"
+                }
+              ],
+              "post_quest_id": "mainquest_gwanak_1_3"
             }
           ]
         }
@@ -74,14 +241,25 @@
       "chapter_id": "ch2_northwest",
       "title": "서북권: 역사의 메아리",
       "order": 2,
+      "region": "northwest",
+      "summary": "서북부의 고도에서 튀어나온 시간 균열을 봉인한다.",
+      "main_story_entry": "ch2_intro_01",
+      "unlock_conditions": [
+        {
+          "type": "keyItem",
+          "value": "key_item_gangnam"
+        }
+      ],
       "districts": [
         {
           "district_id": "jongno_gu",
           "name": "종로구",
+          "merchant_id": "merchant_minji",
+          "synopsis": "경복궁 일대에서 봉인된 왕실 비밀을 되찾는다.",
           "episodes": [
             {
               "episode_id": "jongno_1_1",
-              "title": "이민지 - 경복궁 그림자",
+              "title": "민지 - 그림자의 가문",
               "story_node_id": "jongno_1_1_start",
               "order": 1,
               "unlock_conditions": [],
@@ -89,7 +267,7 @@
             },
             {
               "episode_id": "jongno_1_2",
-              "title": "이민지 - 숨은 봉인",
+              "title": "민지 - 봉인의 균열",
               "story_node_id": "jongno_1_2_start",
               "order": 2,
               "unlock_conditions": [
@@ -102,7 +280,7 @@
             },
             {
               "episode_id": "jongno_1_3",
-              "title": "이민지 - 종로의 결의",
+              "title": "민지 - 궁정의 맹세",
               "story_node_id": "jongno_1_3_start",
               "order": 3,
               "unlock_conditions": [
@@ -122,10 +300,12 @@
         {
           "district_id": "jung_gu",
           "name": "중구",
+          "merchant_id": "merchant_haerin",
+          "synopsis": "을지로 지하에서 잠든 영적인 네트워크를 따라간다.",
           "episodes": [
             {
               "episode_id": "jung_1_1",
-              "title": "정해린 - 명동의 초대",
+              "title": "해린 - 명동의 초대",
               "story_node_id": "jung_1_1_start",
               "order": 1,
               "unlock_conditions": [],
@@ -133,7 +313,7 @@
             },
             {
               "episode_id": "jung_1_2",
-              "title": "정해린 - 을지로 비밀회동",
+              "title": "해린 - 을지로의 비밀 거래",
               "story_node_id": "jung_1_2_start",
               "order": 2,
               "unlock_conditions": [
@@ -146,7 +326,7 @@
             },
             {
               "episode_id": "jung_1_3",
-              "title": "정해린 - 심야의 결정",
+              "title": "해린 - 심야의 결의",
               "story_node_id": "jung_1_3_start",
               "order": 3,
               "unlock_conditions": [
@@ -162,183 +342,12 @@
               "post_quest_id": "mainquest_jung_1_3"
             }
           ]
-        },
-        {
-          "district_id": "seodaemun_gu",
-          "name": "서대문구",
-          "episodes": [
-            {
-              "episode_id": "seodaemun_1_1",
-              "title": "조중기 - 서대문의 기록",
-              "story_node_id": "seodaemun_1_1_start",
-              "order": 1,
-              "unlock_conditions": [],
-              "post_quest_id": "mainquest_seodaemun_1_1"
-            },
-            {
-              "episode_id": "seodaemun_1_2",
-              "title": "조중기 - 독립문의 메아리",
-              "story_node_id": "seodaemun_1_2_start",
-              "order": 2,
-              "unlock_conditions": [
-                {
-                  "type": "episode",
-                  "value": "seodaemun_1_1"
-                }
-              ],
-              "post_quest_id": "mainquest_seodaemun_1_2"
-            },
-            {
-              "episode_id": "seodaemun_1_3",
-              "title": "조중기 - 야간 브리핑",
-              "story_node_id": "seodaemun_1_3_start",
-              "order": 3,
-              "unlock_conditions": [
-                {
-                  "type": "episode",
-                  "value": "seodaemun_1_2"
-                },
-                {
-                  "type": "subQuest",
-                  "value": "joongi_sub_02"
-                }
-              ],
-              "post_quest_id": "mainquest_seodaemun_1_3"
-            }
-          ]
-        },
-        {
-          "district_id": "mapo_gu",
-          "name": "마포구",
-          "episodes": [
-            {
-              "episode_id": "mapo_1_1",
-              "title": "강선우 - 합정의 서막",
-              "story_node_id": "mapo_1_1_start",
-              "order": 1,
-              "unlock_conditions": [],
-              "post_quest_id": "mainquest_mapo_1_1"
-            },
-            {
-              "episode_id": "mapo_1_2",
-              "title": "강선우 - 홍대의 열기",
-              "story_node_id": "mapo_1_2_start",
-              "order": 2,
-              "unlock_conditions": [
-                {
-                  "type": "episode",
-                  "value": "mapo_1_1"
-                }
-              ],
-              "post_quest_id": "mainquest_mapo_1_2"
-            },
-            {
-              "episode_id": "mapo_1_3",
-              "title": "강선우 - 새벽의 믹스",
-              "story_node_id": "mapo_1_3_start",
-              "order": 3,
-              "unlock_conditions": [
-                {
-                  "type": "episode",
-                  "value": "mapo_1_2"
-                },
-                {
-                  "type": "quest",
-                  "value": "sunwoo_sub_02"
-                }
-              ],
-              "post_quest_id": "mainquest_mapo_1_3"
-            }
-          ]
-        },
-        {
-          "district_id": "yongsan_gu",
-          "name": "용산구",
-          "episodes": [
-            {
-              "episode_id": "yongsan_1_1",
-              "title": "배지영 - 전자상가 스캔",
-              "story_node_id": "yongsan_1_1_start",
-              "order": 1,
-              "unlock_conditions": [],
-              "post_quest_id": "mainquest_yongsan_1_1"
-            },
-            {
-              "episode_id": "yongsan_1_2",
-              "title": "배지영 - 용산역 특송",
-              "story_node_id": "yongsan_1_2_start",
-              "order": 2,
-              "unlock_conditions": [
-                {
-                  "type": "episode",
-                  "value": "yongsan_1_1"
-                }
-              ],
-              "post_quest_id": "mainquest_yongsan_1_2"
-            },
-            {
-              "episode_id": "yongsan_1_3",
-              "title": "배지영 - 전략 회의",
-              "story_node_id": "yongsan_1_3_start",
-              "order": 3,
-              "unlock_conditions": [
-                {
-                  "type": "episode",
-                  "value": "yongsan_1_2"
-                },
-                {
-                  "type": "quest",
-                  "value": "jiyoung_sub_02"
-                }
-              ],
-              "post_quest_id": "mainquest_yongsan_1_3"
-            }
-          ]
-        }
-      ],
-      "unlock_conditions": [
-        {
-          "type": "keyItem",
-          "value": "key_item_gangnam"
         }
       ],
       "completion_reward": {
         "key_item": "key_item_northwest",
         "money": 75000,
         "exp": 1500
-      }
-    },
-    {
-      "chapter_id": "ch6_final",
-      "title": "최종장: 서울의 진실",
-      "order": 6,
-      "districts": [],
-      "unlock_conditions": [
-        {
-          "type": "keyItem",
-          "value": "key_item_gangnam"
-        },
-        {
-          "type": "keyItem",
-          "value": "key_item_northwest"
-        },
-        {
-          "type": "keyItem",
-          "value": "key_item_northeast"
-        },
-        {
-          "type": "keyItem",
-          "value": "key_item_southwest"
-        },
-        {
-          "type": "keyItem",
-          "value": "key_item_eastwest"
-        }
-      ],
-      "completion_reward": {
-        "key_item": "final_key",
-        "money": 500000,
-        "exp": 10000
       }
     }
   ]

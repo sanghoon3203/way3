@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_22",
+  "background_image": "bg_neo_subway_station.jpg",
+  "character_id": "player",
+  "character_sprite": "",
+  "dialogue_text": "어...! 이러다가 뭔지 모르겠는데 100퍼센트 되겠는데?",
+  "dialogue_sound_id": "prologue_18",
+  "sound_effect": "sfx_teleport_out.mp3",
+  "next_node_id": "prologue_23.json"
+}

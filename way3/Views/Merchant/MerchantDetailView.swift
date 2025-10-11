@@ -208,7 +208,7 @@ struct MerchantDetailView: View {
             get: { startNodeForStory.map { StoryStartWrapper(id: $0) } },
             set: { _ in startNodeForStory = nil }
         )) { wrapper in
-            StoryView(startNodeID: wrapper.id)
+            StoryView(startNodeID: wrapper.id, returnToMapOnCompletion: true)
                 .background(Color.black.ignoresSafeArea())
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -3,8 +3,8 @@
   "background_image": "bg_street_to_subway.jpg",
   "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "계단을 내려가며 스마트폰을 꺼냈다. 친구 단톡방에 늦는다는 메시지를 보내려는데... [알 수 없는 앱이 설치되었습니다]",
-  "dialogue_sound_id": null,
+  "dialogue_text": "*(시끄럽게 울리는 벨소리)*",
+  "dialogue_sound_id": "prologue_02",
   "sound_effect": "sfx_phone_notification.mp3",
   "next_node_id": "prologue_03"
 }

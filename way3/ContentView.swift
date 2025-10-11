@@ -13,7 +13,6 @@ struct ContentView: View {
     @StateObject private var authManager = AuthManager.shared
     @StateObject private var gameManager = GameManager.shared
     @StateObject private var player = Player.createDefault()
-    @State private var selectedTab = 0
     @State private var showStartView = true
 
     // 로컬 저장 시스템
@@ -29,7 +28,12 @@ struct ContentView: View {
                 LoginView(showLoginView: .constant(true))
                     .environmentObject(authManager)
             } else {
-                MainTabView(selectedTab: $selectedTab)
+                MainTabView(
+                    selectedTab: Binding(
+                        get: { gameManager.activeMainTab },
+                        set: { gameManager.activeMainTab = $0 }
+                    )
+                )
                     .environmentObject(authManager)
                     .environmentObject(gameManager)
                     .environmentObject(locationManager)

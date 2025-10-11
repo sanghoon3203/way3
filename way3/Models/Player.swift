@@ -11,7 +11,6 @@ import SwiftUI
 import CoreLocation
 
 // MARK: - Main Player Class (Unified Interface)
-@MainActor
 class Player: ObservableObject, Codable {
     // MARK: - Component References
     @Published var core: PlayerCore
@@ -481,7 +480,7 @@ extension Player {
     }
 
     // 자동 저장 시작
-    func startAutoSave() {
+    @MainActor func startAutoSave() {
         PlayerDataManager.shared.startAutoSave(for: self)
     }
 
@@ -498,7 +497,7 @@ extension Player {
     }
 
     // 저장된 데이터 존재 여부 확인
-    static func hasSavedData() -> Bool {
+    @MainActor static func hasSavedData() -> Bool {
         return PlayerDataManager.shared.hasSavedData()
     }
 
@@ -508,7 +507,7 @@ extension Player {
     }
 
     // 백업 정보 조회
-    static func getBackupInfo() -> [BackupInfo] {
+    @MainActor static func getBackupInfo() -> [BackupInfo] {
         return PlayerDataManager.shared.getBackupInfo()
     }
 }

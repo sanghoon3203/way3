@@ -46,6 +46,7 @@ struct TradeResult: Codable {
 }
 
 // MARK: - 거래 매니저
+@MainActor
 class TradeManager: ObservableObject {
     static let shared = TradeManager()
     

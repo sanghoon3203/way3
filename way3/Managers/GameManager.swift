@@ -24,6 +24,7 @@ class GameManager: ObservableObject {
     @Published var nearbyMerchants: [Merchant] = []
     @Published var marketPrices: [MarketPrice] = []
     @Published var gameNotifications: [GameNotification] = []
+    @Published var activeMainTab: Int = 0
 
     // MARK: - Profile Management
     @Published var profileViewState: ProfileViewState = .loading
@@ -140,6 +141,16 @@ class GameManager: ObservableObject {
         saveGameData()
 
         GameLogger.shared.logInfo("게임 종료됨", category: .gameplay)
+    }
+
+    // MARK: - Navigation Helpers
+
+    func switchToTab(_ index: Int) {
+        activeMainTab = index
+    }
+
+    func goToMap() {
+        activeMainTab = 0
     }
 
     // MARK: - Player Management
@@ -1150,7 +1161,7 @@ struct GameNotification: Identifiable {
     let type: GameNotificationType
     let timestamp: Date
 }
-
+    
 enum GameNotificationType {
     case info
     case success

@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_36",
+  "background_image": "",
+  "character_id": "???",
+  "character_sprite": "Kijuri.png",
+  "dialogue_text": "이제..좀 일어날 생각이니?",
+  "dialogue_sound_id": "prologue_18",
+  "sound_effect": "",
+  "next_node_id": "prologue_37.json"
+}

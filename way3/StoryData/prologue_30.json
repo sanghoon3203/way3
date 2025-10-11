@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_30",
+  "background_image": "bg_neo_subway_station.jpg",
+  "character_id": "???",
+  "character_sprite": "Kijuri.png",
+  "dialogue_text": "하유...또..넘어왔나보네...",
+  "dialogue_sound_id": "prologue_18",
+  "sound_effect": "",
+  "next_node_id": "prologue_31.json"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_52",
+  "background_image": "",
+  "character_id": "기주리",
+  "character_sprite": "Kijuri.png",
+  "dialogue_text": "아직까지는? 그러겠지?",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_53.json"
+}

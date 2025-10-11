@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_40",
+  "background_image": "",
+  "character_id": "기주리",
+  "character_sprite": "",
+  "dialogue_text": "내 이름은 기주리야, 여기 네오-서울 종로경찰서 소속 시간보안관이야.",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_41.json"
+}
