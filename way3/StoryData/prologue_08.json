@@ -1,8 +1,8 @@
 {
   "node_id": "prologue_08",
-  "background_image": "bg_neo_subway_station.jpg",
+  "background_image": null,
   "character_id": null,
-  "character_sprite": "sprite_player_uniform_confused.png",
+  "character_sprite": null,
   "dialogue_text": "*(지하철 개찰구 통과음)*",
   "dialogue_sound_id": null,
   "sound_effect": null,

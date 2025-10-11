@@ -1,8 +1,8 @@
 {
   "node_id": "prologue_36",
-  "background_image": "",
+  "background_image": "bg_Kijuri.png",
   "character_id": "???",
-  "character_sprite": "Kijuri.png",
+  "character_sprite": "",
   "dialogue_text": "이제..좀 일어날 생각이니?",
   "dialogue_sound_id": "prologue_18",
   "sound_effect": "",

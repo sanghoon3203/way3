@@ -1,10 +1,10 @@
 {
-  "node_id": "prologue_59",
+  "node_id": "prologue_70",
   "background_image": "",
   "character_id": "",
   "character_sprite": "",
-  "dialogue_text": "*(네오-서울 가이드북?! 한번 열어보자)*",
+  "dialogue_text": "*(핸드폰 울리는 소리)*",
   "dialogue_sound_id": "",
   "sound_effect": "",
-  "next_node_id": ""
+  "next_node_id": "prologue_71"
 }

@@ -1,8 +1,8 @@
 {
   "node_id": "prologue_11",
-  "background_image": "bg_neo_subway_station_cracked.jpg",
+  "background_image": null,
   "character_id": null,
-  "character_sprite": "sprite_player_uniform_scared.png",
+  "character_sprite": null,
   "dialogue_text": "*(지하철 출발하는 소리 통과음)*",
   "dialogue_sound_id": null,
   "sound_effect": "sfx_subway.mp3",

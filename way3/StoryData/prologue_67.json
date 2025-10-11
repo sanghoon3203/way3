@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_64",
+  "background_image": "",
+  "character_id": "",
+  "character_sprite": "",
+  "dialogue_text": "[7. 필요한 재화를 얻기 위해서는 교환은 필수입니다. 여러분의 능력을 활용하여 특별한 자원을 손에 얻어 재화를 얻어보세요. ]",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_65"
+}

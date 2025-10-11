@@ -1,10 +1,10 @@
 {
   "node_id": "prologue_13",
-  "background_image": "bg_neo_subway_station_cracked.jpg",
+  "background_image": null,
   "character_id": "NPC",
   "character_sprite": "",
   "dialogue_text": "[커넥션: 서울에서 알려드립니다]",
-  "dialogue_sound_id": "prologue_13",
-  "sound_effect": "sfx_whoosh_appear.mp3",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
   "next_node_id": "prologue_14"
 }

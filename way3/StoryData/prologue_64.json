@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_64",
+  "background_image": "",
+  "character_id": "",
+  "character_sprite": "",
+  "dialogue_text": "[4. 성격이 비슷한 구역을 5개의 구역으로 나눠, 강남권,서북권,동북권,서남권,동서권으로 분류하고 있습니다.]",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_65"
+}

@@ -1,10 +1,10 @@
 {
   "node_id": "prologue_24",
-  "background_image": "bg_neo_subway_station.jpg",
+  "background_image": null,
   "character_id": "player",
   "character_sprite": "",
   "dialogue_text": "엥? 네오-서울...??? 그건 뭐야?",
-  "dialogue_sound_id": "prologue_18",
-  "sound_effect": "sfx_teleport_out.mp3",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
   "next_node_id": "prologue_25.json"
 }

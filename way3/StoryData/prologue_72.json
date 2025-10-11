@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_70",
+  "background_image": "",
+  "character_id": "",
+  "character_sprite": "",
+  "dialogue_text": "[골드 코인 5만원이 입금되었습니다.]",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_71"
+}
