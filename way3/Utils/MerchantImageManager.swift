@@ -10,6 +10,16 @@ import SwiftUI
 import UIKit
 import Foundation
 
+private struct OrderedSet<Element: Hashable> {
+    private var set = Set<Element>()
+    private(set) var elements: [Element] = []
+
+    mutating func append(_ element: Element) {
+        guard set.insert(element).inserted else { return }
+        elements.append(element)
+    }
+}
+
 // MARK: - 상인 이미지 관리자
 class MerchantImageManager: ObservableObject {
     static let shared = MerchantImageManager()
@@ -32,53 +42,38 @@ class MerchantImageManager: ObservableObject {
             .replacingOccurrences(of: "_", with: "")
             .lowercased()
 
+        var candidates = OrderedSet<String>()
+
         // 서버에서 제공한 파일명이 있다면 우선적으로 후보에 포함
-        var possibleNames: [String] = []
         if let imageFileName,
            !imageFileName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            let sanitized = imageFileName
-                .replacingOccurrences(of: "\\", with: "/")
-                .components(separatedBy: "/")
-                .last ?? imageFileName
-
-            let baseName = sanitized
-                .replacingOccurrences(of: ".png", with: "")
-                .replacingOccurrences(of: ".jpg", with: "")
-                .replacingOccurrences(of: ".jpeg", with: "")
-
-            possibleNames.append(contentsOf: [
-                baseName,
-                baseName.replacingOccurrences(of: " ", with: ""),
-                baseName.lowercased()
-            ])
+            let sanitized = sanitizeFileComponent(imageFileName)
+            candidates.append(sanitized)
+            if !sanitized.lowercased().hasSuffix("_face") {
+                candidates.append("\(sanitized)_face")
+            }
         }
 
-        // 2. 기존 이름 기반 패턴 (맵뷰용 _face 우선)
-        possibleNames.append(contentsOf: [
-            // _face 패턴들 (맵뷰 전용)
-            "\(cleanName)_face",
-            "\(merchantName.replacingOccurrences(of: " ", with: ""))_face",
-            "\(merchantName)_face",
-            "\(merchantName.lowercased().replacingOccurrences(of: " ", with: ""))_face",
-
-            // 기본 패턴들
+        // 2. 기본 이름 패턴 (Face 강제)
+        let romanized = romanizedMerchantName(for: merchantName)
+        let baseNames = [
             merchantName,
-            cleanName,
             merchantName.replacingOccurrences(of: " ", with: ""),
-            "\(cleanName)/image",
-            "\(cleanName)/portrait",
-            "\(cleanName)/character",
-            "\(cleanName)/merchant",
-            cleanName.lowercased(),
-            merchantName.lowercased().replacingOccurrences(of: " ", with: ""),
-            "merchant_\(cleanName)",
-            "\(cleanName)_merchant",
-            "char_\(cleanName)",
-            "\(cleanName)_char"
-        ])
+            cleanName,
+            romanized,
+            romanized.replacingOccurrences(of: " ", with: ""),
+            romanized.lowercased()
+        ]
+        for base in baseNames where !base.isEmpty {
+            let normalized = base.replacingOccurrences(of: " ", with: "")
+            let faceName = normalized.lowercased().hasSuffix("_face") ? normalized : "\(normalized)_face"
+            candidates.append(faceName)
+            let capitalizedFace = faceName.prefix(1).uppercased() + faceName.dropFirst()
+            candidates.append(capitalizedFace)
+        }
 
         // 3. 이미지 존재 확인
-        for imageName in possibleNames {
+        for imageName in candidates.elements {
             if UIImage(named: imageName) != nil {
                 #if DEBUG
                 print("✅ Found merchant image: \(imageName) for \(merchantName)")
@@ -87,7 +82,7 @@ class MerchantImageManager: ObservableObject {
             }
         }
 
-        // 4. Asset 폴더 기반 탐색
+        // 4. Asset 폴더 기반 탐색 (_face 기준)
         if let assetImageName = findImageInAssetFolder(merchantName: merchantName) {
             return assetImageName
         }
@@ -107,13 +102,26 @@ class MerchantImageManager: ObservableObject {
             merchantName.capitalized.replacingOccurrences(of: " ", with: ""), // "Alicegang"
         ]
 
-        let imageFileNames = [
-            "image", "portrait", "character", "merchant", "main", "default",
-            cleanName, merchantName.replacingOccurrences(of: " ", with: "")
+        let romanized = romanizedMerchantName(for: merchantName)
+        let baseCandidates: [String] = [
+            merchantName,
+            merchantName.replacingOccurrences(of: " ", with: ""),
+            cleanName,
+            romanized,
+            romanized.replacingOccurrences(of: " ", with: ""),
+            romanized.lowercased()
         ]
 
+        var faceFileNames: [String] = []
+        for base in baseCandidates where !base.isEmpty {
+            let normalized = base.replacingOccurrences(of: " ", with: "")
+            let candidate = normalized.lowercased().hasSuffix("_face") ? normalized : "\(normalized)_face"
+            faceFileNames.append(candidate)
+        }
+        faceFileNames.append("face")
+
         for folderName in assetFolderNames {
-            for fileName in imageFileNames {
+            for fileName in faceFileNames {
                 let fullPath = "\(folderName)/\(fileName)"
                 if UIImage(named: fullPath) != nil {
                     #if DEBUG
@@ -309,6 +317,50 @@ private extension MerchantImageManager {
         }
 
         return URL(string: "\(baseURL)/public/merchants/\(sanitized)")
+    }
+
+    static func sanitizeFileComponent(_ fileName: String) -> String {
+        let sanitized = fileName
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "\\", with: "/")
+
+        let lastComponent = sanitized.components(separatedBy: "/").last ?? sanitized
+        if let dotIndex = lastComponent.firstIndex(of: ".") {
+            return String(lastComponent[..<dotIndex])
+        }
+        return lastComponent
+    }
+
+    static func romanizedMerchantName(for name: String) -> String {
+        if name.canBeConverted(to: .ascii) {
+            return name
+        }
+
+        let key = name.replacingOccurrences(of: " ", with: "")
+        let mapping: [String: String] = [
+            "서예나": "Seoyena",
+            "서 예나": "Seoyena",
+            "서예 나": "Seoyena",
+            "앨리스강": "Alicegang",
+            "알리스강": "Alicegang",
+            "애니박": "Anipark",
+            "카타리나최": "Catarinachoi",
+            "카타리나 최": "Catarinachoi",
+            "진백호": "Jinbaekho",
+            "주블수": "Jubulsu",
+            "주불수": "Jubulsu",
+            "기주리": "Kijuri",
+            "김세휘": "Kimsehwui",
+            "마리": "Mari"
+        ]
+
+        if let mapped = mapping[key] {
+            return mapped
+        }
+        if let mapped = mapping[name] {
+            return mapped
+        }
+        return name
     }
 }
 

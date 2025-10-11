@@ -1,4 +1,5 @@
 import SwiftUI
+import AVKit
 import os
 
 // MARK: - UI Pieces
@@ -148,6 +149,7 @@ struct StoryView: View {
     @StateObject private var engine = TypewriterEngine()   // ✅ 안정화
     @Environment(\.dismiss) private var dismiss
     @State private var showExitConfirmation = false
+    @State private var lastBackgroundName: String?
 
     let returnToMapOnCompletion: Bool
     let onStoryComplete: (() -> Void)?
@@ -200,7 +202,8 @@ struct StoryView: View {
 
     private var backgroundLayer: some View {
         Group {
-            if let name = currentDialogue?.backgroundImage,
+            let backgroundName = resolvedBackgroundName()
+            if let name = backgroundName,
                let ui = UIImage(named: name) {
                 Image(uiImage: ui)
                     .resizable()
@@ -219,16 +222,27 @@ struct StoryView: View {
     private var characterLayer: some View {
         Group {
             if let sprite = currentDialogue?.characterSprite,
-               let ui = UIImage(named: sprite) {
-                VStack {
-                    Spacer()
-                    Image(uiImage: ui)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 320)
-                        .shadow(color: .cyan.opacity(0.4), radius: 12)
+               !sprite.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                let trimmed = sprite.trimmingCharacters(in: .whitespaces)
+                if let movieName = resolvedMovieName(from: trimmed) {
+                    VStack {
+                        Spacer()
+                        CharacterOneShotVideoView(resourceName: movieName)
+                            .frame(height: 320)
+                            .shadow(color: .cyan.opacity(0.4), radius: 12)
+                    }
+                    .padding(.bottom, 140)
+                } else if let ui = UIImage(named: trimmed) {
+                    VStack {
+                        Spacer()
+                        Image(uiImage: ui)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 320)
+                            .shadow(color: .cyan.opacity(0.4), radius: 12)
+                    }
+                    .padding(.bottom, 140)
                 }
-                .padding(.bottom, 140)
             }
         }
     }
@@ -271,6 +285,11 @@ struct StoryView: View {
         node = n
         AppLog.story.info("✅ node loaded: \(n.nodeId, privacy: .public) type=\(n.type.rawValue, privacy: .public) next=\(n.primaryNextNodeId ?? "nil", privacy: .public)")
 
+        if let bg = n.dialogue?.backgroundImage,
+           !bg.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            lastBackgroundName = bg
+        }
+
         engine.stop()
 
         switch n.type {
@@ -311,6 +330,11 @@ struct StoryView: View {
             engine.configure(text: "", blipKey: nil)
             engine.start()
             return
+        }
+
+        if let bg = dialogue.backgroundImage,
+           !bg.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            lastBackgroundName = bg
         }
 
         if let sfx = dialogue.soundEffect, !sfx.isEmpty {
@@ -375,6 +399,23 @@ struct StoryView: View {
         }
     }
 
+    private func resolvedBackgroundName() -> String? {
+        if let current = currentDialogue?.backgroundImage,
+           !current.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+           UIImage(named: current) != nil {
+            return current
+        }
+        return lastBackgroundName
+    }
+
+    private func resolvedMovieName(from resource: String) -> String? {
+        let lower = resource.lowercased()
+        if lower.hasSuffix(".mov") || lower.hasSuffix(".mp4") {
+            return resource
+        }
+        return nil
+    }
+
     private func finishStory() {
         onStoryComplete?()
         if returnToMapOnCompletion {
@@ -398,6 +439,84 @@ struct StoryView: View {
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .padding(.top, 8)
         .padding(.leading, 8)
+    }
+}
+
+// MARK: - Character Video Player
+
+struct CharacterOneShotVideoView: View {
+    let resourceName: String
+    @State private var player: AVPlayer?
+    @State private var completionObserver: Any?
+
+    var body: some View {
+        VideoPlayer(player: player)
+            .onAppear {
+                prepareAndPlay()
+            }
+            .onDisappear {
+                teardown()
+            }
+            .disabled(true)
+            .aspectRatio(contentMode: .fit)
+    }
+
+    private func prepareAndPlay() {
+        guard player == nil else {
+            player?.seek(to: .zero)
+            player?.play()
+            return
+        }
+
+        guard let url = locateVideoURL() else {
+            return
+        }
+
+        let player = AVPlayer(url: url)
+        self.player = player
+        player.play()
+
+        completionObserver = NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemDidPlayToEndTime,
+            object: player.currentItem,
+            queue: .main
+        ) { [weak self] _ in
+            self?.player?.seek(to: .zero)
+            self?.player?.pause()
+        }
+    }
+
+    private func teardown() {
+        player?.pause()
+        if let observer = completionObserver {
+            NotificationCenter.default.removeObserver(observer)
+            completionObserver = nil
+        }
+    }
+
+    private func locateVideoURL() -> URL? {
+        let sanitized = resourceName.replacingOccurrences(of: "\\", with: "/")
+        let components = sanitized.split(separator: "/")
+        let filePart = components.last.map(String.init) ?? sanitized
+
+        let nameComponents = filePart.split(separator: ".")
+        let baseName: String
+        let ext: String
+
+        if nameComponents.count > 1 {
+            ext = String(nameComponents.last!)
+            baseName = nameComponents.dropLast().joined(separator: ".")
+        } else {
+            baseName = filePart
+            ext = "mov"
+        }
+
+        if components.count > 1 {
+            let directory = components.dropLast().joined(separator: "/")
+            return Bundle.main.url(forResource: baseName, withExtension: ext, subdirectory: directory)
+        }
+
+        return Bundle.main.url(forResource: baseName, withExtension: ext)
     }
 }
 

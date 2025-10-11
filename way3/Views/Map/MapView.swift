@@ -407,14 +407,18 @@ struct MapView: View {
     private func generateImageFileName(from merchantName: String) -> String {
         // 서버에서 받은 상인 이름을 Resources 폴더 구조에 맞게 변환
         // 예: "서예나" -> "Seoyena"
-        let imageFileName = convertKoreanNameToFileName(merchantName)
-        return imageFileName
+        let baseName = convertKoreanNameToFileName(merchantName)
+        if baseName.lowercased().hasSuffix("_face") {
+            return baseName
+        }
+        return "\(baseName)_face"
     }
 
     private func convertKoreanNameToFileName(_ koreanName: String) -> String {
         // 한국 이름 -> 영어 파일명 매핑
         let nameMapping: [String: String] = [
             "서예나": "Seoyena",
+            "앨리스강": "Alicegang",
             "알리스강": "Alicegang",
             "애니박": "Anipark",
             "카타리나최": "Catarinachoi",

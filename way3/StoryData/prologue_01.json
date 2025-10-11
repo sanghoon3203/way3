@@ -2,9 +2,9 @@
   "node_id": "prologue_01",
   "background_image": "bg_player_room_morning.jpg",
   "character_id": "player",
-  "character_sprite": "sprite_player_uniform_rushed.png",
+  "character_sprite": "",
   "dialogue_text": "<t>[2025년 10월 7일, 월요일 아침 9시,\n 주인공의 집]",
   "dialogue_sound_id": null,
-  "sound_effect": "sfx_alarm_beep.mp3",
+  "sound_effect": "",
   "next_node_id": "prologue_02"
 }

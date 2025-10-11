@@ -37,8 +37,8 @@ struct StoryHubTabView: View {
                 .animation(.easeInOut, value: filter)
             }
             .background(Color.cyberpunkDarkBg)
-            .navigationTitle("스토리")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("")
+            .toolbar(.hidden, for: .navigationBar)
         }
         .fullScreenCover(item: Binding(
             get: { startNode.map { NodeKey(id: $0) } },

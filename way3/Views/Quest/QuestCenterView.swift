@@ -45,8 +45,8 @@ struct QuestCenterView: View {
                 .padding(.vertical, 20)
             }
             .background(Color.cyberpunkDarkBg.ignoresSafeArea())
-            .navigationTitle("퀘스트 센터")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("")
+            .toolbar(.hidden, for: .navigationBar)
         }
         .sheet(item: $selectedSubQuest) { item in
             NavigationStack {
@@ -54,8 +54,8 @@ struct QuestCenterView: View {
                     .environmentObject(questManager)
                     .environmentObject(progressManager)
                     .environmentObject(gameManager)
-                                        .navigationTitle(item.quest.title)
-                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationTitle("")
+                    .toolbar(.hidden, for: .navigationBar)
             }
         }
         .sheet(item: $selectedMainQuest) { quest in
@@ -64,6 +64,8 @@ struct QuestCenterView: View {
                     .environmentObject(questManager)
                     .environmentObject(progressManager)
                     .environmentObject(gameManager)
+                    .navigationTitle("")
+                    .toolbar(.hidden, for: .navigationBar)
             }
         }
     }

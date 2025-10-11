@@ -273,7 +273,7 @@ struct InventoryView: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 // 사이버펑크 배경
                 Color.cyberpunkDarkBg.ignoresSafeArea()
@@ -322,7 +322,7 @@ struct InventoryView: View {
                 }
             }
             .navigationTitle("")
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
             .onAppear {
                 Task {
                     await gameManager.smartLoadInventory()
@@ -334,7 +334,6 @@ struct InventoryView: View {
                 await gameManager.refreshPersonalItemsData()
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $showingSellSheet) {
             if let item = selectedItem {
                 CyberpunkTradeGoodDetailSheet(tradeGood: item)
