@@ -327,7 +327,14 @@ struct DistrictsData: Codable {
 // MARK: - District Loader
 
 enum DistrictLoader {
+    private static var cachedDistricts: [District]?
+    private static var questMerchantMap: [String: String] = [:]
+
     static func loadDistricts() -> [District] {
+        if let cached = cachedDistricts {
+            return cached
+        }
+
         guard let path = Bundle.main.path(forResource: "districts", ofType: "json", inDirectory: "GameData/Districts") ??
                          Bundle.main.path(forResource: "districts", ofType: "json") else {
             print("❌ districts.json 파일을 찾을 수 없습니다")
@@ -338,6 +345,8 @@ enum DistrictLoader {
             let data = try Data(contentsOf: URL(fileURLWithPath: path))
             let districtsData = try JSONDecoder().decode(DistrictsData.self, from: data)
             print("✅ 구역 \(districtsData.districts.count)개 로드 완료")
+            cachedDistricts = districtsData.districts
+            questMerchantMap = [:]
             return districtsData.districts
         } catch {
             print("❌ districts.json 파싱 실패: \(error)")
@@ -369,6 +378,22 @@ enum DistrictLoader {
         return districts
             .filter { $0.merchant.distance(from: userLocation) <= maxDistance }
             .sorted { $0.merchant.distance(from: userLocation) < $1.merchant.distance(from: userLocation) }
+    }
+
+    static func merchantId(forQuest questId: String) -> String? {
+        if let merchantId = questMerchantMap[questId] {
+            return merchantId
+        }
+
+        let districts = loadDistricts()
+        var updatedMap = questMerchantMap
+        for district in districts {
+            for quest in district.merchant.sub_quests {
+                updatedMap[quest.quest_id] = district.merchant.merchant_id
+            }
+        }
+        questMerchantMap = updatedMap
+        return updatedMap[questId]
     }
 }
 

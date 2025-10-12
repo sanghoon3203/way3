@@ -182,6 +182,7 @@ class ProgressManager: ObservableObject {
     private let userDefaultsKey = "player_progress_v4"
     private let legacyKeys = ["player_progress_v3", "player_progress_v2", "player_progress_v1", "player_progress"]
     private let logger = Logger(subsystem: "com.way3.progress", category: "ProgressManager")
+    private let merchantDataManager = MerchantDataManager.shared
 
     private init() {
         if let current = ProgressManager.loadProgress(forKey: userDefaultsKey) {
@@ -262,6 +263,12 @@ class ProgressManager: ObservableObject {
         progress.completedSubQuests.append(questId)
         save()
         logger.info("✅ 서브 퀘스트 '\(questId)' 완료 처리")
+
+        if let merchantId = DistrictLoader.merchantId(forQuest: questId) {
+            Task {
+                await recordRelationshipProgress(merchantId: merchantId, questId: questId)
+            }
+        }
     }
 
     /// 기존 코드 호환용 (서브 퀘스트 전용)
@@ -315,6 +322,21 @@ class ProgressManager: ObservableObject {
         progress.mainQuestObjectiveProgress.removeValue(forKey: questId)
         save()
         logger.debug("🗑️ 메인 퀘스트 목표 진행 초기화: \(questId)")
+    }
+
+    // MARK: - Relationship Sync
+    private func recordRelationshipProgress(merchantId: String, questId: String) async {
+        do {
+            let response = try await merchantDataManager.recordRelationshipProgress(merchantId: merchantId, questId: questId)
+            if response.success {
+                logger.info("🤝 관계도 진행 반영 성공: \(merchantId) (\(questId))")
+            } else {
+                let message = response.error ?? response.message ?? "알 수 없는 오류"
+                logger.error("⚠️ 관계도 진행 반영 실패: \(message)")
+            }
+        } catch {
+            logger.error("❌ 관계도 진행 요청 실패: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Episode Management

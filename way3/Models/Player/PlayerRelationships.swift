@@ -282,6 +282,8 @@ struct MerchantRelationship: Codable {
     let merchantId: String
     var friendshipPoints: Int = 0
     var trustLevel: Int = 0
+    var stageProgress: Int = 0
+    var stageRequirement: Int = 0
     var totalTrades: Int = 0
     var totalSpent: Int = 0
     var lastInteraction: String?

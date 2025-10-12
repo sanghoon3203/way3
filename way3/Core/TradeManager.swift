@@ -56,6 +56,13 @@ class TradeManager: ObservableObject {
     @Published var lastTradeResult: TradeResult?
     
     private let baseURL = "http://localhost:3000/api/trade"
+    private let merchantDataManager = MerchantDataManager.shared
+    private let permitTierMapping: [String: Int] = [
+        "Merchantpermit_1": 1,
+        "Merchantpermit_2": 2,
+        "Merchantpermit_3": 3,
+        "Merchantpermit_4": 4
+    ]
     
     var totalAmount: Int {
         selectedItems.reduce(into: 0) { result, item in
@@ -399,16 +406,23 @@ class TradeManager: ObservableObject {
 
     // MARK: - 요구 조건 검증
     func requirementFailureMessage(for merchant: Merchant) -> String? {
-        guard let player = GameManager.shared.currentPlayer else { return nil }
-
-        let playerLicense = player.core.currentLicense
-        if playerLicense.rawValue < merchant.requiredLicense.rawValue {
-            return "거래를 위해서는 \(merchant.requiredLicense.displayName) 라이센스가 필요합니다. 현재 라이센스: \(playerLicense.displayName)."
+        let relationship = merchantDataManager.cachedRelationships[merchant.id]
+        let relationshipStage = min(max(relationship?.trustLevel ?? 0, 0), 4)
+        if relationshipStage <= 0 {
+            let requirement = relationship?.stageRequirement ?? 3
+            let progress = relationship?.stageProgress ?? 0
+            if requirement > 0 {
+                return "관계도 1단계를 달성해야 거래할 수 있습니다. 서브 퀘스트 진행 \(progress)/\(requirement)."
+            }
+            return "해당 상인과 대화를 진행해야 거래할 수 있습니다."
         }
 
-        let playerReputation = player.core.reputation
-        if playerReputation < merchant.reputationRequirement {
-            return "거래를 위해서는 평판 \(merchant.reputationRequirement) 이상이 필요합니다. 현재 평판: \(playerReputation)."
+        let permitTier = GameManager.shared.personalItems
+            .compactMap { permitTierMapping[$0.itemTemplateId] }
+            .max() ?? 0
+
+        if permitTier <= 0 {
+            return "상인 허가증이 필요합니다. 길드에서 허가증을 발급받으세요."
         }
 
         return nil

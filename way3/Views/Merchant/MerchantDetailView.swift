@@ -74,6 +74,8 @@ struct MerchantDetailView: View {
     @State var isCartPresented = false
     @State private var showFullScreenTV = false  // 전체화면 TV 애니메이션
     @State private var currentDialogue: String = ""  // JSON에서 로드한 현재 대사
+    @State private var tradeLockAlert: TradeLockAlert?
+    @State private var isUpgradingPermit = false
 
     // Extensions에서 사용할 수 있도록 computed properties 추가 - 🚀 ViewModel 연동
     var merchantInventoryGridView: some View {
@@ -142,6 +144,18 @@ struct MerchantDetailView: View {
                             dialogueText: currentDialogue
                         )
 
+                        RelationshipStatusCard(
+                            stage: viewModel.relationshipStage,
+                            stageProgress: viewModel.stageProgress,
+                            stageRequirement: viewModel.stageRequirement,
+                            permitTier: viewModel.permitTier,
+                            canUpgradePermit: viewModel.canUpgradePermit,
+                            isUpgrading: isUpgradingPermit,
+                            onUpgrade: { upgradePermit() }
+                        )
+                        .padding(.horizontal, 20)
+                        .padding(.top, 16)
+
                         // 📱 콘텐츠 영역 - 탭별로 변경
                         Group {
                             switch selectedTab {
@@ -156,7 +170,7 @@ struct MerchantDetailView: View {
                                         }
                                     },
                                     onStory: merchant.hasActiveStory ? { selectTab(.story) } : nil,
-                                    onTrade: { triggerFullScreenTVSwitch(to: .trade) },
+                                    onTrade: { attemptTradeEntry() },
                                     onExit: { isPresented = false }
                                 )
                                 .padding(.top, 24)
@@ -211,6 +225,13 @@ struct MerchantDetailView: View {
             StoryView(startNodeID: wrapper.id, returnToMapOnCompletion: true)
                 .background(Color.black.ignoresSafeArea())
         }
+        .alert(item: $tradeLockAlert) { alert in
+            Alert(
+                title: Text("거래 불가"),
+                message: Text(alert.message),
+                dismissButton: .default(Text("확인"))
+            )
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationBarHidden(true) // 필요 시 .toolbar(.hidden, for: .navigationBar) 로 교체
         .onAppear {
@@ -225,6 +246,11 @@ struct MerchantDetailView: View {
 
 // StoryStartWrapper: fullScreenCover 식별용
 private struct StoryStartWrapper: Identifiable { let id: String }
+
+private struct TradeLockAlert: Identifiable {
+    let id = UUID()
+    let message: String
+}
 
 // MARK: - Hero
 
@@ -969,7 +995,12 @@ struct MerchantInventoryView: View {
                         isSelected: cartManager.items.contains { cartItem in
                             cartItem.item.id == item.id && cartItem.type == tradeType
                         },
-                        onTap: { onItemTap(item) }
+                        isLocked: viewModel.tradeLockInfo(for: item).isLocked,
+                        lockReason: viewModel.tradeLockInfo(for: item).reason,
+                        onTap: {
+                            guard !viewModel.tradeLockInfo(for: item).isLocked else { return }
+                            onItemTap(item)
+                        }
                     )
                 }
             }
@@ -1018,7 +1049,25 @@ struct TradeItemCard: View {
     let item: TradeItem
     let tradeType: TradeType
     let isSelected: Bool
+    let isLocked: Bool
+    let lockReason: String?
     let onTap: () -> Void
+
+    init(
+        item: TradeItem,
+        tradeType: TradeType,
+        isSelected: Bool,
+        isLocked: Bool = false,
+        lockReason: String? = nil,
+        onTap: @escaping () -> Void
+    ) {
+        self.item = item
+        self.tradeType = tradeType
+        self.isSelected = isSelected
+        self.isLocked = isLocked
+        self.lockReason = lockReason
+        self.onTap = onTap
+    }
 
     var body: some View {
         Button(action: onTap) {
@@ -1088,8 +1137,150 @@ struct TradeItemCard: View {
             )
             .scaleEffect(isSelected ? 1.02 : 1.0)
             .animation(.easeInOut(duration: 0.2), value: isSelected)
+            .overlay(lockOverlay)
         }
         .buttonStyle(PlainButtonStyle())
+        .disabled(isLocked)
+    }
+
+    @ViewBuilder
+    private var lockOverlay: some View {
+        if isLocked {
+            ZStack {
+                Color.black.opacity(0.55)
+                VStack(spacing: 6) {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.cyberpunkYellow)
+
+                    if let lockReason {
+                        Text(lockReason)
+                            .font(.cyberpunkTechnical())
+                            .foregroundColor(.cyberpunkTextSecondary)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(3)
+                            .padding(.horizontal, 6)
+                    }
+                }
+                .padding(8)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
+    }
+}
+
+struct RelationshipStatusCard: View {
+    let stage: Int
+    let stageProgress: Int
+    let stageRequirement: Int
+    let permitTier: Int
+    let canUpgradePermit: Bool
+    let isUpgrading: Bool
+    let onUpgrade: () -> Void
+
+    private var stageStatusText: String {
+        switch stage {
+        case 0: return "관계도 0단계 · 거래 제한"
+        case 1: return "관계도 1단계 · 일반 등급 거래"
+        case 2: return "관계도 2단계 · 중급 등급 거래"
+        case 3: return "관계도 3단계 · 고급 등급 거래"
+        case 4: return "관계도 4단계 · 전설 등급 거래"
+        default: return "관계도 MAX"
+        }
+    }
+
+    private var permitStatusText: String {
+        switch permitTier {
+        case 0: return "허가증 Lv.0 · 임시"
+        case 1: return "허가증 Lv.1 · 임시"
+        case 2: return "허가증 Lv.2 · 초급"
+        case 3: return "허가증 Lv.3 · 중급"
+        default: return "허가증 Lv.4 · 상급"
+        }
+    }
+
+    private var progressLabel: String {
+        guard stageRequirement > 0 else { return "MAX" }
+        return "\(stageProgress)/\(stageRequirement)"
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("RELATIONSHIP STATUS")
+                    .font(.cyberpunkHeading(size: 14))
+                    .foregroundColor(.cyberpunkYellow)
+                Spacer()
+                if stage >= 4 {
+                    Text("MAX")
+                        .font(.cyberpunkTechnical())
+                        .foregroundColor(.cyberpunkGreen)
+                }
+            }
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text(stageStatusText)
+                    .font(.cyberpunkBody())
+                    .foregroundColor(.cyberpunkTextPrimary)
+
+                if stageRequirement > 0 {
+                    ProgressView(value: Double(stageProgress), total: Double(stageRequirement))
+                        .tint(.cyberpunkCyan)
+                        .progressViewStyle(LinearProgressViewStyle())
+                    Text("서브 퀘스트 진행: \(progressLabel)")
+                        .font(.cyberpunkCaption())
+                        .foregroundColor(.cyberpunkTextSecondary)
+                } else {
+                    Text("관계도 최대 단계입니다")
+                        .font(.cyberpunkCaption())
+                        .foregroundColor(.cyberpunkTextSecondary)
+                }
+            }
+
+            Divider().overlay(Color.cyberpunkBorder.opacity(0.4))
+
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("MERCHANT PERMIT")
+                        .font(.cyberpunkTechnical())
+                        .foregroundColor(.cyberpunkTextSecondary)
+                    Text(permitStatusText)
+                        .font(.cyberpunkBody())
+                        .foregroundColor(.cyberpunkTextPrimary)
+                }
+                Spacer()
+                if canUpgradePermit {
+                    Button(action: onUpgrade) {
+                        if isUpgrading {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle())
+                                .tint(.cyberpunkCyan)
+                        } else {
+                            Text("허가증 업그레이드")
+                                .font(.cyberpunkCaption())
+                                .foregroundColor(.cyberpunkCyan)
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 8)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.cyberpunkCyan, lineWidth: 1)
+                                )
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(isUpgrading)
+                }
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(Color.cyberpunkCardBg)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(Color.cyberpunkBorder.opacity(0.6), lineWidth: 1)
+                )
+        )
     }
 }
 
@@ -1587,6 +1778,40 @@ private struct StoryPlaybackView: View {
 // MARK: - View Extensions
 
 extension MerchantDetailView {
+    func attemptTradeEntry() {
+        if let message = viewModel.tradeEntryRestrictionMessage {
+            tradeLockAlert = TradeLockAlert(message: message)
+            return
+        }
+        triggerFullScreenTVSwitch(to: .trade)
+    }
+
+    func upgradePermit() {
+        guard !isUpgradingPermit else { return }
+
+        guard viewModel.canUpgradePermit else {
+            tradeLockAlert = TradeLockAlert(message: "허가증 업그레이드 조건이 충족되지 않았습니다.")
+            return
+        }
+
+        isUpgradingPermit = true
+
+        Task { [merchantId = merchant.id] in
+            do {
+                let message = try await viewModel.upgradePermit(for: merchantId)
+                await MainActor.run {
+                    isUpgradingPermit = false
+                    tradeLockAlert = TradeLockAlert(message: message)
+                }
+            } catch {
+                await MainActor.run {
+                    isUpgradingPermit = false
+                    tradeLockAlert = TradeLockAlert(message: error.localizedDescription)
+                }
+            }
+        }
+    }
+
     func selectTab(_ tab: MerchantDetailTab) {
         selectedTab = tab
         switch tab {

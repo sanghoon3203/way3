@@ -697,12 +697,12 @@ extension NetworkManager {
         )
     }
 
-    func getMerchantDetail(merchantId: String) async throws -> MerchantDetailResponse {
+    func getMerchantDetail(merchantId: String, useCache: Bool = true) async throws -> MerchantDetailResponse {
         return try await makeRequest(
             endpoint: "/merchants/\(merchantId)",
             requiresAuth: true,
             responseType: MerchantDetailResponse.self,
-            useCache: true
+            useCache: useCache
         )
     }
 
@@ -845,6 +845,27 @@ extension NetworkManager {
         )
     }
 
+    func recordRelationshipProgress(merchantId: String, questId: String) async throws -> RelationshipProgressResponse {
+        let body: [String: Any] = ["questId": questId]
+
+        return try await makeRequest(
+            endpoint: "/merchants/\(merchantId)/relationship/progress",
+            method: .POST,
+            body: body,
+            requiresAuth: true,
+            responseType: RelationshipProgressResponse.self
+        )
+    }
+
+    func upgradeMerchantPermit(merchantId: String) async throws -> PermitUpgradeResponse {
+        return try await makeRequest(
+            endpoint: "/merchants/\(merchantId)/permit/upgrade",
+            method: .POST,
+            requiresAuth: true,
+            responseType: PermitUpgradeResponse.self
+        )
+    }
+
     func usePersonalItem(itemId: String, targetId: String? = nil) async throws -> PersonalItemActionResponse {
         var body: [String: Any] = ["itemId": itemId]
         if let targetId = targetId {
@@ -976,6 +997,38 @@ struct TradeHistoryResponse: Codable {
     let success: Bool
     let data: TradeHistoryData?
     let error: String?
+}
+
+struct RelationshipProgressResponse: Codable {
+    let success: Bool
+    let data: RelationshipProgressData?
+    let message: String?
+    let error: String?
+}
+
+struct RelationshipProgressData: Codable {
+    let merchantId: String
+    let questId: String?
+    let relationshipStage: Int
+    let stageProgress: Int
+    let stageRequirement: Int
+    let permitTier: Int
+    let canTrade: Bool
+}
+
+struct PermitUpgradeResponse: Codable {
+    let success: Bool
+    let data: PermitUpgradeData?
+    let message: String?
+    let error: String?
+}
+
+struct PermitUpgradeData: Codable {
+    let merchantId: String
+    let permitTier: Int
+    let relationshipStage: Int
+    let stageRequirement: Int
+    let stageProgress: Int
 }
 
 // MARK: - Data Models
