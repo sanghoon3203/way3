@@ -541,7 +541,12 @@ final class TypewriterEngine: ObservableObject {
 
 // MARK: - Character → Blip
 
-enum CharacterGender: String, Codable { case male, female, neutral }
+enum CharacterGender: String, Codable {
+    case male
+    case female
+    case neutral
+    case typer
+}
 
 struct CharacterProfile: Codable {
     let gender: CharacterGender?
@@ -549,19 +554,31 @@ struct CharacterProfile: Codable {
 }
 
 private func loadCharacterMap() -> [String: CharacterProfile] {
-    let searchDirs = [
-        "StoryData/Characters",
-        "Resources/Story/Characters",
-        "Resources/StoryData/Characters"
+    let candidates: [(directory: String?, resource: String)] = [
+        ("StoryData/Characters", "characters"),
+        ("StoryData/Characters", "Characters"),
+        ("StoryData", "characters"),
+        ("StoryData", "Characters"),
+        ("Resources/Story/Characters", "characters"),
+        ("Resources/Story/Characters", "Characters"),
+        ("Resources/StoryData/Characters", "characters"),
+        ("Resources/StoryData/Characters", "Characters"),
+        (nil, "characters"),
+        (nil, "Characters")
     ]
-    for dir in searchDirs {
-        if let path = Bundle.main.path(forResource: "characters", ofType: "json", inDirectory: dir),
-           let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
+
+    for candidate in candidates {
+        if let path = Bundle.main.path(
+            forResource: candidate.resource,
+            ofType: "json",
+            inDirectory: candidate.directory
+        ), let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
            let dict = try? JSONDecoder().decode([String: CharacterProfile].self, from: data) {
-            AppLog.loader.info("👥 loaded characters.json from \(dir)")
+            AppLog.loader.info("👥 loaded characters.json from \(candidate.directory ?? "bundle root")")
             return dict
         }
     }
+
     AppLog.loader.error("👥 characters.json not found; using defaults")
     return [:]
 }
@@ -571,11 +588,20 @@ enum CharacterBlip {
 
     static func blipKey(for id: String?) -> String? {
         guard let id, !id.isEmpty else { return "sfx-blipmale.wav" }
-        if let explicit = map[id]?.blip, !explicit.isEmpty { return explicit }
-        switch map[id]?.gender ?? .male {
+
+        let normalized = id.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let explicit = map[normalized]?.blip, !explicit.isEmpty { return explicit }
+
+        // NPC는 자동으로 타자기 사운드를 사용
+        if normalized.caseInsensitiveCompare("npc") == .orderedSame {
+            return "sfx-typwriter.wav"
+        }
+
+        switch map[normalized]?.gender ?? .male {
         case .male:    return "sfx-blipmale.wav"
         case .female:  return "sfx-blipfemale.wav"
-        case .neutral: return "" // 무음
+        case .neutral: return ""
+        case .typer:   return "sfx-typwriter.wav" // 타자기 효과음
         }
     }
 }

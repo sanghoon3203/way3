@@ -810,6 +810,30 @@ extension NetworkManager {
         )
     }
 
+    func claimChapterReward(request: ChapterRewardClaimRequest) async throws -> ChapterRewardClaimResponse {
+        var body: [String: Any] = ["chapterId": request.chapterId]
+        if let money = request.money {
+            body["money"] = money
+        }
+        if let experience = request.experience {
+            body["experience"] = experience
+        }
+        if let keyItemName = request.keyItemName, !keyItemName.isEmpty {
+            body["keyItemName"] = keyItemName
+        }
+        if let personalItemTemplateId = request.personalItemTemplateId, !personalItemTemplateId.isEmpty {
+            body["personalItemTemplateId"] = personalItemTemplateId
+        }
+
+        return try await makeRequest(
+            endpoint: "/story/chapter/reward",
+            method: .POST,
+            body: body,
+            requiresAuth: true,
+            responseType: ChapterRewardClaimResponse.self
+        )
+    }
+
     // MARK: - Personal Items API Methods
     func getPersonalItems() async throws -> PersonalItemsResponse {
         return try await makeRequest(
@@ -1250,8 +1274,42 @@ struct StoryProgressData: Codable {
 
 struct StoryRewards: Codable {
     let exp: Int?
-    let reputation: Int?
+   let reputation: Int?
     let money: Int?
+}
+
+// MARK: - Chapter Reward Claim
+struct ChapterRewardClaimRequest {
+    let chapterId: String
+    let money: Int?
+    let experience: Int?
+    let keyItemName: String?
+    let personalItemTemplateId: String?
+}
+
+struct ChapterRewardClaimResponse: Codable {
+    let success: Bool
+    let data: ChapterRewardClaimData?
+    let error: String?
+}
+
+struct ChapterRewardClaimData: Codable {
+    let chapterId: String
+    let rewardSummary: ChapterRewardSummary?
+}
+
+struct ChapterRewardSummary: Codable {
+    let moneyAdded: Int?
+    let experienceAdded: Int?
+    let personalItemGranted: PersonalItemGrantInfo?
+    let keyItemFlag: String?
+}
+
+struct PersonalItemGrantInfo: Codable {
+    let itemId: String?
+    let itemTemplateId: String?
+    let name: String?
+    let alreadyOwned: Bool?
 }
 
 // MARK: - Story Chapters (Court Record)

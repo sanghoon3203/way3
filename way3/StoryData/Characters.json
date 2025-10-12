@@ -28,5 +28,11 @@
   },
   "jiyoung": {
     "gender": "female"
+  },
+  "--": {
+    "gender": "typer"
+  },
+  "typer_narrator": {
+    "gender": "typer"
   }
 }

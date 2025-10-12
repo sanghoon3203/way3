@@ -137,6 +137,13 @@ final class StoryFlowManager: ObservableObject {
                 rewards: questReward,
                 questId: "chapter: \(chapter.chapterId)"
             )
+
+            Task {
+                await StoryRewardService.shared.syncChapterReward(
+                    chapterId: chapter.chapterId,
+                    reward: reward
+                )
+            }
         }
     }
 }

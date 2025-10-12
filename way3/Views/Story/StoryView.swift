@@ -38,13 +38,13 @@ struct HeroDialogueOverlay: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color(red: 0.09, green: 0.09, blue: 0.11))
+                .fill(Color(red: 0.09, green: 0.09, blue: 0.11, opacity: 0.6))
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
                         .stroke(Color.cyan.opacity(0.5), lineWidth: 1)
                 )
         )
-        .padding(.horizontal, 16)
+        .padding(.horizontal, 24)
         .padding(.bottom, 16)
     }
 }
@@ -72,7 +72,7 @@ struct BottomProceedBar: View {
                 )
             }
             .buttonStyle(.plain)
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 24)
             .padding(.top, 8)
             .padding(.bottom, 12)
         }
@@ -179,7 +179,7 @@ struct StoryView: View {
                 }
             }
             .padding(.top, 12)
-            .padding(.trailing, 12)
+            .padding(.trailing, 24)
         }
         .onAppear {
             AppLog.story.info("📺 StoryView appear startNode=\(self.currentNodeID, privacy: .public)")
@@ -201,20 +201,26 @@ struct StoryView: View {
     }
 
     private var backgroundLayer: some View {
-        Group {
+        GeometryReader { geometry in
             let backgroundName = resolvedBackgroundName()
-            if let name = backgroundName,
-               let ui = UIImage(named: name) {
-                Image(uiImage: ui)
-                    .resizable()
-                    .scaledToFill()
-            } else {
+
+            ZStack {
                 LinearGradient(
                     colors: [.black, .black.opacity(0.8)],
                     startPoint: .top,
                     endPoint: .bottom
                 )
+
+                if let name = backgroundName,
+                   let ui = UIImage(named: name) {
+                    Image(uiImage: ui)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .scaleEffect(0.9, anchor: .center)
+                }
             }
+            .frame(width: geometry.size.width, height: geometry.size.height)
         }
         .ignoresSafeArea()
     }
@@ -285,10 +291,7 @@ struct StoryView: View {
         node = n
         AppLog.story.info("✅ node loaded: \(n.nodeId, privacy: .public) type=\(n.type.rawValue, privacy: .public) next=\(n.primaryNextNodeId ?? "nil", privacy: .public)")
 
-        if let bg = n.dialogue?.backgroundImage,
-           !bg.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            lastBackgroundName = bg
-        }
+        cacheBackgroundIfValid(n.dialogue?.backgroundImage)
 
         engine.stop()
 
@@ -332,10 +335,7 @@ struct StoryView: View {
             return
         }
 
-        if let bg = dialogue.backgroundImage,
-           !bg.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            lastBackgroundName = bg
-        }
+        cacheBackgroundIfValid(dialogue.backgroundImage)
 
         if let sfx = dialogue.soundEffect, !sfx.isEmpty {
             AppLog.story.debug("🔔 one-shot sfx=\(sfx, privacy: .public)")
@@ -400,12 +400,21 @@ struct StoryView: View {
     }
 
     private func resolvedBackgroundName() -> String? {
-        if let current = currentDialogue?.backgroundImage,
-           !current.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-           UIImage(named: current) != nil {
-            return current
+        guard let raw = currentDialogue?.backgroundImage else {
+            return lastBackgroundName
         }
-        return lastBackgroundName
+        let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            return lastBackgroundName
+        }
+        return UIImage(named: trimmed) != nil ? trimmed : lastBackgroundName
+    }
+
+    private func cacheBackgroundIfValid(_ candidate: String?) {
+        guard let trimmed = candidate?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !trimmed.isEmpty,
+              UIImage(named: trimmed) != nil else { return }
+        lastBackgroundName = trimmed
     }
 
     private func resolvedMovieName(from resource: String) -> String? {
@@ -438,7 +447,7 @@ struct StoryView: View {
         .background(Color.black.opacity(0.35))
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .padding(.top, 8)
-        .padding(.leading, 8)
+        .padding(.leading, 10)
     }
 }
 
@@ -447,7 +456,7 @@ struct StoryView: View {
 struct CharacterOneShotVideoView: View {
     let resourceName: String
     @State private var player: AVPlayer?
-    @State private var completionObserver: Any?
+    @State private var completionObserver: NSObjectProtocol?
 
     var body: some View {
         VideoPlayer(player: player)
@@ -472,17 +481,17 @@ struct CharacterOneShotVideoView: View {
             return
         }
 
-        let player = AVPlayer(url: url)
-        self.player = player
-        player.play()
+        let newPlayer = AVPlayer(url: url)
+        self.player = newPlayer
+        newPlayer.play()
 
         completionObserver = NotificationCenter.default.addObserver(
             forName: .AVPlayerItemDidPlayToEndTime,
-            object: player.currentItem,
+            object: newPlayer.currentItem,
             queue: .main
-        ) { [weak self] _ in
-            self?.player?.seek(to: .zero)
-            self?.player?.pause()
+        ) { [weak playerRef = newPlayer] _ in
+            playerRef?.seek(to: .zero)
+            playerRef?.pause()
         }
     }
 
@@ -500,23 +509,40 @@ struct CharacterOneShotVideoView: View {
         let filePart = components.last.map(String.init) ?? sanitized
 
         let nameComponents = filePart.split(separator: ".")
-        let baseName: String
-        let ext: String
+        let inferredExt = nameComponents.count > 1 ? String(nameComponents.last!) : "mov"
+        let baseName = nameComponents.count > 1 ? nameComponents.dropLast().joined(separator: ".") : filePart
+        let directory = components.count > 1 ? components.dropLast().joined(separator: "/") : nil
 
-        if nameComponents.count > 1 {
-            ext = String(nameComponents.last!)
-            baseName = nameComponents.dropLast().joined(separator: ".")
-        } else {
-            baseName = filePart
-            ext = "mov"
+        let rawCandidates = [inferredExt, inferredExt.lowercased(), inferredExt.uppercased()]
+        var tried: Set<String> = []
+        for ext in rawCandidates {
+            guard !tried.contains(ext) else { continue }
+            tried.insert(ext)
+            if let url = Bundle.main.url(forResource: baseName, withExtension: ext, subdirectory: directory) {
+                return url
+            }
         }
 
-        if components.count > 1 {
-            let directory = components.dropLast().joined(separator: "/")
-            return Bundle.main.url(forResource: baseName, withExtension: ext, subdirectory: directory)
+        // Fallback: attempt fuzzy match ignoring case/underscores
+        let target = normalizeResourceName(baseName)
+        let searchDirectory = directory
+        let allUrls = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: searchDirectory) ?? []
+        if let match = allUrls.first(where: { url in
+            let normalized = normalizeResourceName(url.deletingPathExtension().lastPathComponent)
+            guard normalized == target else { return false }
+            let ext = url.pathExtension.lowercased()
+            return ext == "mov" || ext == "mp4"
+        }) {
+            return match
         }
 
-        return Bundle.main.url(forResource: baseName, withExtension: ext)
+        AppLog.story.error("🎬 video resource not found '\(resourceName, privacy: .public)'")
+        return nil
+    }
+
+    private func normalizeResourceName(_ name: String) -> String {
+        let lowercase = name.lowercased()
+        return lowercase.unicodeScalars.filter { CharacterSet.alphanumerics.contains($0) }.map(String.init).joined()
     }
 }
 

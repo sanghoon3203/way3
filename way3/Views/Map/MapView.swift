@@ -89,7 +89,7 @@ struct MapView: View {
                     .environmentObject(gameManager)
             }
         }
-        // Nearby players feature removed (no multiplayer)
+       
         .onAppear {
             setupGameEnvironment()
         }
@@ -148,6 +148,11 @@ struct MapView: View {
                 let meetsRequirements = merchantData.meetsRequirements ?? true
                 let withinTradeDistance = merchantData.withinTradeDistance ?? true
 
+                let imageFileName = resolveMerchantImageFileName(
+                    serverFileName: merchantData.imageFileName,
+                    merchantName: merchantData.name
+                )
+
                 var merchant = Merchant(
                     id: merchantData.id,
                     name: merchantData.name,
@@ -159,7 +164,7 @@ struct MapView: View {
                     ),
                     requiredLicense: LicenseLevel(rawValue: merchantData.requiredLicense) ?? .beginner,
                     isActive: merchantData.canTrade,
-                    imageFileName: merchantData.imageFileName ?? generateImageFileName(from: merchantData.name),
+                    imageFileName: imageFileName,
                     withinTradeDistance: withinTradeDistance,
                     tradeDistanceLimit: tradeDistanceLimit,
                     meetsRequirements: meetsRequirements
@@ -195,7 +200,10 @@ struct MapView: View {
                         ),
                         requiredLicense: LicenseLevel(rawValue: merchantData.requiredLicense) ?? .beginner,
                         isActive: merchantData.canTrade,
-                        imageFileName: merchantData.imageFileName ?? generateImageFileName(from: merchantData.name),
+                        imageFileName: resolveMerchantImageFileName(
+                            serverFileName: merchantData.imageFileName,
+                            merchantName: merchantData.name
+                        ),
                         withinTradeDistance: withinTradeDistance,
                         tradeDistanceLimit: tradeDistanceLimit,
                         meetsRequirements: meetsRequirements
@@ -412,6 +420,34 @@ struct MapView: View {
             return baseName
         }
         return "\(baseName)_face"
+    }
+
+    private func resolveMerchantImageFileName(serverFileName: String?, merchantName: String) -> String {
+        if let serverFileName,
+           let canonical = canonicalFaceFileName(from: serverFileName) {
+            return canonical
+        }
+        return generateImageFileName(from: merchantName)
+    }
+
+    private func canonicalFaceFileName(from fileName: String) -> String? {
+        let trimmed = fileName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+
+        let sanitized = trimmed.replacingOccurrences(of: "\\", with: "/")
+        let lastComponent = sanitized.split(separator: "/").last.map(String.init) ?? sanitized
+
+        guard !lastComponent.isEmpty else { return nil }
+
+        let baseComponent = lastComponent.split(separator: ".").first.map(String.init) ?? lastComponent
+        let normalized = baseComponent.replacingOccurrences(of: " ", with: "")
+
+        guard !normalized.isEmpty else { return nil }
+
+        if normalized.lowercased().hasSuffix("_face") {
+            return normalized
+        }
+        return "\(normalized)_face"
     }
 
     private func convertKoreanNameToFileName(_ koreanName: String) -> String {
