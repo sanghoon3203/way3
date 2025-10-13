@@ -79,16 +79,11 @@ struct LogoComponent: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            // 게임 로고 텍스트 (실제 로고 이미지로 교체 가능)
-            Text("네오-서울")
-                .font(.chosunOrFallback(size: 36, weight: .bold))
-                .foregroundColor(.white)
-                .shadow(color: .cyan.opacity(0.5), radius: 10, x: 0, y: 0)
-
-            Text("트레이딩 게임")
-                .font(.chosunOrFallback(size: 18, weight: .medium))
-                .foregroundColor(.cyan)
-                .shadow(color: .cyan.opacity(0.3), radius: 5, x: 0, y: 0)
+            Image("title")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 280)
+                .shadow(color: .cyan.opacity(0.45), radius: 12, x: 0, y: 0)
         }
         .scaleEffect(logoScale)
         .opacity(logoOpacity)
