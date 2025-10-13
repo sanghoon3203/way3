@@ -34,8 +34,14 @@ struct StoryChapterDetailView: View {
             get: { introStartNode.map { IntroLaunchKey(id: $0) } },
             set: { _ in introStartNode = nil }
         )) { key in
-            StoryView(startNodeID: key.id)
-                .background(Color.black.ignoresSafeArea())
+            StoryView(
+                startNodeID: key.id,
+                returnToMapOnCompletion: false,
+                onComplete: {
+                    StoryFlowManager.shared.handleChapterIntroCompletion(chapter: chapter)
+                }
+            )
+            .background(Color.black.ignoresSafeArea())
         }
         .alert("스토리 노드를 찾을 수 없어요", isPresented: $showIntroMissingAlert) {
             Button("확인", role: .cancel) { }

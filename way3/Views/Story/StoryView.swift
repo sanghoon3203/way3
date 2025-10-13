@@ -193,7 +193,7 @@ struct StoryView: View {
         .alert("스토리를 종료할까요?", isPresented: $showExitConfirmation) {
             Button("취소", role: .cancel) { }
             Button("종료", role: .destructive) {
-                finishStory()
+                finishStory(wasCompleted: false)
             }
         } message: {
             Text("진행 중인 스토리를 종료하면 현재 노드에서 종료됩니다.")
@@ -324,7 +324,7 @@ struct StoryView: View {
             advance(to: next)
         } else {
             AppLog.story.info("🏁 no next node. end of story.")
-            finishStory()
+            finishStory(wasCompleted: true)
         }
     }
 
@@ -364,7 +364,7 @@ struct StoryView: View {
             QuestManager.shared.recordDialogueEvent(nodeId: node.nodeId)
         }
         guard let next = choice.nextNodeId, !next.isEmpty else {
-            finishStory()
+            finishStory(wasCompleted: true)
             return
         }
         advance(to: next)
@@ -388,7 +388,7 @@ struct StoryView: View {
         if let next = gate.nextNodeId, !next.isEmpty {
             advance(to: next)
         } else {
-            finishStory()
+            finishStory(wasCompleted: true)
         }
     }
 
@@ -425,8 +425,10 @@ struct StoryView: View {
         return nil
     }
 
-    private func finishStory() {
-        onStoryComplete?()
+    private func finishStory(wasCompleted: Bool) {
+        if wasCompleted {
+            onStoryComplete?()
+        }
         if returnToMapOnCompletion {
             GameManager.shared.activeMainTab = 0
         }

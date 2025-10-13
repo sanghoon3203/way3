@@ -252,10 +252,17 @@ WAY-SERVER/
   GET  /           # 상인 목록
   GET  /:id        # 상인 상세
   GET  /nearby     # 근처 상인 (쿼리: lat, lng, radius)
+  POST /:id/relationship/progress # 서브퀘 완료 → 관계도 진행
+  POST /:id/permit/upgrade        # 허가증 업그레이드
+  GET  /:id/dialogues             # 상인 대화 스크립트
+  GET  /:id/story                 # 상인 스토리 노드 조회
+  POST /:id/story/progress        # 스토리 진행
+  GET  /:id/stories/chapters      # 상인별 스토리 챕터 목록
 
 /api/trade         # 거래
-  POST /execute    # 거래 실행
+  POST /execute    # 거래 실행 (허가증/관계도 검증)
   GET  /history    # 거래 기록
+  GET  /market-prices # 시장 시세 정보
 
 /api/quests        # 퀘스트
   GET  /           # 퀘스트 목록
@@ -378,10 +385,22 @@ player_id TEXT NOT NULL
 merchant_id TEXT NOT NULL
 friendship_points INTEGER DEFAULT 0
 trust_level INTEGER DEFAULT 0
+stage_progress INTEGER DEFAULT 0
 total_trades INTEGER DEFAULT 0
 total_spent INTEGER DEFAULT 0
 last_interaction DATETIME
 UNIQUE(player_id, merchant_id)
+```
+
+### merchant_relationship_quest_log (관계도 진행 로그)
+```sql
+id TEXT PRIMARY KEY
+player_id TEXT NOT NULL
+merchant_id TEXT NOT NULL
+quest_id TEXT NOT NULL
+stage INTEGER NOT NULL
+completed_at DATETIME DEFAULT CURRENT_TIMESTAMP
+UNIQUE(player_id, merchant_id, quest_id)
 ```
 
 ---

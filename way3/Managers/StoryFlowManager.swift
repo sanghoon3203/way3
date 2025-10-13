@@ -111,6 +111,19 @@ final class StoryFlowManager: ObservableObject {
         _ = questManager.completeMainQuest(quest)
     }
 
+    func handleChapterIntroCompletion(chapter: StoryChapterDefinition) {
+        logger.info("🎬 챕터 인트로 완료 처리: \(chapter.chapterId)")
+
+        let alreadyCompleted = progressManager.progress.isChapterCompleted(chapter.chapterId)
+        guard !alreadyCompleted else {
+            logger.debug("⏭️ 챕터 \(chapter.chapterId) 이미 완료 상태 - 인트로 처리 스킵")
+            return
+        }
+
+        progressManager.completeChapter(chapter.chapterId)
+        grantChapterRewardIfNeeded(for: chapter)
+    }
+
     private func handleChapterCompletionIfNeeded(for episode: StoryEpisodeDefinition) {
         let chapters = StoryChapterRepository.loadChapters()
         guard let chapter = StoryChapterRepository.chapter(withId: episodeChapterId(for: episode), in: chapters) else { return }
@@ -121,29 +134,32 @@ final class StoryFlowManager: ObservableObject {
         guard isNowCompleted, !alreadyCompleted else { return }
 
         progressManager.completeChapter(chapter.chapterId)
+        grantChapterRewardIfNeeded(for: chapter)
+    }
 
-        if let reward = chapter.completionReward {
-            let keyItems = reward.keyItem.map { [$0] } ?? []
-            let questReward = QuestRewards(
-                money: reward.money,
-                exp: reward.exp,
-                storyPieceIds: [],
-                inventoryItems: [],
-                keyItems: keyItems,
-                relationshipChange: nil
+    private func grantChapterRewardIfNeeded(for chapter: StoryChapterDefinition) {
+        guard let reward = chapter.completionReward else { return }
+
+        let keyItems = reward.keyItem.map { [$0] } ?? []
+        let questReward = QuestRewards(
+            money: reward.money,
+            exp: reward.exp,
+            storyPieceIds: [],
+            inventoryItems: [],
+            keyItems: keyItems,
+            relationshipChange: nil
+        )
+
+        RewardProcessor(progressManager: progressManager).apply(
+            rewards: questReward,
+            questId: "chapter: \(chapter.chapterId)"
+        )
+
+        Task {
+            await StoryRewardService.shared.syncChapterReward(
+                chapterId: chapter.chapterId,
+                reward: reward
             )
-
-            RewardProcessor(progressManager: progressManager).apply(
-                rewards: questReward,
-                questId: "chapter: \(chapter.chapterId)"
-            )
-
-            Task {
-                await StoryRewardService.shared.syncChapterReward(
-                    chapterId: chapter.chapterId,
-                    reward: reward
-                )
-            }
         }
     }
 }

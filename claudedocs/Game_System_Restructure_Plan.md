@@ -181,6 +181,27 @@
 }
 ```
 
+#### 🤝 상인 관계도 & 거래 허가증 흐름
+- **관계도 단계**: 0~4단계. `merchant_relationships` 테이블에 `stage_progress`(누적)와 `trust_level`(단계)을 저장하며, 단계별 요구치는 **3 → 3 → 5 → 5** 서브퀘스트 클리어.
+- **단계 상승**: 서브퀘스트 완료 시 `POST /api/merchants/:merchantId/relationship/progress`를 호출하여 서버가 진행도를 1 증가시키고, 요구치를 달성하면 다음 단계로 승급.
+  - 중복 제출 방지를 위해 `merchant_relationship_quest_log`에 `(player_id, merchant_id, quest_id)`를 기록.
+  - 최종 단계(4단계)에서는 더 이상 진행도를 쌓지 않고 성공 메시지만 반환.
+- **거래 허가증**: `Merchantpermit_1`~`Merchantpermit_4` 네 종류로 Seed 데이터에 추가. 각 허가증은 **일반 → 중급 → 고급 → 희귀/전설** 등급까지 거래 허용.
+- **거래 검증**: 서버 `/api/trade/execute`는 허가증 등급과 관계도 단계가 모두 충족될 때만 거래 허용(둘 중 하나라도 부족하면 403).
+- **허가증 업그레이드**: `POST /api/merchants/:merchantId/permit/upgrade` 호출 시
+  1. 현재 보유 허가증을 모두 제거하고,
+  2. 목표 단계 허가증으로 교체하며,
+  3. 최소 관계도 단계를 만족하지 못하면 403 반환.
+- **클라이언트 UI**: `MerchantDetailView` 상단에 관계도 카드 노출 → 현재 단계, 진행도, 허가증 레벨, 업그레이드 버튼을 즉시 확인 가능.
+- **클라이언트 동기화 흐름**:
+  1. `ProgressManager.completeSubQuest` → `MerchantDataManager.recordRelationshipProgress` 호출
+  2. 서버가 진행도/단계를 반환하면 `cachedRelationships` 갱신 → `MerchantDetailViewModel` 재로딩
+  3. 허가증 업그레이드 시 `MerchantDataManager.upgradePermit` → `GameManager.loadPersonalItemsData()`로 인벤토리 동기화
+
+> 📌 구현 레퍼런스  
+> - 서버: `way-server/src/routes/api/merchants.js`, `way-server/src/routes/api/trade.js`, `src/database/migrations/006_relationship_progress.sql`  
+> - 클라이언트: `way3/Core/MerchantDataManager.swift`, `way3/Core/ProgressManager.swift`, `way3/Views/Merchant/MerchantDetailView.swift`, `way3/ViewModels/MerchantDetailViewModel.swift`
+
 ---
 
 ### 3. 퀘스트 진행 상태 (Local Storage + Minimal Server Sync)

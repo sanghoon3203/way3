@@ -30,20 +30,44 @@ struct UnlockReq: Codable {
 
 enum EpisodeIndexLoader {
     static func load(merchantId: String) -> [EpisodeMeta] {
-        // Resources/Story/Merchant/<merchantId>/episodes.json
-        guard let path = Bundle.main.path(
-            forResource: "episodes",
-            ofType: "json",
-            inDirectory: "Resources/Story/Merchant/\(merchantId)"
-        ) else { return [] }
-
-        do {
-            let data = try Data(contentsOf: URL(fileURLWithPath: path))
-            return try JSONDecoder().decode([EpisodeMeta].self, from: data)
-        } catch {
-            print("EpisodeIndex load error:", error)
-            return []
+        for directory in directoryCandidates(for: merchantId) {
+            if let path = Bundle.main.path(
+                forResource: "episodes",
+                ofType: "json",
+                inDirectory: directory
+            ) {
+                do {
+                    let data = try Data(contentsOf: URL(fileURLWithPath: path))
+                    return try JSONDecoder().decode([EpisodeMeta].self, from: data)
+                } catch {
+                    print("EpisodeIndex load error:", error)
+                    return []
+                }
+            }
         }
+        return []
+    }
+
+    private static func directoryCandidates(for merchantId: String) -> [String] {
+        var candidates: [String] = []
+        let baseDir = "Resources/Story/Merchant"
+
+        let normalized = merchantId.trimmingCharacters(in: .whitespacesAndNewlines)
+        let withoutPrefix = normalized.replacingOccurrences(of: "merchant_", with: "")
+        let lower = withoutPrefix.lowercased()
+        let capitalized = lower.capitalized
+
+        let uniqueIds = [normalized, withoutPrefix, lower, capitalized].reduce(into: [String]()) { acc, value in
+            if !value.isEmpty && !acc.contains(value) {
+                acc.append(value)
+            }
+        }
+
+        for candidate in uniqueIds {
+            candidates.append("\(baseDir)/\(candidate)")
+        }
+
+        return candidates
     }
 }
 
@@ -67,6 +91,9 @@ struct MerchantDetailView: View {
 
     @State private var showEpisodePicker = false
     @State private var startNodeForStory: String? = nil  // StoryView 시작 노드ID
+    @State private var activeEpisode: EpisodeMeta?
+    @State private var questNotification: QuestNotificationData?
+    @State private var knownMainQuestIds: Set<String> = []
     @State private var selectedTab: MerchantDetailTab = .dialogue
     @State var showQuantityPopup = false
     @State var selectedItem: TradeItem?
@@ -210,20 +237,58 @@ struct MerchantDetailView: View {
                     merchant: merchant,
                     onClose: { showEpisodePicker = false },
                     onSelectEpisode: { ep in
+                        activeEpisode = ep
                         startNodeForStory = ep.entry_node
                         showEpisodePicker = false
                     }
                 )
                 .transition(.opacity)
             }
+
+            if let notification = questNotification {
+                Color.black.opacity(0.55)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+                MerchantQuestNotificationView(
+                    data: notification,
+                    onDismiss: {
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
+                            questNotification = nil
+                        }
+                    },
+                    onConfirm: {
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
+                            questNotification = nil
+                        }
+                        isPresented = false
+                        gameManager.activeMainTab = 2
+                    }
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .transition(.scale.combined(with: .opacity))
+            }
         }
         // 🔽 ZStack "바깥"에 풀스크린 커버 체이닝 (안전)
         .fullScreenCover(item: Binding(
             get: { startNodeForStory.map { StoryStartWrapper(id: $0) } },
-            set: { _ in startNodeForStory = nil }
+            set: { _ in
+                startNodeForStory = nil
+                activeEpisode = nil
+            }
         )) { wrapper in
-            StoryView(startNodeID: wrapper.id, returnToMapOnCompletion: true)
-                .background(Color.black.ignoresSafeArea())
+            StoryView(
+                startNodeID: wrapper.id,
+                returnToMapOnCompletion: false,
+                onComplete: {
+                    if let episode = activeEpisode {
+                        withAnimation(.spring(response: 0.45, dampingFraction: 0.85)) {
+                            presentQuestNotification(for: episode)
+                        }
+                    }
+                    activeEpisode = nil
+                }
+            )
+            .background(Color.black.ignoresSafeArea())
         }
         .alert(item: $tradeLockAlert) { alert in
             Alert(
@@ -235,6 +300,7 @@ struct MerchantDetailView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationBarHidden(true) // 필요 시 .toolbar(.hidden, for: .navigationBar) 로 교체
         .onAppear {
+            knownMainQuestIds = Set(QuestManager.shared.queuedMainQuests.map(\.questId))
             Task {
                 await viewModel.loadMerchant(id: merchant.id)
                 loadRandomDialogue()
@@ -1867,6 +1933,30 @@ extension MerchantDetailView {
 
         currentDialogue = dialogues.randomElement() ?? "..."
     }
+
+    private func presentQuestNotification(for episode: EpisodeMeta) {
+        let currentQueue = QuestManager.shared.queuedMainQuests
+        defer {
+            knownMainQuestIds.formUnion(currentQueue.map(\.questId))
+        }
+
+        if let newQuest = currentQueue.first(where: { !knownMainQuestIds.contains($0.questId) }) {
+            knownMainQuestIds.insert(newQuest.questId)
+            questNotification = QuestNotificationData(
+                merchantName: merchant.name,
+                title: newQuest.title,
+                message: newQuest.description,
+                questIdHint: newQuest.questId.uppercased()
+            )
+        } else {
+            questNotification = QuestNotificationData(
+                merchantName: merchant.name,
+                title: "\(episode.title) 완료",
+                message: "새로운 의뢰가 등록되었습니다. 퀘스트 탭에서 후속 임무를 확인하세요.",
+                questIdHint: episode.episode_id.uppercased()
+            )
+        }
+    }
 }
 
 // MARK: - Episode Picker (대화하기 → 에피소드 선택)
@@ -1876,6 +1966,7 @@ struct EpisodePickerView: View {
     let onClose: () -> Void
     let onSelectEpisode: (EpisodeMeta) -> Void
 
+    @ObservedObject private var progressManager = ProgressManager.shared
     @State private var episodes: [EpisodeMeta] = []
 
     var body: some View {
@@ -1922,32 +2013,12 @@ struct EpisodePickerView: View {
                 ScrollView {
                     VStack(spacing: 12) {
                         ForEach(episodes) { ep in
-                            Button {
-                                onSelectEpisode(ep)
-                            } label: {
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(ep.title)
-                                            .font(.cyberpunkBody())
-                                            .foregroundColor(.cyberpunkTextPrimary)
-                                        Text(ep.episode_id)
-                                            .font(.cyberpunkCaption())
-                                            .foregroundColor(.cyberpunkTextSecondary)
-                                    }
-                                    Spacer()
-                                    Image(systemName: "play.circle.fill")
-                                        .foregroundColor(.cyberpunkYellow)
-                                        .font(.system(size: 24))
-                                }
-                                .padding(14)
-                                .background(Color.cyberpunkPanelBg)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(Color.cyberpunkYellow.opacity(0.4), lineWidth: 1)
-                                )
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
-                            }
-                            .buttonStyle(.plain)
+                            MerchantEpisodeRow(
+                                episode: ep,
+                                isUnlocked: isEpisodeUnlocked(ep),
+                                requirementText: requirementSummary(for: ep),
+                                onSelect: { onSelectEpisode(ep) }
+                            )
                         }
                     }
                     .padding(16)
@@ -1965,8 +2036,248 @@ struct EpisodePickerView: View {
         .onAppear {
             // 🔐 잠금 로직 훅 (나중에 gameManager 상태에 맞게 교체)
             let all = EpisodeIndexLoader.load(merchantId: merchant.id)
-            episodes = all.filter { _ in true }
+            episodes = all.sorted { $0.episode_id < $1.episode_id }
         }
+    }
+
+    private func isEpisodeUnlocked(_ episode: EpisodeMeta) -> Bool {
+        guard let requirements = episode.unlock_requirements, !requirements.isEmpty else {
+            return true
+        }
+
+        for requirement in requirements {
+            switch requirement.type {
+            case .quest_completed:
+                guard let questId = requirement.quest_id else { continue }
+                if !progressManager.isQuestCompleted(questId) {
+                    return false
+                }
+            case .main_progress_at_least:
+                guard let value = requirement.value else { continue }
+                if progressManager.progress.completedChapters.count < value {
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
+
+    private func requirementSummary(for episode: EpisodeMeta) -> String? {
+        guard let requirements = episode.unlock_requirements, !requirements.isEmpty else {
+            return nil
+        }
+
+        let parts = requirements.map { requirement -> String in
+            switch requirement.type {
+            case .quest_completed:
+                if let questId = requirement.quest_id {
+                    return "퀘스트 \(questId) 완료 필요"
+                }
+                return "특정 퀘스트 완료 필요"
+            case .main_progress_at_least:
+                if let value = requirement.value {
+                    return "메인 진행도 \(value)+ 필요"
+                }
+                return "추가 진행 필요"
+            }
+        }
+
+        return parts.joined(separator: " • ")
+    }
+}
+
+private struct MerchantEpisodeRow: View {
+    let episode: EpisodeMeta
+    let isUnlocked: Bool
+    let requirementText: String?
+    let onSelect: () -> Void
+
+    var body: some View {
+        Button(action: onSelect) {
+            MerchantEpisodeCard(
+                episode: episode,
+                isLocked: !isUnlocked,
+                requirementText: requirementText
+            )
+        }
+        .buttonStyle(.plain)
+        .disabled(!isUnlocked)
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(Color.clear, lineWidth: 0)
+        )
+        .opacity(isUnlocked ? 1 : 0.55)
+    }
+}
+
+private struct MerchantEpisodeCard: View {
+    let episode: EpisodeMeta
+    let isLocked: Bool
+    let requirementText: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .center, spacing: 10) {
+                Text(episode.title)
+                    .font(.cyberpunkBody())
+                    .foregroundColor(.cyberpunkTextPrimary)
+                    .lineLimit(1)
+                Spacer()
+                Text(isLocked ? "LOCKED" : "READY")
+                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(isLocked ? Color.cyberpunkError.opacity(0.2) : Color.cyberpunkYellow)
+                    .foregroundColor(isLocked ? .cyberpunkError : .black)
+                    .clipShape(Capsule())
+            }
+
+            HStack(spacing: 8) {
+                Image(systemName: "number.circle")
+                    .font(.system(size: 14))
+                    .foregroundColor(.cyberpunkTextSecondary)
+                Text("#\(episode.episode_id.uppercased())")
+                    .font(.cyberpunkCaption())
+                    .foregroundColor(.cyberpunkTextSecondary)
+                Spacer()
+            }
+
+            if let requirementText, isLocked {
+                HStack(alignment: .top, spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(.cyberpunkError)
+                    Text(requirementText)
+                        .font(.cyberpunkCaption())
+                        .foregroundColor(.cyberpunkTextSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            LinearGradient(
+                colors: isLocked
+                    ? [Color.cyberpunkCardBg, Color.cyberpunkPanelBg]
+                    : [Color.cyberpunkCardBg, Color.cyberpunkYellow.opacity(0.12)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(isLocked ? Color.cyberpunkBorder : Color.cyberpunkYellow.opacity(0.4), lineWidth: 1)
+        )
+        .shadow(color: isLocked ? .clear : Color.cyberpunkYellow.opacity(0.18), radius: 8, x: 0, y: 6)
+    }
+}
+
+private struct QuestNotificationData: Identifiable {
+    let id = UUID()
+    let merchantName: String
+    let title: String
+    let message: String
+    let questIdHint: String?
+}
+
+private struct MerchantQuestNotificationView: View {
+    let data: QuestNotificationData
+    let onDismiss: () -> Void
+    let onConfirm: () -> Void
+
+    var body: some View {
+        VStack(spacing: 20) {
+            VStack(spacing: 8) {
+                Text(data.merchantName.uppercased())
+                    .font(.system(size: 12, weight: .black, design: .monospaced))
+                    .foregroundColor(.cyberpunkYellow)
+
+                Text(data.title)
+                    .font(.cyberpunkHeading(size: 20))
+                    .foregroundColor(.cyberpunkTextPrimary)
+                    .multilineTextAlignment(.center)
+
+                Text(data.message)
+                    .font(.cyberpunkBody())
+                    .foregroundColor(.cyberpunkTextSecondary)
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(4)
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
+
+            if let questIdHint = data.questIdHint, !questIdHint.isEmpty {
+                HStack(spacing: 10) {
+                    Image(systemName: "flag.badge.ellipsis")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(.cyberpunkCyan)
+                    Text("퀘스트 ID: \(questIdHint)")
+                        .font(.cyberpunkCaption())
+                        .foregroundColor(.cyberpunkCyan)
+                    Spacer()
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+                .background(Color.cyberpunkCyan.opacity(0.12))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+            }
+
+            VStack(spacing: 12) {
+                Button(action: onConfirm) {
+                    HStack(spacing: 10) {
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 14, weight: .bold))
+                        Text("퀘스트 탭으로 이동")
+                            .font(.system(size: 15, weight: .bold, design: .monospaced))
+                    }
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .background(
+                        LinearGradient(colors: [.cyberpunkYellow, Color.cyberpunkYellow.opacity(0.8)],
+                                       startPoint: .leading, endPoint: .trailing)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .shadow(color: .cyberpunkYellow.opacity(0.35), radius: 10, x: 0, y: 6)
+                }
+                .buttonStyle(.plain)
+
+                Button(action: onDismiss) {
+                    Text("나중에 보기")
+                        .font(.system(size: 15, weight: .semibold, design: .monospaced))
+                        .foregroundColor(.cyberpunkTextSecondary)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 46)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.cyberpunkBorder, lineWidth: 1)
+                        )
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(24)
+        .frame(maxWidth: 360)
+        .background(
+            LinearGradient(
+                colors: [Color.cyberpunkDarkBg, Color.cyberpunkPanelBg.opacity(0.95)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 22))
+        .overlay(
+            RoundedRectangle(cornerRadius: 22)
+                .stroke(
+                    LinearGradient(colors: [.cyberpunkYellow.opacity(0.7), .cyberpunkCyan.opacity(0.5)],
+                                   startPoint: .topLeading,
+                                   endPoint: .bottomTrailing),
+                    lineWidth: 1.5
+                )
+        )
+        .shadow(color: .black.opacity(0.35), radius: 20, x: 0, y: 16)
     }
 }
 
