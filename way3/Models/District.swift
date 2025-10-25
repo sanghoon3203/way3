@@ -380,6 +380,15 @@ enum DistrictLoader {
             .sorted { $0.merchant.distance(from: userLocation) < $1.merchant.distance(from: userLocation) }
     }
 
+    static func subQuest(withId questId: String) -> SubQuest? {
+        for district in loadDistricts() {
+            if let quest = district.merchant.sub_quests.first(where: { $0.quest_id == questId }) {
+                return quest
+            }
+        }
+        return nil
+    }
+
     static func merchantId(forQuest questId: String) -> String? {
         if let merchantId = questMerchantMap[questId] {
             return merchantId

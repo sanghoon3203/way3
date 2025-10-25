@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_005",
+  "background_image": null,
+  "character_id": "player",
+  "character_sprite": null,
+  "dialogue_text": "\"루트를 기록해둘게요. 이 길이면 숨이 차지 않고 전망도 좋네요.\"",
+  "dialogue_sound_id": "alice_sub2_005",
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_006"
+}

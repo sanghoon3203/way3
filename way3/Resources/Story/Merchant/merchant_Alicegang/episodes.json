@@ -1,0 +1,36 @@
+[
+  {
+    "episode_id": "alice_sub1",
+    "title": "뽀삐와 첫 산책",
+    "entry_node": "alice_sub1_001",
+    "post_unlock_sub_quest": "subquest_alice_02_park",
+    "post_reward_story_piece": "story_piece_alice_intro",
+    "completes_sub_quest": "subquest_alice_01_walk",
+    "unlock_requirements": []
+  },
+  {
+    "episode_id": "alice_sub2",
+    "title": "몽마르뜨 공원 가는 길",
+    "entry_node": "alice_sub2_001",
+    "post_unlock_sub_quest": "subquest_alice_03_treats",
+    "post_reward_story_piece": "story_piece_alice_walk",
+    "unlock_requirements": [
+      {
+        "type": "story_piece_owned",
+        "story_piece_id": "story_piece_alice_intro"
+      }
+    ]
+  },
+  {
+    "episode_id": "alice_sub3",
+    "title": "허브 간식 연구 노트",
+    "entry_node": "alice_sub3_001",
+    "post_reward_story_piece": "story_piece_alice_treat",
+    "unlock_requirements": [
+      {
+        "type": "story_piece_owned",
+        "story_piece_id": "story_piece_alice_walk"
+      }
+    ]
+  }
+]

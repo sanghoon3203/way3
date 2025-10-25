@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_043",
+  "background_image": "bg_rodeo_side_entry",
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "“뭘 원하시나요?” 차갑지만 정확한 목소리가 다시 이어졌다.",
+  "dialogue_sound_id": "chapter_gangnam_043",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_044"
+}

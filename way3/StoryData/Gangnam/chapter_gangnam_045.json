@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_045",
+  "background_image": "bg_rodeo_side_entry",
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "“임시 허가증으로는 불가능합니다. 정식 허가증을 받으세요.” 차갑게 등을 돌리려 했다.",
+  "dialogue_sound_id": "chapter_gangnam_045",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_046"
+}

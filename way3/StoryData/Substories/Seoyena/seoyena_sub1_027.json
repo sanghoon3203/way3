@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub1_027",
+  "background_image": "bg_seoyena_office",
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "\"재미있는 대답이네요. 대부분은 시장가를 말하죠. 필요와 소중함이라… 흥미롭네요.\"",
+  "dialogue_sound_id": "seoyena_sub1_027",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub1_028"
+}

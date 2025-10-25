@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub1_029",
+  "background_image": "bg_seoyena_office",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "\"안 해요.\" 단호하게 고개를 저었다. \"한 번 속이면 다시는 믿을 수 없으니까요.\"",
+  "dialogue_sound_id": "seoyena_sub1_029",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub1_030"
+}

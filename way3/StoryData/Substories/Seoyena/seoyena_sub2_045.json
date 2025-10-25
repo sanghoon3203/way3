@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub2_045",
+  "background_image": "bg_coex_library",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "\"지혜는 나눌수록 커진다.\" 별마당 중앙에 놓인 문구를 읽으며 한 장의 메모를 펼쳤다.",
+  "dialogue_sound_id": "seoyena_sub2_045",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub2_046"
+}

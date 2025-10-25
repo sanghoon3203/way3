@@ -58,7 +58,7 @@
         ],
         "required_level": 5,
         "required_sub_quests": [
-          "seoyena_sub_02"
+          "subquest_seoyena_02_location"
         ]
       },
       "objectives": [
@@ -107,8 +107,8 @@
         ],
         "required_level": 10,
         "required_sub_quests": [
-          "seoyena_sub_03",
-          "seoyena_sub_02"
+          "subquest_seoyena_03_trading",
+          "subquest_seoyena_02_location"
         ]
       },
       "objectives": [

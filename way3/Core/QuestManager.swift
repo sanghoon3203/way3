@@ -137,6 +137,7 @@ final class QuestManager: ObservableObject {
         rewardProcessor.apply(rewards: quest.rewards, questId: quest.quest_id)
 
         logger.info("✅ 서브 퀘스트 완료: \(quest.quest_id)")
+        handleSubQuestChain(for: quest.quest_id)
 
         return QuestExecutionResult(
             success: true,
@@ -150,6 +151,9 @@ final class QuestManager: ObservableObject {
     private func ensureMetaRequirements(for quest: SubQuest) throws {
         let progress = progressManager.progress
         let playerLevel = GameManager.shared.currentPlayer?.core.level ?? 1
+        guard progressManager.isSubQuestUnlocked(quest.quest_id) else {
+            throw QuestExecutionError.requirementsNotMet
+        }
         guard quest.requirements.meetsMetaRequirements(progress: progress, playerLevel: playerLevel) else {
             throw QuestExecutionError.requirementsNotMet
         }
@@ -193,6 +197,54 @@ final class QuestManager: ObservableObject {
         locationVerifier.stopLocationTracking()
         activeQuest = nil
         logger.info("⏹️ 위치 추적 중단")
+    }
+
+    // MARK: - Sub Quest Unlocks
+
+    func unlockSubQuest(_ questId: String) {
+        guard !progressManager.isSubQuestCompleted(questId) else { return }
+        guard !progressManager.isSubQuestUnlocked(questId) else { return }
+        progressManager.unlockSubQuest(questId)
+        logger.info("🔓 서브 퀘스트 해금: \(questId)")
+        GameManager.shared.addNotification(
+            title: "새로운 서브 퀘스트",
+            message: "서브 퀘스트 \(questId.uppercased())가 해금되었습니다.",
+            type: .info
+        )
+    }
+
+    func isSubQuestUnlocked(_ questId: String) -> Bool {
+        progressManager.isSubQuestUnlocked(questId)
+    }
+
+    func autoCompleteDialogueQuest(_ quest: SubQuest) async {
+        guard quest.type == .dialogue else { return }
+        guard let completionNode = quest.requirements.storyNodeComplete else { return }
+        guard !isQuestCompleted(quest.quest_id) else { return }
+
+        do {
+            let result = try await executeDialogueQuest(quest: quest, completedStoryNode: completionNode)
+            if result.success {
+                logger.info("🤝 대화 퀘스트 자동 완료: \(quest.quest_id)")
+            }
+        } catch {
+            logger.error("❌ 대화 퀘스트 자동 완료 실패: \(quest.quest_id) - \(error.localizedDescription)")
+        }
+    }
+
+    private func handleSubQuestChain(for questId: String) {
+        switch questId {
+        case "subquest_seoyena_01_dialogue":
+            unlockSubQuest("subquest_seoyena_02_location")
+        case "subquest_seoyena_02_location":
+            unlockSubQuest("subquest_seoyena_03_trading")
+        case "subquest_alice_01_walk":
+            unlockSubQuest("subquest_alice_02_park")
+        case "subquest_alice_02_park":
+            unlockSubQuest("subquest_alice_03_treats")
+        default:
+            break
+        }
     }
 
     // MARK: - Main Quest Handling
@@ -323,6 +375,7 @@ final class QuestManager: ObservableObject {
 
     func canStartQuest(_ quest: SubQuest, userLocation: CLLocationCoordinate2D) -> Bool {
         guard !isQuestCompleted(quest.quest_id) else { return false }
+        guard progressManager.isSubQuestUnlocked(quest.quest_id) else { return false }
 
         let progress = progressManager.progress
         let playerLevel = GameManager.shared.currentPlayer?.core.level ?? 1

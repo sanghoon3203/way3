@@ -1,0 +1,77 @@
+{
+  "quest_id": "subquest_alice_03_treats",
+  "quest_type": "trading",
+  "title": "뽀삐의 간식 레시피",
+  "description": "뽀삐가 좋아하는 허브 간식을 만들기 위해 프리미엄 재료를 구매하세요.",
+  "merchant_id": "merchant_Alicegang",
+  "region": "gangnam",
+  "district": "seocho_gu",
+
+  "unlock_conditions": [
+    {
+      "type": "subquest",
+      "value": "subquest_alice_02_park"
+    }
+  ],
+
+  "objectives": [
+    {
+      "objective_id": "premium_treat",
+      "type": "receipt_ocr",
+      "description": "프리미엄 애견 베이커리에서 12,000원 이상 구매하기",
+      "location": {
+        "latitude": 37.5032,
+        "longitude": 127.0076,
+        "radius": 120
+      },
+      "min_purchase": 12000,
+      "required": true
+    }
+  ],
+
+  "rewards": {
+    "friendship": {
+      "merchant_id": "merchant_Alicegang",
+      "amount": 12,
+      "final_level": 30
+    },
+    "experience": 260,
+    "money": 3200,
+    "items": [
+      {
+        "item_id": "poppy_treat_recipe",
+        "item_name": "뽀삐 허브 간식 레시피",
+        "quantity": 1,
+        "description": "허브 아포테케리만의 비밀 간식 레시피. 강아지 체력을 부드럽게 회복시킨다."
+      }
+    ],
+    "story_pieces": [
+      "story_piece_alice_treat"
+    ],
+    "key_items": [
+      "alice_recommendation_letter"
+    ]
+  },
+
+  "post_completion": {
+    "unlock_quests": [],
+    "dialogue_changes": {
+      "merchant_Alicegang": {
+        "greeting": "뽀삐 간식을 함께 만들 수 있어서 행복해요.",
+        "farewell": "언제든 산책이 필요하면 불러주세요."
+      }
+    }
+  },
+
+  "time_limit": null,
+  "can_abandon": false,
+  "quest_giver_location": {
+    "location_name": "허브 아포테케리",
+    "coordinates": {
+      "latitude": 37.5005,
+      "longitude": 126.9953
+    }
+  },
+
+  "story_summary": "앨리스와 플레이어는 뽀삐를 위한 새로운 허브 간식 레시피를 완성한다. 재료를 직접 구해오면서 신뢰는 더욱 깊어진다."
+}

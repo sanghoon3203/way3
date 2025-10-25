@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_018",
+  "background_image": "bg_rodeo_arena_gate",
+  "character_id": "NPC",
+  "character_sprite": null,
+  "dialogue_text": "삐—삐— 삐—. “임시 허가증이네요. 학생용은 일반 상점만 이용 가능합니다. 돌아가세요.”",
+  "dialogue_sound_id": "chapter_gangnam_018",
+  "sound_effect": "sfx_scanner_error.mp3",
+  "next_node_id": "chapter_gangnam_019"
+}

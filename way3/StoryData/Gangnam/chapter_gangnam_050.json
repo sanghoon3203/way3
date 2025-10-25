@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_050",
+  "background_image": "bg_rodeo_arena_interior",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "서예나를 따라 화려한 복도를 걸었다. 이제부터가 진짜 시작이었다.",
+  "dialogue_sound_id": "chapter_gangnam_050",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_dialogue_gate"
+}

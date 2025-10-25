@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_041",
+  "background_image": "bg_rodeo_side_entry",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "“저는…” 말이 막혔다. 상인 출입구 접근은 허가증 소지자만 가능하다는 표지판이 눈에 들어왔다.",
+  "dialogue_sound_id": "chapter_gangnam_041",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_042"
+}

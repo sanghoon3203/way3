@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub2_042",
+  "background_image": "bg_bongeunsa_main_hall",
+  "character_id": "NPC",
+  "character_sprite": null,
+  "dialogue_text": "스님이 조용히 연등을 정리하고 있었다. "욕심을 내려놓으면 마음이 가벼워집니다."라는 말을 남겼다.",
+  "dialogue_sound_id": "seoyena_sub2_042",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub2_043"
+}

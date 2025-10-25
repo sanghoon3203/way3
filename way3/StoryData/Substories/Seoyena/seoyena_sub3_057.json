@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub3_057",
+  "background_image": "bg_heat_coffee_interior",
+  "character_id": "NPC",
+  "character_sprite": null,
+  "dialogue_text": "\"좋은 커피는 시간과 정성이 핵심이죠.\" 로스터가 살짝 미소 지으며 영수증을 건넸다.",
+  "dialogue_sound_id": "seoyena_sub3_057",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub3_058"
+}

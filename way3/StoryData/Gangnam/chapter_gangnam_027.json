@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_027",
+  "background_image": "bg_cafe_interior",
+  "character_id": "NPC",
+  "character_sprite": null,
+  "dialogue_text": "“처음이시죠? 네오-서울에 오신 분들 표정이 똑같거든요.” 그는 내 눈치를 살폈다.",
+  "dialogue_sound_id": "chapter_gangnam_027",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_028"
+}

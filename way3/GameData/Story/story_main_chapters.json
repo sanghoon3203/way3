@@ -20,7 +20,7 @@
       "order": 1,
       "region": "gangnam",
       "summary": "강남권 전역에서 발생한 탐욕의 폭발을 추적하며 다섯 상인과 공조한다.",
-      "main_story_entry": "prologue_01",
+      "main_story_entry": "chapter_gangnam_001",
       "unlock_conditions": [],
       "districts": [
         {
@@ -32,40 +32,10 @@
             {
               "episode_id": "gangnam_1_1",
               "title": "서예나 - 황금탑의 균열",
-              "story_node_id": "gangnam_1_1_start",
+              "story_node_id": "chapter_gangnam_001",
               "order": 1,
               "unlock_conditions": [],
               "post_quest_id": "mainquest_gangnam_1_1"
-            },
-            {
-              "episode_id": "gangnam_1_2",
-              "title": "서예나 - 욕망의 경매장",
-              "story_node_id": "gangnam_1_2_start",
-              "order": 2,
-              "unlock_conditions": [
-                {
-                  "type": "episode",
-                  "value": "gangnam_1_1"
-                }
-              ],
-              "post_quest_id": "mainquest_gangnam_1_2"
-            },
-            {
-              "episode_id": "gangnam_1_3",
-              "title": "서예나 - 황금 폭주의 근원",
-              "story_node_id": "gangnam_1_3_start",
-              "order": 3,
-              "unlock_conditions": [
-                {
-                  "type": "episode",
-                  "value": "gangnam_1_2"
-                },
-                {
-                  "type": "quest",
-                  "value": "seoyena_sub_02"
-                }
-              ],
-              "post_quest_id": "mainquest_gangnam_1_3"
             }
           ]
         },
@@ -100,7 +70,7 @@
                 },
                 {
                   "type": "subQuest",
-                  "value": "sunwoo_sub_01"
+                  "value": "subquest_alice_03_treats"
                 }
               ],
               "post_quest_id": "mainquest_seocho_1_2"

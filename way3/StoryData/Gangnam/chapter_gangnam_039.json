@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_039",
+  "background_image": "bg_rodeo_side_entry",
+  "character_id": "typer_narrator",
+  "character_sprite": null,
+  "dialogue_text": "문이 열리며 서예나가 모습을 드러냈다. 완벽한 양복과 얼음빛 눈동자가 다시 나를 꿰뚫었다.",
+  "dialogue_sound_id": "chapter_gangnam_039",
+  "sound_effect": "sfx_door_slide.mp3",
+  "next_node_id": "chapter_gangnam_040"
+}

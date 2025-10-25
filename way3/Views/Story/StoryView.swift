@@ -382,8 +382,12 @@ struct StoryView: View {
     private func handleQuestGateNode(_ node: VNNode) {
         guard let gate = node.questGate else { return }
         AppLog.story.info("🛰️ quest gate node=\(node.nodeId, privacy: .public) quest=\(gate.questId, privacy: .public)")
-        if gate.autoStart, let quest = MainQuestRepository.quest(withId: gate.questId) {
-            QuestManager.shared.enqueueMainQuest(quest)
+        if gate.autoStart {
+            if let quest = MainQuestRepository.quest(withId: gate.questId) {
+                QuestManager.shared.enqueueMainQuest(quest)
+            } else {
+                QuestManager.shared.unlockSubQuest(gate.questId)
+            }
         }
         if let next = gate.nextNodeId, !next.isEmpty {
             advance(to: next)

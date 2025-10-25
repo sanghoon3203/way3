@@ -1,0 +1,9 @@
+{
+  "node_id": "chapter_gangnam_dialogue_gate",
+  "type": "quest_gate",
+  "quest_gate": {
+    "quest_id": "subquest_seoyena_01_dialogue",
+    "auto_start": true,
+    "next_node_id": "chapter_gangnam_051"
+  }
+}

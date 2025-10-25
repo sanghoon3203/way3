@@ -14,6 +14,14 @@
   "Seoyena": {
     "gender": "female"
   },
+  "Alicegang": {
+    "gender": "female",
+    "blip": "sfx-blipfemale.wav"
+  },
+  "Poppy": {
+    "gender": "neutral",
+    "blip": "sfx-typwriter.wav"
+  },
   "minji": {
     "gender": "female"
   },

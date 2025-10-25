@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub3_002",
+  "background_image": null,
+  "character_id": "player",
+  "character_sprite": null,
+  "dialogue_text": "\"필요한 재료 목록을 알려주세요. 근처 애견 베이커리에서 구해올게요.\"",
+  "dialogue_sound_id": "alice_sub3_002",
+  "sound_effect": null,
+  "next_node_id": "alice_sub3_003"
+}

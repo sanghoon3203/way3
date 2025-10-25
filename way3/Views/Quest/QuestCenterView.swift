@@ -31,7 +31,10 @@ struct QuestCenterView: View {
                 )
             }
         }
-        .filter { !progressManager.isSubQuestCompleted($0.quest.quest_id) }
+        .filter {
+            let questId = $0.quest.quest_id
+            return questManager.isSubQuestUnlocked(questId) && !progressManager.isSubQuestCompleted(questId)
+        }
         .sorted { $0.districtName < $1.districtName }
     }
 
@@ -258,6 +261,9 @@ private struct SubQuestCard: View {
                     Text(item.districtName)
                         .font(.system(size: 10, weight: .bold, design: .monospaced))
                         .foregroundColor(.cyberpunkCyan)
+                    Text(item.quest.typeDescription.uppercased())
+                        .font(.system(size: 10, weight: .bold, design: .monospaced))
+                        .foregroundColor(.cyberpunkTextSecondary)
                     Text(item.quest.title)
                         .font(.cyberpunkBody())
                         .foregroundColor(.cyberpunkTextPrimary)
@@ -271,14 +277,28 @@ private struct SubQuestCard: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 requirementIndicator(
+                    title: "요약",
+                    satisfied: true,
+                    detail: item.quest.getDescription()
+                )
+
+                ForEach(keyRequirementDetails, id: \.self) { detail in
+                    requirementIndicator(title: detail.title, satisfied: detail.satisfied, detail: detail.text)
+                }
+
+                requirementIndicator(
                     title: "레벨",
                     satisfied: item.quest.requirements.required_level.map { playerLevel >= $0 } ?? true
                 )
                 if !item.quest.requirements.requiredItems.isEmpty {
-                    requirementIndicator(title: "아이템", satisfied: item.quest.requirements.requiredItems.allSatisfy { progress.hasKeyItem($0) })
+                    let satisfied = item.quest.requirements.requiredItems.allSatisfy { progress.hasKeyItem($0) }
+                    let text = item.quest.requirements.requiredItems.joined(separator: ", ")
+                    requirementIndicator(title: "아이템", satisfied: satisfied, detail: text)
                 }
                 if !item.quest.requirements.requiredStoryPieces.isEmpty {
-                    requirementIndicator(title: "스토리 조각", satisfied: item.quest.requirements.requiredStoryPieces.allSatisfy { progress.hasStoryPiece($0) })
+                    let satisfied = item.quest.requirements.requiredStoryPieces.allSatisfy { progress.hasStoryPiece($0) }
+                    let text = item.quest.requirements.requiredStoryPieces.joined(separator: ", ")
+                    requirementIndicator(title: "스토리 조각", satisfied: satisfied, detail: text)
                 }
             }
 
@@ -309,14 +329,69 @@ private struct SubQuestCard: View {
             .clipShape(RoundedRectangle(cornerRadius: 4))
     }
 
-    private func requirementIndicator(title: String, satisfied: Bool) -> some View {
+    private var keyRequirementDetails: [(title: String, text: String, satisfied: Bool)] {
+        var rows: [(String, String, Bool)] = []
+        let req = item.quest.requirements
+
+        switch item.quest.type {
+        case .trading:
+            if let location = req.location {
+                rows.append((
+                    "거래 위치",
+                    "반경 \(location.radius)m, lat \(String(format: \"%.4f\", location.latitude)), lng \(String(format: \"%.4f\", location.longitude))",
+                    true
+                ))
+            }
+            if let minPurchase = req.min_purchase {
+                rows.append((
+                    "최소 구매",
+                    "₩\(minPurchase.formatted()) 이상",
+                    true
+                ))
+            }
+        case .delivery:
+            if let target = req.target_location {
+                rows.append((
+                    "목표 지점",
+                    "반경 \(target.radius)m, lat \(String(format: \"%.4f\", target.latitude)), lng \(String(format: \"%.4f\", target.longitude))",
+                    true
+                ))
+            }
+            if let timeLimit = req.time_limit {
+                rows.append((
+                    "제한 시간",
+                    "\(timeLimit / 60)분",
+                    true
+                ))
+            }
+        case .dialogue:
+            if let storyNode = req.story_node_start ?? req.story_node_complete {
+                rows.append((
+                    "스토리 시작",
+                    storyNode,
+                    true
+                ))
+            }
+        }
+
+        return rows
+    }
+
+    private func requirementIndicator(title: String, satisfied: Bool, detail: String? = nil) -> some View {
         HStack(spacing: 6) {
             Image(systemName: satisfied ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
                 .foregroundColor(satisfied ? .green : .cyberpunkError)
                 .font(.system(size: 12, weight: .bold))
-            Text(title)
-                .font(.cyberpunkCaption())
-                .foregroundColor(satisfied ? .cyberpunkTextSecondary : .cyberpunkError)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.cyberpunkCaption())
+                    .foregroundColor(satisfied ? .cyberpunkTextSecondary : .cyberpunkError)
+                if let detail, !detail.isEmpty {
+                    Text(detail)
+                        .font(.system(size: 11, weight: .regular, design: .monospaced))
+                        .foregroundColor(.cyberpunkTextSecondary)
+                }
+            }
         }
     }
 }

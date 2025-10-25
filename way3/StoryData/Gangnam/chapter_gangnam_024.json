@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_024",
+  "background_image": "bg_cafe_interior",
+  "character_id": "NPC",
+  "character_sprite": null,
+  "dialogue_text": "“배고파 보이시네요. 앉으세요.” 중년의 카페 주인이 미소 지으며 자리를 권했다.",
+  "dialogue_sound_id": "chapter_gangnam_024",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_025"
+}

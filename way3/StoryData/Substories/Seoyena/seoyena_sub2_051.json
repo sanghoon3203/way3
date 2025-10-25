@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub2_051",
+  "background_image": "bg_seoyena_office",
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "\"겉모습이 아닌 본질을 보았군요.\" 서예나가 미소 지었다. \"강남의 진짜 가치를 이해한 것 같아요.\"",
+  "dialogue_sound_id": "seoyena_sub2_051",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub2_052"
+}

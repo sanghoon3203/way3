@@ -1,0 +1,72 @@
+{
+  "quest_id": "subquest_alice_01_walk",
+  "quest_type": "dialogue",
+  "title": "뽀삐와 첫 산책",
+  "description": "앨리스가 키우는 닥스훈트 뽀삐와 함께 서래마을을 걸으며 신뢰를 쌓으세요.",
+  "merchant_id": "merchant_Alicegang",
+  "region": "gangnam",
+  "district": "seocho_gu",
+
+  "unlock_conditions": [
+    {
+      "type": "main_story",
+      "value": "seocho_episode_1_cleared"
+    }
+  ],
+
+  "objectives": [
+    {
+      "objective_id": "dialogue_walk",
+      "type": "story_completion",
+      "description": "뽀삐와 함께 프티 프랑스 거리를 산책하기",
+      "story_node_start": "alice_sub1_001",
+      "story_node_end": "alice_sub1_007",
+      "required": true
+    }
+  ],
+
+  "rewards": {
+    "friendship": {
+      "merchant_id": "merchant_Alicegang",
+      "amount": 8,
+      "final_level": 8
+    },
+    "experience": 150,
+    "money": 800,
+    "items": [
+      {
+        "item_id": "poppy_walking_badge",
+        "item_name": "뽀삐 산책 배지",
+        "quantity": 1,
+        "description": "앨리스와 뽀삐가 함께하는 첫 산책의 추억이 담긴 배지"
+      }
+    ],
+    "story_pieces": [
+      "story_piece_alice_intro"
+    ]
+  },
+
+  "post_completion": {
+    "unlock_quests": [
+      "subquest_alice_02_park"
+    ],
+    "dialogue_changes": {
+      "merchant_Alicegang": {
+        "greeting": "오늘도 뽀삐가 당신을 기다리고 있었어요.",
+        "farewell": "다음에는 몽마르뜨 공원까지 가봐요."
+      }
+    }
+  },
+
+  "time_limit": null,
+  "can_abandon": false,
+  "quest_giver_location": {
+    "location_name": "허브 아포테케리",
+    "coordinates": {
+      "latitude": 37.5005,
+      "longitude": 126.9953
+    }
+  },
+
+  "story_summary": "몸이 약한 앨리스는 뽀삐와 함께 서래마을을 산책할 수 있는 동료를 찾고 있다. 플레이어는 부드러운 걸음으로 뽀삐의 속도를 맞춰 주며 신뢰를 쌓는다."
+}

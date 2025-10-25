@@ -18,14 +18,27 @@ struct EpisodeMeta: Codable, Identifiable {
     let title: String
     let entry_node: String
     let unlock_requirements: [UnlockReq]?
+    let post_unlock_sub_quest: String?
+    let post_reward_story_piece: String?
+    let post_reward_key_item: String?
+    let completes_sub_quest: String?
 }
 
-enum UnlockReqType: String, Codable { case quest_completed, main_progress_at_least }
+enum UnlockReqType: String, Codable {
+    case quest_completed
+    case main_progress_at_least
+    case sub_quest_completed
+    case story_piece_owned
+    case key_item_owned
+}
 
 struct UnlockReq: Codable {
     let type: UnlockReqType
     let quest_id: String?
     let value: Int?
+    let sub_quest_id: String?
+    let story_piece_id: String?
+    let key_item_id: String?
 }
 
 enum EpisodeIndexLoader {
@@ -1940,6 +1953,27 @@ extension MerchantDetailView {
             knownMainQuestIds.formUnion(currentQueue.map(\.questId))
         }
 
+        if let completionQuestId = episode.completes_sub_quest,
+           let subQuest = DistrictLoader.subQuest(withId: completionQuestId),
+           subQuest.type == .dialogue {
+            QuestManager.shared.unlockSubQuest(completionQuestId)
+            Task {
+                await QuestManager.shared.autoCompleteDialogueQuest(subQuest)
+            }
+        }
+
+        if let questId = episode.post_unlock_sub_quest {
+            QuestManager.shared.unlockSubQuest(questId)
+        }
+        if let storyPiece = episode.post_reward_story_piece,
+           !ProgressManager.shared.hasStoryPiece(storyPiece) {
+            ProgressManager.shared.collectStoryPiece(storyPiece)
+        }
+        if let keyItem = episode.post_reward_key_item,
+           !ProgressManager.shared.hasKeyItem(keyItem) {
+            ProgressManager.shared.acquireKeyItem(keyItem)
+        }
+
         if let newQuest = currentQueue.first(where: { !knownMainQuestIds.contains($0.questId) }) {
             knownMainQuestIds.insert(newQuest.questId)
             questNotification = QuestNotificationData(
@@ -1947,6 +1981,13 @@ extension MerchantDetailView {
                 title: newQuest.title,
                 message: newQuest.description,
                 questIdHint: newQuest.questId.uppercased()
+            )
+        } else if let subQuestId = episode.post_unlock_sub_quest {
+            questNotification = QuestNotificationData(
+                merchantName: merchant.name,
+                title: "\(episode.title) 완료",
+                message: "새로운 서브 퀘스트가 해금되었습니다. 퀘스트 탭에서 '\(subQuestId)'를 확인하세요.",
+                questIdHint: subQuestId.uppercased()
             )
         } else {
             questNotification = QuestNotificationData(
@@ -2057,6 +2098,22 @@ struct EpisodePickerView: View {
                 if progressManager.progress.completedChapters.count < value {
                     return false
                 }
+            case .sub_quest_completed:
+                let questId = requirement.sub_quest_id ?? requirement.quest_id
+                guard let questId else { continue }
+                if !progressManager.isSubQuestCompleted(questId) {
+                    return false
+                }
+            case .story_piece_owned:
+                guard let pieceId = requirement.story_piece_id else { continue }
+                if !progressManager.hasStoryPiece(pieceId) {
+                    return false
+                }
+            case .key_item_owned:
+                guard let keyItemId = requirement.key_item_id else { continue }
+                if !progressManager.hasKeyItem(keyItemId) {
+                    return false
+                }
             }
         }
 
@@ -2080,6 +2137,21 @@ struct EpisodePickerView: View {
                     return "메인 진행도 \(value)+ 필요"
                 }
                 return "추가 진행 필요"
+            case .sub_quest_completed:
+                if let questId = requirement.sub_quest_id ?? requirement.quest_id {
+                    return "서브 퀘스트 \(questId) 완료 필요"
+                }
+                return "서브 퀘스트 완료 필요"
+            case .story_piece_owned:
+                if let pieceId = requirement.story_piece_id {
+                    return "스토리 조각 \(pieceId) 필요"
+                }
+                return "스토리 조각 필요"
+            case .key_item_owned:
+                if let keyItemId = requirement.key_item_id {
+                    return "키 아이템 \(keyItemId) 필요"
+                }
+                return "키 아이템 필요"
             }
         }
 

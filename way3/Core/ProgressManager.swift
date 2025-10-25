@@ -18,6 +18,7 @@ struct PlayerProgress: Codable {
     var completedChapters: [String] = []
     var completedDistricts: [String] = []
     var completedSubQuests: [String] = []
+    var availableSubQuests: [String] = []
     var completedMainQuests: [String] = []
     var mainQuestObjectiveProgress: [String: [Int]] = [:]
     var completedEpisodes: [String] = []
@@ -41,6 +42,7 @@ struct PlayerProgress: Codable {
         case keyItems
         case currentChapterID
         case lastSyncedAt
+        case availableSubQuests
     }
 
     init() { }
@@ -68,6 +70,7 @@ struct PlayerProgress: Codable {
         keyItems = try container.decodeIfPresent([String].self, forKey: .keyItems) ?? []
         currentChapterID = try container.decodeIfPresent(String.self, forKey: .currentChapterID)
         lastSyncedAt = try container.decodeIfPresent(Date.self, forKey: .lastSyncedAt)
+        availableSubQuests = try container.decodeIfPresent([String].self, forKey: .availableSubQuests) ?? []
     }
 
     func encode(to encoder: Encoder) throws {
@@ -87,6 +90,7 @@ struct PlayerProgress: Codable {
         try container.encode(keyItems, forKey: .keyItems)
         try container.encodeIfPresent(currentChapterID, forKey: .currentChapterID)
         try container.encodeIfPresent(lastSyncedAt, forKey: .lastSyncedAt)
+        try container.encode(availableSubQuests, forKey: .availableSubQuests)
     }
 
     // 진행률 계산용
@@ -117,6 +121,10 @@ struct PlayerProgress: Codable {
 
     func isSubQuestCompleted(_ questId: String) -> Bool {
         return completedSubQuests.contains(questId)
+    }
+
+    func isSubQuestUnlocked(_ questId: String) -> Bool {
+        return availableSubQuests.contains(questId) || completedSubQuests.contains(questId)
     }
 
     func isMainQuestCompleted(_ questId: String) -> Bool {
@@ -261,6 +269,9 @@ class ProgressManager: ObservableObject {
         }
 
         progress.completedSubQuests.append(questId)
+        if !progress.availableSubQuests.contains(questId) {
+            progress.availableSubQuests.append(questId)
+        }
         save()
         logger.info("✅ 서브 퀘스트 '\(questId)' 완료 처리")
 
@@ -278,6 +289,17 @@ class ProgressManager: ObservableObject {
 
     func isSubQuestCompleted(_ questId: String) -> Bool {
         return progress.completedSubQuests.contains(questId)
+    }
+
+    func unlockSubQuest(_ questId: String) {
+        guard !progress.availableSubQuests.contains(questId) else { return }
+        progress.availableSubQuests.append(questId)
+        save()
+        logger.info("🔓 서브 퀘스트 해금: \(questId)")
+    }
+
+    func isSubQuestUnlocked(_ questId: String) -> Bool {
+        progress.isSubQuestUnlocked(questId)
     }
 
     // MARK: - Main Quest Management

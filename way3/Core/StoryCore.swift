@@ -356,7 +356,14 @@ enum VNLoader {
         }
     }
 
-    private static let searchDirectories = ["StoryData", "Resources/Story", "Resources/StoryData/prologue", "Story"]
+    private static let searchDirectories = [
+        "StoryData",
+        "StoryData/Prologue",
+        "StoryData/Gangnam",
+        "Resources/Story",
+        "Resources/StoryData/prologue",
+        "Story"
+    ]
 
     private static func nodeURL(for name: String) -> URL? {
         if let path = Bundle.main.path(forResource: name, ofType: "json") {
@@ -370,9 +377,33 @@ enum VNLoader {
             }
         }
 
+        if let url = searchInStoryDataSubdirectories(name: name) {
+            return url
+        }
+
         if let url = Bundle.main.url(forResource: name, withExtension: "json") {
             AppLog.loader.debug("➡️ found \(name).json via URL search")
             return url
+        }
+
+        return nil
+    }
+
+    private static func searchInStoryDataSubdirectories(name: String) -> URL? {
+        guard let baseURL = Bundle.main.url(forResource: "StoryData", withExtension: nil) else {
+            return nil
+        }
+
+        let fm = FileManager.default
+        guard let enumerator = fm.enumerator(at: baseURL, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles], errorHandler: nil) else {
+            return nil
+        }
+
+        for case let fileURL as URL in enumerator {
+            if fileURL.pathExtension == "json" && fileURL.deletingPathExtension().lastPathComponent == name {
+                AppLog.loader.debug("➡️ found \(name).json via recursive StoryData search")
+                return fileURL
+            }
         }
 
         return nil

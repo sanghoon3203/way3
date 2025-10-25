@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub2_046",
+  "background_image": "bg_coex_library_upper",
+  "character_id": "NPC",
+  "character_sprite": null,
+  "dialogue_text": "사서가 조용히 책을 건넸다. "이곳에서 마음껏 영감을 받아가세요."라 적힌 책갈피가 꽂혀 있었다.",
+  "dialogue_sound_id": "seoyena_sub2_046",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub2_047"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_023",
+  "background_image": "bg_cafe_interior",
+  "character_id": "NPC",
+  "character_sprite": null,
+  "dialogue_text": "“저기요.” 카페 안에서 누군가가 나를 불렀다. 따뜻한 커피 향기가 문틈 사이로 새어 나왔다.",
+  "dialogue_sound_id": "chapter_gangnam_023",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_024"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_042",
+  "background_image": "bg_rodeo_side_entry",
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "“신규 상인이군요. 임시 허가증 7일 중 3일째, 소지금 약 8천 골드, 거래 경험 전무.” 그녀가 나를 스캔하듯 훑었다.",
+  "dialogue_sound_id": "chapter_gangnam_042",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_043"
+}

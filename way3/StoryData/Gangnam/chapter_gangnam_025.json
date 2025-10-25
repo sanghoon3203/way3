@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_025",
+  "background_image": "bg_cafe_interior",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "“아니, 저는…” 머뭇거리자 주인이 웃었다. “괜찮아요. 신규 상인 환영 서비스랍니다.”",
+  "dialogue_sound_id": "chapter_gangnam_025",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_026"
+}

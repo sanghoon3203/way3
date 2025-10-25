@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_040",
+  "background_image": "bg_rodeo_side_entry",
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "“무슨 일이죠?” 서예나의 목소리는 차갑고 명료했다.",
+  "dialogue_sound_id": "chapter_gangnam_040",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_041"
+}

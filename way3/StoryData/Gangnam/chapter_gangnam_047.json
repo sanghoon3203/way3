@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_047",
+  "background_image": "bg_rodeo_side_entry",
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "“…북카페 주인이?” 서예나의 표정이 약간 누그러졌다. “그분이 당신을 보냈군요.”",
+  "dialogue_sound_id": "chapter_gangnam_047",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_048"
+}

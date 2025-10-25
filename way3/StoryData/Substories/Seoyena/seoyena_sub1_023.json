@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub1_023",
+  "background_image": "bg_seoyena_office",
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "\"앉으세요.\" 서예나가 마주 앉았다. \"질문하겠어요. 왜 상인이 되고 싶나요? 돈 때문인가요?\"",
+  "dialogue_sound_id": "seoyena_sub1_023",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub1_024"
+}

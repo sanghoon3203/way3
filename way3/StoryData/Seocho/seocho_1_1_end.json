@@ -1,0 +1,10 @@
+{
+  "node_id": "seocho_1_1_end",
+  "background_image": "bg_subway_platform",
+  "character_id": "typer_narrator",
+  "character_sprite": null,
+  "dialogue_text": "추천서를 품에 넣었다. 서래마을의 허브 향과 함께, 새로운 인연이 시작되고 있었다.",
+  "dialogue_sound_id": "seocho_1_1_end",
+  "sound_effect": null,
+  "next_node_id": null
+}

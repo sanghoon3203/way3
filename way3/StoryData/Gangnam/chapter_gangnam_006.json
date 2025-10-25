@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_006",
+  "background_image": "bg_jongno_station_exit",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "“뭐라고…? 7일밖에 못 쓴다고?” 갑자기 심장이 내려앉았다. 식비도, 숙소도 아직 해결 못 했는데.",
+  "dialogue_sound_id": "chapter_gangnam_006",
+  "sound_effect": "sfx_heartbeat_fast.mp3",
+  "next_node_id": "chapter_gangnam_007"
+}
