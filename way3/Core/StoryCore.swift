@@ -652,16 +652,27 @@ enum StoryLibrary {
     static func loadMerchantEpisodes(merchantIds: [String]) -> [MerchantEpisodeMeta] {
         var all: [MerchantEpisodeMeta] = []
         for mid in merchantIds {
-            if let path = Bundle.main.path(forResource: "episodes", ofType: "json", inDirectory: "Resources/Story/Merchant/\(mid)"),
-               let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
-               let eps = try? JSONDecoder().decode([MerchantEpisodeMeta].self, from: data) {
-                let fixed = eps.map { e in
-                    if e.merchant_id.isEmpty {
-                        return MerchantEpisodeMeta(episode_id: e.episode_id, merchant_id: mid, title: e.title, entry_node: e.entry_node, locked: e.locked)
-                    } else { return e }
+            let directory = "Resources/Story/Merchant/\(mid)"
+            let candidateNames = ["episodes_\(mid)", "episodes"]
+
+            let data: Data? = candidateNames.compactMap { name in
+                guard let path = Bundle.main.path(forResource: name, ofType: "json", inDirectory: directory) else {
+                    return nil
                 }
-                all.append(contentsOf: fixed)
+                return try? Data(contentsOf: URL(fileURLWithPath: path))
+            }.first
+
+            guard let fileData = data,
+                  let eps = try? JSONDecoder().decode([MerchantEpisodeMeta].self, from: fileData) else {
+                continue
             }
+
+            let fixed = eps.map { e in
+                if e.merchant_id.isEmpty {
+                    return MerchantEpisodeMeta(episode_id: e.episode_id, merchant_id: mid, title: e.title, entry_node: e.entry_node, locked: e.locked)
+                } else { return e }
+            }
+            all.append(contentsOf: fixed)
         }
         return all
     }

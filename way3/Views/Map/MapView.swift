@@ -645,22 +645,22 @@ struct MapView: View {
 struct OptimizedMerchantPinView: View {
     let merchant: Merchant
     let userLocation: CLLocationCoordinate2D?
-
+    
     @State private var animationScale: CGFloat = 1.0
     @State private var pulseOpacity: Double = 0.7
     @StateObject private var imageManager = MerchantImageManager.shared
-
+    
     private var isNearby: Bool {
         return true
     }
-
+    
     // ⚡ 로컬 거리 계산 유틸리티
     private func calculateDistance(from location1: CLLocationCoordinate2D, to location2: CLLocationCoordinate2D) -> CLLocationDistance {
         let loc1 = CLLocation(latitude: location1.latitude, longitude: location1.longitude)
         let loc2 = CLLocation(latitude: location2.latitude, longitude: location2.longitude)
         return loc1.distance(from: loc2)
     }
-
+    
     var body: some View {
         ZStack {
             // 🌊 Outer Pulsing Ring (Pokemon GO Style)
@@ -674,14 +674,14 @@ struct OptimizedMerchantPinView: View {
                     .repeatForever(autoreverses: true),
                     value: animationScale
                 )
-
+            
             // 💫 Middle Ring
             Circle()
                 .fill(merchant.type.color.opacity(0.5))
                 .frame(width: 50, height: 50)
                 .scaleEffect(isNearby ? 1.1 : 1.0)
                 .animation(.easeInOut(duration: 0.5), value: isNearby)
-
+            
             // 🏪 Main Merchant Pin with Real Image
             Circle()
                 .fill(merchant.type.color.gradient)
@@ -704,48 +704,5 @@ struct OptimizedMerchantPinView: View {
                     }
                 )
                 .shadow(radius: 6)
-
-            // ✨ Active Status Indicator
-            if merchant.isActive && isNearby {
-                Circle()
-                    .fill(Color.yellow)
-                    .frame(width: 8, height: 8)
-                    .offset(x: 16, y: -16)
-                    .shadow(radius: 2)
-            }
-        }
-        .onAppear {
-            // ⚡ 성능 최적화: 어니메이션 간소화
-            animationScale = merchant.isActive ? 1.2 : 1.05
-            pulseOpacity = merchant.isActive ? 0.7 : 0.3
-        }
-        .drawingGroup() // 렌더링 성능 향상
-    }
-}
-
-// Multiplayer components removed (NearbyPlayerPinView, TradeActivityNotification)
-
-// MARK: - 🎨 Merchant Type Extensions
-extension MerchantType {
-    var color: Color {
-        switch self {
-        case .retail: return .blue
-        case .tech: return .purple
-        case .fashion: return .pink
-        case .foodMerchant: return .orange
-        case .antique: return .brown
-        default: return .gray
-        }
-    }
-
-    var iconName: String {
-        switch self {
-        case .retail: return "bag.fill"
-        case .tech: return "desktopcomputer"
-        case .fashion: return "tshirt.fill"
-        case .foodMerchant: return "fork.knife"
-        case .antique: return "building.columns.fill"
-        default: return "storefront.fill"
-        }
-    }
-}
+        }}}
+            // ✨ Active

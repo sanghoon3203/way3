@@ -2090,7 +2090,7 @@ struct EpisodePickerView: View {
             switch requirement.type {
             case .quest_completed:
                 guard let questId = requirement.quest_id else { continue }
-                if !progressManager.isQuestCompleted(questId) {
+                if !progressManager.progress.isQuestCompleted(questId) {
                     return false
                 }
             case .main_progress_at_least:

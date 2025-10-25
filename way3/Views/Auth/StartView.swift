@@ -77,13 +77,34 @@ struct LogoComponent: View {
     @State private var logoScale: CGFloat = 0.8
     @State private var logoOpacity: Double = 0.0
 
+    // Prefer explicit bundle lookup because the logo lives inside a folder reference.
+        private var logoImage: Image {
+            if let url = Bundle.main.url(
+                forResource: "TItle",
+                withExtension: "png",
+                subdirectory: "Resources"
+            ),
+            let uiImage = UIImage(contentsOfFile: url.path) {
+                return Image(uiImage: uiImage)
+            }
+
+            if let uiImage = UIImage(named: "TItle") {
+                return Image(uiImage: uiImage)
+            }
+
+            return Image(systemName: "sparkle.magnifyingglass")
+        }
+    
     var body: some View {
         VStack(spacing: 16) {
-            Image("title")
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 280)
-                .shadow(color: .cyan.opacity(0.45), radius: 12, x: 0, y: 0)
+            ZStack {
+                           LogoGlowView(opacity: logoOpacity)
+                           logoImage
+                               .resizable()
+                               .scaledToFit()
+                               .frame(maxWidth: 280)
+                               .shadow(color: .cyan.opacity(0.45), radius: 12, x: 0, y: 0)
+                       }
         }
         .scaleEffect(logoScale)
         .opacity(logoOpacity)
@@ -96,6 +117,22 @@ struct LogoComponent: View {
     }
 }
 
+private struct LogoGlowView: View {
+    var opacity: Double
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 48, style: .continuous)
+            .fill(Color.white.opacity(0.28))
+            .frame(width: 320, height: 170)
+            .blur(radius: 38)
+            .overlay(
+                RoundedRectangle(cornerRadius: 48, style: .continuous)
+                    .stroke(Color.white.opacity(0.18), lineWidth: 1.5)
+                    .blur(radius: 18)
+            )
+            .opacity(opacity)
+    }
+}
 // MARK: - Typing Animation Component
 struct TypingAnimationComponent: View {
     @State private var displayedText = ""
