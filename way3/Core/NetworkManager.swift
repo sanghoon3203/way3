@@ -77,7 +77,16 @@ class NetworkManager: ObservableObject {
     // MARK: - Private Properties
     private var authToken: String? {
         didSet {
-            isAuthenticated = authToken != nil
+            let updateAuthState = {
+                self.isAuthenticated = self.authToken != nil
+            }
+            
+            if Thread.isMainThread {
+                updateAuthState()
+            } else {
+                DispatchQueue.main.async(execute: updateAuthState)
+            }
+            
             if let token = authToken {
                 UserDefaults.standard.set(token, forKey: "auth_token")
             } else {
@@ -278,7 +287,7 @@ extension NetworkManager {
 
     // MARK: - Auth Token Sync
     func applyAuthTokens(accessToken: String?, refreshToken: String?) {
-        requestQueue.async(flags: .barrier) {
+        Task { @MainActor in
             self.authToken = accessToken
             self.refreshToken = refreshToken
         }
@@ -571,8 +580,10 @@ extension NetworkManager {
     }
     
     func logout() {
-        authToken = nil
-        isAuthenticated = false
+        Task { @MainActor in
+            self.authToken = nil
+            self.isAuthenticated = false
+        }
         
         // ✅ Socket 연결 해제
         SocketManager.shared.disconnect()

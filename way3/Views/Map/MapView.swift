@@ -3,31 +3,11 @@ import SwiftUI
 import CoreLocation
 import UIKit
 
-/**
- * 🎯 3D Player Puck 사용 가이드:
- *
- * 1. 3D 모델 파일 추가:
- *    - Bundle에 .glb 또는 .gltf 파일 추가
- *    - 파일명: player_novice_idle.glb, player_trader_walking.glb 등
- *
- * 2. 권장 3D 모델 사양:
- *    - 파일 크기: < 2MB
- *    - 폴리곤 수: < 5,000 triangles
- *    - 텍스처 해상도: 512x512 이하
- *    - 포맷: glTF 2.0 (.glb) 권장
- *
-*
- * 4. 테스트용 모델:
- *    - Khronos glTF Sample Models 사용 중
- *    - 실제 게임용 캐릭터로 교체 권장
- */
-
 // MARK: - Enhanced MapView with 3D Player Visualization
 struct MapView: View {
     @EnvironmentObject var gameManager: GameManager
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var locationManager: LocationManager
-    @StateObject private var socketManager = SocketManager.shared
 
     // MARK: - 3D Map Configuration
     @State private var viewport: Viewport = .camera(
@@ -66,29 +46,24 @@ struct MapView: View {
     @State private var serverMerchants: [Merchant] = []
     @State private var isLoadingMerchants = false
     @State private var lastMerchantRequestLocation: CLLocationCoordinate2D?
-    private let merchantSearchRadius: Double = 2000
+    private let merchantSearchRadius: Double = 5000 // 5km로 확장 (서울 전역 커버)
     private let defaultMerchantCoordinate = CLLocationCoordinate2D(latitude: 37.5665, longitude: 126.9780)
 
-    // ⚡ 성능 최적화: 화면에 보이는 상인만 표시
+    // ⚡ 모든 상인 표시 (거리 필터링 없음)
     private var allMerchants: [Merchant] {
-        // 화면에 보이는 상인만 필터링 (성능 향상)
-        guard let userLoc = synchronizedLocation else { return serverMerchants }
-
-        return serverMerchants.filter { merchant in
-            let distance = calculateDistance(from: userLoc, to: merchant.coordinate)
-            return distance <= 2000 // 2km 이내 상인만 표시
-        }
+        GameLogger.shared.logDebug("🏪 전체 상인 표시: \(serverMerchants.count)명", category: .gameplay)
+        return serverMerchants
     }
     
     var body: some View {
         ZStack {
-            // 🗺️ Enhanced 3D Mapbox with Pokemon GO Style
+            // \
             Map(viewport: $viewport) {
                 // 🎯 Enhanced 3D Player Puck with Dynamic Animation
                 Puck3D(model: create3DPlayerModel(), bearing: .heading)
 
-                // 🏪 Animated Merchant Markers (Pokemon GO Style)
-                ForEvery(allMerchants.prefix(20)) { merchant in
+                // 🏪 Animated Merchant Markers
+                ForEvery(allMerchants) { merchant in
                     MapViewAnnotation(coordinate: merchant.coordinate) {
                         OptimizedMerchantPinView(
                             merchant: merchant,
@@ -101,28 +76,12 @@ struct MapView: View {
                     .allowOverlap(true)
                 }
 
-                // 👥 Nearby Players Display
-                ForEvery(socketManager.nearbyPlayers) { nearbyPlayer in
-                    MapViewAnnotation(coordinate: nearbyPlayer.location) {
-                        NearbyPlayerPinView(player: nearbyPlayer)
-                            .onTapGesture {
-                                // Show player info or trade offer
-                                GameLogger.shared.logDebug("근처 플레이어 선택: \(nearbyPlayer.name)", category: .gameplay)
-                            }
-                    }
-                    .allowOverlap(true)
-                }
             }
-            .mapStyle(.standard)
+            .mapStyle(.standard(lightPreset: .night))
             .ignoresSafeArea()
 
-            // 🎮 Pokemon GO Style UI Overlay
+            // 💰-📍 Restore UI Overlay
             pokemonGOStyleOverlay
-
-            // 📊 Real-time Activity Feed
-            if !socketManager.recentTradeActivity.isEmpty {
-                tradeActivityFeed
-            }
         }
         .fullScreenCover(isPresented: $showingMerchantDetail) {
             if let selectedMerchant = selectedMerchant {
@@ -130,10 +89,7 @@ struct MapView: View {
                     .environmentObject(gameManager)
             }
         }
-        .sheet(isPresented: $showNearbyPlayers) {
-            NearbyPlayersView()
-                .environmentObject(socketManager)
-        }
+       
         .onAppear {
             setupGameEnvironment()
         }
@@ -151,7 +107,7 @@ struct MapView: View {
             let shouldReloadMerchants: Bool
             if let previousLocation = lastMerchantRequestLocation {
                 let distance = calculateDistance(from: previousLocation, to: latestLocation)
-                shouldReloadMerchants = distance >= 200
+                shouldReloadMerchants = distance >= 10000
             } else {
                 shouldReloadMerchants = true
             }
@@ -188,7 +144,16 @@ struct MapView: View {
 
             // 서버 응답을 Merchant 모델로 변환
             var merchants = response.merchants.map { merchantData in
-                Merchant(
+                let tradeDistanceLimit = merchantData.tradeDistanceLimit.map(Double.init)
+                let meetsRequirements = merchantData.meetsRequirements ?? true
+                let withinTradeDistance = merchantData.withinTradeDistance ?? true
+
+                let imageFileName = resolveMerchantImageFileName(
+                    serverFileName: merchantData.imageFileName,
+                    merchantName: merchantData.name
+                )
+
+                var merchant = Merchant(
                     id: merchantData.id,
                     name: merchantData.name,
                     type: convertServerTypeToMerchantType(merchantData.type),
@@ -199,8 +164,13 @@ struct MapView: View {
                     ),
                     requiredLicense: LicenseLevel(rawValue: merchantData.requiredLicense) ?? .beginner,
                     isActive: merchantData.canTrade,
-                    imageFileName: generateImageFileName(from: merchantData.name)
+                    imageFileName: imageFileName,
+                    withinTradeDistance: withinTradeDistance,
+                    tradeDistanceLimit: tradeDistanceLimit,
+                    meetsRequirements: meetsRequirements
                 )
+                merchant.distance = Double(merchantData.distance)
+                return merchant
             }
 
             var coordinateUsed = currentCoordinate
@@ -215,7 +185,11 @@ struct MapView: View {
                 )
 
                 let fallbackMerchants = fallbackResponse.merchants.map { merchantData in
-                    Merchant(
+                    let tradeDistanceLimit = merchantData.tradeDistanceLimit.map(Double.init)
+                    let meetsRequirements = merchantData.meetsRequirements ?? true
+                    let withinTradeDistance = merchantData.withinTradeDistance ?? true
+
+                    var merchant = Merchant(
                         id: merchantData.id,
                         name: merchantData.name,
                         type: convertServerTypeToMerchantType(merchantData.type),
@@ -226,8 +200,16 @@ struct MapView: View {
                         ),
                         requiredLicense: LicenseLevel(rawValue: merchantData.requiredLicense) ?? .beginner,
                         isActive: merchantData.canTrade,
-                        imageFileName: generateImageFileName(from: merchantData.name)
+                        imageFileName: resolveMerchantImageFileName(
+                            serverFileName: merchantData.imageFileName,
+                            merchantName: merchantData.name
+                        ),
+                        withinTradeDistance: withinTradeDistance,
+                        tradeDistanceLimit: tradeDistanceLimit,
+                        meetsRequirements: meetsRequirements
                     )
+                    merchant.distance = Double(merchantData.distance)
+                    return merchant
                 }
 
                 if !fallbackMerchants.isEmpty {
@@ -241,6 +223,11 @@ struct MapView: View {
             serverMerchants = merchants
             lastMerchantRequestLocation = coordinateUsed
             GameLogger.shared.logDebug("서버에서 \(merchants.count)명의 상인 데이터 로드 완료", category: .network)
+
+            // 디버깅: 각 상인의 위치 출력
+            for merchant in merchants {
+                GameLogger.shared.logDebug("  🏪 \(merchant.name): (\(merchant.coordinate.latitude), \(merchant.coordinate.longitude))", category: .network)
+            }
 
         } catch {
             GameLogger.shared.logError("상인 데이터 로드 실패: \(error)", category: .network)
@@ -264,76 +251,84 @@ struct MapView: View {
     // MARK: - 🎮 Simplified Map Overlay
     private var pokemonGOStyleOverlay: some View {
         ZStack {
-            // 💰 Money Display (왼쪽 하단)
+            // 💰 Money Display (왼쪽 하단 - 패딩 없이 Mapbox 로고 덮기)
             VStack {
                 Spacer()
                 HStack {
                     moneyDisplayComponent
                     Spacer()
                 }
-                .padding(.leading, 30)
-                .padding(.bottom, 20)
             }
 
-            // 📍 Location Button (오른쪽 하단)
+            // 📍 Location Button (오른쪽 하단 - 바닥에 딱 붙이기)
             VStack {
                 Spacer()
                 HStack {
                     Spacer()
                     locationButton
                 }
-                .padding(.trailing, 30)
-                .padding(.bottom, 40)
             }
         }
     }
 
 
-    // MARK: - 💰 Money Display Component
+    // MARK: - 💰 Money Display Component (Cyberpunk Theme)
     private var moneyDisplayComponent: some View {
         HStack(spacing: 8) {
             Image(systemName: "wonsign.circle.fill")
-                .foregroundColor(.yellow)
-                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.cyberpunkYellow)
+                .font(.system(size: 18, weight: .bold, design: .monospaced))
 
             if let player = gameManager.currentPlayer {
                 Text("₩\(player.money.formatted())")
-                    .font(.custom("ChosunCentennial", size: 16))
-                    .fontWeight(.bold)
+                    .font(.system(size: 16, weight: .bold, design: .monospaced))
                     .foregroundColor(.white)
             } else {
                 Text("₩0")
-                    .font(.custom("ChosunCentennial", size: 16))
-                    .fontWeight(.bold)
+                    .font(.system(size: 16, weight: .bold, design: .monospaced))
                     .foregroundColor(.white)
             }
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, 14)
         .padding(.vertical, 10)
         .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.black.opacity(0.7))
+            Rectangle()
+                .fill(Color.cyberpunkDarkBg)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.yellow.opacity(0.6), lineWidth: 1)
+                    Rectangle()
+                        .stroke(Color.cyberpunkYellow, lineWidth: 2)
                 )
         )
-        .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 4)
+        .overlay(
+            Rectangle()
+                .fill(Color.cyberpunkYellow)
+                .frame(width: 4),
+            alignment: .leading
+        )
     }
 
-    // MARK: - 📍 Location Button
+    // MARK: - 📍 Location Button (Cyberpunk Theme)
     private var locationButton: some View {
         Button(action: {
             centerOnPlayerLocation()
         }) {
             Image(systemName: "location.fill")
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundColor(.white)
+                .font(.system(size: 20, weight: .bold, design: .monospaced))
+                .foregroundColor(.cyberpunkCyan)
                 .frame(width: 50, height: 50)
                 .background(
-                    Circle()
-                        .fill(Color.purple.gradient)
-                        .shadow(color: .purple.opacity(0.4), radius: 8, x: 0, y: 4)
+                    Rectangle()
+                        .fill(Color.cyberpunkDarkBg)
+                        .overlay(
+                            Rectangle()
+                                .stroke(Color.cyberpunkCyan, lineWidth: 2)
+                        )
+                )
+                .overlay(
+                    Rectangle()
+                        .fill(Color.cyberpunkCyan)
+                        .frame(width: 4),
+                    alignment: .leading
                 )
         }
         .buttonStyle(PlainButtonStyle())
@@ -345,13 +340,7 @@ struct MapView: View {
             HStack {
                 Spacer()
 
-                VStack(alignment: .trailing, spacing: 8) {
-                    ForEach(socketManager.recentTradeActivity.prefix(3), id: \.id) { activity in
-                        TradeActivityNotification(activity: activity)
-                    }
-                }
-                .padding(.trailing)
-                .padding(.top, 120)
+                // Trade activity notifications removed (multiplayer feature)
             }
 
             Spacer()
@@ -368,21 +357,24 @@ struct MapView: View {
 
     // 🎯 로컬 전용 모델 로딩 시스템
     private func loadOptimizedPlayerModel(named modelName: String) -> Model {
-        // 1차: 로컬 GLB 모델 검색 (Resources/3D_Models/)
-        if let modelURL = findLocalModel(named: modelName, extension: "glb") {
-            print("✅ 로컬 GLB 모델 로드: \(modelName).glb")
+        // 1차: 요청된 모델 검색 (glb, gltf 순서)
+        if let modelURL = findLocalModel(named: modelName, extension: "glb") ?? findLocalModel(named: modelName, extension: "gltf") {
+            print("✅ 모델 로드 성공: \(modelName)")
             return createModelWithOptimization(url: modelURL)
         }
 
-        // 2차: 로컬 GLTF 모델 검색
-        if let modelURL = findLocalModel(named: modelName, extension: "gltf") {
-            print("✅ 로컬 GLTF 모델 로드: \(modelName).gltf")
-            return createModelWithOptimization(url: modelURL)
+        // 2차: 요청된 모델이 없을 경우, 기본 모델로 폴백
+        print("❌ 모델 없음: '\(modelName)'. 기본 모델('player_novice_idle')로 폴백합니다.")
+        let fallbackModelName = "player_novice_idle"
+        
+        guard let fallbackURL = findLocalModel(named: fallbackModelName, extension: "glb") ?? findLocalModel(named: fallbackModelName, extension: "gltf") else {
+            // 최후의 수단: 기본 모델조차 없으면 크래시 발생.
+            // 이는 앱 번들에 필수 리소스가 없다는 의미이므로, 개발 중에 바로잡아야 합니다.
+            fatalError("기본 플레이어 모델('player_novice_idle.glb' 또는 '.gltf')을 찾을 수 없습니다. Resources/3D_Models/ 폴더를 확인해주세요.")
         }
-
-        // 모델 없음: 기본 큐브나 빈 모델 사용
-        print("❌ 로컬 모델 없음: \(modelName) - 기본 모델 사용")
-        return createEmptyPlayerModel()
+        
+        print("✅ 기본 모델 로드 성공: \(fallbackModelName)")
+        return createModelWithOptimization(url: fallbackURL)
     }
 
     // 🔍 로컬 모델 파일 검색 최적화
@@ -422,17 +414,59 @@ struct MapView: View {
     // MARK: - 상인 이미지 파일명 생성
     private func generateImageFileName(from merchantName: String) -> String {
         // 서버에서 받은 상인 이름을 Resources 폴더 구조에 맞게 변환
-        // 예: "서예나" -> "Seoyena"
-        let imageFileName = convertKoreanNameToFileName(merchantName)
-        return imageFileName
+        // 예: "서예나" -> Merchant_seoyena_face
+        let baseName = convertKoreanNameToFileName(merchantName)
+        let normalized = baseName
+            .replacingOccurrences(of: " ", with: "")
+            .lowercased()
+
+        let trimmed = normalized.hasPrefix("merchant_")
+            ? String(normalized.dropFirst("merchant_".count))
+            : normalized
+
+        let merchantPrefixed = "Merchant_\(trimmed)"
+        return merchantPrefixed.hasSuffix("_face")
+            ? merchantPrefixed
+            : "\(merchantPrefixed)_face"
+    }
+
+    private func resolveMerchantImageFileName(serverFileName: String?, merchantName: String) -> String {
+        if let serverFileName,
+           let canonical = canonicalFaceFileName(from: serverFileName) {
+            return canonical
+        }
+        return generateImageFileName(from: merchantName)
+    }
+
+    private func canonicalFaceFileName(from fileName: String) -> String? {
+        let trimmed = fileName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+
+        let sanitized = trimmed.replacingOccurrences(of: "\\", with: "/")
+        let lastComponent = sanitized.split(separator: "/").last.map(String.init) ?? sanitized
+
+        guard !lastComponent.isEmpty else { return nil }
+
+        let baseComponent = lastComponent.split(separator: ".").first.map(String.init) ?? lastComponent
+        let normalized = baseComponent
+            .replacingOccurrences(of: " ", with: "")
+            .replacingOccurrences(of: "Merchant_", with: "", options: [.caseInsensitive], range: nil)
+            .replacingOccurrences(of: "merchant_", with: "", options: [.caseInsensitive], range: nil)
+            .lowercased()
+
+        guard !normalized.isEmpty else { return nil }
+
+        let prefixed = "Merchant_\(normalized)"
+        return prefixed.hasSuffix("_face") ? prefixed : "\(prefixed)_face"
     }
 
     private func convertKoreanNameToFileName(_ koreanName: String) -> String {
         // 한국 이름 -> 영어 파일명 매핑
         let nameMapping: [String: String] = [
             "서예나": "Seoyena",
+            "앨리스강": "Alicegang",
             "알리스강": "Alicegang",
-            "아니박": "Anipark",
+            "애니박": "Anipark",
             "카타리나최": "Catarinachoi",
             "진백호": "Jinbaekho",
             "주불수": "Jubulsu",
@@ -444,12 +478,6 @@ struct MapView: View {
         return nameMapping[koreanName] ?? koreanName
     }
 
-    // 📦 기본 빈 모델 (로컬 모델 없을 때 사용)
-    private func createEmptyPlayerModel() -> Model {
-        // 기본 학습용 모델 또는 빈 모델 반환
-        // 사용자가 모델을 추가할 때까지 대기
-        fatalError("📦 3D 모델을 Resources/3D_Models/ 폴더에 추가해주세요!\n필요한 모델: \(getPlayerModelName())")
-    }
 
     // MARK: - 🎯 최적화된 3D 애니메이션 시스템
     private func startPlayerMovingAnimation() {
@@ -548,28 +576,20 @@ struct MapView: View {
 
     // MARK: - 🎮 Game Methods
     private func handleMerchantTap(_ merchant: Merchant) {
-        // 1000m 이내에서만 거래 가능
+        selectedMerchant = merchant
+        showingMerchantDetail = true
+
+        // 🎯 Focus camera on merchant with smooth animation
+        focusCamera(on: merchant.coordinate)
+
+        // 🎯 플레이어 거래 애니메이션 실행
+        playTradeAnimation()
+
         if let syncLocation = synchronizedLocation {
             let distance = calculateDistance(from: syncLocation, to: merchant.coordinate)
-
-            if distance <= 1000 {
-                selectedMerchant = merchant
-                showingMerchantDetail = true
-
-                // 🎯 Focus camera on merchant with smooth animation
-                focusCamera(on: merchant.coordinate)
-
-                // 🎯 플레이어 거래 애니메이션 실행
-                playTradeAnimation()
-
-                GameLogger.shared.logDebug("상인 선택됨: \(merchant.name) (거리: \(Int(distance))m)", category: .gameplay)
-            } else {
-                GameLogger.shared.logDebug("거래 불가: \(merchant.name) (거리: \(Int(distance))m > 500m)", category: .gameplay)
-
-                // 🚫 Show distance warning with haptic feedback
-                let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-                impactFeedback.impactOccurred()
-            }
+            GameLogger.shared.logDebug("상인 선택됨: \(merchant.name) (거리: \(Int(distance))m)", category: .gameplay)
+        } else {
+            GameLogger.shared.logDebug("상인 선택됨: \(merchant.name)", category: .gameplay)
         }
     }
 
@@ -588,6 +608,10 @@ struct MapView: View {
     }
 
     private func setupGameEnvironment() {
+        // 📍 Start GPS location tracking
+        locationManager.startLocationUpdates()
+        GameLogger.shared.logInfo("🌍 GPS 위치 추적 시작", category: .system)
+
         // 🔄 Setup location tracking and movement detection
         var lastKnownLocation: CLLocationCoordinate2D?
 
@@ -612,7 +636,7 @@ struct MapView: View {
                 }
 
                 lastKnownLocation = location
-                socketManager.updatePlayerLocation(coordinate: location, playerId: playerId)
+                // Socket location update removed (multiplayer feature)
             }
         }
 
@@ -631,24 +655,22 @@ struct MapView: View {
 struct OptimizedMerchantPinView: View {
     let merchant: Merchant
     let userLocation: CLLocationCoordinate2D?
-
+    
     @State private var animationScale: CGFloat = 1.0
     @State private var pulseOpacity: Double = 0.7
     @StateObject private var imageManager = MerchantImageManager.shared
-
+    
     private var isNearby: Bool {
-        guard let userLoc = userLocation else { return false }
-        let distance = calculateDistance(from: userLoc, to: merchant.coordinate)
-        return distance <= 500
+        return true
     }
-
+    
     // ⚡ 로컬 거리 계산 유틸리티
     private func calculateDistance(from location1: CLLocationCoordinate2D, to location2: CLLocationCoordinate2D) -> CLLocationDistance {
         let loc1 = CLLocation(latitude: location1.latitude, longitude: location1.longitude)
         let loc2 = CLLocation(latitude: location2.latitude, longitude: location2.longitude)
         return loc1.distance(from: loc2)
     }
-
+    
     var body: some View {
         ZStack {
             // 🌊 Outer Pulsing Ring (Pokemon GO Style)
@@ -662,17 +684,26 @@ struct OptimizedMerchantPinView: View {
                     .repeatForever(autoreverses: true),
                     value: animationScale
                 )
-
+            
             // 💫 Middle Ring
             Circle()
                 .fill(merchant.type.color.opacity(0.5))
                 .frame(width: 50, height: 50)
                 .scaleEffect(isNearby ? 1.1 : 1.0)
                 .animation(.easeInOut(duration: 0.5), value: isNearby)
-
+            
             // 🏪 Main Merchant Pin with Real Image
             Circle()
-                .fill(merchant.type.color.gradient)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            merchant.type.color,
+                            merchant.type.color.opacity(0.6)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
                 .frame(width: 36, height: 36)
                 .overlay(
                     // 실제 상인 이미지 사용
@@ -685,107 +716,12 @@ struct OptimizedMerchantPinView: View {
                                 .clipShape(Circle())
                         } else {
                             // 이미지가 없을 경우 fallback 아이콘
-                            Image(systemName: merchant.type.iconName)
+                            Image(systemName: merchant.iconName)
                                 .font(.system(size: 18, weight: .bold))
                                 .foregroundColor(.white)
                         }
                     }
                 )
                 .shadow(radius: 6)
-
-            // ✨ Active Status Indicator
-            if merchant.isActive && isNearby {
-                Circle()
-                    .fill(Color.yellow)
-                    .frame(width: 8, height: 8)
-                    .offset(x: 16, y: -16)
-                    .shadow(radius: 2)
-            }
-        }
-        .onAppear {
-            // ⚡ 성능 최적화: 어니메이션 간소화
-            animationScale = merchant.isActive ? 1.2 : 1.05
-            pulseOpacity = merchant.isActive ? 0.7 : 0.3
-        }
-        .drawingGroup() // 렌더링 성능 향상
-    }
-}
-
-// MARK: - 👥 Nearby Player Pin View
-struct NearbyPlayerPinView: View {
-    let player: SocketManager.NearbyPlayer
-
-    var body: some View {
-        ZStack {
-            // 🌀 Player Aura
-            Circle()
-                .fill(Color.blue.opacity(0.3))
-                .frame(width: 50, height: 50)
-
-            // 👤 Player Pin
-            Circle()
-                .fill(Color.blue.gradient)
-                .frame(width: 32, height: 32)
-                .overlay(
-                    Text("\(player.level)")
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                )
-                .shadow(radius: 4)
-        }
-    }
-}
-
-// MARK: - 📢 Trade Activity Notification
-struct TradeActivityNotification: View {
-    let activity: SocketManager.TradeActivity
-
-    var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "arrow.left.arrow.right")
-                .foregroundColor(.green)
-                .font(.system(size: 14, weight: .semibold))
-
-            Text("\(activity.playerName)님이 거래를 완료했습니다")
-                .font(.custom("ChosunCentennial", size: 12))
-                .foregroundColor(.white)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.black.opacity(0.8))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.green.opacity(0.5), lineWidth: 1)
-                )
-        )
-        .shadow(radius: 4)
-    }
-}
-
-// MARK: - 🎨 Merchant Type Extensions
-extension MerchantType {
-    var color: Color {
-        switch self {
-        case .retail: return .blue
-        case .tech: return .purple
-        case .fashion: return .pink
-        case .foodMerchant: return .orange
-        case .antique: return .brown
-        default: return .gray
-        }
-    }
-
-    var iconName: String {
-        switch self {
-        case .retail: return "bag.fill"
-        case .tech: return "desktopcomputer"
-        case .fashion: return "tshirt.fill"
-        case .foodMerchant: return "fork.knife"
-        case .antique: return "building.columns.fill"
-        default: return "storefront.fill"
-        }
-    }
-}
+        }}}
+            // ✨ Active

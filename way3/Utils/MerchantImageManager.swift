@@ -10,6 +10,16 @@ import SwiftUI
 import UIKit
 import Foundation
 
+private struct OrderedSet<Element: Hashable> {
+    private var set = Set<Element>()
+    private(set) var elements: [Element] = []
+
+    mutating func append(_ element: Element) {
+        guard set.insert(element).inserted else { return }
+        elements.append(element)
+    }
+}
+
 // MARK: - 상인 이미지 관리자
 class MerchantImageManager: ObservableObject {
     static let shared = MerchantImageManager()
@@ -32,46 +42,65 @@ class MerchantImageManager: ObservableObject {
             .replacingOccurrences(of: "_", with: "")
             .lowercased()
 
+        var candidates = OrderedSet<String>()
+
         // 서버에서 제공한 파일명이 있다면 우선적으로 후보에 포함
-        var possibleNames: [String] = []
         if let imageFileName,
            !imageFileName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            let sanitized = imageFileName
-                .replacingOccurrences(of: "\\", with: "/")
-                .components(separatedBy: "/")
-                .last ?? imageFileName
+            let sanitized = sanitizeFileComponent(imageFileName)
+            candidates.append(sanitized)
+            if !sanitized.lowercased().hasSuffix("_face") {
+                candidates.append("\(sanitized)_face")
+                candidates.append("\(sanitized)_face.png")
+            }
 
-            let baseName = sanitized
-                .replacingOccurrences(of: ".png", with: "")
-                .replacingOccurrences(of: ".jpg", with: "")
-                .replacingOccurrences(of: ".jpeg", with: "")
+            let lowerVariant = sanitized.lowercased().hasPrefix("merchant_")
+                ? sanitized.lowercased()
+                : "merchant_\(sanitized.lowercased())"
+            candidates.append(lowerVariant)
+            if !lowerVariant.hasSuffix("_face") {
+                candidates.append("\(lowerVariant)_face")
+            }
 
-            possibleNames.append(contentsOf: [
-                baseName,
-                baseName.replacingOccurrences(of: " ", with: ""),
-                baseName.lowercased()
-            ])
+            let capitalVariant = lowerVariant.replacingOccurrences(of: "merchant_", with: "Merchant_")
+            candidates.append(capitalVariant)
+            if !capitalVariant.hasSuffix("_face") {
+                candidates.append("\(capitalVariant)_face")
+            }
         }
 
-        // 2. 기존 이름 기반 패턴
-        possibleNames.append(contentsOf: [
+        // 2. 기본 이름 패턴 (Face 강제)
+        let romanized = romanizedMerchantName(for: merchantName)
+        let baseNames = [
             merchantName,
-            cleanName,
             merchantName.replacingOccurrences(of: " ", with: ""),
-            "\(cleanName)/image",
-            "\(cleanName)/portrait",
-            "\(cleanName)/character",
-            "\(cleanName)/merchant",
-            cleanName.lowercased(),
-            merchantName.lowercased().replacingOccurrences(of: " ", with: ""),
-            "merchant_\(cleanName)",
-            "\(cleanName)_merchant",
-            "char_\(cleanName)",
-            "\(cleanName)_char"
-        ])
+            cleanName,
+            romanized,
+            romanized.replacingOccurrences(of: " ", with: ""),
+            romanized.lowercased()
+        ]
+        for base in baseNames where !base.isEmpty {
+            let normalized = base.replacingOccurrences(of: " ", with: "")
+            let lower = normalized.lowercased()
+            let faceName = lower.hasSuffix("_face") ? lower : "\(lower)_face"
+            candidates.append(faceName)
+            let capitalizedFace = faceName.prefix(1).uppercased() + faceName.dropFirst()
+            candidates.append(String(capitalizedFace))
+
+            let merchantLower = "merchant_\(lower)"
+            let merchantUpper = "Merchant_\(lower)"
+            candidates.append(merchantLower)
+            candidates.append(merchantUpper)
+            if !merchantLower.hasSuffix("_face") {
+                candidates.append("\(merchantLower)_face")
+            }
+            if !merchantUpper.hasSuffix("_face") {
+                candidates.append("\(merchantUpper)_face")
+            }
+        }
 
         // 3. 이미지 존재 확인
-        for imageName in possibleNames {
+        for imageName in candidates.elements {
             if UIImage(named: imageName) != nil {
                 #if DEBUG
                 print("✅ Found merchant image: \(imageName) for \(merchantName)")
@@ -80,7 +109,7 @@ class MerchantImageManager: ObservableObject {
             }
         }
 
-        // 4. Asset 폴더 기반 탐색
+        // 4. Asset 폴더 기반 탐색 (_face 기준)
         if let assetImageName = findImageInAssetFolder(merchantName: merchantName) {
             return assetImageName
         }
@@ -100,13 +129,26 @@ class MerchantImageManager: ObservableObject {
             merchantName.capitalized.replacingOccurrences(of: " ", with: ""), // "Alicegang"
         ]
 
-        let imageFileNames = [
-            "image", "portrait", "character", "merchant", "main", "default",
-            cleanName, merchantName.replacingOccurrences(of: " ", with: "")
+        let romanized = romanizedMerchantName(for: merchantName)
+        let baseCandidates: [String] = [
+            merchantName,
+            merchantName.replacingOccurrences(of: " ", with: ""),
+            cleanName,
+            romanized,
+            romanized.replacingOccurrences(of: " ", with: ""),
+            romanized.lowercased()
         ]
 
+        var faceFileNames: [String] = []
+        for base in baseCandidates where !base.isEmpty {
+            let normalized = base.replacingOccurrences(of: " ", with: "")
+            let candidate = normalized.lowercased().hasSuffix("_face") ? normalized : "\(normalized)_face"
+            faceFileNames.append(candidate)
+        }
+        faceFileNames.append("face")
+
         for folderName in assetFolderNames {
-            for fileName in imageFileNames {
+            for fileName in faceFileNames {
                 let fullPath = "\(folderName)/\(fileName)"
                 if UIImage(named: fullPath) != nil {
                     #if DEBUG
@@ -134,7 +176,7 @@ class MerchantImageManager: ObservableObject {
             loadingImages.insert(assetName)
 
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                if let image = UIImage(named: assetName) {
+                if let image = Self.loadBundledImage(named: assetName) {
                     DispatchQueue.main.async {
                         self?.imageCache[assetName] = image
                         self?.loadingImages.remove(assetName)
@@ -159,6 +201,11 @@ class MerchantImageManager: ObservableObject {
 
         if let cachedImage = imageCache[cacheKey] {
             return cachedImage
+        }
+
+        if let localImage = Self.loadLocalImage(named: imageFileName) {
+            imageCache[cacheKey] = localImage
+            return localImage
         }
 
         guard !loadingImages.contains(cacheKey), !failedRemoteImages.contains(cacheKey) else {
@@ -231,6 +278,61 @@ class MerchantImageManager: ObservableObject {
 
 // MARK: - Remote Utilities
 private extension MerchantImageManager {
+    static func loadBundledImage(named imageName: String) -> UIImage? {
+        if let image = UIImage(named: imageName) {
+            return image
+        }
+        return loadLocalImage(named: imageName)
+    }
+
+    static func loadLocalImage(named imageFileName: String) -> UIImage? {
+        guard let resourcePath = Bundle.main.resourcePath else { return nil }
+
+        let sanitized = imageFileName
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "\\", with: "/")
+
+        let merchantsDirectory = URL(fileURLWithPath: resourcePath)
+            .appendingPathComponent("Resources", isDirectory: true)
+            .appendingPathComponent("Merchant", isDirectory: true)
+
+        let fileManager = FileManager.default
+
+        func imageFromURL(_ url: URL) -> UIImage? {
+            guard fileManager.fileExists(atPath: url.path) else { return nil }
+            return UIImage(contentsOfFile: url.path)
+        }
+
+        if sanitized.contains("/") {
+            let directURL = merchantsDirectory.appendingPathComponent(sanitized)
+                if let image = imageFromURL(directURL) {
+                    #if DEBUG
+                    print("📄 Found merchant image in bundle: \(directURL.lastPathComponent)")
+                    #endif
+                    return image
+                }
+            }
+
+        let targetFileName = sanitized.contains(".") ? sanitized : "\(sanitized).png"
+
+        guard let enumerator = fileManager.enumerator(at: merchantsDirectory, includingPropertiesForKeys: nil) else {
+            return nil
+        }
+
+        for case let url as URL in enumerator {
+            if url.lastPathComponent.compare(targetFileName, options: [.caseInsensitive]) == .orderedSame {
+                if let image = imageFromURL(url) {
+                    #if DEBUG
+                    print("📄 Found merchant image in bundle: \(url.lastPathComponent)")
+                    #endif
+                    return image
+                }
+            }
+        }
+
+        return nil
+    }
+
     static func remoteImageURL(for fileName: String) -> URL? {
         let trimmed = fileName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
@@ -249,6 +351,50 @@ private extension MerchantImageManager {
         }
 
         return URL(string: "\(baseURL)/public/merchants/\(sanitized)")
+    }
+
+    static func sanitizeFileComponent(_ fileName: String) -> String {
+        let sanitized = fileName
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "\\", with: "/")
+
+        let lastComponent = sanitized.components(separatedBy: "/").last ?? sanitized
+        if let dotIndex = lastComponent.firstIndex(of: ".") {
+            return String(lastComponent[..<dotIndex])
+        }
+        return lastComponent
+    }
+
+    static func romanizedMerchantName(for name: String) -> String {
+        if name.canBeConverted(to: .ascii) {
+            return name
+        }
+
+        let key = name.replacingOccurrences(of: " ", with: "")
+        let mapping: [String: String] = [
+            "서예나": "Seoyena",
+            "서 예나": "Seoyena",
+            "서예 나": "Seoyena",
+            "앨리스강": "Alicegang",
+            "알리스강": "Alicegang",
+            "애니박": "Anipark",
+            "카타리나최": "Catarinachoi",
+            "카타리나 최": "Catarinachoi",
+            "진백호": "Jinbaekho",
+            "주블수": "Jubulsu",
+            "주불수": "Jubulsu",
+            "기주리": "Kijuri",
+            "김세휘": "Kimsehwui",
+            "마리": "Mari"
+        ]
+
+        if let mapped = mapping[key] {
+            return mapped
+        }
+        if let mapped = mapping[name] {
+            return mapped
+        }
+        return name
     }
 }
 

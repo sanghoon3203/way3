@@ -123,47 +123,11 @@ struct Merchant: Identifiable {
     }
     
     var pinColor: Color {
-        switch type {
-        case .retail, .convenience: return .blue
-        case .wholesale, .industrial: return .green
-        case .premium, .luxury: return .purple
-        case .artisan, .craftsman: return .orange
-        case .mystic, .collector, .antique: return .red
-        case .tech, .electronics: return .cyan
-        case .fashion, .artist: return .pink
-        case .herbalist, .natural, .forager: return .mint
-        case .foodMerchant: return .yellow
-        case .scholar: return .indigo
-        case .student: return .teal
-        case .tourist: return .brown
-        }
+        type.color
     }
     
     var iconName: String {
-        switch type {
-        case .retail: return "cart.fill"
-        case .wholesale: return "building.2.fill"
-        case .premium: return "crown.fill"
-        case .artisan: return "hammer.fill"
-        case .mystic: return "sparkles"
-        case .collector: return "archivebox.fill"
-        case .tech: return "laptopcomputer"
-        case .fashion: return "tshirt.fill"
-        case .artist: return "paintbrush.fill"
-        case .antique: return "scroll.fill"
-        case .herbalist: return "leaf.fill"
-        case .foodMerchant: return "fork.knife"
-        case .industrial: return "gearshape.fill"
-        case .luxury: return "gem.fill"
-        case .scholar: return "book.fill"
-        case .student: return "pencil"
-        case .tourist: return "camera.fill"
-        case .craftsman: return "wrench.fill"
-        case .electronics: return "bolt.fill"
-        case .natural: return "tree.fill"
-        case .forager: return "basket.fill"
-        case .convenience: return "bag.fill"
-        }
+        type.iconName
     }
     
     
@@ -352,6 +316,50 @@ enum MerchantType: String, CaseIterable, Codable {
         case .scholar: return .rare
         case .student, .convenience: return .common
         case .tourist: return .intermediate
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .retail, .convenience: return .blue
+        case .wholesale, .industrial: return .green
+        case .premium, .luxury: return .purple
+        case .artisan, .craftsman: return .orange
+        case .mystic, .collector, .antique: return .red
+        case .tech, .electronics: return .cyan
+        case .fashion, .artist: return .pink
+        case .herbalist, .natural, .forager: return .mint
+        case .foodMerchant: return .yellow
+        case .scholar: return .indigo
+        case .student: return .teal
+        case .tourist: return .brown
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .retail: return "cart.fill"
+        case .wholesale: return "building.2.fill"
+        case .premium: return "crown.fill"
+        case .artisan: return "hammer.fill"
+        case .mystic: return "sparkles"
+        case .collector: return "archivebox.fill"
+        case .tech: return "laptopcomputer"
+        case .fashion: return "tshirt.fill"
+        case .artist: return "paintbrush.fill"
+        case .antique: return "scroll.fill"
+        case .herbalist: return "leaf.fill"
+        case .foodMerchant: return "fork.knife"
+        case .industrial: return "gearshape.fill"
+        case .luxury: return "gem.fill"
+        case .scholar: return "book.fill"
+        case .student: return "pencil"
+        case .tourist: return "camera.fill"
+        case .craftsman: return "wrench.fill"
+        case .electronics: return "bolt.fill"
+        case .natural: return "tree.fill"
+        case .forager: return "basket.fill"
+        case .convenience: return "bag.fill"
         }
     }
 }
