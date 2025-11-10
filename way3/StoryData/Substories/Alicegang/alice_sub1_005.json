@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub1_005",
+  "background_image": null,
+  "character_id": "Alicegang",
+  "character_sprite": null,
+  "dialogue_text": "\"뽀삐는 사람을 잘 믿지만, 너무 빨리 달리면 겁먹어요. 천천히 같이 걸어주세요.\"",
+  "dialogue_sound_id": "alice_sub1_005",
+  "sound_effect": null,
+  "next_node_id": "alice_sub1_006"
+}

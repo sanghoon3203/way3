@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_27",
+  "background_image": "bg_black.png",
+  "character_id": "player",
+  "character_sprite": null,
+  "dialogue_text": "(들려야 할 지하철소리 없이 정적으로 바뀌며 일순간 정신이 혼미해졌다)",
+  "dialogue_sound_id": "prologue_18",
+  "sound_effect": null,
+  "next_node_id": "prologue_28.json"
+}

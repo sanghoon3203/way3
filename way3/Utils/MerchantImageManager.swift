@@ -51,21 +51,6 @@ class MerchantImageManager: ObservableObject {
             candidates.append(sanitized)
             if !sanitized.lowercased().hasSuffix("_face") {
                 candidates.append("\(sanitized)_face")
-                candidates.append("\(sanitized)_face.png")
-            }
-
-            let lowerVariant = sanitized.lowercased().hasPrefix("merchant_")
-                ? sanitized.lowercased()
-                : "merchant_\(sanitized.lowercased())"
-            candidates.append(lowerVariant)
-            if !lowerVariant.hasSuffix("_face") {
-                candidates.append("\(lowerVariant)_face")
-            }
-
-            let capitalVariant = lowerVariant.replacingOccurrences(of: "merchant_", with: "Merchant_")
-            candidates.append(capitalVariant)
-            if !capitalVariant.hasSuffix("_face") {
-                candidates.append("\(capitalVariant)_face")
             }
         }
 
@@ -81,22 +66,10 @@ class MerchantImageManager: ObservableObject {
         ]
         for base in baseNames where !base.isEmpty {
             let normalized = base.replacingOccurrences(of: " ", with: "")
-            let lower = normalized.lowercased()
-            let faceName = lower.hasSuffix("_face") ? lower : "\(lower)_face"
+            let faceName = normalized.lowercased().hasSuffix("_face") ? normalized : "\(normalized)_face"
             candidates.append(faceName)
             let capitalizedFace = faceName.prefix(1).uppercased() + faceName.dropFirst()
-            candidates.append(String(capitalizedFace))
-
-            let merchantLower = "merchant_\(lower)"
-            let merchantUpper = "Merchant_\(lower)"
-            candidates.append(merchantLower)
-            candidates.append(merchantUpper)
-            if !merchantLower.hasSuffix("_face") {
-                candidates.append("\(merchantLower)_face")
-            }
-            if !merchantUpper.hasSuffix("_face") {
-                candidates.append("\(merchantUpper)_face")
-            }
+            candidates.append(capitalizedFace)
         }
 
         // 3. 이미지 존재 확인
@@ -176,7 +149,7 @@ class MerchantImageManager: ObservableObject {
             loadingImages.insert(assetName)
 
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                if let image = Self.loadBundledImage(named: assetName) {
+                if let image = UIImage(named: assetName) {
                     DispatchQueue.main.async {
                         self?.imageCache[assetName] = image
                         self?.loadingImages.remove(assetName)
@@ -278,13 +251,6 @@ class MerchantImageManager: ObservableObject {
 
 // MARK: - Remote Utilities
 private extension MerchantImageManager {
-    static func loadBundledImage(named imageName: String) -> UIImage? {
-        if let image = UIImage(named: imageName) {
-            return image
-        }
-        return loadLocalImage(named: imageName)
-    }
-
     static func loadLocalImage(named imageFileName: String) -> UIImage? {
         guard let resourcePath = Bundle.main.resourcePath else { return nil }
 

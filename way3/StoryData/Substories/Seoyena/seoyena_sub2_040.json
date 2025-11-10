@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub2_040",
+  "background_image": "bg_bongeunsa_gate",
+  "character_id": "typer_narrator",
+  "character_sprite": null,
+  "dialogue_text": "두 번째 좌표, 봉은사. 빽빽한 빌딩 숲 사이로 전통 목조 일주문이 조용히 서 있었다.",
+  "dialogue_sound_id": "seoyena_sub2_040",
+  "sound_effect": "sfx_wind_soft.mp3",
+  "next_node_id": "seoyena_sub2_041"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub3_064",
+  "background_image": "bg_rodeo_arena_interior",
+  "character_id": "typer_narrator",
+  "character_sprite": null,
+  "dialogue_text": "두 장의 영수증과 구매한 아이템을 챙겨 서예나에게로 향했다.",
+  "dialogue_sound_id": "seoyena_sub3_064",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub3_065"
+}

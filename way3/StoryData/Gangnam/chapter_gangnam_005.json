@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_005",
+  "background_image": "bg_guidebook_closeup",
+  "character_id": "typer_narrator",
+  "character_sprite": null,
+  "dialogue_text": "가이드북 7장, '상인 자격증에 대해서'. 임시 허가증은 7일 후 자동 소멸, 정식 시험이 필수라는 문장이 눈에 박혔다.",
+  "dialogue_sound_id": "chapter_gangnam_005",
+  "sound_effect": "sfx_page_flip.mp3",
+  "next_node_id": "chapter_gangnam_006"
+}

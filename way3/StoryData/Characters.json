@@ -1,0 +1,46 @@
+{
+  "player": {
+    "gender": "male"
+  },
+  "Kijuri": {
+    "gender": "female"
+  },
+  "Jubulsu": {
+    "gender": "male"
+  },
+  "Kimsehwui": {
+    "gender": "female"
+  },
+  "Seoyena": {
+    "gender": "female"
+  },
+  "Alicegang": {
+    "gender": "female",
+    "blip": "sfx-blipfemale.wav"
+  },
+  "Poppy": {
+    "gender": "neutral",
+    "blip": "sfx-typwriter.wav"
+  },
+  "minji": {
+    "gender": "female"
+  },
+  "haerin": {
+    "gender": "female"
+  },
+  "joongi": {
+    "gender": "male"
+  },
+  "sunwoo": {
+    "gender": "male"
+  },
+  "jiyoung": {
+    "gender": "female"
+  },
+  "--": {
+    "gender": "typer"
+  },
+  "typer_narrator": {
+    "gender": "typer"
+  }
+}

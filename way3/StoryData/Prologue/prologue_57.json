@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_57",
+  "background_image": "",
+  "character_id": "기주리",
+  "character_sprite": "Kijuri.png",
+  "dialogue_text": "나는 모르지??? 잘해봐라~ 아니면 이거 읽어봐",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_58.json"
+}

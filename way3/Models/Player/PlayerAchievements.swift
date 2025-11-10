@@ -2,7 +2,6 @@
 import Foundation
 import SwiftUI
 
-@MainActor
 class PlayerAchievements: ObservableObject, Codable {
     @Published var unlockedAchievements: [Achievement] = []
     @Published var achievementProgress: [String: Int] = [:]

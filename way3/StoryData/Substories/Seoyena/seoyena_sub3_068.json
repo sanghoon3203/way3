@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub3_068",
+  "background_image": "bg_rodeo_arena_interior",
+  "character_id": "typer_narrator",
+  "character_sprite": null,
+  "dialogue_text": "강남권에서 이제 나는 서예나의 파트너였다. 빛과 그림자가 공존하는 도시, 새로운 거래가 기다리고 있다.",
+  "dialogue_sound_id": "seoyena_sub3_068",
+  "sound_effect": null,
+  "next_node_id": null
+}

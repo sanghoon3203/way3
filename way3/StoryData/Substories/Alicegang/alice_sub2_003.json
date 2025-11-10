@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_003",
+  "background_image": null,
+  "character_id": "typer_narrator",
+  "character_sprite": null,
+  "dialogue_text": "몽마르뜨 공원으로 향하는 언덕길은 생각보다 가팔랐다. 허브 향과 갓 구운 빵 냄새가 바람을 타고 섞여 왔다.",
+  "dialogue_sound_id": "alice_sub2_003",
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_004"
+}

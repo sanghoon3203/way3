@@ -1,0 +1,144 @@
+{
+  "story_group": "alicegang_substories",
+  "merchant_id": "merchant_Alicegang",
+  "total_nodes": 19,
+  "description": "앨리스 강의 산책 & 간식 서브 스토리 노드",
+
+  "nodes": [
+    {
+      "node_id": "alice_sub1_001",
+      "quest_id": "subquest_alice_01_walk",
+      "title": "산책 제안",
+      "order": 1,
+      "next_node": "alice_sub1_002"
+    },
+    {
+      "node_id": "alice_sub1_002",
+      "quest_id": "subquest_alice_01_walk",
+      "title": "첫 대답",
+      "order": 2,
+      "next_node": "alice_sub1_003"
+    },
+    {
+      "node_id": "alice_sub1_003",
+      "quest_id": "subquest_alice_01_walk",
+      "title": "뽀삐의 환영",
+      "order": 3,
+      "next_node": "alice_sub1_004"
+    },
+    {
+      "node_id": "alice_sub1_004",
+      "quest_id": "subquest_alice_01_walk",
+      "title": "프티 프랑스 거리",
+      "order": 4,
+      "next_node": "alice_sub1_005"
+    },
+    {
+      "node_id": "alice_sub1_005",
+      "quest_id": "subquest_alice_01_walk",
+      "title": "산책 요령",
+      "order": 5,
+      "next_node": "alice_sub1_006"
+    },
+    {
+      "node_id": "alice_sub1_006",
+      "quest_id": "subquest_alice_01_walk",
+      "title": "걸음 맞추기",
+      "order": 6,
+      "next_node": "alice_sub1_007"
+    },
+    {
+      "node_id": "alice_sub1_007",
+      "quest_id": "subquest_alice_01_walk",
+      "title": "다음 산책 약속",
+      "order": 7,
+      "next_node": null
+    },
+
+    {
+      "node_id": "alice_sub2_001",
+      "quest_id": "subquest_alice_02_park",
+      "title": "몽마르뜨 공원 계획",
+      "order": 8,
+      "next_node": "alice_sub2_002"
+    },
+    {
+      "node_id": "alice_sub2_002",
+      "quest_id": "subquest_alice_02_park",
+      "title": "뽀삐의 기대",
+      "order": 9,
+      "next_node": "alice_sub2_003"
+    },
+    {
+      "node_id": "alice_sub2_003",
+      "quest_id": "subquest_alice_02_park",
+      "title": "언덕 오르기",
+      "order": 10,
+      "next_node": "alice_sub2_004"
+    },
+    {
+      "node_id": "alice_sub2_004",
+      "quest_id": "subquest_alice_02_park",
+      "title": "주의 구간",
+      "order": 11,
+      "next_node": "alice_sub2_005"
+    },
+    {
+      "node_id": "alice_sub2_005",
+      "quest_id": "subquest_alice_02_park",
+      "title": "산책 루트 기록",
+      "order": 12,
+      "next_node": "alice_sub2_006"
+    },
+    {
+      "node_id": "alice_sub2_006",
+      "quest_id": "subquest_alice_02_park",
+      "title": "숨 고르는 시간",
+      "order": 13,
+      "next_node": null
+    },
+
+    {
+      "node_id": "alice_sub3_001",
+      "quest_id": "subquest_alice_03_treats",
+      "title": "간식 준비",
+      "order": 14,
+      "next_node": "alice_sub3_002"
+    },
+    {
+      "node_id": "alice_sub3_002",
+      "quest_id": "subquest_alice_03_treats",
+      "title": "재료 수급",
+      "order": 15,
+      "next_node": "alice_sub3_003"
+    },
+    {
+      "node_id": "alice_sub3_003",
+      "quest_id": "subquest_alice_03_treats",
+      "title": "뽀삐의 기대",
+      "order": 16,
+      "next_node": "alice_sub3_004"
+    },
+    {
+      "node_id": "alice_sub3_004",
+      "quest_id": "subquest_alice_03_treats",
+      "title": "허브 볶기",
+      "order": 17,
+      "next_node": "alice_sub3_005"
+    },
+    {
+      "node_id": "alice_sub3_005",
+      "quest_id": "subquest_alice_03_treats",
+      "title": "향기 점검",
+      "order": 18,
+      "next_node": "alice_sub3_006"
+    },
+    {
+      "node_id": "alice_sub3_006",
+      "quest_id": "subquest_alice_03_treats",
+      "title": "완성된 레시피",
+      "order": 19,
+      "next_node": null
+    }
+  ]
+}

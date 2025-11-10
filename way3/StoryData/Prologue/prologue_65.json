@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_65",
+  "background_image": "",
+  "character_id": "",
+  "character_sprite": "",
+  "dialogue_text": "[5. 기본적으로 각 구역의 자원을 보존하기위해서 자원의 교환에 대해서 엄격한 통제를 받고 있습니다. 따라서 상인 허가증이 없다면 교환을 할 수 없습니다.]",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_66"
+}

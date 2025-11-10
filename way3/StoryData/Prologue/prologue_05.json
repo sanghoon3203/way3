@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_05",
+  "background_image": null,
+  "character_id": "player",
+  "character_sprite": null,
+  "dialogue_text": "<s>....????",
+  "dialogue_sound_id": "prologue_05",
+  "sound_effect": "sfx_phone_vibrate_intense.mp3",
+  "next_node_id": "prologue_06"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_61",
+  "background_image": "",
+  "character_id": "",
+  "character_sprite": "",
+  "dialogue_text": "[1. 네오-서울의 기술의 발전 이후 정부의 부실한 운영으로 인해, 디폴트 상태에 놓이게 되자 각 구역은 자치령으로 독립하여 세워진 도시입니다.]",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_62"
+}

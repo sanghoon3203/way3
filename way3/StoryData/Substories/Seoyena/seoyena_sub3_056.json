@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub3_056",
+  "background_image": "bg_heat_coffee_interior",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "바리스타가 손수 내려준 시그니처 블렌드. 한 모금 마시자 라즈베리와 다크 초콜릿 향이 퍼졌다.",
+  "dialogue_sound_id": "seoyena_sub3_056",
+  "sound_effect": "sfx_coffee_pour.mp3",
+  "next_node_id": "seoyena_sub3_057"
+}

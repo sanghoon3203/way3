@@ -104,8 +104,7 @@ struct ShopView: View {
         NavigationView {
             ZStack {
                 // 사이버펑크 배경
-                Color.cyberpunkDarkBg
-                    .ignoresSafeArea()
+                Color.cyberpunkDarkBg.ignoresSafeArea()
 
                 VStack(spacing: 0) {
                     // Custom Tab Selector - 사이버펑크 스타일
@@ -144,6 +143,7 @@ struct ShopView: View {
                 .navigationBarHidden(true)
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $showingItemDetail) {
             if let item = selectedItem {
                 CyberpunkSpecialItemDetailSheet(specialItem: item)

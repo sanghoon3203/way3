@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_037",
+  "background_image": "bg_rodeo_street_morning",
+  "character_id": "typer_narrator",
+  "character_sprite": null,
+  "dialogue_text": "카페 문을 나서며 로데오 거리를 다시 바라봤다. 이번엔 화려함 뒤에 숨은 그림자가 보이는 것 같았다.",
+  "dialogue_sound_id": "chapter_gangnam_037",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_038"
+}

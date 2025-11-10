@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_007",
+  "background_image": "bg_jongno_station_exit",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "“굶어죽을 순 없어… 정보를 찾아야 해.” 누구든 상인 제도를 잘 아는 사람을 만나야 했다.",
+  "dialogue_sound_id": "chapter_gangnam_007",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_008"
+}

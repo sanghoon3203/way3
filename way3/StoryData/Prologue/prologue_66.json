@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_67",
+  "background_image": "",
+  "character_id": "",
+  "character_sprite": "",
+  "dialogue_text": "[6. 상인 허가증에는 단계가 있어 더 높은 희귀도의 자원을 교환하기 위해서는 높은 단계의 허가증이 필요합니다.]",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_68"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_51",
+  "background_image": "",
+  "character_id": "player",
+  "character_sprite": "",
+  "dialogue_text": "나는 여기 평생 살아야하는거에요? ",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_52.json"
+}

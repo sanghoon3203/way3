@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_021",
+  "background_image": "bg_cafe_entrance",
+  "character_id": "typer_narrator",
+  "character_sprite": null,
+  "dialogue_text": "카페 문이 열리며 한 여성이 나왔다. 검은 양복, 매끄러운 헤어스타일, 얼음처럼 차가운 눈빛.",
+  "dialogue_sound_id": "chapter_gangnam_021",
+  "sound_effect": "sfx_door_chime.mp3",
+  "next_node_id": "chapter_gangnam_022"
+}

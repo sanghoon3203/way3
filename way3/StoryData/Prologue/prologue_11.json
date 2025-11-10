@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_11",
+  "background_image": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "*(지하철 출발하는 소리 통과음)*",
+  "dialogue_sound_id": null,
+  "sound_effect": "sfx_subway.mp3",
+  "next_node_id": "prologue_12"
+}

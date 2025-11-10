@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_031",
+  "background_image": "bg_cafe_interior",
+  "character_id": "NPC",
+  "character_sprite": null,
+  "dialogue_text": "“아, 서예나 씨 말씀이군요. 로데오 아레나 점장이자 ‘경매의 여왕’이라 불리는 분이죠.”",
+  "dialogue_sound_id": "chapter_gangnam_031",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_032"
+}

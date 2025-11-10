@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_38",
+  "background_image": "",
+  "character_id": "player",
+  "character_sprite": "",
+  "dialogue_text": "누구세요...?",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_39"
+}

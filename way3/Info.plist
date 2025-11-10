@@ -47,5 +47,9 @@
 	<array>
 		<string>ChosunCentennial_otf.otf</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>현재 위치를 기반으로 주변 상인을 찾기 위해 위치 정보가 필요합니다.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>백그라운드에서도 주변 상인을 추적하기 위해 위치 정보가 필요합니다.</string>
 </dict>
 </plist>

@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_020",
+  "background_image": "bg_rodeo_side_alley",
+  "character_id": "typer_narrator",
+  "character_sprite": null,
+  "dialogue_text": "배고픔이 파도처럼 밀려왔다. 옆 골목에 ‘가로수길 북카페’라는 소박한 간판이 눈에 들어왔다.",
+  "dialogue_sound_id": "chapter_gangnam_020",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_021"
+}

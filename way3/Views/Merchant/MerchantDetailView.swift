@@ -43,145 +43,22 @@ struct UnlockReq: Codable {
 
 enum EpisodeIndexLoader {
     static func load(merchantId: String) -> [EpisodeMeta] {
-        load(identifiers: [merchantId])
-    }
-
-    static func load(for merchant: Merchant) -> [EpisodeMeta] {
-        var identifiers: [String] = []
-        identifiers.append(merchant.id)
-        identifiers.append(merchant.name)
-
-        let romanized = romanizedName(for: merchant.name)
-        identifiers.append(romanized)
-        identifiers.append("merchant_\(romanized)")
-        identifiers.append(merchant.id.lowercased())
-        identifiers.append(merchant.name.replacingOccurrences(of: " ", with: ""))
-
-        return load(identifiers: identifiers)
-    }
-
-    static func load(identifiers rawIdentifiers: [String]) -> [EpisodeMeta] {
-        let expanded = expandIdentifiers(rawIdentifiers)
-
-        for rawId in expanded {
-            if let episodes = loadInternal(rawId: rawId) {
-                return episodes
-            }
-        }
-
-        let candidateFiles = expanded.flatMap {
-            fileCandidates(rawId: $0, normalizedId: normalize(merchantId: $0))
-        }
-
-        if let url = searchInBundle(fileNames: candidateFiles) {
-            do {
-                let data = try Data(contentsOf: url)
-                return try JSONDecoder().decode([EpisodeMeta].self, from: data)
-            } catch {
-                print("EpisodeIndex load error (bundle scan):", error)
-            }
-        }
-
-        return []
-    }
-
-    private static func loadInternal(rawId: String) -> [EpisodeMeta]? {
-        let normalized = normalize(merchantId: rawId)
-        for directory in directoryCandidates(for: rawId) {
-            for fileName in fileCandidates(rawId: rawId, normalizedId: normalized) {
-                if let path = Bundle.main.path(forResource: fileName, ofType: "json", inDirectory: directory) {
-                    do {
-                        let data = try Data(contentsOf: URL(fileURLWithPath: path))
-                        return try JSONDecoder().decode([EpisodeMeta].self, from: data)
-                    } catch {
-                        print("EpisodeIndex load error:", error)
-                        return nil
-                    }
+        for directory in directoryCandidates(for: merchantId) {
+            if let path = Bundle.main.path(
+                forResource: "episodes",
+                ofType: "json",
+                inDirectory: directory
+            ) {
+                do {
+                    let data = try Data(contentsOf: URL(fileURLWithPath: path))
+                    return try JSONDecoder().decode([EpisodeMeta].self, from: data)
+                } catch {
+                    print("EpisodeIndex load error:", error)
+                    return []
                 }
             }
         }
-        return nil
-    }
-
-    private static func expandIdentifiers(_ identifiers: [String]) -> [String] {
-        var results: [String] = []
-        var seen = Set<String>()
-
-        func append(_ value: String) {
-            let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !trimmed.isEmpty else { return }
-            if seen.insert(trimmed).inserted {
-                results.append(trimmed)
-            }
-        }
-
-        for raw in identifiers {
-            append(raw)
-
-            let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-            append(trimmed)
-
-            let noSpaces = trimmed.replacingOccurrences(of: " ", with: "")
-            append(noSpaces)
-
-            if trimmed.lowercased().hasPrefix("merchant_") {
-                append(String(trimmed.dropFirst("merchant_".count)))
-            }
-            if trimmed.lowercased().hasPrefix("Merchant_".lowercased()) {
-                append(String(trimmed.dropFirst("Merchant_".count)))
-            }
-
-            append(noSpaces.lowercased())
-            append(noSpaces.uppercased())
-            append(noSpaces.capitalized)
-            append("merchant_\(noSpaces.lowercased())")
-            append("Merchant_\(noSpaces.capitalized)")
-
-            let romanized = romanizedName(for: trimmed)
-            append(romanized)
-            append("merchant_\(romanized)")
-            append("Merchant_\(romanized.capitalized)")
-        }
-
-        return results
-    }
-
-    private static func normalize(merchantId: String) -> String {
-        return merchantId
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .replacingOccurrences(of: "merchant_", with: "")
-            .replacingOccurrences(of: " ", with: "")
-            .lowercased()
-    }
-
-    private static func fileCandidates(rawId: String, normalizedId: String) -> [String] {
-        var names: [String] = ["episodes"]
-        let id = normalizedId
-        let capitalized = id.prefix(1).uppercased() + id.dropFirst()
-        let trimmedRaw = rawId.replacingOccurrences(of: " ", with: "")
-        let rawCapitalized = trimmedRaw.prefix(1).uppercased() + trimmedRaw.dropFirst()
-        let mixedCase = "merchant_\(capitalized)"
-
-        let variants = [
-            "episodes_\(id)",
-            "episodes_\(capitalized)",
-            "\(id)_episodes",
-            "\(capitalized)_episodes",
-            "episodes_\(trimmedRaw)",
-            "episodes_\(rawCapitalized)",
-            "\(trimmedRaw)_episodes",
-            "\(rawCapitalized)_episodes",
-            "episodes_\(mixedCase)",
-            "\(mixedCase)_episodes"
-        ]
-
-        for candidate in variants {
-            if !names.contains(candidate) {
-                names.append(candidate)
-            }
-        }
-
-        return names
+        return []
     }
 
     private static func directoryCandidates(for merchantId: String) -> [String] {
@@ -192,21 +69,8 @@ enum EpisodeIndexLoader {
         let withoutPrefix = normalized.replacingOccurrences(of: "merchant_", with: "")
         let lower = withoutPrefix.lowercased()
         let capitalized = lower.capitalized
-        let merchantLower = "merchant_\(lower)"
-        let merchantCapitalized = "merchant_\(capitalized)"
-        let merchantPascal = "Merchant_\(capitalized)"
 
-        let rawCandidates = [
-            normalized,
-            withoutPrefix,
-            lower,
-            capitalized,
-            merchantLower,
-            merchantCapitalized,
-            merchantPascal
-        ]
-
-        let uniqueIds = rawCandidates.reduce(into: [String]()) { acc, value in
+        let uniqueIds = [normalized, withoutPrefix, lower, capitalized].reduce(into: [String]()) { acc, value in
             if !value.isEmpty && !acc.contains(value) {
                 acc.append(value)
             }
@@ -217,57 +81,6 @@ enum EpisodeIndexLoader {
         }
 
         return candidates
-    }
-
-    private static func searchInBundle(fileNames: [String]) -> URL? {
-        guard let resourceURL = Bundle.main.resourceURL else { return nil }
-        let fm = FileManager.default
-
-        guard let enumerator = fm.enumerator(
-            at: resourceURL,
-            includingPropertiesForKeys: nil,
-            options: [.skipsHiddenFiles]
-        ) else {
-            return nil
-        }
-
-        let lowerFileNames = fileNames.map { $0.lowercased() + ".json" }
-
-        for case let url as URL in enumerator {
-            guard url.pathExtension.lowercased() == "json" else { continue }
-            let candidate = url.deletingPathExtension().lastPathComponent.lowercased() + ".json"
-            if lowerFileNames.contains(candidate) {
-                return url
-            }
-        }
-        return nil
-    }
-
-    private static func romanizedName(for name: String) -> String {
-        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        let key = trimmed.replacingOccurrences(of: " ", with: "")
-
-        let mapping: [String: String] = [
-            "서예나": "seoyena",
-            "서 예나": "seoyena",
-            "앨리스강": "alicegang",
-            "알리스강": "alicegang",
-            "애니박": "anipark",
-            "카타리나최": "catarinachoi",
-            "카타리나 최": "catarinachoi",
-            "진백호": "jinbaekho",
-            "주블수": "jubulsu",
-            "주불수": "jubulsu",
-            "기주리": "kijuri",
-            "김세휘": "kimsehwui",
-            "마리": "mari"
-        ]
-
-        if let mapped = mapping[trimmed] ?? mapping[key] {
-            return mapped
-        }
-
-        return key.lowercased()
     }
 }
 
@@ -2153,11 +1966,11 @@ extension MerchantDetailView {
             QuestManager.shared.unlockSubQuest(questId)
         }
         if let storyPiece = episode.post_reward_story_piece,
-           !ProgressManager.shared.progress.hasStoryPiece(storyPiece) {
+           !ProgressManager.shared.hasStoryPiece(storyPiece) {
             ProgressManager.shared.collectStoryPiece(storyPiece)
         }
         if let keyItem = episode.post_reward_key_item,
-           !ProgressManager.shared.progress.hasKeyItem(keyItem) {
+           !ProgressManager.shared.hasKeyItem(keyItem) {
             ProgressManager.shared.acquireKeyItem(keyItem)
         }
 
@@ -2263,7 +2076,7 @@ struct EpisodePickerView: View {
         .padding(.horizontal, 16)
         .onAppear {
             // 🔐 잠금 로직 훅 (나중에 gameManager 상태에 맞게 교체)
-            let all = EpisodeIndexLoader.load(for: merchant)
+            let all = EpisodeIndexLoader.load(merchantId: merchant.id)
             episodes = all.sorted { $0.episode_id < $1.episode_id }
         }
     }
@@ -2293,12 +2106,12 @@ struct EpisodePickerView: View {
                 }
             case .story_piece_owned:
                 guard let pieceId = requirement.story_piece_id else { continue }
-                if !progressManager.progress.hasStoryPiece(pieceId) {
+                if !progressManager.hasStoryPiece(pieceId) {
                     return false
                 }
             case .key_item_owned:
                 guard let keyItemId = requirement.key_item_id else { continue }
-                if !progressManager.progress.hasKeyItem(keyItemId) {
+                if !progressManager.hasKeyItem(keyItemId) {
                     return false
                 }
             }

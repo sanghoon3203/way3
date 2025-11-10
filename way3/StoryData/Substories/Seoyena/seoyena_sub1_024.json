@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub1_024",
+  "background_image": "bg_seoyena_office",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "\"돈도 필요하지만… 그게 전부는 아니에요. 이 세계에서 살아남기 위해서요.\"",
+  "dialogue_sound_id": "seoyena_sub1_024",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub1_025"
+}

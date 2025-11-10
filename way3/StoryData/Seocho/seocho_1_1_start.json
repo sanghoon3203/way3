@@ -1,0 +1,10 @@
+{
+  "node_id": "seocho_1_1_start",
+  "background_image": "bg_subway_platform",
+  "character_id": "typer_narrator",
+  "character_sprite": null,
+  "dialogue_text": "다음 날 아침, 가이드북을 다시 펼쳤다. 목적지는 서초구 서래 가든 타운. 프랑스풍 마을이라고 적혀 있었다.",
+  "dialogue_sound_id": "seocho_1_1_start",
+  "sound_effect": "sfx_train_arrival.mp3",
+  "next_node_id": "seocho_1_1_002"
+}

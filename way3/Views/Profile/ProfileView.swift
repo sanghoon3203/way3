@@ -20,7 +20,7 @@ struct ProfileView: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Group {
                 switch gameManager.profileViewState {
                 case .loading:
@@ -46,9 +46,10 @@ struct ProfileView: View {
                     )
                 }
             }
-            .background(Color.cyberpunkDarkBg)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.cyberpunkDarkBg.ignoresSafeArea())
             .navigationTitle("")
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
             .cyberpunkStatusBar(title: "OPERATIVE_PROFILE", status: "ONLINE")
         }
         .onAppear {

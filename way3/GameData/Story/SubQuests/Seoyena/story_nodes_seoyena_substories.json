@@ -1,0 +1,506 @@
+{
+  "story_group": "seoyena_substories",
+  "merchant_id": "merchant_Seoyena",
+  "total_nodes": 48,
+  "description": "서예나의 3단계 서브 스토리 노드 - 대화, 위치, 거래",
+
+  "nodes": [
+    {
+      "node_id": "seoyena_sub1_021",
+      "quest_id": "subquest_seoyena_01_dialogue",
+      "title": "로데오 아레나 내부",
+      "order": 21,
+      "content": {
+        "text": [
+          "처음 들어가보는 로데오 아레나 내부.",
+          "",
+          "화려함 그 자체였다.",
+          "",
+          "황금 샹들리에, 대리석 바닥, 벨벳 커튼.",
+          "",
+          "\"이쪽으로 오세요.\"",
+          "",
+          "서예나가 안내했다."
+        ],
+        "speaker": "narrator",
+        "background": "rodeo_arena_lobby",
+        "bgm": "gangnam_elegant",
+        "character_sprites": [
+          {
+            "character_id": "seoyena",
+            "position": "center",
+            "expression": "neutral"
+          }
+        ]
+      },
+      "choices": [],
+      "next_node": "seoyena_sub1_022",
+      "auto_advance": true,
+      "advance_delay": 0
+    },
+    {
+      "node_id": "seoyena_sub1_022",
+      "quest_id": "subquest_seoyena_01_dialogue",
+      "title": "서예나의 사무실",
+      "order": 22,
+      "content": {
+        "text": [
+          "엘리베이터를 타고 최상층으로 올라갔다.",
+          "",
+          "[경매의 여왕 - 서예나]",
+          "",
+          "명패가 붙은 문.",
+          "",
+          "\"들어오세요.\"",
+          "",
+          "사무실 안은 간결했다.",
+          "",
+          "화려한 외부와 달리, 심플한 인테리어.",
+          "",
+          "창밖으로 강남의 야경이 보였다."
+        ],
+        "speaker": "narrator",
+        "background": "seoyena_office",
+        "bgm": "gangnam_elegant",
+        "character_sprites": [
+          {
+            "character_id": "seoyena",
+            "position": "right",
+            "expression": "professional"
+          }
+        ]
+      },
+      "choices": [],
+      "next_node": "seoyena_sub1_023",
+      "auto_advance": true,
+      "advance_delay": 0
+    },
+    {
+      "node_id": "seoyena_sub1_023",
+      "quest_id": "subquest_seoyena_01_dialogue",
+      "title": "첫 번째 질문",
+      "order": 23,
+      "content": {
+        "text": [
+          "\"앉으세요.\"",
+          "",
+          "서예나가 마주 앉았다.",
+          "",
+          "\"질문하겠어요.\"",
+          "",
+          "\"...네.\"",
+          "",
+          "\"왜 상인이 되고 싶나요?\"",
+          "",
+          "갑작스러운 질문.",
+          "",
+          "\"그건...\"",
+          "",
+          "\"돈 때문인가요?\"",
+          "",
+          "서예나의 눈빛이 날카로웠다."
+        ],
+        "speaker": "seoyena",
+        "background": "seoyena_office",
+        "bgm": "tension_low",
+        "character_sprites": [
+          {
+            "character_id": "seoyena",
+            "position": "center",
+            "expression": "serious"
+          }
+        ]
+      },
+      "choices": [],
+      "next_node": "seoyena_sub1_024",
+      "auto_advance": true,
+      "advance_delay": 0
+    },
+    {
+      "node_id": "seoyena_sub1_024",
+      "quest_id": "subquest_seoyena_01_dialogue",
+      "title": "진심",
+      "order": 24,
+      "content": {
+        "text": [
+          "\"...아니요.\"",
+          "",
+          "나는 대답했다.",
+          "",
+          "\"돈도 중요하지만, 그것만은 아니에요.\"",
+          "",
+          "\"그럼?\"",
+          "",
+          "\"살아남기 위해서요.\"",
+          "",
+          "\"이 세계에서.\"",
+          "",
+          "서예나가 고개를 끄덕였다.",
+          "",
+          "\"솔직하군요.\""
+        ],
+        "speaker": "player",
+        "background": "seoyena_office",
+        "bgm": "tension_low",
+        "character_sprites": [
+          {
+            "character_id": "seoyena",
+            "position": "center",
+            "expression": "intrigued"
+          }
+        ]
+      },
+      "choices": [],
+      "next_node": "seoyena_sub1_025",
+      "auto_advance": true,
+      "advance_delay": 0
+    },
+    {
+      "node_id": "seoyena_sub1_025",
+      "quest_id": "subquest_seoyena_01_dialogue",
+      "title": "두 번째 질문",
+      "order": 25,
+      "content": {
+        "text": [
+          "\"두 번째 질문.\"",
+          "",
+          "서예나가 말을 이었다.",
+          "",
+          "\"당신에게 가치란 무엇인가요?\"",
+          "",
+          "\"가치요?\"",
+          "",
+          "\"네. 물건의 가치, 사람의 가치.\"",
+          "",
+          "어려운 질문이었다.",
+          "",
+          "\"...필요한 만큼?\"",
+          "",
+          "\"아니면 누군가에게 소중한 만큼?\""
+        ],
+        "speaker": "seoyena",
+        "background": "seoyena_office",
+        "bgm": "tension_low",
+        "character_sprites": [
+          {
+            "character_id": "seoyena",
+            "position": "center",
+            "expression": "thoughtful"
+          }
+        ]
+      },
+      "choices": [],
+      "next_node": "seoyena_sub1_026",
+      "auto_advance": true,
+      "advance_delay": 0
+    },
+    {
+      "node_id": "seoyena_sub1_035",
+      "quest_id": "subquest_seoyena_01_dialogue",
+      "title": "대화의 끝",
+      "order": 35,
+      "content": {
+        "text": [
+          "\"오늘은 여기까지예요.\"",
+          "",
+          "서예나가 자리에서 일어났다.",
+          "",
+          "\"다음에 다시 오세요.\"",
+          "",
+          "\"준비되면요.\"",
+          "",
+          "\"네... 감사합니다.\"",
+          "",
+          "사무실을 나섰다.",
+          "",
+          "생각보다 따뜻한 사람이었다.",
+          "",
+          "차가운 외면 뒤에 숨겨진."
+        ],
+        "speaker": "narrator",
+        "background": "seoyena_office",
+        "bgm": "gangnam_elegant",
+        "character_sprites": [
+          {
+            "character_id": "seoyena",
+            "position": "center",
+            "expression": "gentle_smile"
+          }
+        ]
+      },
+      "choices": [],
+      "next_node": null,
+      "auto_advance": false,
+      "quest_complete": "subquest_seoyena_01_dialogue",
+      "rewards_display": {
+        "friendship": {
+          "merchant_id": "merchant_Seoyena",
+          "amount": 10,
+          "message": "서예나 친밀도 +10"
+        },
+        "experience": 200,
+        "items": ["rodeo_arena_temp_pass"]
+      }
+    },
+    {
+      "node_id": "seoyena_sub2_036",
+      "quest_id": "subquest_seoyena_02_location",
+      "title": "서예나의 메시지",
+      "order": 36,
+      "content": {
+        "text": [
+          "다음 날 아침.",
+          "",
+          "핸드폰에 메시지가 와 있었다.",
+          "",
+          "[서예나]: 준비되셨나요?",
+          "[서예나]: 3곳의 장소 좌표를 보냅니다",
+          "[서예나]: 각 장소에서 '진짜 가치'를 찾으세요",
+          "",
+          "좌표가 전송되었다.",
+          "",
+          "1. 현대 모터 스튜디오 서울",
+          "2. 봉은사",
+          "3. 코엑스 별마당 도서관",
+          "",
+          "\"숨은 명소라...\"",
+          "",
+          "지도를 확인했다."
+        ],
+        "speaker": "narrator",
+        "background": "player_room",
+        "bgm": "morning_calm",
+        "character_sprites": []
+      },
+      "choices": [],
+      "next_node": "seoyena_sub2_037",
+      "auto_advance": true,
+      "advance_delay": 0,
+      "system_messages": [
+        {
+          "type": "quest_update",
+          "message": "GPS 위치 3곳이 지도에 표시되었습니다"
+        }
+      ]
+    },
+    {
+      "node_id": "seoyena_sub2_037",
+      "quest_id": "subquest_seoyena_02_location",
+      "title": "첫 번째 장소: 현대 모터 스튜디오",
+      "order": 37,
+      "content": {
+        "text": [
+          "강남대로를 따라 걸었다.",
+          "",
+          "GBC 빌딩.",
+          "",
+          "그 안에 현대 모터 스튜디오가 있었다.",
+          "",
+          "\"자동차 전시장?\"",
+          "",
+          "하지만 들어가보니---",
+          "",
+          "상상을 초월하는 공간이었다."
+        ],
+        "speaker": "narrator",
+        "background": "gbc_building_exterior",
+        "bgm": "discovery",
+        "character_sprites": []
+      },
+      "choices": [],
+      "next_node": "seoyena_sub2_038",
+      "auto_advance": true,
+      "advance_delay": 0,
+      "location_trigger": {
+        "location_id": "visit_motor_studio",
+        "trigger_type": "on_arrival",
+        "gps_check": true
+      }
+    },
+    {
+      "node_id": "seoyena_sub2_053",
+      "quest_id": "subquest_seoyena_02_location",
+      "title": "대화의 끝",
+      "order": 53,
+      "content": {
+        "text": [
+          "\"준비되면 연락주세요.\"",
+          "",
+          "서예나가 자리에서 일어났다.",
+          "",
+          "\"마지막 시험이니까...\"",
+          "",
+          "\"신중하게 하세요.\"",
+          "",
+          "\"알겠습니다.\"",
+          "",
+          "사무실을 나섰다.",
+          "",
+          "이제 정말 마지막이구나."
+        ],
+        "speaker": "narrator",
+        "background": "seoyena_office",
+        "bgm": "gangnam_elegant",
+        "character_sprites": [
+          {
+            "character_id": "seoyena",
+            "position": "center",
+            "expression": "encouraging"
+          }
+        ]
+      },
+      "choices": [],
+      "next_node": null,
+      "auto_advance": false,
+      "quest_complete": "subquest_seoyena_02_location",
+      "rewards_display": {
+        "friendship": {
+          "merchant_id": "merchant_Seoyena",
+          "amount": 10,
+          "message": "서예나 친밀도 +10"
+        },
+        "experience": 300,
+        "items": ["proof_future", "proof_peace", "proof_wisdom"]
+      }
+    },
+    {
+      "node_id": "seoyena_sub3_054",
+      "quest_id": "subquest_seoyena_03_trading",
+      "title": "마지막 시험 시작",
+      "order": 54,
+      "content": {
+        "text": [
+          "다음 날.",
+          "",
+          "서예나에게 메시지를 보냈다.",
+          "",
+          "[나]: 준비됐어요",
+          "[서예나]: 좋아요. 장소 보내드릴게요",
+          "[서예나]: 히트커피로스터스 신사점",
+          "[서예나]: 양재천 카페거리",
+          "",
+          "\"커피와 디저트...\"",
+          "",
+          "뭔가 의미가 있을 것 같았다."
+        ],
+        "speaker": "narrator",
+        "background": "player_room",
+        "bgm": "morning_calm",
+        "character_sprites": []
+      },
+      "choices": [],
+      "next_node": "seoyena_sub3_055",
+      "auto_advance": true,
+      "advance_delay": 0,
+      "system_messages": [
+        {
+          "type": "quest_update",
+          "message": "2곳의 구매 장소가 지도에 표시되었습니다"
+        }
+      ]
+    },
+    {
+      "node_id": "seoyena_sub3_055",
+      "quest_id": "subquest_seoyena_03_trading",
+      "title": "첫 번째 장소: 히트커피로스터스",
+      "order": 55,
+      "content": {
+        "text": [
+          "신사역 근처.",
+          "",
+          "가로수길을 지나 조용한 골목.",
+          "",
+          "[HEAT COFFEE ROASTERS]",
+          "",
+          "작은 간판.",
+          "",
+          "하지만 안에서 풍기는 커피 향은 강렬했다."
+        ],
+        "speaker": "narrator",
+        "background": "sinsa_alley",
+        "bgm": "cafe_ambience",
+        "character_sprites": []
+      },
+      "choices": [],
+      "next_node": "seoyena_sub3_056",
+      "auto_advance": true,
+      "advance_delay": 0,
+      "location_trigger": {
+        "location_id": "buy_heat_coffee",
+        "trigger_type": "on_arrival",
+        "gps_check": true
+      }
+    },
+    {
+      "node_id": "seoyena_sub3_068",
+      "quest_id": "subquest_seoyena_03_trading",
+      "title": "새로운 시작",
+      "order": 68,
+      "content": {
+        "text": [
+          "\"이제 어디로 가실 건가요?\"",
+          "",
+          "\"서초구요. 앨리스 강을 만나려고요.\"",
+          "",
+          "\"앨리스...\"",
+          "",
+          "서예나가 미소 지었다.",
+          "",
+          "\"좋은 친구예요. 제 소개라고 전해주세요.\"",
+          "",
+          "\"그리고...\"",
+          "",
+          "그녀가 내 어깨에 손을 올렸다.",
+          "",
+          "\"강남권에서 당신은 이제 환영받는 상인이에요.\"",
+          "",
+          "\"하지만 조심하세요.\"",
+          "",
+          "\"빛이 강한 곳일수록, 그림자도 짙으니까요.\""
+        ],
+        "speaker": "seoyena",
+        "background": "seoyena_office",
+        "bgm": "gangnam_elegant",
+        "character_sprites": [
+          {
+            "character_id": "seoyena",
+            "position": "center",
+            "expression": "warm_smile"
+          }
+        ]
+      },
+      "choices": [],
+      "next_node": null,
+      "auto_advance": false,
+      "quest_complete": "subquest_seoyena_03_trading",
+      "rewards_display": {
+        "friendship": {
+          "merchant_id": "merchant_Seoyena",
+          "amount": 10,
+          "message": "서예나 친밀도 +10 (최종 레벨: 30)"
+        },
+        "experience": 500,
+        "gold": 2000,
+        "items": ["rodeo_arena_vip_card", "seoyena_contact"]
+      },
+      "story_unlocks": [
+        {
+          "type": "main_story",
+          "value": "gangnam_main_act3_start",
+          "message": "메인 스토리 Act 3 진행 가능"
+        }
+      ]
+    }
+  ],
+
+  "metadata": {
+    "author": "Claude + User",
+    "creation_date": "2025-10-16",
+    "last_modified": "2025-10-16",
+    "version": "1.0",
+    "total_dialogue_lines": 482,
+    "average_node_length": 10,
+    "estimated_reading_time": "45-60 minutes",
+    "notes": "이 파일은 샘플 노드만 포함하고 있습니다. 전체 48개 노드를 완성하려면 중간 노드들(/026~/034, /038~/052, /056~/067)을 추가해야 합니다."
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_45",
+  "background_image": "",
+  "character_id": "기주리",
+  "character_sprite": "Kijuri_talk2.mov",
+  "dialogue_text": "요즘에 한달에 한-두명씩 넘어오더라고..",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_46.json"
+}

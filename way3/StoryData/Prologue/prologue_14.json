@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_14",
+  "background_image": null,
+  "character_id": "NPC",
+  "character_sprite": "",
+  "dialogue_text": "<t>[현재 지역 공간 불안정성 상승중]",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "prologue_15"
+}

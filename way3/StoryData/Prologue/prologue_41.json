@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_41",
+  "background_image": "",
+  "character_id": "player",
+  "character_sprite": "",
+  "dialogue_text": "에 그게 무슨소리에요?",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_42.json"
+}

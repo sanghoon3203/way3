@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub3_003",
+  "background_image": null,
+  "character_id": "Poppy",
+  "character_sprite": null,
+  "dialogue_text": "\"왈왈! 달콤한 냄새!\" 뽀삐가 주방 문 앞에서 콧노래를 흥얼거렸다.",
+  "dialogue_sound_id": "alice_sub3_003",
+  "sound_effect": "sfx_dog_bark_soft.wav",
+  "next_node_id": "alice_sub3_004"
+}

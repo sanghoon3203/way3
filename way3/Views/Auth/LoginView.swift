@@ -89,15 +89,11 @@ extension LoginView {
     // MARK: - Logo Component
     var LogoComponent: some View {
         VStack(spacing: 12) {
-            Text("네오-서울")
-                .font(.chosunOrFallback(size: 32, weight: .bold))
-                .foregroundColor(.white)
-                .shadow(color: .cyan.opacity(0.5), radius: 8, x: 0, y: 0)
-
-            Text("트레이딩 게임")
-                .font(.chosunOrFallback(size: 16, weight: .medium))
-                .foregroundColor(.cyan)
-                .shadow(color: .cyan.opacity(0.3), radius: 5, x: 0, y: 0)
+            Image("title")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 240)
+                .shadow(color: .cyan.opacity(0.45), radius: 10, x: 0, y: 0)
         }
         .padding(.bottom, 20)
     }

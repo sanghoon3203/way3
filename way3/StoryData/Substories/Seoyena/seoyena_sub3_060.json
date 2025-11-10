@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub3_060",
+  "background_image": "bg_yangjaecheon_cafe",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "작은 카페 '숨'을 골랐다. 진열대 위에 놓인 티라미수가 눈길을 끌었다.",
+  "dialogue_sound_id": "seoyena_sub3_060",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub3_061"
+}

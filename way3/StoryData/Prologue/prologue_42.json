@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_42",
+  "background_image": "bg_neoseoul_subway.png",
+  "character_id": "기주리",
+  "character_sprite": "Kijuri_talk1.mov",
+  "dialogue_text": "<s>음... <n>다 말할려면 귀찮긴한데 말해줄게, \n 너는 요컨데 커넥트:서울이라는 게임 다운받았을거야 맞지?",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_43.json"
+}

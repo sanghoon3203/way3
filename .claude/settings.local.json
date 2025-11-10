@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for:*)",
+      "Bash(if [ -f \"Kijuri.png\" ])",
+      "Bash(then mv \"Kijuri.png\" \"Merchant_kijuri.png\")",
+      "Bash(else echo \"File not found or already renamed\")",
+      "Bash(fi)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

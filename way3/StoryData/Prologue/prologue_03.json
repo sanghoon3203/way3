@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_03",
+  "background_image": null,
+  "character_id": "player",
+  "character_sprite": null,
+  "dialogue_text": "<s>음냐...흠냐...",
+  "dialogue_sound_id": "prologue_03",
+  "sound_effect": "sfx_phone_notification.mp3",
+  "next_node_id": "prologue_04"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_029",
+  "background_image": "bg_cafe_interior",
+  "character_id": "NPC",
+  "character_sprite": null,
+  "dialogue_text": "“당연하죠. 정식 허가증 없으면 못 들어갑니다. 상인회 시험을 통과해야 해요.” 그의 말투가 진지해졌다.",
+  "dialogue_sound_id": "chapter_gangnam_029",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_030"
+}

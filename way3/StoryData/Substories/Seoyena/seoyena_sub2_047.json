@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub2_047",
+  "background_image": "bg_coex_library",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "지혜의 증표는 작은 수정 조각이었다. 빛이 프리즘처럼 퍼져 마음이 환해졌다.",
+  "dialogue_sound_id": "seoyena_sub2_047",
+  "sound_effect": "sfx_item_present.mp3",
+  "next_node_id": "seoyena_sub2_048"
+}

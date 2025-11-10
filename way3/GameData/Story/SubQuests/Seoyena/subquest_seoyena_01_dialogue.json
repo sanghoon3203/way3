@@ -1,0 +1,68 @@
+{
+  "quest_id": "subquest_seoyena_01_dialogue",
+  "quest_type": "dialogue",
+  "title": "서예나의 심문 - 상인의 마음",
+  "description": "로데오 아레나의 서예나와 대화를 나누고 상인으로서의 가치관을 증명하세요.",
+  "merchant_id": "merchant_Seoyena",
+  "region": "gangnam",
+  "district": "gangnam_gu",
+
+  "unlock_conditions": [
+    {
+      "type": "main_story",
+      "value": "gangnam_main_020_completed"
+    }
+  ],
+
+  "objectives": [
+    {
+      "objective_id": "dialogue_01",
+      "type": "story_completion",
+      "description": "서예나의 질문에 답하기",
+      "story_node_start": "seoyena_sub1_021",
+      "story_node_end": "seoyena_sub1_035",
+      "required": true
+    }
+  ],
+
+  "rewards": {
+    "friendship": {
+      "merchant_id": "merchant_Seoyena",
+      "amount": 10,
+      "final_level": 10
+    },
+    "experience": 200,
+    "items": [
+      {
+        "item_id": "rodeo_arena_temp_pass",
+        "item_name": "로데오 아레나 임시 출입증",
+        "quantity": 1,
+        "description": "로데오 아레나를 자유롭게 드나들 수 있는 임시 출입증"
+      }
+    ]
+  },
+
+  "post_completion": {
+    "unlock_quests": [
+      "subquest_seoyena_02_location"
+    ],
+    "dialogue_changes": {
+      "merchant_Seoyena": {
+        "greeting": "다시 오셨군요. 준비되셨나요?",
+        "farewell": "다음 시험을 기대하겠어요."
+      }
+    }
+  },
+
+  "time_limit": null,
+  "can_abandon": false,
+  "quest_giver_location": {
+    "location_name": "로데오 아레나 - 서예나 사무실",
+    "coordinates": {
+      "latitude": 37.5279,
+      "longitude": 127.0396
+    }
+  },
+
+  "story_summary": "서예나의 사무실에서 세 가지 핵심 질문에 답하며 상인으로서의 마음가짐을 증명합니다. 왜 상인이 되고 싶은지, 가치란 무엇인지, 그리고 이익과 신뢰 중 무엇을 선택할 것인지에 대한 진솔한 대화를 나눕니다."
+}

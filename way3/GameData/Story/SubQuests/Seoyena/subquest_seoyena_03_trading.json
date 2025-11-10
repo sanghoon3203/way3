@@ -1,0 +1,218 @@
+{
+  "quest_id": "subquest_seoyena_03_trading",
+  "quest_type": "trading",
+  "title": "강남의 맛을 찾아서",
+  "description": "강남의 특별한 맛집에서 진짜 가치를 지닌 아이템을 구매하고 영수증으로 증명하세요.",
+  "merchant_id": "merchant_Seoyena",
+  "region": "gangnam",
+  "district": "gangnam_gu",
+
+  "unlock_conditions": [
+    {
+      "type": "subquest",
+      "value": "subquest_seoyena_02_location"
+    }
+  ],
+
+  "objectives": [
+    {
+      "objective_id": "buy_heat_coffee",
+      "type": "trading_receipt",
+      "description": "히트커피로스터스 신사에서 시그니처 원두 구매",
+      "location": {
+        "name": "히트커피로스터스 신사점",
+        "address": "서울특별시 강남구 논현로153길 24",
+        "coordinates": {
+          "latitude": 37.5193,
+          "longitude": 127.0236
+        },
+        "radius": 50
+      },
+      "required_purchase": {
+        "shop_name": "히트커피로스터스",
+        "shop_name_variations": [
+          "HEAT COFFEE ROASTERS",
+          "히트커피",
+          "히트커피로스터스 신사점"
+        ],
+        "item_name": "시그니처 원두",
+        "item_name_variations": [
+          "시그니처 블렌드",
+          "원두",
+          "커피"
+        ],
+        "min_price": 20000,
+        "expected_price": 25000
+      },
+      "ocr_verification": {
+        "required_fields": [
+          "shop_name",
+          "item_name",
+          "price",
+          "date"
+        ],
+        "date_validation": "quest_active_period"
+      },
+      "story_node_start": "seoyena_sub3_055",
+      "story_node_end": "seoyena_sub3_058",
+      "order": 1,
+      "required": true
+    },
+    {
+      "objective_id": "buy_yangjaecheon_dessert",
+      "type": "trading_receipt",
+      "description": "양재천 카페거리에서 디저트 구매",
+      "location": {
+        "name": "양재천 카페거리",
+        "address": "서울특별시 서초구 매헌로 16 일대",
+        "coordinates": {
+          "latitude": 37.4722,
+          "longitude": 127.0347
+        },
+        "radius": 500
+      },
+      "required_purchase": {
+        "shop_name": "자유 선택",
+        "shop_name_note": "플레이어가 직접 카페를 선택할 수 있습니다",
+        "item_name": "디저트",
+        "item_name_variations": [
+          "티라미수",
+          "케이크",
+          "마카롱",
+          "타르트",
+          "디저트"
+        ],
+        "min_price": 5000,
+        "expected_price": 8000
+      },
+      "ocr_verification": {
+        "required_fields": [
+          "shop_name",
+          "item_name",
+          "price",
+          "date"
+        ],
+        "date_validation": "quest_active_period",
+        "location_validation": {
+          "method": "gps_proximity",
+          "radius": 500
+        }
+      },
+      "story_node_start": "seoyena_sub3_059",
+      "story_node_end": "seoyena_sub3_063",
+      "order": 2,
+      "required": true
+    },
+    {
+      "objective_id": "final_report",
+      "type": "story_completion",
+      "description": "서예나에게 최종 보고",
+      "story_node_start": "seoyena_sub3_064",
+      "story_node_end": "seoyena_sub3_068",
+      "order": 3,
+      "required": true
+    }
+  ],
+
+  "rewards": {
+    "friendship": {
+      "merchant_id": "merchant_Seoyena",
+      "amount": 10,
+      "final_level": 30
+    },
+    "experience": 500,
+    "gold": 2000,
+    "items": [
+      {
+        "item_id": "rodeo_arena_vip_card",
+        "item_name": "로데오 아레나 VIP 카드",
+        "quantity": 1,
+        "description": "로데오 아레나의 모든 경매에 참여할 수 있는 특별 카드",
+        "rarity": "legendary"
+      },
+      {
+        "item_id": "seoyena_contact",
+        "item_name": "서예나 개인 연락처",
+        "quantity": 1,
+        "description": "서예나의 개인 연락처와 네트워크 이용 권한",
+        "rarity": "unique"
+      }
+    ]
+  },
+
+  "post_completion": {
+    "unlock_story": "gangnam_main_act3_start",
+    "dialogue_changes": {
+      "merchant_Seoyena": {
+        "greeting": "당신은 이제 저의 파트너예요. 언제든 연락하세요.",
+        "farewell": "강남권에서 조심하세요. 빛이 강한 곳일수록 그림자도 짙으니까요.",
+        "relationship_level": "partner"
+      }
+    },
+    "system_unlocks": [
+      "rodeo_arena_vip_access",
+      "seoyena_network_access",
+      "auction_participation_enabled"
+    ]
+  },
+
+  "time_limit": 43200,
+  "time_limit_description": "12시간",
+  "can_abandon": false,
+  "quest_giver_location": {
+    "location_name": "로데오 아레나 - 서예나 사무실",
+    "coordinates": {
+      "latitude": 37.5279,
+      "longitude": 127.0396
+    }
+  },
+
+  "story_summary": "서예나의 마지막 시험. 히트커피로스터스에서 품질의 가치를, 양재천 카페거리에서 정성의 가치를 직접 경험하며 진짜 가치를 판단하는 눈을 증명합니다. 세 가지 시험을 모두 통과하면 서예나의 완전한 신뢰를 얻게 됩니다.",
+
+  "hints": [
+    "히트커피로스터스는 신사역 근처 가로수길 골목에 있습니다.",
+    "양재천 카페거리에는 다양한 카페가 있습니다. 직접 선택하세요.",
+    "영수증은 퀘스트 활성화 이후에 구매한 것만 유효합니다.",
+    "OCR 인증을 위해 영수증을 선명하게 촬영하세요."
+  ],
+
+  "ocr_settings": {
+    "min_confidence": 0.7,
+    "retry_attempts": 3,
+    "manual_input_allowed": true,
+    "required_data_points": [
+      "shop_name",
+      "item_name",
+      "total_price",
+      "purchase_date"
+    ]
+  },
+
+  "validation_rules": {
+    "date_range": {
+      "start": "quest_activation_time",
+      "end": "quest_submission_time"
+    },
+    "location_verification": {
+      "heat_coffee": {
+        "strict": true,
+        "radius": 50
+      },
+      "yangjaecheon": {
+        "strict": false,
+        "radius": 500,
+        "note": "양재천 카페거리 일대 어디든 가능"
+      }
+    },
+    "price_validation": {
+      "heat_coffee": {
+        "min": 20000,
+        "max": 50000
+      },
+      "yangjaecheon": {
+        "min": 5000,
+        "max": 20000
+      }
+    }
+  }
+}

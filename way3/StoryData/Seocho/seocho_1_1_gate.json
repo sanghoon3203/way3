@@ -1,0 +1,9 @@
+{
+  "node_id": "seocho_1_1_gate",
+  "type": "quest_gate",
+  "quest_gate": {
+    "quest_id": "subquest_alice_01_walk",
+    "auto_start": true,
+    "next_node_id": "seocho_1_1_end"
+  }
+}

@@ -77,18 +77,34 @@ struct LogoComponent: View {
     @State private var logoScale: CGFloat = 0.8
     @State private var logoOpacity: Double = 0.0
 
+    // Prefer explicit bundle lookup because the logo lives inside a folder reference.
+        private var logoImage: Image {
+            if let url = Bundle.main.url(
+                forResource: "TItle",
+                withExtension: "png",
+                subdirectory: "Resources"
+            ),
+            let uiImage = UIImage(contentsOfFile: url.path) {
+                return Image(uiImage: uiImage)
+            }
+
+            if let uiImage = UIImage(named: "TItle") {
+                return Image(uiImage: uiImage)
+            }
+
+            return Image(systemName: "sparkle.magnifyingglass")
+        }
+    
     var body: some View {
         VStack(spacing: 16) {
-            // 게임 로고 텍스트 (실제 로고 이미지로 교체 가능)
-            Text("네오-서울")
-                .font(.chosunOrFallback(size: 36, weight: .bold))
-                .foregroundColor(.white)
-                .shadow(color: .cyan.opacity(0.5), radius: 10, x: 0, y: 0)
-
-            Text("트레이딩 게임")
-                .font(.chosunOrFallback(size: 18, weight: .medium))
-                .foregroundColor(.cyan)
-                .shadow(color: .cyan.opacity(0.3), radius: 5, x: 0, y: 0)
+            ZStack {
+                           LogoGlowView(opacity: logoOpacity)
+                           logoImage
+                               .resizable()
+                               .scaledToFit()
+                               .frame(maxWidth: 280)
+                               .shadow(color: .cyan.opacity(0.45), radius: 12, x: 0, y: 0)
+                       }
         }
         .scaleEffect(logoScale)
         .opacity(logoOpacity)
@@ -101,6 +117,22 @@ struct LogoComponent: View {
     }
 }
 
+private struct LogoGlowView: View {
+    var opacity: Double
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 48, style: .continuous)
+            .fill(Color.white.opacity(0.28))
+            .frame(width: 320, height: 170)
+            .blur(radius: 38)
+            .overlay(
+                RoundedRectangle(cornerRadius: 48, style: .continuous)
+                    .stroke(Color.white.opacity(0.18), lineWidth: 1.5)
+                    .blur(radius: 18)
+            )
+            .opacity(opacity)
+    }
+}
 // MARK: - Typing Animation Component
 struct TypingAnimationComponent: View {
     @State private var displayedText = ""

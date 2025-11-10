@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_10",
+  "background_image": "bg_insubway.png",
+  "character_id": null,
+  "character_sprite": "sprite_player_uniform_confused.png",
+  "dialogue_text": "<s>휴...겨우탔네..그래도 지각이네...",
+  "dialogue_sound_id": null,
+  "sound_effect": "sfx_tutorial_start.mp3",
+  "next_node_id": "prologue_11"
+}

@@ -1,0 +1,754 @@
+{
+  "districts": [
+    {
+      "district_id": "gangnam_gu",
+      "chapter_id": "ch1_gangnam",
+      "name": "강남구",
+      "merchant": {
+        "merchant_id": "merchant_seoyena",
+        "name": "서예나",
+        "location": {
+          "latitude": 37.5172,
+          "longitude": 127.0473,
+          "radius": 500
+        },
+        "main_story_id": "gangnam_seoyena_main",
+        "sub_quests": [
+          {
+            "quest_id": "subquest_seoyena_01_dialogue",
+            "title": "서예나의 심문 - 상인의 마음",
+            "type": "dialogue",
+            "verification": "story_completion",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": "seoyena_sub1_035",
+              "story_node_start": "seoyena_sub1_021",
+              "required_items": [],
+              "required_story_pieces": [],
+              "required_main_quests": [],
+              "required_sub_quests": []
+            },
+            "rewards": {
+              "money": 1000,
+              "exp": 200,
+              "story_piece_ids": [
+                "story_piece_seoyena_dialogue_intro"
+              ],
+              "key_items": [
+                "rodeo_arena_temp_pass"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_seoyena",
+                "trust": 10
+              }
+            }
+          },
+          {
+            "quest_id": "subquest_seoyena_02_location",
+            "title": "강남의 숨은 명소 순례",
+            "type": "delivery",
+            "verification": "gps_location",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": {
+                "latitude": 37.5015,
+                "longitude": 127.0395,
+                "radius": 50
+              },
+              "time_limit": 86400,
+              "story_node_complete": null,
+              "story_node_start": null,
+              "required_items": [],
+              "required_story_pieces": [],
+              "required_main_quests": [],
+              "required_sub_quests": [
+                "subquest_seoyena_01_dialogue"
+              ]
+            },
+            "rewards": {
+              "money": 1500,
+              "exp": 300,
+              "story_piece_ids": [
+                "story_piece_seoyena_location"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_seoyena",
+                "trust": 10
+              }
+            }
+          },
+          {
+            "quest_id": "subquest_seoyena_03_trading",
+            "title": "로데오 아레나 프리미엄 거래",
+            "type": "trading",
+            "verification": "receipt_ocr",
+            "requirements": {
+              "location": {
+                "latitude": 37.5279,
+                "longitude": 127.0396,
+                "radius": 120
+              },
+              "min_purchase": 20000,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": null,
+              "story_node_start": null,
+              "required_items": [],
+              "required_story_pieces": [],
+              "required_main_quests": [],
+              "required_sub_quests": [
+                "subquest_seoyena_02_location"
+              ]
+            },
+            "rewards": {
+              "money": 5000,
+              "exp": 400,
+              "story_piece_ids": [
+                "story_piece_seoyena_trade"
+              ],
+              "key_items": [
+                "rodeo_arena_vip_card",
+                "seoyena_contact"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_seoyena",
+                "trust": 10
+              }
+            }
+          }
+        ]
+      },
+      "unlock_condition": "story_tab_always_visible"
+    },
+    {
+      "district_id": "seocho_gu",
+      "chapter_id": "ch1_gangnam",
+      "name": "서초구",
+      "merchant": {
+        "merchant_id": "merchant_Alicegang",
+        "name": "앨리스 강",
+        "location": {
+          "latitude": 37.5005,
+          "longitude": 126.9953,
+          "radius": 400
+        },
+        "main_story_id": "seocho_alice_main",
+        "sub_quests": [
+          {
+            "quest_id": "subquest_alice_01_walk",
+            "title": "뽀삐와 첫 산책",
+            "type": "dialogue",
+            "verification": "story_completion",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": "alice_sub1_007",
+              "story_node_start": "alice_sub1_001",
+              "required_items": [],
+              "required_story_pieces": [],
+              "required_main_quests": [],
+              "required_sub_quests": [],
+              "required_level": null
+            },
+            "rewards": {
+              "money": 800,
+              "exp": 150,
+              "story_piece_ids": [
+                "story_piece_alice_intro"
+              ],
+              "key_items": [
+                "poppy_walking_badge"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_Alicegang",
+                "trust": 8
+              }
+            }
+          },
+          {
+            "quest_id": "subquest_alice_02_park",
+            "title": "몽마르뜨 공원 산책로",
+            "type": "delivery",
+            "verification": "gps_location",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": {
+                "latitude": 37.4994,
+                "longitude": 126.9988,
+                "radius": 70
+              },
+              "time_limit": 1800,
+              "story_node_complete": null,
+              "story_node_start": null,
+              "required_items": [],
+              "required_story_pieces": [],
+              "required_main_quests": [],
+              "required_sub_quests": [
+                "subquest_alice_01_walk"
+              ],
+              "required_level": null
+            },
+            "rewards": {
+              "money": 1800,
+              "exp": 220,
+              "story_piece_ids": [
+                "story_piece_alice_walk"
+              ],
+              "key_items": [
+                "poppy_park_pass"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_Alicegang",
+                "trust": 10
+              }
+            }
+          },
+          {
+            "quest_id": "subquest_alice_03_treats",
+            "title": "뽀삐의 간식 레시피",
+            "type": "trading",
+            "verification": "receipt_ocr",
+            "requirements": {
+              "location": {
+                "latitude": 37.5032,
+                "longitude": 127.0076,
+                "radius": 120
+              },
+              "min_purchase": 12000,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": null,
+              "story_node_start": null,
+              "required_items": [],
+              "required_story_pieces": [],
+              "required_main_quests": [],
+              "required_sub_quests": [
+                "subquest_alice_02_park"
+              ],
+              "required_level": null
+            },
+            "rewards": {
+              "money": 3200,
+              "exp": 260,
+              "story_piece_ids": [
+                "story_piece_alice_treat"
+              ],
+              "key_items": [
+                "poppy_treat_recipe"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_Alicegang",
+                "trust": 12
+              }
+            }
+          }
+        ]
+      },
+      "unlock_condition": "story_tab_always_visible"
+    },
+    {
+      "district_id": "jongno_gu",
+      "chapter_id": "ch2_northwest",
+      "name": "종로구",
+      "merchant": {
+        "merchant_id": "merchant_minji",
+        "name": "이민지",
+        "location": {
+          "latitude": 37.5735,
+          "longitude": 126.9788,
+          "radius": 500
+        },
+        "main_story_id": "jongno_minji_main",
+        "sub_quests": [
+          {
+            "quest_id": "minji_sub_01",
+            "title": "이민지의 역사 탐방",
+            "type": "dialogue",
+            "verification": "story_completion",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": "minji_dialogue_01_end",
+              "story_node_start": "minji_dialogue_01_start"
+            },
+            "rewards": {
+              "money": 15000,
+              "exp": 150,
+              "item_id": "story_piece_minji_01",
+              "relationship_change": {
+                "merchant_id": "merchant_minji",
+                "trust": 10
+              }
+            }
+          },
+          {
+            "quest_id": "minji_sub_02",
+            "title": "종로의 전통 시장",
+            "type": "trading",
+            "verification": "receipt_ocr",
+            "requirements": {
+              "location": {
+                "latitude": 37.5735,
+                "longitude": 126.9788,
+                "radius": 100
+              },
+              "min_purchase": 8000,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": null
+            },
+            "rewards": {
+              "money": 20000,
+              "exp": 200,
+              "item_id": "story_piece_minji_02",
+              "relationship_change": {
+                "merchant_id": "merchant_minji",
+                "trust": 15
+              }
+            }
+          },
+          {
+            "quest_id": "minji_sub_03",
+            "title": "경복궁 앞 배달",
+            "type": "delivery",
+            "verification": "gps_location",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": {
+                "latitude": 37.5796,
+                "longitude": 126.977,
+                "radius": 30
+              },
+              "time_limit": 2400,
+              "story_node_complete": null
+            },
+            "rewards": {
+              "money": 25000,
+              "exp": 250,
+              "item_id": "story_piece_minji_03",
+              "relationship_change": {
+                "merchant_id": "merchant_minji",
+                "trust": 20
+              }
+            }
+          }
+        ]
+      },
+      "unlock_condition": "story_tab_always_visible"
+    },
+    {
+      "district_id": "jung_gu",
+      "chapter_id": "ch2_northwest",
+      "name": "중구",
+      "merchant": {
+        "merchant_id": "merchant_haerin",
+        "name": "정해린",
+        "location": {
+          "latitude": 37.5636,
+          "longitude": 126.9978,
+          "radius": 400
+        },
+        "main_story_id": "jung_gu_main",
+        "sub_quests": [
+          {
+            "quest_id": "haerin_sub_01",
+            "title": "명동의 고객 맞이",
+            "type": "trading",
+            "verification": "receipt_ocr",
+            "requirements": {
+              "location": {
+                "latitude": 37.5637,
+                "longitude": 126.9857,
+                "radius": 120
+              },
+              "min_purchase": 8000,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": null,
+              "story_node_start": null
+            },
+            "rewards": {
+              "money": 14000,
+              "exp": 140,
+              "story_piece_ids": [
+                "story_piece_haerin_01"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_haerin",
+                "trust": 8
+              }
+            }
+          },
+          {
+            "quest_id": "haerin_sub_02",
+            "title": "을지로 공방 배송",
+            "type": "delivery",
+            "verification": "gps_location",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": {
+                "latitude": 37.5661,
+                "longitude": 126.9895,
+                "radius": 45
+              },
+              "time_limit": 2700,
+              "story_node_complete": null,
+              "story_node_start": null
+            },
+            "rewards": {
+              "money": 19000,
+              "exp": 210,
+              "story_piece_ids": [
+                "story_piece_haerin_02"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_haerin",
+                "trust": 12
+              }
+            }
+          },
+          {
+            "quest_id": "haerin_sub_03",
+            "title": "정해린과의 심야 대화",
+            "type": "dialogue",
+            "verification": "story_completion",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": "haerin_dialogue_01_end",
+              "story_node_start": "haerin_dialogue_01_start"
+            },
+            "rewards": {
+              "money": 23000,
+              "exp": 260,
+              "story_piece_ids": [
+                "story_piece_haerin_03"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_haerin",
+                "trust": 18
+              }
+            }
+          }
+        ]
+      },
+      "unlock_condition": "story_tab_always_visible"
+    },
+    {
+      "district_id": "mapo_gu",
+      "chapter_id": "ch2_northwest",
+      "name": "마포구",
+      "merchant": {
+        "merchant_id": "merchant_sunwoo",
+        "name": "강선우",
+        "location": {
+          "latitude": 37.5513,
+          "longitude": 126.9137,
+          "radius": 420
+        },
+        "main_story_id": "mapo_gu_main",
+        "sub_quests": [
+          {
+            "quest_id": "sunwoo_sub_01",
+            "title": "합정 리믹스 거래",
+            "type": "trading",
+            "verification": "receipt_ocr",
+            "requirements": {
+              "location": {
+                "latitude": 37.5496,
+                "longitude": 126.9148,
+                "radius": 150
+              },
+              "min_purchase": 9000,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": null,
+              "story_node_start": null
+            },
+            "rewards": {
+              "money": 15000,
+              "exp": 160,
+              "story_piece_ids": [
+                "story_piece_sunwoo_01"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_sunwoo",
+                "trust": 9
+              }
+            }
+          },
+          {
+            "quest_id": "sunwoo_sub_02",
+            "title": "홍대 밤시장 공연 지원",
+            "type": "delivery",
+            "verification": "gps_location",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": {
+                "latitude": 37.556,
+                "longitude": 126.9224,
+                "radius": 70
+              },
+              "time_limit": 3000,
+              "story_node_complete": null,
+              "story_node_start": null
+            },
+            "rewards": {
+              "money": 21000,
+              "exp": 230,
+              "story_piece_ids": [
+                "story_piece_sunwoo_02"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_sunwoo",
+                "trust": 13
+              }
+            }
+          },
+          {
+            "quest_id": "sunwoo_sub_03",
+            "title": "선우의 밤샘 믹스",
+            "type": "dialogue",
+            "verification": "story_completion",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": "sunwoo_dialogue_01_end",
+              "story_node_start": "sunwoo_dialogue_01_start"
+            },
+            "rewards": {
+              "money": 27000,
+              "exp": 270,
+              "story_piece_ids": [
+                "story_piece_sunwoo_03"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_sunwoo",
+                "trust": 19
+              }
+            }
+          }
+        ]
+      },
+      "unlock_condition": "story_tab_always_visible"
+    },
+    {
+      "district_id": "seodaemun_gu",
+      "chapter_id": "ch2_northwest",
+      "name": "서대문구",
+      "merchant": {
+        "merchant_id": "merchant_joongi",
+        "name": "조중기",
+        "location": {
+          "latitude": 37.5765,
+          "longitude": 126.9386,
+          "radius": 450
+        },
+        "main_story_id": "seodaemun_gu_main",
+        "sub_quests": [
+          {
+            "quest_id": "joongi_sub_01",
+            "title": "독립문 역사 카드",
+            "type": "trading",
+            "verification": "receipt_ocr",
+            "requirements": {
+              "location": {
+                "latitude": 37.5728,
+                "longitude": 126.9599,
+                "radius": 120
+              },
+              "min_purchase": 6000,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": null,
+              "story_node_start": null
+            },
+            "rewards": {
+              "money": 11000,
+              "exp": 130,
+              "story_piece_ids": [
+                "story_piece_joongi_01"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_joongi",
+                "trust": 6
+              }
+            }
+          },
+          {
+            "quest_id": "joongi_sub_02",
+            "title": "연희동 아카이브 전달",
+            "type": "delivery",
+            "verification": "gps_location",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": {
+                "latitude": 37.5645,
+                "longitude": 126.9294,
+                "radius": 60
+              },
+              "time_limit": 2400,
+              "story_node_complete": null,
+              "story_node_start": null
+            },
+            "rewards": {
+              "money": 20000,
+              "exp": 220,
+              "story_piece_ids": [
+                "story_piece_joongi_02"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_joongi",
+                "trust": 14
+              }
+            }
+          },
+          {
+            "quest_id": "joongi_sub_03",
+            "title": "서대문 야간 브리핑",
+            "type": "dialogue",
+            "verification": "story_completion",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": "joongi_dialogue_01_end",
+              "story_node_start": "joongi_dialogue_01_start"
+            },
+            "rewards": {
+              "money": 26000,
+              "exp": 260,
+              "story_piece_ids": [
+                "story_piece_joongi_03"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_joongi",
+                "trust": 20
+              }
+            }
+          }
+        ]
+      },
+      "unlock_condition": "story_tab_always_visible"
+    },
+    {
+      "district_id": "yongsan_gu",
+      "chapter_id": "ch2_northwest",
+      "name": "용산구",
+      "merchant": {
+        "merchant_id": "merchant_jiyoung",
+        "name": "배지영",
+        "location": {
+          "latitude": 37.5311,
+          "longitude": 126.9817,
+          "radius": 430
+        },
+        "main_story_id": "yongsan_gu_main",
+        "sub_quests": [
+          {
+            "quest_id": "jiyoung_sub_01",
+            "title": "전자상가 드론 부품",
+            "type": "trading",
+            "verification": "receipt_ocr",
+            "requirements": {
+              "location": {
+                "latitude": 37.5345,
+                "longitude": 126.9603,
+                "radius": 160
+              },
+              "min_purchase": 12000,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": null,
+              "story_node_start": null
+            },
+            "rewards": {
+              "money": 18000,
+              "exp": 200,
+              "story_piece_ids": [
+                "story_piece_jiyoung_01"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_jiyoung",
+                "trust": 10
+              }
+            }
+          },
+          {
+            "quest_id": "jiyoung_sub_02",
+            "title": "용산역 특송",
+            "type": "delivery",
+            "verification": "gps_location",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": {
+                "latitude": 37.5298,
+                "longitude": 126.9646,
+                "radius": 60
+              },
+              "time_limit": 2100,
+              "story_node_complete": null,
+              "story_node_start": null
+            },
+            "rewards": {
+              "money": 24000,
+              "exp": 250,
+              "story_piece_ids": [
+                "story_piece_jiyoung_02"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_jiyoung",
+                "trust": 16
+              }
+            }
+          },
+          {
+            "quest_id": "jiyoung_sub_03",
+            "title": "지영의 전략 회의",
+            "type": "dialogue",
+            "verification": "story_completion",
+            "requirements": {
+              "location": null,
+              "min_purchase": null,
+              "target_location": null,
+              "time_limit": null,
+              "story_node_complete": "jiyoung_dialogue_01_end",
+              "story_node_start": "jiyoung_dialogue_01_start"
+            },
+            "rewards": {
+              "money": 30000,
+              "exp": 280,
+              "story_piece_ids": [
+                "story_piece_jiyoung_03"
+              ],
+              "relationship_change": {
+                "merchant_id": "merchant_jiyoung",
+                "trust": 22
+              }
+            }
+          }
+        ]
+      },
+      "unlock_condition": "story_tab_always_visible"
+    }
+  ]
+}

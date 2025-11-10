@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub1_030",
+  "background_image": "bg_seoyena_office",
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "\"합격이에요.\" 서예나가 자리에서 일어났다. \"당신은 진짜 상인의 마음을 가졌네요.\"",
+  "dialogue_sound_id": "seoyena_sub1_030",
+  "sound_effect": "sfx_success_chime.mp3",
+  "next_node_id": "seoyena_sub1_031"
+}

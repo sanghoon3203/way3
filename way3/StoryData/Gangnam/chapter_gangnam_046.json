@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_046",
+  "background_image": "bg_rodeo_side_entry",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "“잠깐만요! 가로수길 북카페 주인분이… 당신을 소개해줬어요. 진짜 가치를 아는 분이라고.”",
+  "dialogue_sound_id": "chapter_gangnam_046",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_047"
+}

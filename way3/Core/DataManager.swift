@@ -26,7 +26,6 @@ class DataManager: ObservableObject {
     
     // MARK: - Private Properties
     private let networkManager = NetworkManager.shared
-    private let socketManager = SocketManager.shared
     private var cancellables = Set<AnyCancellable>()
     private var itemResetTimer: Timer?
     

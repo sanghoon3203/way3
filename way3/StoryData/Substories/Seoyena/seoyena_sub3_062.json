@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub3_062",
+  "background_image": "bg_yangjaecheon_cafe",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "\"정성이 담긴 한 조각이면 충분해요.\" 디저트를 주문하며 영수증을 챙겼다.",
+  "dialogue_sound_id": "seoyena_sub3_062",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub3_063"
+}

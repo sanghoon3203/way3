@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub3_065",
+  "background_image": "bg_seoyena_office",
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "\"커피와 디저트라...\" 서예나가 영수증을 살펴보며 고개를 끄덕였다.",
+  "dialogue_sound_id": "seoyena_sub3_065",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub3_066"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_46",
+  "background_image": "",
+  "character_id": "player",
+  "character_sprite": "",
+  "dialogue_text": "어이가 없겠지만.. 여기는 그런 세계야..",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_47.json"
+}

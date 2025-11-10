@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_07",
+  "background_image": "bg_subway_out.png",
+  "character_id": "player",
+  "character_sprite": null,
+  "dialogue_text": "(대충 옷을 갈아입고 근처 지하철로 향했다)",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "prologue_08"
+}

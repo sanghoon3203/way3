@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_004",
+  "background_image": null,
+  "character_id": "Alicegang",
+  "character_sprite": null,
+  "dialogue_text": "\"여기는 조금 미끄러우니까 발걸음을 작게 내딛는 게 좋아요. 뽀삐가 미끄러지면 다칠 수 있거든요.\"",
+  "dialogue_sound_id": "alice_sub2_004",
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_005"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub2_049",
+  "background_image": "bg_seoyena_office",
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "\"생각보다 빨리 돌아왔네요.\" 서예나가 증표들을 바라보며 고개를 끄덕였다.",
+  "dialogue_sound_id": "seoyena_sub2_049",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub2_050"
+}

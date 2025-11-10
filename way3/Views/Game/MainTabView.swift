@@ -38,7 +38,7 @@ struct MainTabView: View {
                     .tag(1)
 
                 // ⚔️ 퀘스트 (세 번째 탭)
-                QuestView()
+                QuestCenterView()
                     .tabItem {
                         Image(systemName: "flag.fill")
                         Text("퀘스트")
@@ -46,10 +46,10 @@ struct MainTabView: View {
                     .tag(2)
 
                 // 🏪 상점 (네 번째 탭) - 경매장과 상점 통합
-                ShopView()
+                StoryHubTabView()
                     .tabItem {
-                        Image(systemName: "storefront.fill")
-                        Text("상점")
+                        Image(systemName: "book.fill")
+                        Text("스토리")
                     }
                     .tag(3)
 
@@ -205,3 +205,28 @@ struct ItemDetailView: View {
 // ShopView는 별도 파일로 이동됩니다
 
 // ProfileView는 별도 파일로 이동됩니다
+
+// MARK: - Quest Placeholder (임시)
+struct QuestPlaceholderView: View {
+    var body: some View {
+        ZStack {
+            Color.cyberpunkDarkBg.ignoresSafeArea()
+
+            VStack(spacing: 24) {
+                Image(systemName: "hammer.fill")
+                    .font(.system(size: 64))
+                    .foregroundColor(.cyberpunkCyan)
+
+                Text("퀘스트 시스템 재구성 중")
+                    .font(.chosunH2)
+                    .foregroundColor(.cyberpunkTextPrimary)
+
+                Text("스토리 탭에서 챕터별 퀘스트를 확인하세요")
+                    .font(.chosunBody)
+                    .foregroundColor(.cyberpunkTextSecondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding()
+        }
+    }
+}

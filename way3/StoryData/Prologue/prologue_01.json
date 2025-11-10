@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_01",
+  "background_image": "bg_player_room_morning.png",
+  "character_id": "typer_narrator",
+  "character_sprite": null,
+  "dialogue_text": "<t>[2025년 10월 7일, 월요일 아침 9시,\n 주인공의 집]",
+  "dialogue_sound_id": null,
+  "sound_effect": "",
+  "next_node_id": "prologue_02"
+}

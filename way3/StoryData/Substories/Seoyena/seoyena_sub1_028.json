@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub1_028",
+  "background_image": "bg_seoyena_office",
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "\"마지막 질문입니다. 큰 이익을 얻을 기회가 있지만 누군가를 속여야 한다면?\"",
+  "dialogue_sound_id": "seoyena_sub1_028",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub1_029"
+}

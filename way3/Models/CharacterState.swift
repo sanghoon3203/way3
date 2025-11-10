@@ -18,37 +18,19 @@ enum CharacterState: String, CaseIterable {
     case angry       // 화남 (MOV)
     case surprised   // 놀람 (MOV)
 
-    /// 현재 자산 구성에서는 모든 상태를 PNG로 처리
+    /// MOV 비디오 파일인지 여부
     var isAnimated: Bool {
-        return false
+        return self != .idle
     }
 
-    /// 파일 확장자 (PNG 고정)
+    /// 파일 확장자
     var fileExtension: String {
-        return "png"
+        return isAnimated ? "mov" : "png"
     }
 
     /// 파일명 suffix (예: "seoyena_idle.png", "seoyena_talking.mov")
     var fileSuffix: String {
         return "_\(self.rawValue)"
-    }
-
-    /// 상태별 우선 시도할 이미지 suffix 목록
-    var imageSuffixCandidates: [String] {
-        switch self {
-        case .idle:
-            return ["_idle", ""]
-        case .talking:
-            return ["_talk_1", "_talk_2", "_talking", "_talk", ""]
-        case .happy:
-            return ["_happy", ""]
-        case .sad:
-            return ["_sad", ""]
-        case .angry:
-            return ["_angry", ""]
-        case .surprised:
-            return ["_surprised", ""]
-        }
     }
 }
 

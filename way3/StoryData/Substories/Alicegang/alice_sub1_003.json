@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub1_003",
+  "background_image": null,
+  "character_id": "Poppy",
+  "character_sprite": null,
+  "dialogue_text": "\"왈왈! 새 친구다!\" 뽀삐가 꼬리를 힘껏 흔들었다.",
+  "dialogue_sound_id": "alice_sub1_003",
+  "sound_effect": "sfx_dog_bark_soft.wav",
+  "next_node_id": "alice_sub1_004"
+}

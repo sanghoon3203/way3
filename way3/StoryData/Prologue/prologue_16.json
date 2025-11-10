@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_16",
+  "background_image": null,
+  "character_id": "player",
+  "character_sprite": "",
+  "dialogue_text": "커넥션:서울? 아 어제 내가 할려다가 잠들어버린 게임이구나",
+  "dialogue_sound_id": "prologue_16",
+  "sound_effect": null,
+  "next_node_id": "prologue_17"
+}

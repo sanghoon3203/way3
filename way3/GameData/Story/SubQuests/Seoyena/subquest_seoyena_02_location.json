@@ -1,0 +1,157 @@
+{
+  "quest_id": "subquest_seoyena_02_location",
+  "quest_type": "delivery",
+  "title": "강남의 숨은 명소 탐방",
+  "description": "서예나가 알려준 강남의 숨은 명소 3곳을 방문하고 각 장소의 진짜 가치를 찾으세요.",
+  "merchant_id": "merchant_Seoyena",
+  "region": "gangnam",
+  "district": "gangnam_gu",
+
+  "unlock_conditions": [
+    {
+      "type": "subquest",
+      "value": "subquest_seoyena_01_dialogue"
+    }
+  ],
+
+  "objectives": [
+    {
+      "objective_id": "visit_motor_studio",
+      "type": "gps_delivery",
+      "description": "현대 모터 스튜디오 서울 방문",
+      "location": {
+        "name": "현대 모터 스튜디오 서울",
+        "address": "서울특별시 강남구 테헤란로 152 GBC 빌딩",
+        "coordinates": {
+          "latitude": 37.5015,
+          "longitude": 127.0395
+        },
+        "radius": 50
+      },
+      "reward_item": {
+        "item_id": "proof_future",
+        "item_name": "미래의 증표",
+        "description": "Mobility of Tomorrow - 현대 모터 스튜디오에서 얻은 미래 비전"
+      },
+      "story_node_start": "seoyena_sub2_037",
+      "story_node_end": "seoyena_sub2_039",
+      "order": 1,
+      "required": true
+    },
+    {
+      "objective_id": "visit_bongeunsa",
+      "type": "gps_delivery",
+      "description": "봉은사 방문",
+      "location": {
+        "name": "봉은사",
+        "address": "서울특별시 강남구 봉은사로 531",
+        "coordinates": {
+          "latitude": 37.5147,
+          "longitude": 127.0591
+        },
+        "radius": 100
+      },
+      "reward_item": {
+        "item_id": "proof_peace",
+        "item_name": "고요의 증표",
+        "description": "Inner Peace - 봉은사에서 얻은 마음의 평화"
+      },
+      "story_node_start": "seoyena_sub2_040",
+      "story_node_end": "seoyena_sub2_043",
+      "order": 2,
+      "required": true
+    },
+    {
+      "objective_id": "visit_starfield_library",
+      "type": "gps_delivery",
+      "description": "코엑스 별마당 도서관 방문",
+      "location": {
+        "name": "코엑스 별마당 도서관",
+        "address": "서울특별시 강남구 영동대로 513 코엑스몰 1층",
+        "coordinates": {
+          "latitude": 37.5126,
+          "longitude": 127.0591
+        },
+        "radius": 50
+      },
+      "reward_item": {
+        "item_id": "proof_wisdom",
+        "item_name": "지혜의 증표",
+        "description": "Knowledge is Power - 별마당 도서관에서 얻은 지식의 힘"
+      },
+      "story_node_start": "seoyena_sub2_044",
+      "story_node_end": "seoyena_sub2_047",
+      "order": 3,
+      "required": true
+    },
+    {
+      "objective_id": "report_to_seoyena",
+      "type": "story_completion",
+      "description": "서예나에게 결과 보고",
+      "story_node_start": "seoyena_sub2_048",
+      "story_node_end": "seoyena_sub2_053",
+      "order": 4,
+      "required": true
+    }
+  ],
+
+  "rewards": {
+    "friendship": {
+      "merchant_id": "merchant_Seoyena",
+      "amount": 10,
+      "final_level": 20
+    },
+    "experience": 300,
+    "items": [
+      {
+        "item_id": "proof_future",
+        "item_name": "미래의 증표",
+        "quantity": 1,
+        "description": "현대 모터 스튜디오에서 얻은 증표"
+      },
+      {
+        "item_id": "proof_peace",
+        "item_name": "고요의 증표",
+        "quantity": 1,
+        "description": "봉은사에서 얻은 증표"
+      },
+      {
+        "item_id": "proof_wisdom",
+        "item_name": "지혜의 증표",
+        "quantity": 1,
+        "description": "별마당 도서관에서 얻은 증표"
+      }
+    ]
+  },
+
+  "post_completion": {
+    "unlock_quests": [
+      "subquest_seoyena_03_trading"
+    ],
+    "dialogue_changes": {
+      "merchant_Seoyena": {
+        "greeting": "세 장소 모두 잘 다녀오셨군요. 이제 마지막 시험이 남았어요.",
+        "farewell": "마지막 시험을 기대하고 있을게요."
+      }
+    }
+  },
+
+  "time_limit": 86400,
+  "time_limit_description": "24시간",
+  "can_abandon": false,
+  "quest_giver_location": {
+    "location_name": "로데오 아레나 - 서예나 사무실",
+    "coordinates": {
+      "latitude": 37.5279,
+      "longitude": 127.0396
+    }
+  },
+
+  "story_summary": "서예나가 알려준 강남의 숨은 명소 3곳을 탐방합니다. 현대 모터 스튜디오에서 미래를, 봉은사에서 고요를, 별마당 도서관에서 지혜를 발견하며 강남의 진짜 가치를 이해하게 됩니다.",
+
+  "hints": [
+    "현대 모터 스튜디오는 GBC 빌딩 내부에 있습니다.",
+    "봉은사는 코엑스 뒤편에 위치한 천년 고찰입니다.",
+    "별마당 도서관은 코엑스몰 1층 중앙에 있습니다."
+  ]
+}

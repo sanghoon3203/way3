@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_35",
+  "background_image": null,
+  "character_id": "player",
+  "character_sprite": "",
+  "dialogue_text": "종로3가역? 여기가??",
+  "dialogue_sound_id": "prologue_18",
+  "sound_effect": "",
+  "next_node_id": "prologue_36.json"
+}

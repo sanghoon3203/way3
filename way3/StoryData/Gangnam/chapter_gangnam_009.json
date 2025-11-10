@@ -1,0 +1,10 @@
+{
+  "node_id": "chapter_gangnam_009",
+  "background_image": "bg_gangnam_skyline_intro",
+  "character_id": "player",
+  "character_sprite": "sprite_player_uniform_default.png",
+  "dialogue_text": "“저기가 인포메이션 센터인가…? 일단 가보자.” 발걸음이 자연스럽게 황금빛 건물을 향했다.",
+  "dialogue_sound_id": "chapter_gangnam_009",
+  "sound_effect": null,
+  "next_node_id": "chapter_gangnam_010"
+}

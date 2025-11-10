@@ -282,7 +282,7 @@ private struct SubQuestCard: View {
                     detail: item.quest.getDescription()
                 )
 
-                ForEach(Array(keyRequirementDetails.enumerated()), id: \.offset) { _, detail in
+                ForEach(keyRequirementDetails, id: \.self) { detail in
                     requirementIndicator(title: detail.title, satisfied: detail.satisfied, detail: detail.text)
                 }
 
@@ -338,7 +338,7 @@ private struct SubQuestCard: View {
             if let location = req.location {
                 rows.append((
                     "거래 위치",
-                    "반경 \(location.radius)m, lat \(String(format: "%.4f", location.latitude)), lng \(String(format: "%.4f", location.longitude))",
+                    "반경 \(location.radius)m, lat \(String(format: \"%.4f\", location.latitude)), lng \(String(format: \"%.4f\", location.longitude))",
                     true
                 ))
             }
@@ -353,7 +353,7 @@ private struct SubQuestCard: View {
             if let target = req.target_location {
                 rows.append((
                     "목표 지점",
-                    "반경 \(target.radius)m, lat \(String(format: "%.4f", target.latitude)), lng \(String(format: "%.4f", target.longitude))",
+                    "반경 \(target.radius)m, lat \(String(format: \"%.4f\", target.latitude)), lng \(String(format: \"%.4f\", target.longitude))",
                     true
                 ))
             }

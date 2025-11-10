@@ -1,0 +1,10 @@
+{
+  "node_id": "seocho_1_1_008",
+  "background_image": null,
+  "character_id": "typer_narrator",
+  "character_sprite": null,
+  "dialogue_text": "가게 뒤편 작은 온실에는 민트와 라벤더가 줄지어 있었다. 물을 주고, 잎을 다듬고, 잡초를 뽑다 보니 시간 가는 줄 몰랐다.",
+  "dialogue_sound_id": "seocho_1_1_008",
+  "sound_effect": "sfx_watering_can.wav",
+  "next_node_id": "seocho_1_1_009"
+}

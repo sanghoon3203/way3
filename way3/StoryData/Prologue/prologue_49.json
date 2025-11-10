@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_49",
+  "background_image": "",
+  "character_id": "player",
+  "character_sprite": "",
+  "dialogue_text": "....??? ",
+  "dialogue_sound_id": "",
+  "sound_effect": "",
+  "next_node_id": "prologue_50.json"
+}

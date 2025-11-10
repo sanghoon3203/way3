@@ -92,7 +92,6 @@ seed_merchants.js
 migrate_merchants.js
 
 # Claude Documentation (development only)
-claudedocs/
 
 # Server temporary files
 theway_server/data/merchants_fallback.json

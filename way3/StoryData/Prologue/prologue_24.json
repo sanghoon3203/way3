@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_24",
+  "background_image": null,
+  "character_id": "player",
+  "character_sprite": "",
+  "dialogue_text": "엥? 네오-서울...??? 그건 뭐야?",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "prologue_25.json"
+}

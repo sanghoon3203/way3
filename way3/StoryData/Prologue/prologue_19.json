@@ -1,0 +1,10 @@
+{
+  "node_id": "prologue_19",
+  "background_image": null,
+  "character_id": "NPC",
+  "character_sprite": "",
+  "dialogue_text": "[불안정성: 56%...]",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "prologue_20.json"
+}
