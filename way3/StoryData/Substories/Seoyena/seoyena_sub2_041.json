@@ -1,10 +1,10 @@
 {
   "node_id": "seoyena_sub2_041",
-  "background_image": "bg_bongeunsa_temple",
-  "character_id": "player",
-  "character_sprite": "sprite_player_uniform_default.png",
-  "dialogue_text": "향 냄새와 목탁 소리가 마음을 가라앉힌다. 도시의 소음이 거짓말처럼 멀어졌다.",
-  "dialogue_sound_id": "seoyena_sub2_041",
-  "sound_effect": "sfx_bell_chime.mp3",
+  "background_image": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "직원이 손을 잡아 이끌며 운전석에 태웠다. 문이 닫히자 계기판 전체가 홀로그램으로 펼쳐졌다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
   "next_node_id": "seoyena_sub2_042"
 }

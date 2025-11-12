@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub2_002",
+  "background_image": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "여기구나....현대차가 이렇게 좋아졌나..? ",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub2_003"
+}

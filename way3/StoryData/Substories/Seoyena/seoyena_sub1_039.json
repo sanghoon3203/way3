@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub1_039",
+  "background_image": "bg_rodeo_arena_interior",
+  "character_id": "",
+  "character_sprite": null,
+  "dialogue_text": "쾅(경호원이 날 밀며 문을 닫는 소리.)",
+  "dialogue_sound_id": "seoyena_sub1_035",
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub1_040"
+}

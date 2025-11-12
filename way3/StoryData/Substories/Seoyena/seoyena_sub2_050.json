@@ -1,10 +1,10 @@
 {
   "node_id": "seoyena_sub2_050",
-  "background_image": "bg_seoyena_office",
-  "character_id": "player",
-  "character_sprite": "sprite_player_uniform_default.png",
-  "dialogue_text": "\"미래, 고요, 지혜.\" 증표 세 개를 책상 위에 올려놓고 각각의 느낌을 설명했다.",
-  "dialogue_sound_id": "seoyena_sub2_050",
+  "background_image": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "",
+  "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seoyena_sub2_051"
 }

@@ -1,10 +1,10 @@
 {
   "node_id": "seoyena_sub2_043",
-  "background_image": "bg_bongeunsa_temple",
-  "character_id": "player",
-  "character_sprite": "sprite_player_uniform_default.png",
-  "dialogue_text": "손바닥 위에 올라온 것은 고요의 증표. 빛나는 염주가 잔잔한 위안을 전했다.",
-  "dialogue_sound_id": "seoyena_sub2_043",
-  "sound_effect": "sfx_item_present.mp3",
+  "background_image": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "[스포츠 부스트 모드, 시간가속을 시작합니다]",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
   "next_node_id": "seoyena_sub2_044"
 }

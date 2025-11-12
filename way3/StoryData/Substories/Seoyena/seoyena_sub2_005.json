@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub2_005",
+  "background_image": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "로비에 들어서자마자 압도당했다. 각종 자동차 부품부터 옛날 자동차가 20대 이상, 내가 알던 자동차가 20대... 그리고 이게....현대에서 만든 거라고...?",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub2_006"
+}

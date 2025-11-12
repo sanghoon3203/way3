@@ -1,9 +1,9 @@
 {
   "node_id": "seoyena_sub1_031",
   "background_image": "bg_seoyena_office",
-  "character_id": "Seoyena",
+  "character_id": "player",
   "character_sprite": null,
-  "dialogue_text": "\"생존에 대한 절박함, 가치에 대한 본질적 이해, 그리고 신뢰.\" 그녀가 손가락으로 하나하나 짚었다.",
+  "dialogue_text": "(그래 뭐 지금 내가 이런거 가릴때냐...)",
   "dialogue_sound_id": "seoyena_sub1_031",
   "sound_effect": null,
   "next_node_id": "seoyena_sub1_032"

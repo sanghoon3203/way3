@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub2_063",
+  "background_image": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "\"저도 잘 모르겠습니다만, 서예나 님 말씀이 '정확히 7시 23분'에 도착하라고 하셨어요. 1분이라도 늦으면 안 된다고요.\"",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub2_064"
+}

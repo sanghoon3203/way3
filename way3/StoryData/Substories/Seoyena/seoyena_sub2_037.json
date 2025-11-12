@@ -1,10 +1,10 @@
 {
   "node_id": "seoyena_sub2_037",
-  "background_image": "bg_motor_studio_exterior",
-  "character_id": "typer_narrator",
+  "background_image": null,
+  "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "강남 테헤란로 한가운데, 유리벽 너머로 빛나는 현대 모터 스튜디오 서울. 서예나가 보낸 좌표 첫 번째 목적지다.",
-  "dialogue_sound_id": "seoyena_sub2_037",
+  "dialogue_text": "\"뭐야....? 이게 자동차라고?\"",
+  "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seoyena_sub2_038"
 }

@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub2_254",
+  "background_image": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "서예나가 나무 상자를 두 손으로 공손히 올렸다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub2_255"
+}

@@ -1,10 +1,10 @@
 {
   "node_id": "seoyena_sub2_048",
-  "background_image": "bg_rodeo_arena_interior",
-  "character_id": "typer_narrator",
+  "background_image": null,
+  "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "세 장소의 증표를 챙겨 로데오 아레나로 돌아왔다. 서예나가 이미 사무실에서 기다리고 있었다.",
-  "dialogue_sound_id": "seoyena_sub2_048",
+  "dialogue_text": "",
+  "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seoyena_sub2_049"
 }

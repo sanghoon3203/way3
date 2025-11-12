@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub2_023",
+  "background_image": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "\"주문제작 하신 차를 보여드리면서 직접 설명해드리겠습니다.\"",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub2_024"
+}

@@ -1,10 +1,10 @@
 {
   "node_id": "seoyena_sub2_049",
-  "background_image": "bg_seoyena_office",
-  "character_id": "Seoyena",
+  "background_image": null,
+  "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "\"생각보다 빨리 돌아왔네요.\" 서예나가 증표들을 바라보며 고개를 끄덕였다.",
-  "dialogue_sound_id": "seoyena_sub2_049",
+  "dialogue_text": "\"재밌죠? 그리고 요청하신 자동추적 레이저건, 타이탄 다이아드릴, 긴급탈출 버튼, 자율주행 모드 등 확실하게 넣어뒀습니다!!\"",
+  "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seoyena_sub2_050"
 }

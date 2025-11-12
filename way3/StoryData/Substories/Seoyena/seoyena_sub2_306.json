@@ -1,0 +1,10 @@
+{
+  "node_id": "seoyena_sub2_306",
+  "background_image": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "서예나가 찻잔을 들고 생각에 잠겼다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seoyena_sub2_307"
+}

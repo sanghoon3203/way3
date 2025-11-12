@@ -1,10 +1,10 @@
 {
   "node_id": "seoyena_sub2_053",
-  "background_image": "bg_rodeo_arena_interior",
-  "character_id": "typer_narrator",
+  "background_image": null,
+  "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "세 개의 증표가 서로 맞물려 빛났다. 강남의 숨은 명소가 전한 가치는 이제 내것이 되었다.",
-  "dialogue_sound_id": "seoyena_sub2_053",
+  "dialogue_text": "\"서예나 님께서 특수 허가증을 발급받으셨더라고요~ 여기 픽업 확인서에 서명해주세요!\"",
+  "dialogue_sound_id": null,
   "sound_effect": null,
-  "next_node_id": null
+  "next_node_id": "seoyena_sub2_054"
 }

@@ -1,10 +1,10 @@
 {
   "node_id": "seoyena_sub2_039",
-  "background_image": "bg_motor_studio_showroom",
-  "character_id": "NPC",
+  "background_image": null,
+  "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "\"이 토큰을 가져가세요.\" 안내 스태프가 황금빛 메달을 내밀었다. \"우리가 꿈꾸는 미래를 기억해 주세요.\"",
-  "dialogue_sound_id": "seoyena_sub2_039",
-  "sound_effect": "sfx_item_present.mp3",
+  "dialogue_text": "\"아직 놀라긴 이르세요ㅎㅎ 타보시겠어요?\"",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
   "next_node_id": "seoyena_sub2_040"
 }
