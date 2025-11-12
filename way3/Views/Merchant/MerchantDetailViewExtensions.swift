@@ -11,38 +11,15 @@ import SwiftUI
 class CartManager: ObservableObject {
     @Published var items: [CartItem] = []
 
-    var buyItems: [CartItem] {
-        items.filter { $0.type == .buy }
-    }
-
-    var sellItems: [CartItem] {
-        items.filter { $0.type == .sell }
-    }
-
-    var totalBuyCost: Int {
-        buyItems.reduce(0) { $0 + ($1.item.currentPrice * $1.quantity) }
-    }
-
-    var totalSellRevenue: Int {
-        sellItems.reduce(0) { $0 + ($1.item.currentPrice * $1.quantity) }
-    }
-
-    var netAmount: Int {
-        totalBuyCost - totalSellRevenue
-    }
-
-    // Backward compatibility for existing usage
     var totalAmount: Int {
-        totalBuyCost
+        items.reduce(0) { $0 + ($1.item.currentPrice * $1.quantity) }
     }
 
     func addItem(_ item: TradeItem, quantity: Int, type: TradeType = .buy) {
-        let maxQuantity = max(1, item.quantity)
         if let existingIndex = items.firstIndex(where: { $0.item.id == item.id && $0.type == type }) {
-            items[existingIndex].quantity = min(items[existingIndex].quantity + quantity, maxQuantity)
+            items[existingIndex].quantity += quantity
         } else {
-            let clampedQuantity = min(quantity, maxQuantity)
-            items.append(CartItem(item: item, quantity: clampedQuantity, type: type))
+            items.append(CartItem(item: item, quantity: quantity, type: type))
         }
     }
 
@@ -64,7 +41,7 @@ class CartManager: ObservableObject {
         items.removeAll()
     }
 
-    // Legacy compatibility helper for older TradeManager-based flows
+    // TradeManager 호환성을 위한 메서드
     func clear() {
         clearCart()
     }
@@ -79,132 +56,26 @@ struct CartItem: Identifiable {
 
 // MARK: - MerchantDetailView 로직 확장
 extension MerchantDetailView {
+    func startDialogue() {
+        viewModel.startDialogue()
+    }
+
+    func continueDialogue() {
+        viewModel.continueDialogue()
+    }
+
     func exitMerchant() {
         isPresented = false
     }
 
-    private func validateCartForTrade() -> MerchantDataError? {
-        guard let player = gameManager.currentPlayer else {
-            return .merchantNotFound
-        }
-
-        let netCost = max(0, cartManager.netAmount)
-        if netCost > player.core.money {
-            return .insufficientFunds
-        }
-
-        if !cartManager.sellItems.isEmpty {
-            let inventory = player.inventory.inventory
-            let inventoryCounts = Dictionary(grouping: inventory, by: { $0.id }).mapValues { items in
-                items.reduce(0) { $0 + $1.quantity }
-            }
-
-            for cartItem in cartManager.sellItems {
-                let available = inventoryCounts[cartItem.item.id] ?? cartItem.item.quantity
-                if cartItem.quantity > available {
-                    return .insufficientItems
-                }
-            }
-        }
-
-        return nil
+    func selectItem(_ item: TradeItem) {
+        selectedItem = item
+        showQuantityPopup = true
     }
 
-    private func proposedPrice(for cartItem: CartItem) -> Int {
-        let base = cartItem.item.currentPrice * cartItem.quantity
-        switch cartItem.type {
-        case .buy:
-            return base
-        case .sell:
-            if let purchasePrice = cartItem.item.purchasePrice {
-                let desired = Int(Double(purchasePrice) * Double(cartItem.quantity) * 1.1)
-                return max(base, desired)
-            }
-            return base
-        case .exchange:
-            return base
-        }
-    }
-
-    private func executeTradeForCart() async {
-        if let requirementMessage = TradeManager.shared.requirementFailureMessage(for: merchant) {
-            await MainActor.run {
-                viewModel.error = MerchantDataError.tradeValidationFailed(requirementMessage)
-            }
-            return
-        }
-
-        let merchantId = merchant.id
-
-        let totalBuy = cartManager.totalBuyCost
-        let totalSell = cartManager.totalSellRevenue
-        let net = cartManager.netAmount
-
-        await MainActor.run { viewModel.isLoading = true }
-
-        do {
-            for cartItem in cartManager.items {
-                let request = TradeExecuteRequest(
-                    merchantId: merchantId,
-                    itemTemplateId: cartItem.item.itemId,
-                    tradeType: cartItem.type.rawValue,
-                    quantity: cartItem.quantity,
-                    proposedPrice: proposedPrice(for: cartItem)
-                )
-
-                let response = try await NetworkManager.shared.executeTrade(request: request)
-                if !response.success {
-                    throw TradeExecutionError(message: response.error ?? response.message ?? "거래에 실패했습니다")
-                }
-            }
-
-            await gameManager.refreshPlayerData()
-            await viewModel.refreshMerchantData()
-
-            await MainActor.run {
-                cartManager.clearCart()
-                showPurchaseConfirmation = false
-                isCartPresented = false
-                viewModel.isLoading = false
-                selectTab(.dialogue)
-
-                let summary: String
-                if totalSell > 0 {
-                    summary = "구매 ₩\(totalBuy.formatted()) · 판매 ₩\(totalSell.formatted())"
-                } else {
-                    summary = "총 ₩\(totalBuy.formatted()) 지출"
-                }
-                gameManager.addNotification(title: "거래 완료", message: summary, type: .success)
-            }
-
-        } catch let tradeError as TradeExecutionError {
-            await MainActor.run {
-                viewModel.error = MerchantDataError.tradeExecutionFailed(tradeError.message)
-                viewModel.isLoading = false
-            }
-        } catch let networkError as NetworkManager.NetworkError {
-            if case .clientError(let statusCode, _) = networkError, statusCode == 403 {
-                let message = TradeManager.shared.requirementFailureMessage(for: merchant) ?? "거래 조건을 충족하지 못했습니다."
-                await MainActor.run {
-                    viewModel.error = MerchantDataError.tradeExecutionFailed(message)
-                    viewModel.isLoading = false
-                }
-            } else {
-                await MainActor.run {
-                    viewModel.error = MerchantDataError.networkError(networkError)
-                    viewModel.isLoading = false
-                }
-            }
-        } catch {
-            await MainActor.run {
-                viewModel.error = MerchantDataError.networkError(error)
-                viewModel.isLoading = false
-            }
-        }
-    }
-
-    private struct TradeExecutionError: Error {
-        let message: String
+    func showThankYouDialogue() {
+        currentMode = .dialogue
+        viewModel.showThankYouDialogue()
     }
 }
 
@@ -250,95 +121,67 @@ extension MerchantDetailView {
 
     // 장바구니 상세 화면
     var CartDetailView: some View {
-        ZStack {
-            Color.black.opacity(0.75)
-                .ignoresSafeArea()
-                .onTapGesture {
-                    isCartPresented = false
-                }
+        VStack(spacing: 0) {
+            // 헤더
+            CartHeaderView
 
-            VStack(spacing: 0) {
-                // 헤더
-                CartHeaderView
-
-                // 장바구니 아이템들
-                ScrollView {
-                    LazyVStack(spacing: 12) {
-                        ForEach(cartManager.items) { cartItem in
-                            CartItemRow(cartItem: cartItem, cartManager: cartManager)
-                        }
+            // 장바구니 아이템들
+            ScrollView {
+                LazyVStack(spacing: 12) {
+                    ForEach(cartManager.items) { cartItem in
+                        CartItemRow(cartItem: cartItem, cartManager: cartManager)
                     }
-                    .padding()
-                }
-
-                // 요약 및 진행 버튼
-                VStack(spacing: 16) {
-                    let totalBuy = cartManager.totalBuyCost
-                    let totalSell = cartManager.totalSellRevenue
-                    let net = cartManager.netAmount
-
-                    VStack(alignment: .leading, spacing: 6) {
-                        if totalBuy > 0 {
-                            Text("구매 금액: ₩\(totalBuy)")
-                                .font(Font.chosunOrFallback(size: 18, weight: .bold))
-                                .foregroundColor(.cyberpunkYellow)
-                        }
-                        if totalSell > 0 {
-                            Text("판매 수익: ₩\(totalSell)")
-                                .font(Font.chosunOrFallback(size: 18, weight: .bold))
-                                .foregroundColor(.cyberpunkGreen)
-                        }
-                        if totalBuy > 0 && totalSell > 0 {
-                            Text(net >= 0 ? "순 지출: ₩\(net)" : "순 수익: ₩\(-net)")
-                                .font(Font.chosunOrFallback(size: 16, weight: .semibold))
-                                .foregroundColor(net >= 0 ? .cyberpunkTextPrimary : .cyberpunkGreen)
-                        }
-                    }
-
-                    Button("거래 진행") {
-                        if let validationError = validateCartForTrade() {
-                            viewModel.error = validationError
-                        } else {
-                            showPurchaseConfirmation = true
-                        }
-                    }
-                    .font(Font.chosunOrFallback(size: 18, weight: .semibold))
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 52)
-                    .background(
-                        RoundedRectangle(cornerRadius: 26)
-                            .fill(Color.cyberpunkYellow)
-                    )
                 }
                 .padding()
-                .background(Color.black.opacity(0.9))
             }
-            .frame(maxWidth: 420)
-            .background(Color.black.opacity(0.95))
-            .clipShape(RoundedRectangle(cornerRadius: 20))
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.cyberpunkBorder.opacity(0.6), lineWidth: 1)
-            )
+
+            // 구매 버튼
+            VStack(spacing: 16) {
+                HStack {
+                    Text("총액")
+                        .font(.chosunOrFallback(size: 18, weight: .bold))
+                        .foregroundColor(.white)
+
+                    Spacer()
+
+                    Text("₩\(cartManager.totalAmount)")
+                        .font(.chosunOrFallback(size: 20, weight: .bold))
+                        .foregroundColor(.cyan)
+                }
+
+                Button("구매하기") {
+                    showPurchaseConfirmation = true
+                }
+                .font(.chosunOrFallback(size: 18, weight: .semibold))
+                .foregroundColor(.black)
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(
+                    RoundedRectangle(cornerRadius: 25)
+                        .fill(Color.cyan)
+                )
+            }
+            .padding()
+            .background(Color.black.opacity(0.9))
         }
+        .background(Color.black.opacity(0.95))
     }
 
     var CartHeaderView: some View {
         HStack {
-            Button(action: { isCartPresented = false }) {
+            Button(action: { currentMode = .trading }) {
                 HStack {
                     Image(systemName: "arrow.left")
                     Text("거래로 돌아가기")
                 }
-                .font(Font.chosunOrFallback(size: 16))
+                .font(.chosunOrFallback(size: 16))
                 .foregroundColor(.cyan)
             }
 
             Spacer()
 
             Text("장바구니")
-                .font(Font.chosunOrFallback(size: 20, weight: .bold))
+                .font(.chosunOrFallback(size: 20, weight: .bold))
                 .foregroundColor(.white)
 
             Spacer()
@@ -348,7 +191,7 @@ extension MerchantDetailView {
                 Image(systemName: "arrow.left")
                 Text("거래로 돌아가기")
             }
-            .font(Font.chosunOrFallback(size: 16))
+            .font(.chosunOrFallback(size: 16))
             .foregroundColor(.clear)
         }
         .padding()
@@ -379,37 +222,22 @@ extension MerchantDetailView {
 
             VStack(spacing: 20) {
                 Text("구매 확인")
-                    .font(Font.chosunOrFallback(size: 20, weight: .bold))
+                    .font(.chosunOrFallback(size: 20, weight: .bold))
                     .foregroundColor(.cyan)
 
                 Text("정말 구매하시겠습니까?")
-                    .font(Font.chosunOrFallback(size: 16))
+                    .font(.chosunOrFallback(size: 16))
                     .foregroundColor(.white)
 
-                VStack(alignment: .trailing, spacing: 6) {
-                    if cartManager.totalBuyCost > 0 {
-                        Text("구매 금액: ₩\(cartManager.totalBuyCost)")
-                            .font(Font.chosunOrFallback(size: 16, weight: .bold))
-                            .foregroundColor(.cyan)
-                    }
-                    if cartManager.totalSellRevenue > 0 {
-                        Text("판매 수익: ₩\(cartManager.totalSellRevenue)")
-                            .font(Font.chosunOrFallback(size: 16, weight: .bold))
-                            .foregroundColor(.cyberpunkGreen)
-                    }
-                    if cartManager.totalBuyCost > 0 && cartManager.totalSellRevenue > 0 {
-                        let net = cartManager.netAmount
-                        Text(net >= 0 ? "순 지출: ₩\(net)" : "순 수익: ₩\(-net)")
-                            .font(Font.chosunOrFallback(size: 16, weight: .semibold))
-                            .foregroundColor(net >= 0 ? .cyberpunkYellow : .cyberpunkGreen)
-                    }
-                }
+                Text("총액: ₩\(cartManager.totalAmount)")
+                    .font(.chosunOrFallback(size: 18, weight: .bold))
+                    .foregroundColor(.cyan)
 
                 HStack(spacing: 20) {
                     Button("취소") {
                         showPurchaseConfirmation = false
                     }
-                    .font(Font.chosunOrFallback(size: 16))
+                    .font(.chosunOrFallback(size: 16))
                     .foregroundColor(.white)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
@@ -421,7 +249,7 @@ extension MerchantDetailView {
                     Button("구매 확인") {
                         completePurchase()
                     }
-                    .font(Font.chosunOrFallback(size: 16))
+                    .font(.chosunOrFallback(size: 16))
                     .foregroundColor(.black)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
@@ -445,48 +273,29 @@ extension MerchantDetailView {
     }
 
     func QuantityPopupContent(item: TradeItem) -> some View {
-        QuantityPopupContentView(
-            item: item,
-            tradeType: viewModel.selectedTradeType,
-            cartManager: cartManager,
-            showQuantityPopup: $showQuantityPopup
-        )
+        QuantityPopupContentView(item: item, cartManager: cartManager, showQuantityPopup: $showQuantityPopup)
     }
 }
 
 struct QuantityPopupContentView: View {
     let item: TradeItem
-    let tradeType: TradeType
     let cartManager: CartManager
     @Binding var showQuantityPopup: Bool
-    let maxQuantity: Int
     @State private var quantity = 1
-
-    init(item: TradeItem, tradeType: TradeType, cartManager: CartManager, showQuantityPopup: Binding<Bool>) {
-        self.item = item
-        self.tradeType = tradeType
-        self.cartManager = cartManager
-        self._showQuantityPopup = showQuantityPopup
-        if item.quantity > 0 {
-            self.maxQuantity = item.quantity
-        } else {
-            self.maxQuantity = tradeType == .buy ? 99 : 1
-        }
-    }
 
     var body: some View {
         VStack(spacing: 20) {
             Text("수량 선택")
-                .font(Font.chosunOrFallback(size: 18, weight: .bold))
+                .font(.chosunOrFallback(size: 18, weight: .bold))
                 .foregroundColor(.cyan)
 
             VStack(spacing: 12) {
                 Text(item.name)
-                    .font(Font.chosunOrFallback(size: 16))
+                    .font(.chosunOrFallback(size: 16))
                     .foregroundColor(.white)
 
                 Text("₩\(item.currentPrice) 각")
-                    .font(Font.chosunOrFallback(size: 14))
+                    .font(.chosunOrFallback(size: 14))
                     .foregroundColor(.cyan)
             }
 
@@ -500,12 +309,12 @@ struct QuantityPopupContentView: View {
                 .background(Circle().stroke(Color.cyan, lineWidth: 1))
 
                 Text("\(quantity)")
-                    .font(Font.chosunOrFallback(size: 18, weight: .bold))
+                    .font(.chosunOrFallback(size: 18, weight: .bold))
                     .foregroundColor(.white)
                     .frame(width: 60)
 
                 Button("+") {
-                    if quantity < maxQuantity { quantity += 1 }
+                    if quantity < 99 { quantity += 1 }
                 }
                 .font(.title2)
                 .foregroundColor(.cyan)
@@ -513,15 +322,15 @@ struct QuantityPopupContentView: View {
                 .background(Circle().stroke(Color.cyan, lineWidth: 1))
             }
 
-            Text(tradeType == .buy ? "총액: ₩\(item.currentPrice * quantity)" : "판매 금액: ₩\(item.currentPrice * quantity)")
-                .font(Font.chosunOrFallback(size: 16, weight: .bold))
+            Text("총액: ₩\(item.currentPrice * quantity)")
+                .font(.chosunOrFallback(size: 16, weight: .bold))
                 .foregroundColor(.cyan)
 
             HStack(spacing: 20) {
                 Button("아니요") {
                     showQuantityPopup = false
                 }
-                .font(Font.chosunOrFallback(size: 16))
+                .font(.chosunOrFallback(size: 16))
                 .foregroundColor(.white)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
@@ -531,10 +340,10 @@ struct QuantityPopupContentView: View {
                 )
 
                 Button("예") {
-                    cartManager.addItem(item, quantity: quantity, type: tradeType)
+                    cartManager.addItem(item, quantity: quantity)
                     showQuantityPopup = false
                 }
-                .font(Font.chosunOrFallback(size: 16))
+                .font(.chosunOrFallback(size: 16))
                 .foregroundColor(.black)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
@@ -560,19 +369,32 @@ struct QuantityPopupContentView: View {
 extension MerchantDetailView {
     // 구매 완료 처리
     func completePurchase() {
-        guard !cartManager.items.isEmpty else {
-            isCartPresented = false
-            showPurchaseConfirmation = false
-            return
-        }
+        // 실제 플레이어 머니 차감
+        if let player = gameManager.currentPlayer {
+            let totalCost = cartManager.totalAmount
+            if player.money >= totalCost {
+                player.money -= totalCost
 
-        if let validationError = validateCartForTrade() {
-            viewModel.error = validationError
-            showPurchaseConfirmation = false
-            return
-        }
+                // 구매한 아이템들을 플레이어 인벤토리에 추가
+                for cartItem in cartManager.items {
+                    // TODO: 실제 인벤토리 시스템에 추가
+                    print("구매 완료: \(cartItem.item.name) x\(cartItem.quantity)")
+                }
 
-        Task { await executeTradeForCart() }
+                // 장바구니 비우기
+                cartManager.clear()
+
+                // 팝업 닫기
+                showPurchaseConfirmation = false
+
+                // 감사 대화 표시
+                showThankYouDialogue()
+            } else {
+                // 돈이 부족한 경우
+                // TODO: 에러 처리
+                print("돈이 부족합니다")
+            }
+        }
     }
 }
 
@@ -662,11 +484,11 @@ struct CartItemRow: View {
             // 아이템 정보
             VStack(alignment: .leading, spacing: 4) {
                 Text(cartItem.item.name)
-                    .font(Font.chosunOrFallback(size: 16, weight: .semibold))
+                    .font(.chosunOrFallback(size: 16, weight: .semibold))
                     .foregroundColor(.white)
 
                 Text("₩\(cartItem.item.currentPrice) x \(cartItem.quantity)개")
-                    .font(Font.chosunOrFallback(size: 14))
+                    .font(.chosunOrFallback(size: 14))
                     .foregroundColor(.white.opacity(0.7))
             }
 
@@ -674,7 +496,7 @@ struct CartItemRow: View {
 
             // 총 가격
             Text("₩\(cartItem.item.currentPrice * cartItem.quantity)")
-                .font(Font.chosunOrFallback(size: 16, weight: .bold))
+                .font(.chosunOrFallback(size: 16, weight: .bold))
                 .foregroundColor(.cyan)
         }
         .padding()

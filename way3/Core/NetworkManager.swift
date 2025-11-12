@@ -77,7 +77,16 @@ class NetworkManager: ObservableObject {
     // MARK: - Private Properties
     private var authToken: String? {
         didSet {
-            isAuthenticated = authToken != nil
+            let updateAuthState = {
+                self.isAuthenticated = self.authToken != nil
+            }
+            
+            if Thread.isMainThread {
+                updateAuthState()
+            } else {
+                DispatchQueue.main.async(execute: updateAuthState)
+            }
+            
             if let token = authToken {
                 UserDefaults.standard.set(token, forKey: "auth_token")
             } else {
@@ -278,7 +287,7 @@ extension NetworkManager {
 
     // MARK: - Auth Token Sync
     func applyAuthTokens(accessToken: String?, refreshToken: String?) {
-        requestQueue.async(flags: .barrier) {
+        Task { @MainActor in
             self.authToken = accessToken
             self.refreshToken = refreshToken
         }
@@ -533,11 +542,12 @@ extension NetworkManager {
             responseType: AuthResponse.self
         )
         
-        // ✅ 성공 시 토큰 저장
+        // ✅ 성공 시 토큰 저장 및 Socket 연결
         if response.success, let authData = response.data {
             let token = authData.token
             await MainActor.run {
                 self.authToken = token
+                SocketManager.shared.connect(with: token)
             }
         }
         
@@ -557,11 +567,12 @@ extension NetworkManager {
             responseType: AuthResponse.self
         )
         
-        // ✅ 성공 시 토큰 저장
+        // ✅ 성공 시 토큰 저장 및 Socket 연결
         if response.success, let authData = response.data {
             let token = authData.token
             await MainActor.run {
                 self.authToken = token
+                SocketManager.shared.connect(with: token)
             }
         }
         
@@ -569,8 +580,13 @@ extension NetworkManager {
     }
     
     func logout() {
-        authToken = nil
-        isAuthenticated = false
+        Task { @MainActor in
+            self.authToken = nil
+            self.isAuthenticated = false
+        }
+        
+        // ✅ Socket 연결 해제
+        SocketManager.shared.disconnect()
         
         // ✅ 캐시 정리 (스레드 안전)
         requestQueue.async(flags: .barrier) {
@@ -697,12 +713,12 @@ extension NetworkManager {
         )
     }
 
-    func getMerchantDetail(merchantId: String, useCache: Bool = true) async throws -> MerchantDetailResponse {
+    func getMerchantDetail(merchantId: String) async throws -> MerchantDetailResponse {
         return try await makeRequest(
             endpoint: "/merchants/\(merchantId)",
             requiresAuth: true,
             responseType: MerchantDetailResponse.self,
-            useCache: useCache
+            useCache: true
         )
     }
 
@@ -746,24 +762,6 @@ extension NetworkManager {
         )
     }
     
-    func executeTrade(request: TradeExecuteRequest) async throws -> TradeExecuteResponse {
-        let body: [String: Any] = [
-            "merchantId": request.merchantId,
-            "itemTemplateId": request.itemTemplateId,
-            "tradeType": request.tradeType,
-            "quantity": request.quantity,
-            "proposedPrice": request.proposedPrice
-        ]
-
-        return try await makeRequest(
-            endpoint: "/trade/execute",
-            method: .POST,
-            body: body,
-            requiresAuth: true,
-            responseType: TradeExecuteResponse.self
-        )
-    }
-    
     func getTradeHistory(limit: Int = 20, offset: Int = 0) async throws -> TradeHistoryResponse {
         return try await makeRequest(
             endpoint: "/trade/history?limit=\(limit)&offset=\(offset)",
@@ -800,37 +798,56 @@ extension NetworkManager {
         )
     }
 
-    /// Get list of story chapters for a merchant (Court Record style)
-    func getMerchantStoryChapters(merchantId: String) async throws -> StoryChaptersResponse {
+    // MARK: - Quest API Methods
+    func getQuests() async throws -> QuestListResponse {
         return try await makeRequest(
-            endpoint: "/api/merchants/\(merchantId)/stories/chapters",
+            endpoint: "/quests",
+            method: .GET,
             requiresAuth: true,
-            responseType: StoryChaptersResponse.self,
-            useCache: false
+            responseType: QuestListResponse.self,
+            useCache: true
         )
     }
-
-    func claimChapterReward(request: ChapterRewardClaimRequest) async throws -> ChapterRewardClaimResponse {
-        var body: [String: Any] = ["chapterId": request.chapterId]
-        if let money = request.money {
-            body["money"] = money
-        }
-        if let experience = request.experience {
-            body["experience"] = experience
-        }
-        if let keyItemName = request.keyItemName, !keyItemName.isEmpty {
-            body["keyItemName"] = keyItemName
-        }
-        if let personalItemTemplateId = request.personalItemTemplateId, !personalItemTemplateId.isEmpty {
-            body["personalItemTemplateId"] = personalItemTemplateId
-        }
-
+    
+    func acceptQuest(questId: String) async throws -> QuestActionResponse {
         return try await makeRequest(
-            endpoint: "/story/chapter/reward",
+            endpoint: "/quests/\(questId)/accept",
+            method: .POST,
+            requiresAuth: true,
+            responseType: QuestActionResponse.self
+        )
+    }
+    
+    func claimQuestReward(questId: String) async throws -> QuestRewardResponse {
+        return try await makeRequest(
+            endpoint: "/quests/\(questId)/claim",
+            method: .POST,
+            requiresAuth: true,
+            responseType: QuestRewardResponse.self
+        )
+    }
+    
+    func updateQuestProgress(actionType: String, actionData: [String: Any]) async throws -> QuestProgressResponse {
+        let body: [String: Any] = [
+            "actionType": actionType,
+            "actionData": actionData
+        ]
+        
+        return try await makeRequest(
+            endpoint: "/quests/progress",
             method: .POST,
             body: body,
             requiresAuth: true,
-            responseType: ChapterRewardClaimResponse.self
+            responseType: QuestProgressResponse.self
+        )
+    }
+    
+    func getQuestHistory(limit: Int = 20, offset: Int = 0) async throws -> QuestHistoryResponse {
+        return try await makeRequest(
+            endpoint: "/quests/history?limit=\(limit)&offset=\(offset)",
+            requiresAuth: true,
+            responseType: QuestHistoryResponse.self,
+            useCache: true
         )
     }
 
@@ -842,27 +859,6 @@ extension NetworkManager {
             requiresAuth: true,
             responseType: PersonalItemsResponse.self,
             useCache: true
-        )
-    }
-
-    func recordRelationshipProgress(merchantId: String, questId: String) async throws -> RelationshipProgressResponse {
-        let body: [String: Any] = ["questId": questId]
-
-        return try await makeRequest(
-            endpoint: "/merchants/\(merchantId)/relationship/progress",
-            method: .POST,
-            body: body,
-            requiresAuth: true,
-            responseType: RelationshipProgressResponse.self
-        )
-    }
-
-    func upgradeMerchantPermit(merchantId: String) async throws -> PermitUpgradeResponse {
-        return try await makeRequest(
-            endpoint: "/merchants/\(merchantId)/permit/upgrade",
-            method: .POST,
-            requiresAuth: true,
-            responseType: PermitUpgradeResponse.self
         )
     }
 
@@ -955,38 +951,6 @@ struct MerchantsResponse: Codable {
     let error: String?
 }
 
-struct TradeExecuteRequest {
-    let merchantId: String
-    let itemTemplateId: String
-    let tradeType: String
-    let quantity: Int
-    let proposedPrice: Int
-}
-
-struct TradeExecuteResponse: Codable {
-    let success: Bool
-    let message: String?
-    let data: TradeExecuteData?
-    let error: String?
-}
-
-struct TradeExecuteData: Codable {
-    let tradeId: String?
-    let tradeType: String?
-    let itemName: String?
-    let quantity: Int?
-    let finalPrice: Int?
-    let profit: Int?
-    let experienceGained: Int?
-    let relationshipChange: TradeRelationshipChange?
-    let timestamp: String?
-}
-
-struct TradeRelationshipChange: Codable {
-    let friendship: Int?
-    let trust: Int?
-}
-
 struct TradeResponse: Codable {
     let success: Bool
     let data: TradeResult?
@@ -997,38 +961,6 @@ struct TradeHistoryResponse: Codable {
     let success: Bool
     let data: TradeHistoryData?
     let error: String?
-}
-
-struct RelationshipProgressResponse: Codable {
-    let success: Bool
-    let data: RelationshipProgressData?
-    let message: String?
-    let error: String?
-}
-
-struct RelationshipProgressData: Codable {
-    let merchantId: String
-    let questId: String?
-    let relationshipStage: Int
-    let stageProgress: Int
-    let stageRequirement: Int
-    let permitTier: Int
-    let canTrade: Bool
-}
-
-struct PermitUpgradeResponse: Codable {
-    let success: Bool
-    let data: PermitUpgradeData?
-    let message: String?
-    let error: String?
-}
-
-struct PermitUpgradeData: Codable {
-    let merchantId: String
-    let permitTier: Int
-    let relationshipStage: Int
-    let stageRequirement: Int
-    let stageProgress: Int
 }
 
 // MARK: - Data Models
@@ -1233,6 +1165,153 @@ struct PaginationInfo: Codable {
     let hasMore: Bool
 }
 
+// MARK: - Quest Response Models
+struct QuestListResponse: Codable {
+    let success: Bool
+    let data: QuestListData?
+    let error: String?
+}
+
+struct QuestListData: Codable {
+    let playerId: String
+    let playerLevel: Int
+    let playerLicense: Int
+    let totalQuests: Int
+    let questsByStatus: QuestsByStatus
+    let summary: QuestSummary
+}
+
+struct QuestsByStatus: Codable {
+    let available: [QuestData]
+    let active: [QuestData]
+    let completed: [QuestData]
+    let claimed: [QuestData]
+}
+
+struct QuestSummary: Codable {
+    let available: Int
+    let active: Int
+    let completed: Int
+    let claimed: Int
+}
+
+struct QuestData: Codable, Identifiable, Equatable {
+    let id: String
+    let title: String
+    let description: String
+    let category: String
+    let questType: String
+    let maxProgress: Int
+    let currentProgress: Int
+    let rewards: QuestRewards
+    let requirements: QuestRequirements?
+    let isRepeatable: Bool
+    let cooldownHours: Int
+    let priority: Int
+    let status: String
+    let acceptedAt: String?
+    let completedAt: String?
+    let expiresAt: String?
+    let rewardClaimed: Bool
+}
+
+struct QuestRewards: Codable, Equatable {
+    let experience: Int
+    let money: Int
+    let trustPoints: Int
+    let items: [QuestRewardItem]?
+}
+
+struct QuestRewardItem: Codable, Equatable {
+    let itemId: String
+    let quantity: Int
+}
+
+struct QuestRequirements: Codable, Equatable {
+    let minLevel: Int?
+    let requiredLicense: Int?
+    let requiredItems: [String]?
+    let reputationRequirement: Int?
+    let requiredMoney: Int?
+}
+
+struct QuestActionResponse: Codable {
+    let success: Bool
+    let data: QuestActionData?
+    let message: String?
+    let error: String?
+}
+
+struct QuestActionData: Codable {
+    let questId: String
+    let title: String
+    let description: String
+    let status: String
+    let acceptedAt: String
+    let expiresAt: String?
+}
+
+struct QuestRewardResponse: Codable {
+    let success: Bool
+    let data: QuestRewardData?
+    let message: String?
+    let error: String?
+}
+
+struct QuestRewardData: Codable {
+    let questId: String
+    let title: String
+    let rewards: QuestRewards
+}
+
+struct QuestProgressResponse: Codable {
+    let success: Bool
+    let data: QuestProgressData?
+    let error: String?
+}
+
+struct QuestProgressData: Codable {
+    let actionType: String
+    let updatedQuests: [QuestProgressUpdate]
+    let questsUpdated: Int
+}
+
+struct QuestProgressUpdate: Codable {
+    let questId: String
+    let title: String
+    let oldProgress: Int
+    let newProgress: Int
+    let maxProgress: Int
+    let isCompleted: Bool
+    let progressDelta: Int
+}
+
+struct QuestHistoryResponse: Codable {
+    let success: Bool
+    let data: QuestHistoryData?
+    let error: String?
+}
+
+struct QuestHistoryData: Codable {
+    let quests: [QuestHistoryItem]
+    let pagination: PaginationInfo
+}
+
+struct QuestHistoryItem: Codable {
+    let questId: String
+    let title: String
+    let description: String
+    let category: String
+    let questType: String
+    let status: String
+    let currentProgress: Int
+    let acceptedAt: String?
+    let completedAt: String?
+    let rewardClaimed: Bool
+    let rewards: QuestRewards
+}
+
+// MARK: - Personal Items Response Models
 // PersonalItemActionResponse and PersonalItemActionData are defined in PersonalItem.swift
 
 // MARK: - Profile Response Models
@@ -1327,68 +1406,6 @@ struct StoryProgressData: Codable {
 
 struct StoryRewards: Codable {
     let exp: Int?
-   let reputation: Int?
+    let reputation: Int?
     let money: Int?
-}
-
-// MARK: - Chapter Reward Claim
-struct ChapterRewardClaimRequest {
-    let chapterId: String
-    let money: Int?
-    let experience: Int?
-    let keyItemName: String?
-    let personalItemTemplateId: String?
-}
-
-struct ChapterRewardClaimResponse: Codable {
-    let success: Bool
-    let data: ChapterRewardClaimData?
-    let error: String?
-}
-
-struct ChapterRewardClaimData: Codable {
-    let chapterId: String
-    let rewardSummary: ChapterRewardSummary?
-}
-
-struct ChapterRewardSummary: Codable {
-    let moneyAdded: Int?
-    let experienceAdded: Int?
-    let personalItemGranted: PersonalItemGrantInfo?
-    let keyItemFlag: String?
-}
-
-struct PersonalItemGrantInfo: Codable {
-    let itemId: String?
-    let itemTemplateId: String?
-    let name: String?
-    let alreadyOwned: Bool?
-}
-
-// MARK: - Story Chapters (Court Record)
-struct StoryChaptersResponse: Codable {
-    let success: Bool
-    let data: StoryChaptersData?
-    let error: String?
-}
-
-struct StoryChaptersData: Codable {
-    let chapters: [StoryChapter]
-}
-
-struct StoryChapter: Codable, Identifiable {
-    let chapter: Int
-    let title: String
-    let storyType: String
-    let initialNodeId: String
-    let completed: Bool
-
-    var id: Int { chapter }
-
-    enum CodingKeys: String, CodingKey {
-        case chapter, title
-        case storyType = "storyType"
-        case initialNodeId = "initialNodeId"
-        case completed
-    }
 }

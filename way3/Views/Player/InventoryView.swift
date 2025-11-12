@@ -273,10 +273,11 @@ struct InventoryView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationView {
             ZStack {
                 // 사이버펑크 배경
-                Color.cyberpunkDarkBg.ignoresSafeArea()
+                Color.cyberpunkDarkBg
+                    .ignoresSafeArea()
 
                 // 상태 기반 콘텐츠 렌더링
                 switch gameManager.inventoryViewState {
@@ -322,7 +323,7 @@ struct InventoryView: View {
                 }
             }
             .navigationTitle("")
-            .toolbar(.hidden, for: .navigationBar)
+            .navigationBarHidden(true)
             .onAppear {
                 Task {
                     await gameManager.smartLoadInventory()

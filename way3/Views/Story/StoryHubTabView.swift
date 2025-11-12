@@ -22,7 +22,7 @@ struct StoryHubTabView: View {
     @EnvironmentObject private var progressManager: ProgressManager
 
     var body: some View {
-        NavigationStack {
+        GameScreen {
             VStack(spacing: 0) {
                 header
                 segmentedControl
@@ -36,9 +36,6 @@ struct StoryHubTabView: View {
                 }
                 .animation(.easeInOut, value: filter)
             }
-            .background(Color.cyberpunkDarkBg)
-            .navigationTitle("")
-            .toolbar(.hidden, for: .navigationBar)
         }
         .fullScreenCover(item: Binding(
             get: { startNode.map { NodeKey(id: $0) } },

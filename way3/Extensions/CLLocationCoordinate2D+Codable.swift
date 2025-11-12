@@ -151,3 +151,11 @@ extension CLLocationCoordinate2D {
 }
 
 // MARK: - Equatable은 이미 다른 곳에서 지원됨 (Turf framework)
+
+// MARK: - Hashable 지원
+extension CLLocationCoordinate2D: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(latitude)
+        hasher.combine(longitude)
+    }
+}

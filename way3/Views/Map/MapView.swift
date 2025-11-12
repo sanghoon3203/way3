@@ -414,12 +414,20 @@ struct MapView: View {
     // MARK: - 상인 이미지 파일명 생성
     private func generateImageFileName(from merchantName: String) -> String {
         // 서버에서 받은 상인 이름을 Resources 폴더 구조에 맞게 변환
-        // 예: "서예나" -> "Seoyena"
+        // 예: "서예나" -> Merchant_seoyena_face
         let baseName = convertKoreanNameToFileName(merchantName)
-        if baseName.lowercased().hasSuffix("_face") {
-            return baseName
-        }
-        return "\(baseName)_face"
+        let normalized = baseName
+            .replacingOccurrences(of: " ", with: "")
+            .lowercased()
+
+        let trimmed = normalized.hasPrefix("merchant_")
+            ? String(normalized.dropFirst("merchant_".count))
+            : normalized
+
+        let merchantPrefixed = "Merchant_\(trimmed)"
+        return merchantPrefixed.hasSuffix("_face")
+            ? merchantPrefixed
+            : "\(merchantPrefixed)_face"
     }
 
     private func resolveMerchantImageFileName(serverFileName: String?, merchantName: String) -> String {
@@ -440,14 +448,16 @@ struct MapView: View {
         guard !lastComponent.isEmpty else { return nil }
 
         let baseComponent = lastComponent.split(separator: ".").first.map(String.init) ?? lastComponent
-        let normalized = baseComponent.replacingOccurrences(of: " ", with: "")
+        let normalized = baseComponent
+            .replacingOccurrences(of: " ", with: "")
+            .replacingOccurrences(of: "Merchant_", with: "", options: [.caseInsensitive], range: nil)
+            .replacingOccurrences(of: "merchant_", with: "", options: [.caseInsensitive], range: nil)
+            .lowercased()
 
         guard !normalized.isEmpty else { return nil }
 
-        if normalized.lowercased().hasSuffix("_face") {
-            return normalized
-        }
-        return "\(normalized)_face"
+        let prefixed = "Merchant_\(normalized)"
+        return prefixed.hasSuffix("_face") ? prefixed : "\(prefixed)_face"
     }
 
     private func convertKoreanNameToFileName(_ koreanName: String) -> String {
@@ -684,7 +694,16 @@ struct OptimizedMerchantPinView: View {
             
             // 🏪 Main Merchant Pin with Real Image
             Circle()
-                .fill(merchant.type.color.gradient)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            merchant.type.color,
+                            merchant.type.color.opacity(0.6)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
                 .frame(width: 36, height: 36)
                 .overlay(
                     // 실제 상인 이미지 사용
@@ -697,7 +716,7 @@ struct OptimizedMerchantPinView: View {
                                 .clipShape(Circle())
                         } else {
                             // 이미지가 없을 경우 fallback 아이콘
-                            Image(systemName: merchant.type.iconName)
+                            Image(systemName: merchant.iconName)
                                 .font(.system(size: 18, weight: .bold))
                                 .foregroundColor(.white)
                         }

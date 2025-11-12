@@ -32,11 +32,6 @@ struct Merchant: Identifiable {
     // 이미지 정보
     var imageFileName: String?
 
-    // 위치 기반 거래 정보
-    var withinTradeDistance: Bool
-    var tradeDistanceLimit: Double?
-    var meetsRequirements: Bool
-
     // 거리 (계산된 값, 옵셔널)
     var distance: Double = 0.0
 
@@ -63,9 +58,6 @@ struct Merchant: Identifiable {
         reputationRequirement: Int = 0,
         isActive: Bool = true,
         imageFileName: String? = nil,
-        withinTradeDistance: Bool = true,
-        tradeDistanceLimit: Double? = nil,
-        meetsRequirements: Bool = true,
         storyRole: StoryRole? = nil,
         hasActiveStory: Bool = false,
         initialStoryNode: String? = nil
@@ -87,9 +79,6 @@ struct Merchant: Identifiable {
         self.isActive = isActive
         self.imageFileName = imageFileName
         self.lastRestocked = Date()
-        self.withinTradeDistance = withinTradeDistance
-        self.tradeDistanceLimit = tradeDistanceLimit
-        self.meetsRequirements = meetsRequirements
         self.storyRole = storyRole
         self.hasActiveStory = hasActiveStory
         self.initialStoryNode = initialStoryNode
@@ -117,9 +106,6 @@ struct Merchant: Identifiable {
         self.isActive = serverMerchant.isActive
         self.imageFileName = serverMerchant.imageFileName
         self.lastRestocked = Date(timeIntervalSince1970: serverMerchant.lastRestocked)
-        self.withinTradeDistance = true
-        self.tradeDistanceLimit = nil
-        self.meetsRequirements = true
 
         // 🆕 Story system fields
         self.storyRole = serverMerchant.storyRole.flatMap { StoryRole(rawValue: $0) }
@@ -137,47 +123,11 @@ struct Merchant: Identifiable {
     }
     
     var pinColor: Color {
-        switch type {
-        case .retail, .convenience: return .blue
-        case .wholesale, .industrial: return .green
-        case .premium, .luxury: return .purple
-        case .artisan, .craftsman: return .orange
-        case .mystic, .collector, .antique: return .red
-        case .tech, .electronics: return .cyan
-        case .fashion, .artist: return .pink
-        case .herbalist, .natural, .forager: return .mint
-        case .foodMerchant: return .yellow
-        case .scholar: return .indigo
-        case .student: return .teal
-        case .tourist: return .brown
-        }
+        type.color
     }
     
     var iconName: String {
-        switch type {
-        case .retail: return "cart.fill"
-        case .wholesale: return "building.2.fill"
-        case .premium: return "crown.fill"
-        case .artisan: return "hammer.fill"
-        case .mystic: return "sparkles"
-        case .collector: return "archivebox.fill"
-        case .tech: return "laptopcomputer"
-        case .fashion: return "tshirt.fill"
-        case .artist: return "paintbrush.fill"
-        case .antique: return "scroll.fill"
-        case .herbalist: return "leaf.fill"
-        case .foodMerchant: return "fork.knife"
-        case .industrial: return "gearshape.fill"
-        case .luxury: return "gem.fill"
-        case .scholar: return "book.fill"
-        case .student: return "pencil"
-        case .tourist: return "camera.fill"
-        case .craftsman: return "wrench.fill"
-        case .electronics: return "bolt.fill"
-        case .natural: return "tree.fill"
-        case .forager: return "basket.fill"
-        case .convenience: return "bag.fill"
-        }
+        type.iconName
     }
     
     
@@ -231,7 +181,6 @@ extension Merchant: Codable {
         case requiredLicense, inventory, priceModifier, negotiationDifficulty
         case preferredItems, dislikedItems, reputationRequirement
         case isActive, lastRestocked, imageFileName, distance
-        case withinTradeDistance, tradeDistanceLimit, meetsRequirements
         case storyRole, hasActiveStory, initialStoryNode
     }
     
@@ -259,9 +208,6 @@ extension Merchant: Codable {
         isActive = try container.decode(Bool.self, forKey: .isActive)
         lastRestocked = try container.decode(Date.self, forKey: .lastRestocked)
         imageFileName = try container.decodeIfPresent(String.self, forKey: .imageFileName)
-        withinTradeDistance = try container.decodeIfPresent(Bool.self, forKey: .withinTradeDistance) ?? true
-        tradeDistanceLimit = try container.decodeIfPresent(Double.self, forKey: .tradeDistanceLimit)
-        meetsRequirements = try container.decodeIfPresent(Bool.self, forKey: .meetsRequirements) ?? true
         distance = try container.decodeIfPresent(Double.self, forKey: .distance) ?? 0.0
 
         // 🆕 Story fields
@@ -291,9 +237,6 @@ extension Merchant: Codable {
         try container.encode(isActive, forKey: .isActive)
         try container.encode(lastRestocked, forKey: .lastRestocked)
         try container.encodeIfPresent(imageFileName, forKey: .imageFileName)
-        try container.encode(withinTradeDistance, forKey: .withinTradeDistance)
-        try container.encodeIfPresent(tradeDistanceLimit, forKey: .tradeDistanceLimit)
-        try container.encode(meetsRequirements, forKey: .meetsRequirements)
         try container.encode(distance, forKey: .distance)
 
         // 🆕 Story fields
@@ -373,6 +316,50 @@ enum MerchantType: String, CaseIterable, Codable {
         case .scholar: return .rare
         case .student, .convenience: return .common
         case .tourist: return .intermediate
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .retail, .convenience: return .blue
+        case .wholesale, .industrial: return .green
+        case .premium, .luxury: return .purple
+        case .artisan, .craftsman: return .orange
+        case .mystic, .collector, .antique: return .red
+        case .tech, .electronics: return .cyan
+        case .fashion, .artist: return .pink
+        case .herbalist, .natural, .forager: return .mint
+        case .foodMerchant: return .yellow
+        case .scholar: return .indigo
+        case .student: return .teal
+        case .tourist: return .brown
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .retail: return "cart.fill"
+        case .wholesale: return "building.2.fill"
+        case .premium: return "crown.fill"
+        case .artisan: return "hammer.fill"
+        case .mystic: return "sparkles"
+        case .collector: return "archivebox.fill"
+        case .tech: return "laptopcomputer"
+        case .fashion: return "tshirt.fill"
+        case .artist: return "paintbrush.fill"
+        case .antique: return "scroll.fill"
+        case .herbalist: return "leaf.fill"
+        case .foodMerchant: return "fork.knife"
+        case .industrial: return "gearshape.fill"
+        case .luxury: return "gem.fill"
+        case .scholar: return "book.fill"
+        case .student: return "pencil"
+        case .tourist: return "camera.fill"
+        case .craftsman: return "wrench.fill"
+        case .electronics: return "bolt.fill"
+        case .natural: return "tree.fill"
+        case .forager: return "basket.fill"
+        case .convenience: return "bag.fill"
         }
     }
 }

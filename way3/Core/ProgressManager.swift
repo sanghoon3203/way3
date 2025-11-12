@@ -427,6 +427,10 @@ class ProgressManager: ObservableObject {
         logger.info("📜 스토리 조각 '\(storyPieceId)' 수집")
     }
 
+    func hasStoryPiece(_ storyPieceId: String) -> Bool {
+        progress.hasStoryPiece(storyPieceId)
+    }
+
     // MARK: - Key Item Management
 
     func acquireKeyItem(_ itemId: String) {
@@ -438,6 +442,10 @@ class ProgressManager: ObservableObject {
         progress.keyItems.append(itemId)
         save()
         logger.info("🔑 증표 아이템 '\(itemId)' 획득")
+    }
+
+    func hasKeyItem(_ itemId: String) -> Bool {
+        progress.hasKeyItem(itemId)
     }
 
     func hasAllRegionalKeys() -> Bool {

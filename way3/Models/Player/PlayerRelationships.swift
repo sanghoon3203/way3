@@ -282,8 +282,6 @@ struct MerchantRelationship: Codable {
     let merchantId: String
     var friendshipPoints: Int = 0
     var trustLevel: Int = 0
-    var stageProgress: Int = 0
-    var stageRequirement: Int = 0
     var totalTrades: Int = 0
     var totalSpent: Int = 0
     var lastInteraction: String?
@@ -301,20 +299,6 @@ struct MerchantRelationship: Codable {
         } else if satisfaction <= 2 {
             trustLevel = max(trustLevel - 1, 0)
         }
-    }
-}
-
-extension PlayerRelationships {
-    func adjustTrust(for merchantId: String, amount: Int) {
-        guard amount != 0 else { return }
-
-        if merchantRelationships[merchantId] == nil {
-            merchantRelationships[merchantId] = MerchantRelationship(merchantId: merchantId)
-        }
-
-        merchantRelationships[merchantId]?.friendshipPoints = max(0, (merchantRelationships[merchantId]?.friendshipPoints ?? 0) + amount)
-        merchantRelationships[merchantId]?.trustLevel = min(100, max(0, (merchantRelationships[merchantId]?.trustLevel ?? 0) + amount))
-        merchantRelationships[merchantId]?.lastInteraction = ISO8601DateFormatter().string(from: Date())
     }
 }
 

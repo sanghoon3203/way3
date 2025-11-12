@@ -1,5 +1,4 @@
 import SwiftUI
-import AVKit
 import os
 
 // MARK: - UI Pieces
@@ -228,27 +227,16 @@ struct StoryView: View {
     private var characterLayer: some View {
         Group {
             if let sprite = currentDialogue?.characterSprite,
-               !sprite.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                let trimmed = sprite.trimmingCharacters(in: .whitespaces)
-                if let movieName = resolvedMovieName(from: trimmed) {
-                    VStack {
-                        Spacer()
-                        CharacterOneShotVideoView(resourceName: movieName)
-                            .frame(height: 320)
-                            .shadow(color: .cyan.opacity(0.4), radius: 12)
-                    }
-                    .padding(.bottom, 140)
-                } else if let ui = UIImage(named: trimmed) {
-                    VStack {
-                        Spacer()
-                        Image(uiImage: ui)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 320)
-                            .shadow(color: .cyan.opacity(0.4), radius: 12)
-                    }
-                    .padding(.bottom, 140)
+               let image = resolvedCharacterImage(from: sprite) {
+                VStack {
+                    Spacer()
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 320)
+                        .shadow(color: .cyan.opacity(0.4), radius: 12)
                 }
+                .padding(.bottom, 140)
             }
         }
     }
@@ -421,12 +409,53 @@ struct StoryView: View {
         lastBackgroundName = trimmed
     }
 
-    private func resolvedMovieName(from resource: String) -> String? {
-        let lower = resource.lowercased()
-        if lower.hasSuffix(".mov") || lower.hasSuffix(".mp4") {
-            return resource
+    private func resolvedCharacterImage(from resource: String) -> UIImage? {
+        let trimmed = resource.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+
+        let sanitized = trimmed.replacingOccurrences(of: "\\", with: "/")
+        var candidates: [String] = []
+        var seen = Set<String>()
+        func append(_ value: String) {
+            let normalized = value.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !normalized.isEmpty, !seen.contains(normalized) else { return }
+            seen.insert(normalized)
+            candidates.append(normalized)
         }
+
+        append(sanitized)
+
+        let lower = sanitized.lowercased()
+        let isVideo = lower.hasSuffix(".mov") || lower.hasSuffix(".mp4")
+        let basePath = stripExtension(from: sanitized)
+        append(basePath)
+        append("\(basePath).png")
+
+        if let lastComponent = basePath.split(separator: "/").last.map(String.init) {
+            append(lastComponent)
+            append("\(lastComponent).png")
+        }
+
+        if isVideo {
+            let pngVariant = "\(basePath)_frame.png"
+            append(pngVariant)
+        }
+
+        for candidate in candidates {
+            if let image = UIImage(named: candidate) {
+                return image
+            }
+            if let image = UIImage(named: "\(candidate).png") {
+                return image
+            }
+        }
+
         return nil
+    }
+
+    private func stripExtension(from path: String) -> String {
+        guard let dotIndex = path.lastIndex(of: ".") else { return path }
+        return String(path[..<dotIndex])
     }
 
     private func finishStory(wasCompleted: Bool) {
@@ -458,99 +487,6 @@ struct StoryView: View {
 }
 
 // MARK: - Character Video Player
-
-struct CharacterOneShotVideoView: View {
-    let resourceName: String
-    @State private var player: AVPlayer?
-    @State private var completionObserver: NSObjectProtocol?
-
-    var body: some View {
-        VideoPlayer(player: player)
-            .onAppear {
-                prepareAndPlay()
-            }
-            .onDisappear {
-                teardown()
-            }
-            .disabled(true)
-            .aspectRatio(contentMode: .fit)
-    }
-
-    private func prepareAndPlay() {
-        guard player == nil else {
-            player?.seek(to: .zero)
-            player?.play()
-            return
-        }
-
-        guard let url = locateVideoURL() else {
-            return
-        }
-
-        let newPlayer = AVPlayer(url: url)
-        self.player = newPlayer
-        newPlayer.play()
-
-        completionObserver = NotificationCenter.default.addObserver(
-            forName: .AVPlayerItemDidPlayToEndTime,
-            object: newPlayer.currentItem,
-            queue: .main
-        ) { [weak playerRef = newPlayer] _ in
-            playerRef?.seek(to: .zero)
-            playerRef?.pause()
-        }
-    }
-
-    private func teardown() {
-        player?.pause()
-        if let observer = completionObserver {
-            NotificationCenter.default.removeObserver(observer)
-            completionObserver = nil
-        }
-    }
-
-    private func locateVideoURL() -> URL? {
-        let sanitized = resourceName.replacingOccurrences(of: "\\", with: "/")
-        let components = sanitized.split(separator: "/")
-        let filePart = components.last.map(String.init) ?? sanitized
-
-        let nameComponents = filePart.split(separator: ".")
-        let inferredExt = nameComponents.count > 1 ? String(nameComponents.last!) : "mov"
-        let baseName = nameComponents.count > 1 ? nameComponents.dropLast().joined(separator: ".") : filePart
-        let directory = components.count > 1 ? components.dropLast().joined(separator: "/") : nil
-
-        let rawCandidates = [inferredExt, inferredExt.lowercased(), inferredExt.uppercased()]
-        var tried: Set<String> = []
-        for ext in rawCandidates {
-            guard !tried.contains(ext) else { continue }
-            tried.insert(ext)
-            if let url = Bundle.main.url(forResource: baseName, withExtension: ext, subdirectory: directory) {
-                return url
-            }
-        }
-
-        // Fallback: attempt fuzzy match ignoring case/underscores
-        let target = normalizeResourceName(baseName)
-        let searchDirectory = directory
-        let allUrls = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: searchDirectory) ?? []
-        if let match = allUrls.first(where: { url in
-            let normalized = normalizeResourceName(url.deletingPathExtension().lastPathComponent)
-            guard normalized == target else { return false }
-            let ext = url.pathExtension.lowercased()
-            return ext == "mov" || ext == "mp4"
-        }) {
-            return match
-        }
-
-        AppLog.story.error("🎬 video resource not found '\(resourceName, privacy: .public)'")
-        return nil
-    }
-
-    private func normalizeResourceName(_ name: String) -> String {
-        let lowercase = name.lowercased()
-        return lowercase.unicodeScalars.filter { CharacterSet.alphanumerics.contains($0) }.map(String.init).joined()
-    }
-}
 
 // MARK: - Exit Button
 

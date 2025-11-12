@@ -12,147 +12,54 @@ class MerchantDetailViewModel: ObservableObject {
     @Published var merchantDetail: MerchantDetailResponse?
     @Published var inventory: [TradeItem] = []
     @Published var relationship: MerchantRelationship?
+    @Published var currentDialogue: String = ""
     @Published var isLoading = false
     @Published var error: MerchantDataError?
 
     // MARK: - UI State
+    @Published var currentMode: MerchantInteractionMode = .dialogue
     @Published var selectedTradeType: TradeType = .buy
+    @Published var showQuantityPopup = false
+    @Published var selectedItem: TradeItem?
+    @Published var showCartDetail = false
+    @Published var showPurchaseConfirmation = false
+
+    // MARK: - 대화 상태
+    @Published var displayedText = ""
+    @Published var isTypingComplete = false
+    @Published var showNextArrow = false
+    @Published var currentDialogueIndex = 0
 
     // MARK: - Dependencies
     private let dataManager = MerchantDataManager.shared
+    private let dialogueManager = DialogueDataManager.shared
+    private var cartManager = CartManager()
     private let gameManager = GameManager.shared
 
     private var cancellables = Set<AnyCancellable>()
     private var currentMerchantId: String?
-    private let permitTierMapping: [String: Int] = [
-        "Merchantpermit_1": 1,
-        "Merchantpermit_2": 2,
-        "Merchantpermit_3": 3,
-        "Merchantpermit_4": 4
-    ]
-    private let gradeCapByTier: [Int: Int] = [
-        1: 0,
-        2: 1,
-        3: 2,
-        4: 5
-    ]
-    private let defaultGradeRequirement: [Int: Int] = [
-        0: 1,
-        1: 2,
-        2: 3,
-        3: 4,
-        4: 4,
-        5: 4
-    ]
-    private let stageRequirements: [Int: Int] = [
-        0: 3,
-        1: 3,
-        2: 5,
-        3: 5,
-        4: 0
-    ]
-    private let maxPermitTier = 4
 
     // MARK: - Computed Properties
     var playerInventory: [TradeItem] {
         return gameManager.currentPlayer?.inventory.inventory ?? []
     }
 
-    private var accessControl: AccessControlResponse? {
-        merchantDetail?.accessControl
-    }
+    var canTrade: Bool {
+        guard let profile = merchantDetail else { return false }
+        guard let player = gameManager.currentPlayer else { return false }
 
-    private var gradeRequirementMap: [Int: Int] {
-        var requirements = defaultGradeRequirement
-        if let serverMap = accessControl?.requiredTierForGrade {
-            for (key, value) in serverMap {
-                if let grade = Int(key) {
-                    requirements[grade] = value
-                }
-            }
-        }
-        return requirements
-    }
-
-    private var normalizedRelationshipStage: Int {
-        if let stage = accessControl?.relationshipStage {
-            return stage
-        }
-        if let trust = relationship?.trustLevel {
-            return min(max(trust, 0), 4)
-        }
-        return 0
-    }
-
-    private var resolvedPermitTier: Int {
-        let localTier = gameManager.personalItems
-            .compactMap { permitTierMapping[$0.itemTemplateId] }
-            .max() ?? 0
-        if let serverTier = accessControl?.permitTier {
-            return max(serverTier, localTier)
-        }
-        return localTier
-    }
-
-    private var permitGradeCap: Int {
-        gradeCap(for: resolvedPermitTier)
-    }
-
-    private var relationshipGradeCap: Int {
-        gradeCap(for: normalizedRelationshipStage)
-    }
-
-    private var effectiveMaxGrade: Int {
-        guard permitGradeCap >= 0, relationshipGradeCap >= 0 else {
-            return -1
-        }
-        return min(permitGradeCap, relationshipGradeCap)
-    }
-
-    var relationshipStage: Int {
-        normalizedRelationshipStage
-    }
-
-    var stageProgress: Int {
-        if let progress = accessControl?.stageProgress {
-            return progress
-        }
-        return relationship?.stageProgress ?? 0
-    }
-
-    var stageRequirement: Int {
-        if let requirement = accessControl?.stageRequirement {
-            return requirement
-        }
-        return stageRequirements[normalizedRelationshipStage] ?? 0
-    }
-
-    var permitTier: Int {
-        resolvedPermitTier
-    }
-
-    var canUpgradePermit: Bool {
-        resolvedPermitTier < maxPermitTier && normalizedRelationshipStage >= resolvedPermitTier + 1
-    }
-
-    var tradeEntryRestrictionMessage: String? {
-        if normalizedRelationshipStage <= 0 {
-            let requirement = stageRequirement(forStage: normalizedRelationshipStage)
-            if requirement > 0 {
-                return "관계도 1단계를 달성해야 거래가 열립니다. 서브 퀘스트 진행 \(stageProgress)/\(requirement)."
-            }
-            return "해당 상인과 대화를 진행해야 거래가 열립니다."
-        }
-        if resolvedPermitTier <= 0 {
-            let nextTier = min(maxPermitTier, resolvedPermitTier + 1)
-            return "상인 허가증이 필요합니다. 허가증을 Lv.\(nextTier)까지 승급하세요."
-        }
-        return nil
+        // TODO: 플레이어 라이센스/평판 확인
+        // 기본 거래 가능성 체크
+        return player.core.money > 0 && player.core.currentLicense.rawValue >= 0
     }
 
     // MARK: - 초기화
     init() {
         setupBindings()
+    }
+
+    func attachCartManager(_ manager: CartManager) {
+        self.cartManager = manager
     }
 
     private func setupBindings() {
@@ -173,24 +80,6 @@ class MerchantDetailViewModel: ObservableObject {
                 self?.objectWillChange.send()
             }
             .store(in: &cancellables)
-
-        gameManager.$personalItems
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
-            }
-            .store(in: &cancellables)
-    }
-
-    private func ensurePersonalItemsLoaded() async {
-        if !gameManager.personalItems.isEmpty {
-            return
-        }
-
-        if gameManager.personalItemsViewState.isLoading {
-            return
-        }
-
-        await gameManager.loadPersonalItemsData()
     }
 
     // MARK: - 상인 데이터 로딩
@@ -205,19 +94,20 @@ class MerchantDetailViewModel: ObservableObject {
 
         do {
             // 병렬로 데이터 로딩
-            async let personalItemsLoad = ensurePersonalItemsLoaded()
             async let detail = dataManager.fetchMerchantDetail(merchantId: id)
             async let inventory = dataManager.fetchMerchantInventory(merchantId: id)
             async let relationship = dataManager.fetchMerchantRelationship(merchantId: id)
 
             // 결과 받기
             let (loadedDetail, loadedInventory, loadedRelationship) = try await (detail, inventory, relationship)
-            await personalItemsLoad
 
             // UI 업데이트
             self.merchantDetail = loadedDetail
             self.inventory = loadedInventory
             self.relationship = loadedRelationship
+
+            // 초기 대화 설정
+            startDialogue()
 
             isLoading = false
 
@@ -227,109 +117,201 @@ class MerchantDetailViewModel: ObservableObject {
         }
     }
 
-    func refreshMerchantData() async {
-        guard let merchantId = currentMerchantId else { return }
+    // MARK: - 대화 시스템
+    /// 대화 시작 (JSON 및 컨텍스트 기반 시스템)
+    func startDialogue() {
+        guard let merchantId = merchantDetail?.id else { return }
 
-        do {
-            await ensurePersonalItemsLoaded()
-            async let detail = dataManager.fetchMerchantDetail(merchantId: merchantId, forceRefresh: true)
-            async let inventoryItems = dataManager.fetchMerchantInventory(merchantId: merchantId, forceRefresh: true)
-            async let relationshipInfo = dataManager.fetchMerchantRelationship(merchantId: merchantId, forceRefresh: true)
-
-            let (loadedDetail, loadedInventory, loadedRelationship) = try await (detail, inventoryItems, relationshipInfo)
+        Task {
+            let greeting = await dialogueManager.getDialogue(
+                merchantId: merchantId,
+                category: .greeting,
+                context: createDialogueContext()
+            )
 
             await MainActor.run {
-                self.merchantDetail = loadedDetail
-                self.inventory = loadedInventory
-                self.relationship = loadedRelationship
+                startTypingAnimation(text: greeting)
             }
-        } catch {
-            await MainActor.run { self.error = .networkError(error) }
+        }
+    }
+
+    func continueDialogue() {
+        guard let merchantId = merchantDetail?.id else { return }
+
+        Task {
+            let dialogue = await dialogueManager.getDialogue(
+                merchantId: merchantId,
+                category: .trading,
+                context: createDialogueContext()
+            )
+
+            await MainActor.run {
+                startTypingAnimation(text: dialogue)
+            }
+        }
+    }
+
+    func showThankYouDialogue() {
+        guard let merchantId = merchantDetail?.id else { return }
+
+        Task {
+            let farewell = await dialogueManager.getDialogue(
+                merchantId: merchantId,
+                category: .goodbye,
+                context: createDialogueContext()
+            )
+
+            await MainActor.run {
+                startTypingAnimation(text: farewell)
+            }
+        }
+    }
+
+    // MARK: - 대화 컨텍스트 생성
+    private func createDialogueContext() -> DialogueContext {
+        let currentHour = Calendar.current.component(.hour, from: Date())
+        let timeOfDay = {
+            switch currentHour {
+            case 6..<12: return "morning"
+            case 12..<18: return "afternoon"
+            case 18..<22: return "evening"
+            default: return "night"
+            }
+        }()
+
+        return DialogueContext(
+            playerRelationshipLevel: relationship?.friendshipPoints ?? 0,
+            timeOfDay: timeOfDay,
+            lastInteractionTime: relationship?.lastInteraction,
+            currentMood: nil, // MerchantRelationship에 mood 필드 없음
+            recentPurchases: [] // TODO: 최근 구매 이력 - TradeHistory에서 가져오기
+        )
+    }
+
+    func startTrading() {
+        withAnimation(.easeInOut(duration: 0.5)) {
+            currentMode = .trading
+        }
+    }
+
+    func closeDialogue() {
+        // 부모 뷰에서 처리
+    }
+
+    // MARK: - 타이핑 애니메이션
+    private func startTypingAnimation(text: String) {
+        displayedText = ""
+        isTypingComplete = false
+        showNextArrow = false
+
+        let words = text.split(separator: " ").map(String.init)
+        var currentIndex = 0
+
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+            if currentIndex < words.count {
+                if currentIndex == 0 {
+                    self.displayedText = words[currentIndex]
+                } else {
+                    self.displayedText += " " + words[currentIndex]
+                }
+                currentIndex += 1
+            } else {
+                timer.invalidate()
+                self.isTypingComplete = true
+                self.showNextArrow = true
+            }
         }
     }
 
     // MARK: - 아이템 관리
-    private func gradeCap(for tier: Int) -> Int {
-        guard tier > 0 else { return -1 }
-        return gradeCapByTier[tier] ?? -1
+    /// 상인 인벤토리 아이템 선택
+    func selectMerchantItem(_ item: TradeItem) {
+        selectedItem = item
+        showQuantityPopup = true
     }
 
-    private func requiredTier(for grade: Int) -> Int {
-        return gradeRequirementMap[grade] ?? 4
+    /// 플레이어 인벤토리 아이템 선택
+    func selectPlayerItem(_ item: TradeItem) {
+        selectedItem = item
+        showQuantityPopup = true
     }
 
-    private func stageRequirement(forStage stage: Int) -> Int {
-        if stage == normalizedRelationshipStage, let requirement = accessControl?.stageRequirement {
-            return requirement
-        }
-        return stageRequirements[stage] ?? 0
-    }
-
-    func tradeLockInfo(for item: TradeItem) -> TradeLockInfo {
-        if let entryMessage = tradeEntryRestrictionMessage {
-            return TradeLockInfo(isLocked: true, reason: entryMessage)
-        }
-
-        let itemGrade = item.grade.rawValue
-
-        if effectiveMaxGrade >= 0 && itemGrade <= effectiveMaxGrade {
-            return .unlocked
-        }
-
-        if permitGradeCap < itemGrade {
-            let requiredTierLevel = requiredTier(for: itemGrade)
-            let currentTier = resolvedPermitTier
-            return TradeLockInfo(
-                isLocked: true,
-                reason: "상인 허가증을 Lv.\(requiredTierLevel)까지 승급해야 거래할 수 있습니다. (현재 Lv.\(currentTier))"
-            )
-        }
-
-        if relationshipGradeCap < itemGrade {
-            let requiredStage = requiredTier(for: itemGrade)
-            let requirement = stageRequirement(forStage: normalizedRelationshipStage)
-            let progressValue = stageProgress
-            let baseMessage = "관계도를 \(requiredStage)단계까지 올려야 거래할 수 있습니다."
-            if requirement > 0 {
-                let progressText = " 현재 진행 \(progressValue)/\(requirement)."
-                return TradeLockInfo(
-                    isLocked: true,
-                    reason: baseMessage + progressText
-                )
+    /// 장바구니에 아이템 추가
+    func addToCart(item: TradeItem, quantity: Int) {
+        // 판매 시 플레이어 인벤토리 확인
+        if selectedTradeType == .sell {
+            let availableQuantity = playerInventory.first { $0.id == item.id }?.quantity ?? 0
+            guard quantity <= availableQuantity else {
+                error = .insufficientItems
+                return
             }
-            return TradeLockInfo(
-                isLocked: true,
-                reason: baseMessage
-            )
         }
 
-        return TradeLockInfo(isLocked: true, reason: "거래 조건을 충족하지 못했습니다.")
+        // 구매 시 플레이어 자금 확인
+        if selectedTradeType == .buy {
+            let totalCost = item.basePrice * quantity
+            let playerMoney = gameManager.currentPlayer?.core.money ?? 0
+            guard totalCost <= playerMoney else {
+                error = .insufficientFunds
+                return
+            }
+        }
+
+        cartManager.addItem(item, quantity: quantity, type: selectedTradeType)
+        showQuantityPopup = false
+        selectedItem = nil
     }
 
-    func upgradePermit(for merchantId: String) async throws -> String {
+    /// 거래 실행
+    func executeTrade() async {
+        guard !cartManager.items.isEmpty else { return }
+        guard let merchantId = currentMerchantId else { return }
+
+        isLoading = true
+
         do {
-            let response = try await dataManager.upgradePermit(merchantId: merchantId)
-            guard response.success else {
-                let message = response.error ?? response.message ?? "허가증 업그레이드에 실패했습니다."
-                throw MerchantDataError.tradeValidationFailed(message)
+            // 거래 유효성 검증
+            let playerMoney = gameManager.currentPlayer?.core.money ?? 0
+            let validation = TradeManager.shared.validateTrade(
+                cartItems: cartManager.items,
+                playerMoney: playerMoney,
+                playerInventory: playerInventory
+            )
+
+            guard validation.isValid else {
+                self.error = .tradeValidationFailed(validation.message)
+                isLoading = false
+                return
             }
 
-            await gameManager.loadPersonalItemsData()
-            await refreshMerchantData()
+            // 서버에 거래 요청 전송
+            let tradeResult = try await TradeManager.shared.executeTrade(
+                with: merchantId,
+                cartItems: cartManager.items
+            )
 
-            return response.message ?? "상인 허가증이 업그레이드되었습니다."
-        } catch let dataError as MerchantDataError {
-            throw dataError
+            if tradeResult.success {
+                // 거래 성공 시 플레이어 데이터 갱신
+                await gameManager.refreshPlayerData()
+
+                // 상인 인벤토리 갱신
+                inventory = try await dataManager.fetchMerchantInventory(merchantId: merchantId)
+
+                // 장바구니 비우기
+                cartManager.clearCart()
+                showPurchaseConfirmation = true
+
+                // 성공 피드백
+                TradeManager.shared.triggerSuccessHaptic()
+            } else {
+                self.error = .tradeExecutionFailed(tradeResult.message)
+            }
+
         } catch {
-            throw MerchantDataError.networkError(error)
+            self.error = .networkError(error)
         }
-    }
 
-    struct TradeLockInfo {
-        let isLocked: Bool
-        let reason: String?
-
-        static let unlocked = TradeLockInfo(isLocked: false, reason: nil)
+        isLoading = false
     }
 
     // MARK: - 에러 처리

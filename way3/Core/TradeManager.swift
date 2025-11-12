@@ -22,8 +22,6 @@ enum TradeType: String, Codable {
 enum TradeRequestError: Error {
     case emptyCart
     case unsupportedTradeType
-    case requirementsNotMet(String)
-    case serverMessage(String)
 }
 
 // TradeItem is defined in Models/TradeItem.swift
@@ -46,7 +44,6 @@ struct TradeResult: Codable {
 }
 
 // MARK: - 거래 매니저
-@MainActor
 class TradeManager: ObservableObject {
     static let shared = TradeManager()
     
@@ -56,13 +53,6 @@ class TradeManager: ObservableObject {
     @Published var lastTradeResult: TradeResult?
     
     private let baseURL = "http://localhost:3000/api/trade"
-    private let merchantDataManager = MerchantDataManager.shared
-    private let permitTierMapping: [String: Int] = [
-        "Merchantpermit_1": 1,
-        "Merchantpermit_2": 2,
-        "Merchantpermit_3": 3,
-        "Merchantpermit_4": 4
-    ]
     
     var totalAmount: Int {
         selectedItems.reduce(into: 0) { result, item in
@@ -108,13 +98,9 @@ class TradeManager: ObservableObject {
     
     // MARK: - 거래 실행
     /// CartItem 배열을 사용한 거래 실행 (MerchantDetailViewModel용)
-    func executeTrade(with merchant: Merchant, cartItems: [CartItem]) async throws -> TradeResult {
+    func executeTrade(with merchantId: String, cartItems: [CartItem]) async throws -> TradeResult {
         guard !cartItems.isEmpty else {
             throw TradeRequestError.emptyCart
-        }
-
-        if let requirementMessage = requirementFailureMessage(for: merchant) {
-            throw TradeRequestError.requirementsNotMet(requirementMessage)
         }
 
         var totalAmount = 0
@@ -129,7 +115,7 @@ class TradeManager: ObservableObject {
             }
 
             let request = TradeRequest(
-                merchantId: merchant.id,
+                merchantId: merchantId,
                 itemTemplateId: cartItem.item.itemId,
                 tradeType: cartItem.type,
                 quantity: cartItem.quantity,
@@ -149,7 +135,7 @@ class TradeManager: ObservableObject {
             lastMessage = result.message
         }
 
-        let result = TradeResult(
+        return TradeResult(
             success: true,
             message: lastMessage.isEmpty ? "거래가 완료되었습니다." : lastMessage,
             totalAmount: totalAmount,
@@ -157,9 +143,6 @@ class TradeManager: ObservableObject {
             purchasedItemIds: purchasedIds,
             soldItemIds: soldIds
         )
-
-        QuestManager.shared.recordTradeEvent(merchantId: merchant.id, storeId: nil, amount: totalAmount)
-        return result
     }
 
     /// 기존 방식의 거래 실행 (기존 UI용)
@@ -182,7 +165,7 @@ class TradeManager: ObservableObject {
                 CartItem(item: selection, quantity: selection.quantity, type: .buy)
             }
 
-            let result = try await executeTrade(with: merchant, cartItems: cartItems)
+            let result = try await executeTrade(with: merchant.id, cartItems: cartItems)
             
             await MainActor.run {
                 if result.success {
@@ -199,18 +182,7 @@ class TradeManager: ObservableObject {
             
         } catch {
             await MainActor.run {
-                if let tradeError = error as? TradeRequestError {
-                    switch tradeError {
-                    case .emptyCart:
-                        errorMessage = "거래할 아이템을 선택해주세요."
-                    case .unsupportedTradeType:
-                        errorMessage = "현재 거래 타입은 지원되지 않습니다."
-                    case .requirementsNotMet(let message), .serverMessage(let message):
-                        errorMessage = message
-                    }
-                } else {
-                    errorMessage = "거래 실패: \(error.localizedDescription)"
-                }
+                errorMessage = "거래 실패: \(error.localizedDescription)"
                 isLoading = false
             }
         }
@@ -269,34 +241,13 @@ class TradeManager: ObservableObject {
             if await AuthManager.shared.refreshAuthToken() {
                 urlRequest.allHTTPHeaderFields = AuthManager.shared.getAuthHeaders()
                 let (retryData, _) = try await URLSession.shared.data(for: urlRequest)
-                return try decodeTradeResult(from: retryData, for: request)
+                return try JSONDecoder().decode(TradeResult.self, from: retryData)
             } else {
                 throw URLError(.userAuthenticationRequired)
             }
         }
-
-        struct TradeErrorResponse: Decodable {
-            let success: Bool?
-            let error: String?
-            let message: String?
-        }
-
-        if (400...499).contains(httpResponse.statusCode) {
-            let errorResponse = try? JSONDecoder().decode(TradeErrorResponse.self, from: data)
-            let message = errorResponse?.error ?? errorResponse?.message ?? "거래 요청을 처리할 수 없습니다 (코드: \(httpResponse.statusCode))"
-            if httpResponse.statusCode == 403 {
-                throw TradeRequestError.requirementsNotMet(message)
-            } else {
-                throw TradeRequestError.serverMessage(message)
-            }
-        }
-
-        if (500...599).contains(httpResponse.statusCode) {
-            let message = String(data: data, encoding: .utf8) ?? "알 수 없는 서버 오류"
-            throw TradeRequestError.serverMessage("서버 오류: \(message)")
-        }
         
-        return try decodeTradeResult(from: data, for: request)
+        return try JSONDecoder().decode(TradeResult.self, from: data)
     }
 
     // MARK: - 제안 가격 계산
@@ -370,62 +321,8 @@ class TradeManager: ObservableObject {
         if merchant.distance > 100 {
             return (false, "상인과의 거리가 너무 멉니다.")
         }
-
-        if let requirementMessage = requirementFailureMessage(for: merchant) {
-            return (false, requirementMessage)
-        }
         
         return (true, "거래 가능")
-    }
-
-    // MARK: - 내부 헬퍼
-    private func decodeTradeResult(from data: Data, for request: TradeRequest) throws -> TradeResult {
-        let response = try JSONDecoder().decode(TradeExecuteResponse.self, from: data)
-
-        guard response.success else {
-            let message = response.error ?? response.message ?? "거래에 실패했습니다."
-            throw TradeRequestError.serverMessage(message)
-        }
-
-        let finalPrice = response.data?.finalPrice ?? 0
-        let experience = response.data?.experienceGained ?? 0
-        let message = response.message ?? "거래가 완료되었습니다."
-
-        let purchasedIds = request.tradeType == .buy ? [request.itemTemplateId] : []
-        let soldIds = request.tradeType == .sell ? [request.itemTemplateId] : []
-
-        return TradeResult(
-            success: true,
-            message: message,
-            totalAmount: finalPrice,
-            experienceGained: experience,
-            purchasedItemIds: purchasedIds,
-            soldItemIds: soldIds
-        )
-    }
-
-    // MARK: - 요구 조건 검증
-    func requirementFailureMessage(for merchant: Merchant) -> String? {
-        let relationship = merchantDataManager.cachedRelationships[merchant.id]
-        let relationshipStage = min(max(relationship?.trustLevel ?? 0, 0), 4)
-        if relationshipStage <= 0 {
-            let requirement = relationship?.stageRequirement ?? 3
-            let progress = relationship?.stageProgress ?? 0
-            if requirement > 0 {
-                return "관계도 1단계를 달성해야 거래할 수 있습니다. 서브 퀘스트 진행 \(progress)/\(requirement)."
-            }
-            return "해당 상인과 대화를 진행해야 거래할 수 있습니다."
-        }
-
-        let permitTier = GameManager.shared.personalItems
-            .compactMap { permitTierMapping[$0.itemTemplateId] }
-            .max() ?? 0
-
-        if permitTier <= 0 {
-            return "상인 허가증이 필요합니다. 길드에서 허가증을 발급받으세요."
-        }
-
-        return nil
     }
     
     // MARK: - 거래 통계

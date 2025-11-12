@@ -24,8 +24,8 @@ class MerchantDataManager: ObservableObject {
     /// 상인 상세 정보를 서버에서 직접 가져옴 (서버 응답 그대로)
     /// - Parameter merchantId: 상인 ID
     /// - Returns: 서버 응답 상세 정보
-    func fetchMerchantDetail(merchantId: String, forceRefresh: Bool = false) async throws -> MerchantDetailResponse {
-        return try await networkManager.getMerchantDetail(merchantId: merchantId, useCache: !forceRefresh)
+    func fetchMerchantDetail(merchantId: String) async throws -> MerchantDetailResponse {
+        return try await networkManager.getMerchantDetail(merchantId: merchantId)
     }
 
 
@@ -33,8 +33,8 @@ class MerchantDataManager: ObservableObject {
     /// 상인의 실시간 인벤토리를 서버에서 가져옴 (하드코딩 대체)
     /// - Parameter merchantId: 상인 ID
     /// - Returns: 거래 가능한 아이템 목록
-    func fetchMerchantInventory(merchantId: String, forceRefresh: Bool = false) async throws -> [TradeItem] {
-        let response = try await networkManager.getMerchantDetail(merchantId: merchantId, useCache: !forceRefresh)
+    func fetchMerchantInventory(merchantId: String) async throws -> [TradeItem] {
+        let response = try await networkManager.getMerchantDetail(merchantId: merchantId)
 
         // 서버 응답을 TradeItem으로 변환
         let tradeItems = response.inventory.map { serverItem in
@@ -64,23 +64,13 @@ class MerchantDataManager: ObservableObject {
     /// 플레이어와 상인의 관계 정보를 가져옴
     /// - Parameter merchantId: 상인 ID
     /// - Returns: 상인 관계 정보
-    func fetchMerchantRelationship(merchantId: String, forceRefresh: Bool = false) async throws -> MerchantRelationship {
-        let response = try await networkManager.getMerchantDetail(merchantId: merchantId, useCache: !forceRefresh)
-
-        let relationshipStage = response.relationship.stage ?? response.relationship.trustLevel
-        let stageProgress = response.relationship.stageProgress
-            ?? response.accessControl?.stageProgress
-            ?? 0
-        let stageRequirement = response.relationship.stageRequirement
-            ?? response.accessControl?.stageRequirement
-            ?? 0
+    func fetchMerchantRelationship(merchantId: String) async throws -> MerchantRelationship {
+        let response = try await networkManager.getMerchantDetail(merchantId: merchantId)
 
         let relationship = MerchantRelationship(
             merchantId: merchantId,
             friendshipPoints: response.relationship.friendshipPoints,
-            trustLevel: relationshipStage,
-            stageProgress: stageProgress,
-            stageRequirement: stageRequirement,
+            trustLevel: response.relationship.trustLevel,
             totalTrades: response.relationship.totalTrades,
             totalSpent: response.relationship.totalSpent,
             lastInteraction: response.relationship.lastInteraction,
@@ -91,26 +81,6 @@ class MerchantDataManager: ObservableObject {
         cachedRelationships[merchantId] = relationship
 
         return relationship
-    }
-
-    /// 서브 퀘스트 완료 등 관계도 진행 상황을 서버에 반영
-    func recordRelationshipProgress(merchantId: String, questId: String) async throws -> RelationshipProgressResponse {
-        let response = try await networkManager.recordRelationshipProgress(merchantId: merchantId, questId: questId)
-
-        if response.success, let data = response.data {
-            var relationship = cachedRelationships[merchantId] ?? MerchantRelationship(merchantId: merchantId)
-            relationship.trustLevel = data.relationshipStage
-            relationship.stageProgress = data.stageProgress
-            relationship.stageRequirement = data.stageRequirement
-            cachedRelationships[merchantId] = relationship
-        }
-
-        return response
-    }
-
-    /// 상인 허가증 업그레이드
-    func upgradePermit(merchantId: String) async throws -> PermitUpgradeResponse {
-        return try await networkManager.upgradeMerchantPermit(merchantId: merchantId)
     }
 
     // MARK: - 근처 상인 조회
@@ -173,7 +143,6 @@ struct MerchantDetailResponse: Codable {
     let dislikedCategories: [String]
     let inventory: [InventoryItemResponse]
     let relationship: RelationshipResponse
-    let accessControl: AccessControlResponse?
 }
 
 struct InventoryItemResponse: Codable {
@@ -195,25 +164,10 @@ struct InventoryItemResponse: Codable {
 struct RelationshipResponse: Codable {
     let friendshipPoints: Int
     let trustLevel: Int
-    let stage: Int?
-    let stageProgress: Int?
-    let stageRequirement: Int?
     let totalTrades: Int
     let totalSpent: Int
     let lastInteraction: String?
     let notes: String?
-}
-
-struct AccessControlResponse: Codable {
-    let relationshipStage: Int
-    let relationshipMaxGrade: Int
-    let stageProgress: Int?
-    let stageRequirement: Int?
-    let permitTier: Int
-    let permitMaxGrade: Int
-    let effectiveMaxGrade: Int
-    let canTrade: Bool
-    let requiredTierForGrade: [String: Int]?
 }
 
 struct LocationResponse: Codable {
@@ -231,17 +185,7 @@ struct MerchantPreview: Identifiable {
     let coordinate: CLLocationCoordinate2D
     let distance: Double
     let canTrade: Bool
-    let meetsRequirements: Bool
-    let withinTradeDistance: Bool
-    let tradeDistanceLimit: Int?
     let inventoryCount: Int
-    let relationshipStage: Int
-    let stageProgress: Int
-    let stageRequirement: Int
-    let permitTier: Int
-    let relationshipMaxGrade: Int
-    let permitMaxGrade: Int
-    let effectiveMaxGrade: Int
 
     var distanceText: String {
         if distance < 1000 {
@@ -276,23 +220,12 @@ struct MerchantPreviewResponse: Codable {
     let location: LocationResponse
     let distance: Int
     let canTrade: Bool
-    let meetsRequirements: Bool?
-    let withinTradeDistance: Bool?
-    let tradeDistanceLimit: Int?
-    let imageFileName: String?
     let requiredLicense: Int
     let reputationRequirement: Int
     let priceModifier: Double
     let negotiationDifficulty: Int
     let inventoryCount: Int
     let lastRestocked: String
-    let relationshipStage: Int?
-    let stageProgress: Int?
-    let stageRequirement: Int?
-    let relationshipMaxGrade: Int?
-    let permitTier: Int?
-    let permitMaxGrade: Int?
-    let effectiveMaxGrade: Int?
 }
 
 
@@ -311,17 +244,7 @@ extension MerchantPreview {
             ),
             distance: Double(response.distance),
             canTrade: response.canTrade,
-            meetsRequirements: response.meetsRequirements ?? response.canTrade,
-            withinTradeDistance: response.withinTradeDistance ?? true,
-            tradeDistanceLimit: response.tradeDistanceLimit,
-            inventoryCount: response.inventoryCount,
-            relationshipStage: response.relationshipStage ?? 0,
-            stageProgress: response.stageProgress ?? 0,
-            stageRequirement: response.stageRequirement ?? 0,
-            permitTier: response.permitTier ?? 0,
-            relationshipMaxGrade: response.relationshipMaxGrade ?? -1,
-            permitMaxGrade: response.permitMaxGrade ?? -1,
-            effectiveMaxGrade: response.effectiveMaxGrade ?? -1
+            inventoryCount: response.inventoryCount
         )
     }
 }
