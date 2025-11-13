@@ -46,7 +46,7 @@ struct MainTabView: View {
                     .tag(2)
 
                 // 🏪 상점 (네 번째 탭) - 경매장과 상점 통합
-                ShopView()
+                StoryHubTabView()
                     .tabItem {
                         Image(systemName: "storefront.fill")
                         Text("상점")

@@ -489,27 +489,6 @@ class SocketManager: ObservableObject {
         ])
     }
     
-    // MARK: - Auction Methods
-    func joinAuction(auctionId: String) {
-        socket?.emit("joinAuction", [
-            "auctionId": auctionId
-        ])
-    }
-    
-    func leaveAuction(auctionId: String) {
-        socket?.emit("leaveAuction", [
-            "auctionId": auctionId
-        ])
-    }
-    
-    func submitAuctionBid(auctionId: String, playerId: String, bidAmount: Int) {
-        socket?.emit("submitAuctionBid", [
-            "auctionId": auctionId,
-            "playerId": playerId,
-            "bidAmount": bidAmount
-        ])
-    }
-
     // MARK: - Trade Broadcasting
     func broadcastTradeCompletion(
         playerId: String,
