@@ -798,6 +798,32 @@ extension NetworkManager {
         )
     }
 
+    func getMerchantStoryChapters(merchantId: String) async throws -> MerchantStoryChaptersResponse {
+        return try await makeRequest(
+            endpoint: "/merchants/\(merchantId)/stories/chapters",
+            method: .GET,
+            requiresAuth: true,
+            responseType: MerchantStoryChaptersResponse.self,
+            useCache: false
+        )
+    }
+
+    func claimChapterReward(request: ChapterRewardClaimRequest) async throws -> ChapterRewardClaimResponse {
+        return try await makeRequest(
+            endpoint: "/story/chapter/reward",
+            method: .POST,
+            body: [
+                "chapterId": request.chapterId,
+                "money": request.money as Any,
+                "experience": request.experience as Any,
+                "keyItemName": request.keyItemName as Any,
+                "personalItemTemplateId": request.personalItemTemplateId as Any
+            ].compactMapValues { $0 },
+            requiresAuth: true,
+            responseType: ChapterRewardClaimResponse.self
+        )
+    }
+
     // MARK: - Quest API Methods
     func getQuests() async throws -> QuestListResponse {
         return try await makeRequest(
@@ -1166,151 +1192,6 @@ struct PaginationInfo: Codable {
 }
 
 // MARK: - Quest Response Models
-struct QuestListResponse: Codable {
-    let success: Bool
-    let data: QuestListData?
-    let error: String?
-}
-
-struct QuestListData: Codable {
-    let playerId: String
-    let playerLevel: Int
-    let playerLicense: Int
-    let totalQuests: Int
-    let questsByStatus: QuestsByStatus
-    let summary: QuestSummary
-}
-
-struct QuestsByStatus: Codable {
-    let available: [QuestData]
-    let active: [QuestData]
-    let completed: [QuestData]
-    let claimed: [QuestData]
-}
-
-struct QuestSummary: Codable {
-    let available: Int
-    let active: Int
-    let completed: Int
-    let claimed: Int
-}
-
-struct QuestData: Codable, Identifiable, Equatable {
-    let id: String
-    let title: String
-    let description: String
-    let category: String
-    let questType: String
-    let maxProgress: Int
-    let currentProgress: Int
-    let rewards: QuestRewards
-    let requirements: QuestRequirements?
-    let isRepeatable: Bool
-    let cooldownHours: Int
-    let priority: Int
-    let status: String
-    let acceptedAt: String?
-    let completedAt: String?
-    let expiresAt: String?
-    let rewardClaimed: Bool
-}
-
-struct QuestRewards: Codable, Equatable {
-    let experience: Int
-    let money: Int
-    let trustPoints: Int
-    let items: [QuestRewardItem]?
-}
-
-struct QuestRewardItem: Codable, Equatable {
-    let itemId: String
-    let quantity: Int
-}
-
-struct QuestRequirements: Codable, Equatable {
-    let minLevel: Int?
-    let requiredLicense: Int?
-    let requiredItems: [String]?
-    let reputationRequirement: Int?
-    let requiredMoney: Int?
-}
-
-struct QuestActionResponse: Codable {
-    let success: Bool
-    let data: QuestActionData?
-    let message: String?
-    let error: String?
-}
-
-struct QuestActionData: Codable {
-    let questId: String
-    let title: String
-    let description: String
-    let status: String
-    let acceptedAt: String
-    let expiresAt: String?
-}
-
-struct QuestRewardResponse: Codable {
-    let success: Bool
-    let data: QuestRewardData?
-    let message: String?
-    let error: String?
-}
-
-struct QuestRewardData: Codable {
-    let questId: String
-    let title: String
-    let rewards: QuestRewards
-}
-
-struct QuestProgressResponse: Codable {
-    let success: Bool
-    let data: QuestProgressData?
-    let error: String?
-}
-
-struct QuestProgressData: Codable {
-    let actionType: String
-    let updatedQuests: [QuestProgressUpdate]
-    let questsUpdated: Int
-}
-
-struct QuestProgressUpdate: Codable {
-    let questId: String
-    let title: String
-    let oldProgress: Int
-    let newProgress: Int
-    let maxProgress: Int
-    let isCompleted: Bool
-    let progressDelta: Int
-}
-
-struct QuestHistoryResponse: Codable {
-    let success: Bool
-    let data: QuestHistoryData?
-    let error: String?
-}
-
-struct QuestHistoryData: Codable {
-    let quests: [QuestHistoryItem]
-    let pagination: PaginationInfo
-}
-
-struct QuestHistoryItem: Codable {
-    let questId: String
-    let title: String
-    let description: String
-    let category: String
-    let questType: String
-    let status: String
-    let currentProgress: Int
-    let acceptedAt: String?
-    let completedAt: String?
-    let rewardClaimed: Bool
-    let rewards: QuestRewards
-}
-
 // MARK: - Personal Items Response Models
 // PersonalItemActionResponse and PersonalItemActionData are defined in PersonalItem.swift
 

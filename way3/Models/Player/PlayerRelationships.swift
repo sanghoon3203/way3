@@ -132,6 +132,16 @@ extension PlayerRelationships {
         let score = getRelationshipScore(with: merchantId)
         return min(Double(score) / 1000.0 * 0.1, 0.15) // 최대 15% 할인
     }
+
+    func adjustTrust(for merchantId: String, amount: Int) {
+        guard amount != 0 else { return }
+
+        var relationship = merchantRelationships[merchantId] ?? MerchantRelationship(merchantId: merchantId)
+        relationship.friendshipPoints = max(0, relationship.friendshipPoints + amount * 10)
+        relationship.trustLevel = min(max(relationship.trustLevel + amount, 0), 100)
+        relationship.lastInteraction = ISO8601DateFormatter().string(from: Date())
+        merchantRelationships[merchantId] = relationship
+    }
 }
 
 // MARK: - 길드 시스템 메서드

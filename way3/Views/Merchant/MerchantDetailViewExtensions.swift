@@ -67,16 +67,6 @@ extension MerchantDetailView {
     func exitMerchant() {
         isPresented = false
     }
-
-    func selectItem(_ item: TradeItem) {
-        selectedItem = item
-        showQuantityPopup = true
-    }
-
-    func showThankYouDialogue() {
-        currentMode = .dialogue
-        viewModel.showThankYouDialogue()
-    }
 }
 
 // MARK: - 아이템 그리드 뷰들
@@ -388,7 +378,7 @@ extension MerchantDetailView {
                 showPurchaseConfirmation = false
 
                 // 감사 대화 표시
-                showThankYouDialogue()
+                viewModel.showThankYouDialogue()
             } else {
                 // 돈이 부족한 경우
                 // TODO: 에러 처리

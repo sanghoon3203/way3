@@ -204,14 +204,14 @@ struct CyberpunkQuestCard: View {
     private var rewardDisplayString: String {
         var rewardStrings: [String] = []
 
-        if quest.rewards.money > 0 {
-            rewardStrings.append("₩\(quest.rewards.money)")
+        if let money = quest.rewards.money {
+            rewardStrings.append("₩\(money)")
         }
-        if quest.rewards.experience > 0 {
-            rewardStrings.append("EXP +\(quest.rewards.experience)")
+        if let exp = quest.rewards.exp ?? quest.rewards.experience {
+            rewardStrings.append("EXP +\(exp)")
         }
-        if quest.rewards.trustPoints > 0 {
-            rewardStrings.append("TRUST +\(quest.rewards.trustPoints)")
+        if let trust = quest.rewards.trustPoints {
+            rewardStrings.append("TRUST +\(trust)")
         }
         if let items = quest.rewards.items, !items.isEmpty {
             for item in items {

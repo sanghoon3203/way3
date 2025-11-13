@@ -186,6 +186,9 @@ struct MerchantPreview: Identifiable {
     let distance: Double
     let canTrade: Bool
     let inventoryCount: Int
+    let withinTradeDistance: Bool
+    let tradeDistanceLimit: Double?
+    let meetsRequirements: Bool
 
     var distanceText: String {
         if distance < 1000 {
@@ -226,6 +229,10 @@ struct MerchantPreviewResponse: Codable {
     let negotiationDifficulty: Int
     let inventoryCount: Int
     let lastRestocked: String
+    let imageFileName: String?
+    let meetsRequirements: Bool?
+    let withinTradeDistance: Bool?
+    let tradeDistanceLimit: Int?
 }
 
 
@@ -244,7 +251,10 @@ extension MerchantPreview {
             ),
             distance: Double(response.distance),
             canTrade: response.canTrade,
-            inventoryCount: response.inventoryCount
+            inventoryCount: response.inventoryCount,
+            withinTradeDistance: response.withinTradeDistance ?? true,
+            tradeDistanceLimit: response.tradeDistanceLimit.map(Double.init),
+            meetsRequirements: response.meetsRequirements ?? true
         )
     }
 }

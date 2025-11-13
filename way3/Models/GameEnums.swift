@@ -248,6 +248,14 @@ enum TradeMode: String, CaseIterable {
     }
 }
 
+// MARK: - 상인 상호작용 모드
+enum MerchantInteractionMode: String, CaseIterable, Codable {
+    case dialogue
+    case trading
+    case cart
+    case story
+}
+
 // MARK: - 서울 구역 (지역별 가격 배수)
 enum SeoulDistrict: String, CaseIterable, Codable {
     case gangnam = "강남구"

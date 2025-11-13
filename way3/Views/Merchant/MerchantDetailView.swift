@@ -301,8 +301,6 @@ struct MerchantDetailView: View {
     @State var isCartPresented = false
     @State private var showFullScreenTV = false  // 전체화면 TV 애니메이션
     @State private var currentDialogue: String = ""  // JSON에서 로드한 현재 대사
-    @State private var tradeLockAlert: TradeLockAlert?
-    @State private var isUpgradingPermit = false
 
     // Extensions에서 사용할 수 있도록 computed properties 추가 - 🚀 ViewModel 연동
     var merchantInventoryGridView: some View {
@@ -371,14 +369,9 @@ struct MerchantDetailView: View {
                             dialogueText: currentDialogue
                         )
 
-                        RelationshipStatusCard(
-                            stage: viewModel.relationshipStage,
-                            stageProgress: viewModel.stageProgress,
-                            stageRequirement: viewModel.stageRequirement,
-                            permitTier: viewModel.permitTier,
-                            canUpgradePermit: viewModel.canUpgradePermit,
-                            isUpgrading: isUpgradingPermit,
-                            onUpgrade: { upgradePermit() }
+                        PermitInfoCard(
+                            playerLicense: gameManager.currentPlayer?.core.currentLicense ?? .beginner,
+                            requiredLicense: merchant.requiredLicense
                         )
                         .padding(.horizontal, 20)
                         .padding(.top, 16)
@@ -397,7 +390,7 @@ struct MerchantDetailView: View {
                                         }
                                     },
                                     onStory: merchant.hasActiveStory ? { selectTab(.story) } : nil,
-                                    onTrade: { attemptTradeEntry() },
+                                    onTrade: { triggerFullScreenTVSwitch(to: .trade) },
                                     onExit: { isPresented = false }
                                 )
                                 .padding(.top, 24)
@@ -490,13 +483,6 @@ struct MerchantDetailView: View {
             )
             .background(Color.black.ignoresSafeArea())
         }
-        .alert(item: $tradeLockAlert) { alert in
-            Alert(
-                title: Text("거래 불가"),
-                message: Text(alert.message),
-                dismissButton: .default(Text("확인"))
-            )
-        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationBarHidden(true) // 필요 시 .toolbar(.hidden, for: .navigationBar) 로 교체
         .onAppear {
@@ -512,11 +498,6 @@ struct MerchantDetailView: View {
 
 // StoryStartWrapper: fullScreenCover 식별용
 private struct StoryStartWrapper: Identifiable { let id: String }
-
-private struct TradeLockAlert: Identifiable {
-    let id = UUID()
-    let message: String
-}
 
 // MARK: - Hero
 
@@ -1435,108 +1416,51 @@ struct TradeItemCard: View {
     }
 }
 
-struct RelationshipStatusCard: View {
-    let stage: Int
-    let stageProgress: Int
-    let stageRequirement: Int
-    let permitTier: Int
-    let canUpgradePermit: Bool
-    let isUpgrading: Bool
-    let onUpgrade: () -> Void
+struct PermitInfoCard: View {
+    let playerLicense: LicenseLevel
+    let requiredLicense: LicenseLevel
 
-    private var stageStatusText: String {
-        switch stage {
-        case 0: return "관계도 0단계 · 거래 제한"
-        case 1: return "관계도 1단계 · 일반 등급 거래"
-        case 2: return "관계도 2단계 · 중급 등급 거래"
-        case 3: return "관계도 3단계 · 고급 등급 거래"
-        case 4: return "관계도 4단계 · 전설 등급 거래"
-        default: return "관계도 MAX"
-        }
-    }
-
-    private var permitStatusText: String {
-        switch permitTier {
-        case 0: return "허가증 Lv.0 · 임시"
-        case 1: return "허가증 Lv.1 · 임시"
-        case 2: return "허가증 Lv.2 · 초급"
-        case 3: return "허가증 Lv.3 · 중급"
-        default: return "허가증 Lv.4 · 상급"
-        }
-    }
-
-    private var progressLabel: String {
-        guard stageRequirement > 0 else { return "MAX" }
-        return "\(stageProgress)/\(stageRequirement)"
+    private var meetsRequirement: Bool {
+        playerLicense.rawValue >= requiredLicense.rawValue
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("RELATIONSHIP STATUS")
-                    .font(.cyberpunkHeading(size: 14))
-                    .foregroundColor(.cyberpunkYellow)
-                Spacer()
-                if stage >= 4 {
-                    Text("MAX")
-                        .font(.cyberpunkTechnical())
-                        .foregroundColor(.cyberpunkGreen)
+            Text("TRADE PERMIT")
+                .font(.cyberpunkHeading(size: 14))
+                .foregroundColor(.cyberpunkYellow)
+
+            HStack(spacing: 16) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("보유 허가증")
+                        .font(.cyberpunkCaption())
+                        .foregroundColor(.cyberpunkTextSecondary)
+                    Text(playerLicense.displayName)
+                        .font(.cyberpunkBody())
+                        .foregroundColor(.cyberpunkTextPrimary)
                 }
-            }
 
-            VStack(alignment: .leading, spacing: 8) {
-                Text(stageStatusText)
-                    .font(.cyberpunkBody())
-                    .foregroundColor(.cyberpunkTextPrimary)
+                Spacer()
 
-                if stageRequirement > 0 {
-                    ProgressView(value: Double(stageProgress), total: Double(stageRequirement))
-                        .tint(.cyberpunkCyan)
-                        .progressViewStyle(LinearProgressViewStyle())
-                    Text("서브 퀘스트 진행: \(progressLabel)")
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("필요 허가증")
                         .font(.cyberpunkCaption())
                         .foregroundColor(.cyberpunkTextSecondary)
-                } else {
-                    Text("관계도 최대 단계입니다")
-                        .font(.cyberpunkCaption())
-                        .foregroundColor(.cyberpunkTextSecondary)
+                    Text(requiredLicense.displayName)
+                        .font(.cyberpunkBody())
+                        .foregroundColor(meetsRequirement ? .cyberpunkGreen : .cyberpunkError)
                 }
             }
 
             Divider().overlay(Color.cyberpunkBorder.opacity(0.4))
 
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("MERCHANT PERMIT")
-                        .font(.cyberpunkTechnical())
-                        .foregroundColor(.cyberpunkTextSecondary)
-                    Text(permitStatusText)
-                        .font(.cyberpunkBody())
-                        .foregroundColor(.cyberpunkTextPrimary)
-                }
-                Spacer()
-                if canUpgradePermit {
-                    Button(action: onUpgrade) {
-                        if isUpgrading {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle())
-                                .tint(.cyberpunkCyan)
-                        } else {
-                            Text("허가증 업그레이드")
-                                .font(.cyberpunkCaption())
-                                .foregroundColor(.cyberpunkCyan)
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 8)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.cyberpunkCyan, lineWidth: 1)
-                                )
-                        }
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(isUpgrading)
-                }
-            }
+            Text(
+                meetsRequirement ?
+                "이 상인과 거래할 수 있는 허가증 등급입니다." :
+                "허가증 등급이 부족하여 일부 거래가 제한됩니다."
+            )
+            .font(.cyberpunkCaption())
+            .foregroundColor(meetsRequirement ? .cyberpunkGreen : .cyberpunkError)
         }
         .padding(16)
         .background(
@@ -2044,40 +1968,6 @@ private struct StoryPlaybackView: View {
 // MARK: - View Extensions
 
 extension MerchantDetailView {
-    func attemptTradeEntry() {
-        if let message = viewModel.tradeEntryRestrictionMessage {
-            tradeLockAlert = TradeLockAlert(message: message)
-            return
-        }
-        triggerFullScreenTVSwitch(to: .trade)
-    }
-
-    func upgradePermit() {
-        guard !isUpgradingPermit else { return }
-
-        guard viewModel.canUpgradePermit else {
-            tradeLockAlert = TradeLockAlert(message: "허가증 업그레이드 조건이 충족되지 않았습니다.")
-            return
-        }
-
-        isUpgradingPermit = true
-
-        Task { [merchantId = merchant.id] in
-            do {
-                let message = try await viewModel.upgradePermit(for: merchantId)
-                await MainActor.run {
-                    isUpgradingPermit = false
-                    tradeLockAlert = TradeLockAlert(message: message)
-                }
-            } catch {
-                await MainActor.run {
-                    isUpgradingPermit = false
-                    tradeLockAlert = TradeLockAlert(message: error.localizedDescription)
-                }
-            }
-        }
-    }
-
     func selectTab(_ tab: MerchantDetailTab) {
         selectedTab = tab
         switch tab {

@@ -66,7 +66,6 @@ class DialogueDataManager: ObservableObject {
 
     // MARK: - Dependencies
     private let networkManager = NetworkManager.shared
-    private let aiProvider = AIDialogueProvider.shared
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - 대화 데이터 로딩
@@ -153,15 +152,6 @@ class DialogueDataManager: ObservableObject {
         do {
             let dialogueSet = try await fetchDialogues(for: merchantId)
 
-            // AI 기반 대화 생성 옵션
-            if useAI {
-                return await generateAIDialogue(
-                    dialogueSet: dialogueSet,
-                    category: category,
-                    context: context
-                )
-            }
-
             return selectAppropriateDialogue(
                 from: dialogueSet,
                 category: category,
@@ -172,53 +162,7 @@ class DialogueDataManager: ObservableObject {
         }
     }
 
-    // MARK: - AI 기반 대화 생성 (간단한 버전)
-    private func generateAIDialogue(
-        dialogueSet: MerchantDialogueSet,
-        category: DialogueCategory,
-        context: DialogueContext?
-    ) async -> String {
-        // 간단한 AI 대화 생성
-        let situationContext = mapCategoryToSituation(category)
-        let mood = mapPersonalityToMood(dialogueSet.personality)
-
-        return aiProvider.generateContextualDialogue(
-            merchantName: dialogueSet.merchantName,
-            playerName: "플레이어", // TODO: 실제 플레이어 이름
-            situation: situationContext,
-            mood: mood
-        )
-    }
-
     // MARK: - 헬퍼 메서드
-    private func mapCategoryToSituation(_ category: DialogueCategory) -> DialogueSituation {
-        switch category {
-        case .greeting:
-            return .firstMeeting
-        case .trading:
-            return .negotiation
-        case .goodbye:
-            return .completedTrade
-        case .relationship:
-            return .regularCustomer
-        case .special:
-            return .browsingOnly
-        }
-    }
-
-    private func mapPersonalityToMood(_ personality: String) -> DialogueMood {
-        switch personality.lowercased() {
-        case "friendly", "친절":
-            return .friendly
-        case "energetic", "젊은":
-            return .happy
-        case "cold", "차가운":
-            return .serious
-        default:
-            return .neutral
-        }
-    }
-
     private func selectAppropriateDialogue(
         from dialogueSet: MerchantDialogueSet,
         category: DialogueCategory,
