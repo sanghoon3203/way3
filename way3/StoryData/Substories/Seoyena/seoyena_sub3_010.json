@@ -1,0 +1,1 @@
+{ "node_id": "sub3_010", "background_image": null, "character_id": "System", "character_sprite": null, "dialogue_text": "시간 이끼 채집 완료. 안정도 82%... 81%... 주의: 시간이 지나면 데이터가 손실됩니다.", "dialogue_sound_id": null, "sound_effect": "sfx_system_warning", "next_node_id": "sub3_011" }

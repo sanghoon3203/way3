@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_039",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "***",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_040"
-}
+{ "node_id": "sub2_039", "background_image": null, "character_id": "System", "character_sprite": null, "dialogue_text": "우회로 감지. 봉은사까지 최단 경로를 재탐색합니다.", "dialogue_sound_id": null, "sound_effect": "sfx_system_beep", "next_node_id": "sub2_040" }

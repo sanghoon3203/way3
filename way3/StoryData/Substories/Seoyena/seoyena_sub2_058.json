@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_058",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "목소리는 차갑고 낮았다. ",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_059"
-}
+{ "node_id": "sub2_058", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "스님이 품에서 낡은 회중시계를 꺼내 내게 건넸다. 시계바늘은 4시 44분에 멈춰 있었다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_059" }

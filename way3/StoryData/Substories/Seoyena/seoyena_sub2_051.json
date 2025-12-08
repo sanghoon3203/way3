@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_051",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "[현재 시각: 19:23:00]",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_052"
-}
+{ "node_id": "sub2_051", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "스님이 밤하늘을 가리켰다. 서울의 네온사인과 별빛이 뒤섞여 흐르고 있었다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_052" }

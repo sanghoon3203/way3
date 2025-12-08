@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_038",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "\"이 차면 충분하죠~ 조심히 가세요!\"",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_039"
-}
+{ "node_id": "sub2_038", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_normal", "dialogue_text": "네오서울에서 가장 귀한 약초예요. 어떤 독도 정화하고, 어떤 병도 치유한다고 알려져 있죠. 100년 전에 멸종됐지만.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_039" }

@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_008",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "직원의 눈빛이 순간 달라졌다.",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_009"
-}
+{ "node_id": "sub2_008", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "차가 천천히 입구 앞에 멈췄다. 호버 모드가 해제되며 바퀴가 다시 나타났다. 딸깍, 하는 소리와 함께 평범한 개구리 자동차로 돌아왔다.", "dialogue_sound_id": null, "sound_effect": "sfx_transform", "next_node_id": "sub2_009" }

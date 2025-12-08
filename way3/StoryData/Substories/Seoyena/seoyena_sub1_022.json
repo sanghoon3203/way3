@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub1_022",
-  "background_image": "bg_seoyena_office",
-  "character_id": "typer_narrator",
-  "character_sprite": null,
-  "dialogue_text": "엘리베이터 최상층. ‘경매의 여왕 - 서예나’ 명패가 붙은 문 너머로 간결한 사무실과 강남의 야경이 펼쳐졌다.",
-  "dialogue_sound_id": "seoyena_sub1_022",
-  "sound_effect": "sfx_door_slide.mp3",
-  "next_node_id": "seoyena_sub1_023"
-}
+{ "node_id": "sub1_022", "background_image": null, "character_id": "플레이어", "character_sprite": null, "dialogue_text": "뭐 그런 셈이죠. 쉽죠?", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_023" }

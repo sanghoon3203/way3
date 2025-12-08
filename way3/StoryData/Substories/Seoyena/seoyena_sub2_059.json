@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_059",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "\"저... 해결된거죠?\"",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_060"
-}
+{ "node_id": "sub2_059", "background_image": null, "character_id": "지월 스님", "character_sprite": "npc_monk", "dialogue_text": "이 시계가 나침반이 될 겁니다. 아이비 근처에 가면 시간이 반응할 테니까요.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_060" }

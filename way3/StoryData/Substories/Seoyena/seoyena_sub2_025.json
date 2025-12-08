@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_025",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "[스포츠 부스트 모드, 시간가속을 시작합니다]",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_026"
-}
+{ "node_id": "sub2_025", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "서예나의 목소리가 한 옥타브 낮아졌다. 나도 모르게 액셀을 밟았다. 차가 조용히 앞으로 나아갔다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_026" }

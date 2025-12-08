@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub1_037",
-  "background_image": "bg_rodeo_arena_interior",
-  "character_id": "player",
-  "character_sprite": null,
-  "dialogue_text": "그정도야뭐...",
-  "dialogue_sound_id": "seoyena_sub1_035",
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub1_038"
-}
+{ "node_id": "sub1_037", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "말도 하기 전에 끌려가버렸다. 직원의 손아귀 힘이 장난 아니다. 이 사람 원래 보디가드였나?", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_038" }

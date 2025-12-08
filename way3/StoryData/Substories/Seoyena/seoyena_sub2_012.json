@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_012",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "\"여기 앉으시죠!\"",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_013"
-}
+{ "node_id": "sub2_012", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "그녀는 천천히, 하지만 확신에 찬 걸음으로 차에 다가왔다. 조수석 문을 열고 자연스럽게 앉더니, 안전벨트를 매며 말했다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_013" }

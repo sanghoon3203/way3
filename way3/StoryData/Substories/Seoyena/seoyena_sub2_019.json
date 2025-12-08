@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_019",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "\"해당 자동차는 기본적으로는 굉장히 평범한 외형이지만. 이렇게 하면!\"",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_020"
-}
+{ "node_id": "sub2_019", "background_image": null, "character_id": "플레이어", "character_sprite": null, "dialogue_text": "봉은사요? 거기는 왜...", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_020" }

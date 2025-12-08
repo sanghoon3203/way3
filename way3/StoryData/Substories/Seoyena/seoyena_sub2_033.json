@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_033",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "\"그럼 즐거운 드라이브 되세요! 아, 참! K-AUCTION HOUSE 입구에서 서예나 님이 기다리고 계실 거예요.\"",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_034"
-}
+{ "node_id": "sub2_033", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "탕! 탕!", "dialogue_sound_id": null, "sound_effect": "sfx_gunshot", "next_node_id": "sub2_034" }

@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_018",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "개구리 같은 외형의 자동차. 보기에는 평범하다. 아니, 솔직히 좀 못생겼다.",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_019"
-}
+{ "node_id": "sub2_018", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_normal", "dialogue_text": "이제 출발하세요. 봉은사로.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_019" }

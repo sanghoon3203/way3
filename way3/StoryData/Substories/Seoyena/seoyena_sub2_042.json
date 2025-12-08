@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_042",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "[자율주행 모드를 활성화하시겠습니까?]",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_043"
-}
+{ "node_id": "sub2_042", "background_image": "bg_bongeunsa_garden", "character_id": "Narrator", "character_sprite": null, "dialogue_text": "대나무 숲을 지나 약초원에 도착했다. 낡은 삿갓을 쓴 지월 스님이 우리를 맞이했다.", "dialogue_sound_id": null, "sound_effect": "bgm_temple", "next_node_id": "sub2_043" }

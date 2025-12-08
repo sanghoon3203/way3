@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub1_021",
-  "background_image": "bg_rodeo_arena_interior",
-  "character_id": "typer_narrator",
-  "character_sprite": null,
-  "dialogue_text": "처음 들어온 로데오 아레나 내부는 황금빛으로 반짝였다. 샹들리에와 대리석 바닥이 숨을 멎게 한다.",
-  "dialogue_sound_id": "seoyena_sub1_021",
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub1_022"
-}
+{ "node_id": "sub1_021", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_normal", "dialogue_text": "강남의 숨은 명소들을 찾아가 진짜 가치를 보여주세요.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_022" }

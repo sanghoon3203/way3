@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_032",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "멀미가 심하게 온 채로 사인을 했다. 손이 떨려서 서명이 삐뚤빼뚤하다.",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_033"
-}
+{ "node_id": "sub2_032", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_smile", "dialogue_text": "익명 경매였거든요. 근데 내가 낙찰받은 걸 알고 화가 난 사람들이 좀 있어요. 특히 네오서울의 제약 카르텔이 이걸 노리고 있었죠.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_033" }

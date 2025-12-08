@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_050",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "차가 천천히 입구 앞에 멈췄다. 호버 모드가 해제되며 바퀴가 다시 나타났다. 딸깍, 하는 소리와 함께 평범한 개구리 자동차로 돌아왔다.",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_051"
-}
+{ "node_id": "sub2_050", "background_image": null, "character_id": "지월 스님", "character_sprite": "npc_monk", "dialogue_text": "아니요. 네오서울의 오염된 땅에서는 더 이상 자라지 않습니다. 대신...", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_051" }

@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_048",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "[현재 시각: 19:22:31]",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_049"
-}
+{ "node_id": "sub2_048", "background_image": null, "character_id": "지월 스님", "character_sprite": "npc_monk", "dialogue_text": "서 보살, 그런데 말입니다. 도감은 돌아왔지만, 천년감로초는 이제 이 세상에 없습니다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_049" }

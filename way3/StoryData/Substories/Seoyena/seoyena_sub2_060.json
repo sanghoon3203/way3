@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_060",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "\"네. 수고했어요.\"",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_061"
-}
+{ "node_id": "sub2_060", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "서예나가 내 어깨에 손을 올렸다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_061" }

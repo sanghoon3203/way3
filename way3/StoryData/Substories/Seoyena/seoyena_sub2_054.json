@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_054",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "정갈한 네이비 양복. 한 치의 흐트러짐도 없는 머리. 차가운 표정으로 이쪽을 바라보는 여자.",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_055"
-}
+{ "node_id": "sub2_054", "background_image": null, "character_id": "지월 스님", "character_sprite": "npc_monk", "dialogue_text": "우리는 그것을 크로노스 아이비(Chronos Ivy)라고 부릅니다. 혹은 시간 이끼라고도 하지요.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_055" }

@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_027",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "0.5초. 딱 0.5초 만에 지하 공간을 한 바퀴 돌았다. 눈앞이 핑 돌고, 속이 뒤집힌다.",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_028"
-}
+{ "node_id": "sub2_027", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_normal", "dialogue_text": "내가 오늘 낙찰받은 물건 때문이에요.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_028" }

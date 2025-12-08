@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_061",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "그녀가 손목시계를 확인했다. 7시 23분 40초.",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_062"
-}
+{ "node_id": "sub2_061", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_normal", "dialogue_text": "들었지? 계획 변경이야. 도감 전달은 끝났으니, 이제부턴 내 개인적인 의뢰야.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_062" }

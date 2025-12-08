@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_013",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "고급 의자에 앉혀진 순간, 나는 깨달았다. 이건 그냥 쇼룸이 아니었다.",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_014"
-}
+{ "node_id": "sub2_013", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_normal", "dialogue_text": "시간 잘 지켰네요.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_014" }

@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub1_024",
-  "background_image": "bg_seoyena_office",
-  "character_id": "player",
-  "character_sprite": "sprite_player_uniform_default.png",
-  "dialogue_text": "\"돈도 필요하지만… 그게 전부는 아니에요. 이 세계에서 살아남기 위해서요.\"",
-  "dialogue_sound_id": "seoyena_sub1_024",
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub1_025"
-}
+{ "node_id": "sub1_024", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_normal", "dialogue_text": "핸드폰 있죠? 시간 잘 보고 다녀와요. 지금 여기 위치 아래로 오면 돼요.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_025" }

@@ -1,0 +1,1 @@
+{ "node_id": "sub3_008", "background_image": "bg_banpo_river_evening", "character_id": "Narrator", "character_sprite": null, "dialogue_text": "두 번째 장소. 강변 분수는 멈춰 있었다. 시계바늘이 격렬하게 떨리기 시작했다.", "dialogue_sound_id": null, "sound_effect": "bgm_glitch_river", "next_node_id": "sub3_009" }

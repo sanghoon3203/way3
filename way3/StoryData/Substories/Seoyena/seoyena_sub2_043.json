@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_043",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "\"응, 부탁해.\"",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_044"
-}
+{ "node_id": "sub2_043", "background_image": null, "character_id": "지월 스님", "character_sprite": "npc_monk", "dialogue_text": "오셨습니까, 서 보살.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_044" }

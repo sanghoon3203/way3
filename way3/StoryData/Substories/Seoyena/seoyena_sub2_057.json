@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_057",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "\"시간 잘 지켰네요.\"",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_058"
-}
+{ "node_id": "sub2_057", "background_image": null, "character_id": "지월 스님", "character_sprite": "npc_monk", "dialogue_text": "시간이 고여있는 곳. 과거와 현재가 충돌하여 균열이 생긴 곳입니다. 서리풀 공원의 잊혀진 벤치, 그리고 반포의 멈춘 강물 위.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_058" }

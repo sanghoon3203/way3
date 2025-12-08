@@ -1,0 +1,1 @@
+{ "node_id": "sub3_024", "background_image": null, "character_id": "System", "character_sprite": null, "dialogue_text": "퀘스트 갱신: 서초구로 이동. 목표: 아이비의 안정도가 떨어지기 전에 앨리스 강에게 전달하십시오.", "dialogue_sound_id": null, "sound_effect": "sfx_system_update", "next_node_id": "sub3_025" }

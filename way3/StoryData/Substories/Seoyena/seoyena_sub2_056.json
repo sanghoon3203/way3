@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_056",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "그녀는 천천히, 하지만 확신에 찬 걸음으로 차에 다가왔다. 조수석 문을 열고 자연스럽게 앉더니, 안전벨트를 매며 말했다.",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_057"
-}
+{ "node_id": "sub2_056", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_smile", "dialogue_text": "크로노스 아이비... 멸종 위기 식물보다 훨씬 더 가치 있겠군요. 어디서 구할 수 있죠?", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_057" }

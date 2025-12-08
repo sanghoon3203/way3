@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub1_025",
-  "background_image": "bg_seoyena_office",
-  "character_id": "Seoyena",
-  "character_sprite": null,
-  "dialogue_text": "\"두 번째 질문입니다. 당신에게 ‘가치’란 무엇인가요? 가격? 희소성? 브랜드?\"",
-  "dialogue_sound_id": "seoyena_sub1_025",
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub1_026"
-}
+{ "node_id": "sub1_025", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "쾅 (경호원이 날 밀며 문을 닫는 소리.)", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_026" }

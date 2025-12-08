@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_024",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "직원이 손을 잡아 이끌며 운전석에 태웠다. 문이 닫히자 계기판 전체가 홀로그램으로 펼쳐졌다.",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_025"
-}
+{ "node_id": "sub2_024", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_stern", "dialogue_text": "출발. 지금.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_025" }

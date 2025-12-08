@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_034",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "\"네? 왜 거기서...?\"",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_035"
-}
+{ "node_id": "sub2_034", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "뒤에서 총성이 울렸다. 총알이 차체에 맞았지만 흠집 하나 나지 않았다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_035" }

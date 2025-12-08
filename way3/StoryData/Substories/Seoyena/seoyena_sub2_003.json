@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_003",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "일단 들어가보자..",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_004"
-}
+{ "node_id": "sub2_003", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "차가 부드럽게 움직이기 시작했다. 강남 한복판을 떠다니는 기분이 이상하다. 사람들이 쳐다본다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_004" }

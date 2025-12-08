@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub1_027",
-  "background_image": "bg_seoyena_office",
-  "character_id": "Seoyena",
-  "character_sprite": null,
-  "dialogue_text": "눈에서 간절함이 있긴하네요. 그러면 제 심부름을 몇가지 해오면 상인등록증을 드리도록하죠",
-  "dialogue_sound_id": "seoyena_sub1_027",
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub1_028"
-}
+{ "node_id": "sub1_027", "background_image": "bg_teheran_road", "character_id": "Narrator", "character_sprite": null, "dialogue_text": "강남 테헤란로 한가운데, 유리벽 너머로 빛나는 현대 모터 스튜디오 서울.", "dialogue_sound_id": null, "sound_effect": "bgm_city_noise", "next_node_id": "sub1_028" }

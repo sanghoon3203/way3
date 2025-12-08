@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub1_033",
-  "background_image": "bg_seoyena_office",
-  "character_id": "player",
-  "character_sprite": "sprite_player_uniform_default.png",
-  "dialogue_text": "\"장담은 못 해요. 하지만… 최선을 다해 지켜볼게요.\" 결의를 담아 고개를 끄덕였다.",
-  "dialogue_sound_id": "seoyena_sub1_033",
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub1_034"
-}
+{ "node_id": "sub1_033", "background_image": null, "character_id": "플레이어", "character_sprite": null, "dialogue_text": "저 혹시.. 서예나 이름으로.. 픽업 요청된 거 있을까요?", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_034" }

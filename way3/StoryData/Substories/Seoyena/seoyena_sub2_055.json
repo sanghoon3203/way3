@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_055",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "서예나였다.",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_056"
-}
+{ "node_id": "sub2_055", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "서예나의 눈빛이 달라졌다. 실망이 아니라, 새로운 사업 기회를 포착한 상인의 눈빛이었다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_056" }

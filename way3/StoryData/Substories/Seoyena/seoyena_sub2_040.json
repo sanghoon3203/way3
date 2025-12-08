@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_040",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "[목적지: K-AUCTION HOUSE]",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_041"
-}
+{ "node_id": "sub2_040", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_stern", "dialogue_text": "아니요. 정문으로 가세요. 떳떳하게. 봉은사 경내로 들어가면 저들도 함부로 못 해요. 네오서울의 성역이니까.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_041" }

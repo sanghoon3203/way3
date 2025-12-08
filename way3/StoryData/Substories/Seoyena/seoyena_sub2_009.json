@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_009",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "\"잠시만요..엇!!! 서예나 님.. 안쪽으로 모시겠습니다..\"",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_010"
-}
+{ "node_id": "sub2_009", "background_image": null, "character_id": "System", "character_sprite": null, "dialogue_text": "현재 시각 19:23:00", "dialogue_sound_id": null, "sound_effect": "sfx_system_beep", "next_node_id": "sub2_010" }

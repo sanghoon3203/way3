@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_049",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "저 멀리 보이는 건물. 'K-AUCTION HOUSE'라는 금색 간판이 석양을 받아 빛난다. 주차장에는 롤스로이스, 벤틀리, 페라리가 즐비하다.",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_050"
-}
+{ "node_id": "sub2_049", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_normal", "dialogue_text": "네? 멸종됐다는 건 알지만, 씨앗이 있다면...", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_050" }

@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub1_030",
-  "background_image": "bg_seoyena_office",
-  "character_id": "player",
-  "character_sprite": null,
-  "dialogue_text": "아아....하..할게요!!!",
-  "dialogue_sound_id": "seoyena_sub1_030",
-  "sound_effect": "sfx_success_chime.mp3",
-  "next_node_id": "seoyena_sub1_031"
-}
+{ "node_id": "sub1_030", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "내가 알던 자동차가 20대... 그리고 이게....현대에서 만든 거라고...?", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_031" }

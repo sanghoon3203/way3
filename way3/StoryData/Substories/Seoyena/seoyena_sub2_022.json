@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_022",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "\"뭐야....? 이게 자동차라고?\"",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_023"
-}
+{ "node_id": "sub2_022", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "서예나는 대답 대신 창밖을 가리켰다. 경매장 입구에서 정장을 입은 남자들이 우르르 쏟아져 나오고 있었다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_023" }

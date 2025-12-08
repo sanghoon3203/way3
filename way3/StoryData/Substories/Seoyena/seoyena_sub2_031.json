@@ -1,10 +1,1 @@
-{
-  "node_id": "seoyena_sub2_031",
-  "background_image": null,
-  "character_id": null,
-  "character_sprite": null,
-  "dialogue_text": "\"어...네\"",
-  "dialogue_sound_id": null,
-  "sound_effect": null,
-  "next_node_id": "seoyena_sub2_032"
-}
+{ "node_id": "sub2_031", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "서예나의 입꼬리가 살짝 올라갔다. 처음 보는 표정이었다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub2_032" }
