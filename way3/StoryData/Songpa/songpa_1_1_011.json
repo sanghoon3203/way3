@@ -1,0 +1,11 @@
+{
+  "node_id": "songpa_1_1_011",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
+  "character_sprite": null,
+  "dialogue_text": "좀비 영화처럼 덤벼들지는 않는다. 그저 행복해 보인다. 그게 더 소름 끼친다. 이들은 현실을 걷는 게 아니라, 각자의 꿈속을 걷고 있다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "songpa_1_1_012"
+}

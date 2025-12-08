@@ -1,0 +1,11 @@
+{
+  "node_id": "songpa_1_1_038",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
+  "character_sprite": null,
+  "dialogue_text": "하지만 앨리스의 씨앗 냄새, 그 쌉싸래한 흙냄새가 정신을 붙잡아준다. 현실의 냄새.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "songpa_1_1_039"
+}

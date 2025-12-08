@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_1_011",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "간판들은 세월에 바래 있었고, 골목마다 오래된 냄새가 났다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_1_012"
+}

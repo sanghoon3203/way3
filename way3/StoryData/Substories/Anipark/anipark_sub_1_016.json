@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_1_016",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "앨리스가 씨앗을 들이댔다. 씨앗이 그 '피로감'을 빨아들였다. 초록색 빛이 살짝 돌았다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_1_017"
+}

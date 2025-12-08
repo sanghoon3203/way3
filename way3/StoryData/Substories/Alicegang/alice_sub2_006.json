@@ -1,10 +1,10 @@
 {
   "node_id": "alice_sub2_006",
-  "background_image": null,
+  "background_image": "bg_alice_greenhouse",
   "character_id": "Alicegang",
   "character_sprite": null,
-  "dialogue_text": "\"고마워요. 덕분에 뽀삐도 숨 고르기가 한결 쉬워졌어요.\"",
-  "dialogue_sound_id": "alice_sub2_006",
+  "dialogue_text": "다행히 외상은 없어요. 하지만... 마음이 다친 것 같아요. 아까 드론을 막을 때 출력이 부족해서 놈을 완전히 정지시키지 못했거든요. 마지막에 제가 태블릿으로 해킹 코드를 넣지 않았으면... 우린 둘 다 위험했을 거예요.",
+  "dialogue_sound_id": null,
   "sound_effect": null,
-  "next_node_id": null
+  "next_node_id": "alice_sub2_007"
 }

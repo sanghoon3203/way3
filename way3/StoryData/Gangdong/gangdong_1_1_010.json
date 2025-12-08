@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_1_010",
+  "background_image": "bg_cheonho_street",
+  "bgm": "bgm_morning_coffee",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "화려하지만 어딘가 낡은 느낌의 번화가.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_1_011"
+}

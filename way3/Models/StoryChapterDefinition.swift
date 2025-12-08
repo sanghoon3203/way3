@@ -18,6 +18,7 @@ struct StoryChapterDefinition: Codable, Identifiable, Hashable {
     let mainStoryEntry: String?
     let districts: [StoryDistrictDefinition]
     let unlockConditions: [StoryUnlockCondition]
+    let entryRequirements: EntryRequirements?
     let completionReward: StoryCompletionReward?
 
     var id: String { chapterId }
@@ -31,6 +32,7 @@ struct StoryChapterDefinition: Codable, Identifiable, Hashable {
         case mainStoryEntry
         case districts
         case unlockConditions
+        case entryRequirements
         case completionReward
     }
 
@@ -43,6 +45,7 @@ struct StoryChapterDefinition: Codable, Identifiable, Hashable {
         mainStoryEntry: String?,
         districts: [StoryDistrictDefinition],
         unlockConditions: [StoryUnlockCondition] = [],
+        entryRequirements: EntryRequirements?,
         completionReward: StoryCompletionReward?
     ) {
         self.chapterId = chapterId
@@ -53,6 +56,7 @@ struct StoryChapterDefinition: Codable, Identifiable, Hashable {
         self.mainStoryEntry = mainStoryEntry
         self.districts = districts
         self.unlockConditions = unlockConditions
+        self.entryRequirements = entryRequirements
         self.completionReward = completionReward
     }
 
@@ -66,8 +70,14 @@ struct StoryChapterDefinition: Codable, Identifiable, Hashable {
         mainStoryEntry = try container.decodeIfPresent(String.self, forKey: .mainStoryEntry)
         districts = try container.decode([StoryDistrictDefinition].self, forKey: .districts)
         unlockConditions = try container.decodeIfPresent([StoryUnlockCondition].self, forKey: .unlockConditions) ?? []
+        entryRequirements = try container.decodeIfPresent(EntryRequirements.self, forKey: .entryRequirements)
         completionReward = try container.decodeIfPresent(StoryCompletionReward.self, forKey: .completionReward)
     }
+}
+
+struct EntryRequirements: Codable, Hashable {
+    let minLevel: Int?
+    let requiredItems: [String]?
 }
 
 struct StoryDistrictDefinition: Codable, Identifiable, Hashable {

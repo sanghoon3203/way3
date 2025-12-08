@@ -147,7 +147,7 @@ extension Player {
         // 스킬 향상
         stats.improveSkill(.trading, by: 1)
         if tradeType == .buy {
-            stats.improveSkill(.negotiation, by: 1)
+            // 협상 스킬 제거됨
         }
 
         // 상인 관계 기록

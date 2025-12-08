@@ -1,0 +1,11 @@
+{
+  "node_id": "seocho_1_2_055",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
+  "character_sprite": null,
+  "dialogue_text": "몸은 젖었고, 머리는 묵직하다. 그래도 눈은 또렷하다. 두려움과 기대가 한꺼번에 목을 눌렀다. 감로초가 정말 시간을 되돌릴까? 모르겠다. 그래도 움직인다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seocho_1_2_056"
+}

@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_054",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Alice Kang",
+  "character_sprite": null,
+  "dialogue_text": "할머니... 보셨어요? 우리가 해냈어요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_055"
+}

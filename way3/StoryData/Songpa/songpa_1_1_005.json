@@ -1,0 +1,11 @@
+{
+  "node_id": "songpa_1_1_005",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "서예나의 메시지는 짧았다. [석촌호수. 미러레이크 현상 확인 요망. 감로초 빛 파장 감지됨.]",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "songpa_1_1_006"
+}

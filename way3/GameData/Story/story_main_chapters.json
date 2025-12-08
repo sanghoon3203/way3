@@ -1,19 +1,24 @@
 {
-  "chapters": [{
-    "chapter_id": "ch0_prologue",
-    "title": "프롤로그: 이상한 세계로 떨어지다",
-    "order": 1,
-    "region": "seoul",
-    "summary": "'커넥트: 서울'을 통해서 다른 세계에 와버린 나, 앞으로 어떻게 나아가야할까?",
-    "main_story_entry": "prologue_01",
-    "unlock_conditions": [],
-    "districts": [],
-    "completion_reward": {
-      "key_item": "임시 상인증",
-      "money": 50000,
-      "exp": 1000
-    }
-  },
+  "chapters": [
+    {
+      "chapter_id": "ch0_prologue",
+      "title": "프롤로그: 이상한 세계로 떨어지다",
+      "order": 0,
+      "region": "seoul",
+      "summary": "'커넥트: 서울'을 통해서 다른 세계에 와버린 나, 앞으로 어떻게 나아가야할까?",
+      "main_story_entry": "prologue_01",
+      "unlock_conditions": [],
+      "entry_requirements": {
+        "min_level": 1,
+        "required_items": []
+      },
+      "districts": [],
+      "completion_reward": {
+        "key_item": "임시 상인증",
+        "money": 50000,
+        "exp": 1000
+      }
+    },
     {
       "chapter_id": "ch1_gangnam",
       "title": "강남권: 번영의 그림자",
@@ -22,6 +27,10 @@
       "summary": "강남권 전역에서 발생한 탐욕의 폭발을 추적하며 다섯 상인과 공조한다.",
       "main_story_entry": "chapter_gangnam_001",
       "unlock_conditions": [],
+      "entry_requirements": {
+        "min_level": 1,
+        "required_items": []
+      },
       "districts": [
         {
           "district_id": "gangnam_gu",
@@ -141,8 +150,8 @@
                   "value": "gangdong_1_1"
                 },
                 {
-                  "type": "quest",
-                  "value": "joongi_sub_01"
+                  "type": "subQuest",
+                  "value": "jinbeakho_sub_01"
                 }
               ],
               "post_quest_id": "mainquest_gangdong_1_2"
@@ -179,8 +188,8 @@
                   "value": "gwanak_1_1"
                 },
                 {
-                  "type": "quest",
-                  "value": "jiyoung_sub_02"
+                  "type": "subQuest",
+                  "value": "kimsehwui_sub_01"
                 }
               ],
               "post_quest_id": "mainquest_gwanak_1_2"
@@ -214,6 +223,10 @@
       "region": "northwest",
       "summary": "서북부의 고도에서 튀어나온 시간 균열을 봉인한다.",
       "main_story_entry": "ch2_intro_01",
+      "entry_requirements": {
+        "min_level": 5,
+        "required_items": []
+      },
       "unlock_conditions": [
         {
           "type": "keyItem",
@@ -318,6 +331,124 @@
         "key_item": "key_item_northwest",
         "money": 75000,
         "exp": 1500
+      }
+    },
+    {
+      "chapter_id": "ch3_northeast",
+      "title": "동북권: 자연과 도시",
+      "order": 3,
+      "region": "northeast",
+      "summary": "동북부의 자연과 도시가 어우러진 곳에서 새로운 단서를 찾는다.",
+      "main_story_entry": "ch3_intro_01",
+      "entry_requirements": {
+        "min_level": 10,
+        "required_items": []
+      },
+      "unlock_conditions": [
+         {
+          "type": "keyItem",
+          "value": "key_item_northwest"
+        }
+      ],
+      "districts": [],
+      "completion_reward": {
+        "key_item": "key_item_northeast",
+        "money": 100000,
+        "exp": 2000
+      }
+    },
+    {
+      "chapter_id": "ch4_southwest",
+      "title": "서남권: 새로운 가능성",
+      "order": 4,
+      "region": "southwest",
+      "summary": "디지털과 공업이 공존하는 서남권에서 혁신의 바람을 탄다.",
+      "main_story_entry": "ch4_intro_01",
+      "entry_requirements": {
+        "min_level": 15,
+        "required_items": []
+      },
+      "unlock_conditions": [
+         {
+          "type": "keyItem",
+          "value": "key_item_northeast"
+        }
+      ],
+      "districts": [],
+      "completion_reward": {
+        "key_item": "key_item_southwest",
+        "money": 125000,
+        "exp": 2500
+      }
+    },
+    {
+      "chapter_id": "ch5_eastwest",
+      "title": "동서권: 전통의 재발견",
+      "order": 5,
+      "region": "eastwest",
+      "summary": "오래된 주거 지역에서 잊혀진 전통의 가치를 재발견한다.",
+      "main_story_entry": "ch5_intro_01",
+      "entry_requirements": {
+        "min_level": 20,
+        "required_items": []
+      },
+      "unlock_conditions": [
+         {
+          "type": "keyItem",
+          "value": "key_item_southwest"
+        }
+      ],
+      "districts": [],
+      "completion_reward": {
+        "key_item": "key_item_eastwest",
+        "money": 150000,
+        "exp": 3000
+      }
+    },
+    {
+      "chapter_id": "ch6_final",
+      "title": "최종장: 서울의 진실",
+      "order": 6,
+      "region": "final",
+      "summary": "모든 증표를 모아 서울의 숨겨진 진실을 마주한다.",
+      "main_story_entry": "ch6_final_01",
+      "entry_requirements": {
+        "min_level": 25,
+        "required_items": [
+          "key_item_gangnam",
+          "key_item_northwest",
+          "key_item_northeast",
+          "key_item_southwest",
+          "key_item_eastwest"
+        ]
+      },
+      "unlock_conditions": [
+        {
+            "type": "keyItem",
+            "value": "key_item_gangnam"
+        },
+        {
+            "type": "keyItem",
+            "value": "key_item_northwest"
+        },
+        {
+            "type": "keyItem",
+            "value": "key_item_northeast"
+        },
+        {
+            "type": "keyItem",
+            "value": "key_item_southwest"
+        },
+        {
+            "type": "keyItem",
+            "value": "key_item_eastwest"
+        }
+      ],
+      "districts": [],
+      "completion_reward": {
+        "key_item": "final_key",
+        "money": 500000,
+        "exp": 10000
       }
     }
   ]

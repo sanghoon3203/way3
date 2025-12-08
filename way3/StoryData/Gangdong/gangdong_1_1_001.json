@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_1_001",
+  "background_image": "bg_bridge_dawn",
+  "bgm": "bgm_river_drive",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "송파를 빠져나오자마자 공기가 달라졌다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_1_002"
+}

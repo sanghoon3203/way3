@@ -15,7 +15,6 @@ struct MerchantProfile {
     let requiredLicense: LicenseLevel
     let reputationRequirement: Int
     let priceModifier: Double
-    let negotiationDifficulty: Int
     let preferredCategories: [String]
     let dislikedCategories: [String]
 
@@ -30,7 +29,6 @@ struct MerchantProfile {
         requiredLicense: LicenseLevel = .beginner,
         reputationRequirement: Int = 0,
         priceModifier: Double = 1.0,
-        negotiationDifficulty: Int = 3,
         preferredCategories: [String] = [],
         dislikedCategories: [String] = []
     ) {
@@ -44,7 +42,6 @@ struct MerchantProfile {
         self.requiredLicense = requiredLicense
         self.reputationRequirement = reputationRequirement
         self.priceModifier = priceModifier
-        self.negotiationDifficulty = negotiationDifficulty
         self.preferredCategories = preferredCategories
         self.dislikedCategories = dislikedCategories
     }

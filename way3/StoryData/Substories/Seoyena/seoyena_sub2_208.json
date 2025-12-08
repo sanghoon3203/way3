@@ -3,7 +3,7 @@
   "background_image": null,
   "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "\"저기예요. 일주문 앞까지만 가면 돼요.\"",
+  "dialogue_text": "서예나가 핸들을 잡았다.",
   "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seoyena_sub2_209"

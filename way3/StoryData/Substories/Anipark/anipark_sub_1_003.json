@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_1_003",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Alice Kang",
+  "character_sprite": null,
+  "dialogue_text": "못 들어가요. 지금 들어가면 씨앗도, 우리도 꿈에 먹혀서 영원히 잠들 거예요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_1_004"
+}

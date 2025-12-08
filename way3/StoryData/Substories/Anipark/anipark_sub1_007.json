@@ -1,0 +1,10 @@
+{
+  "node_id": "anipark_sub1_007",
+  "background_image": "밤",
+  "character_id": "Anipark",
+  "character_sprite": null,
+  "dialogue_text": "당신이 가서 확인해 주세요. 만약 제 예상이 맞다면... (눈을 가늘게 뜨며) 아주 박살을 내버리세요. 수리비는 청구 안 할 테니까.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub1_008"
+}

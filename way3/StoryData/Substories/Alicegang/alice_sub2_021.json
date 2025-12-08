@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_021",
+  "background_image": "밤",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "**(비 내리는 카페골목은 한적했다. 화려한 카페들의 불빛이 젖은 아스팔트 위에 비쳐 일렁거렸다. 골목 끝자락, 가로등조차 켜지지 않은 어두운 곳에 낡은 셔터가 반쯤 내려진 정비소가 보였다.)**",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_022"
+}

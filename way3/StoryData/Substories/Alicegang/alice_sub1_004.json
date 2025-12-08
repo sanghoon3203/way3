@@ -1,10 +1,10 @@
 {
   "node_id": "alice_sub1_004",
-  "background_image": null,
-  "character_id": "typer_narrator",
+  "background_image": "bg_alice_greenhouse",
+  "character_id": "Alicegang",
   "character_sprite": null,
-  "dialogue_text": "프티 프랑스 구역의 돌길을 천천히 걸었다. 허브 향이 미세하게 흐르고, 낮은 담벼락 너머로 아이들이 웃고 있었다.",
-  "dialogue_sound_id": "alice_sub1_004",
+  "dialogue_text": "이 톱니바퀴는 시계탑의 일부였으니, 마을의 오랜 기억들을 간직하고 있을 거예요. 같은 파장을 가진 물건들을 가까이 두면, 잃어버린 데이터가 다시 떠오를 수도 있어요.",
+  "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "alice_sub1_005"
 }

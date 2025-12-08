@@ -1,10 +1,10 @@
 {
   "node_id": "alice_sub1_005",
-  "background_image": null,
-  "character_id": "Alicegang",
+  "background_image": "bg_alice_greenhouse",
+  "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "\"뽀삐는 사람을 잘 믿지만, 너무 빨리 달리면 겁먹어요. 천천히 같이 걸어주세요.\"",
-  "dialogue_sound_id": "alice_sub1_005",
+  "dialogue_text": "**(앨리스가 태블릿에 지도를 띄웠다. 지도에는 세 곳의 좌표가 붉게 표시되어 있었다.)**",
+  "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "alice_sub1_006"
 }

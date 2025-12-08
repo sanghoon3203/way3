@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_019",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "톱니가 녹아 액체가 되었다. 주불수는 그 쇳물을 틀에 붓고, 망치로 두드리기 시작했다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_020"
+}

@@ -1,0 +1,11 @@
+{
+  "node_id": "jinbaekho_sub_1_005",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
+  "character_sprite": null,
+  "dialogue_text": "6천 년 전에도 사람들은 여기서 밥을 먹고, 잠을 자고, 꿈을 꿨을 것이다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "jinbaekho_sub_1_006"
+}

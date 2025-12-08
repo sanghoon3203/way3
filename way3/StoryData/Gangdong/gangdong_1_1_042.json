@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_1_042",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "나는 다시 문을 열고 나섰다. 강동의 바람이 불어왔다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_1_043"
+}

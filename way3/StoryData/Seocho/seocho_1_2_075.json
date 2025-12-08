@@ -1,0 +1,11 @@
+{
+  "node_id": "seocho_1_2_075",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
+  "character_sprite": null,
+  "dialogue_text": "허브 냄새가 다시 난다. 좋은 징조라고 믿자. 오늘 끝까지 걸어야 한다. 내일이 오지 않는다면, 우리가 데려오면 된다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seocho_1_2_076"
+}

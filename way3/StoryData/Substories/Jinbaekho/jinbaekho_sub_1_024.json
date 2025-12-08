@@ -1,0 +1,11 @@
+{
+  "node_id": "jinbaekho_sub_1_024",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Alice Kang",
+  "character_sprite": null,
+  "dialogue_text": "지금이에요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "jinbaekho_sub_1_025"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "anipark_sub1_006",
+  "background_image": "밤",
+  "character_id": "Anipark",
+  "character_sprite": null,
+  "dialogue_text": "제 생각엔 누군가 저 안에 불법 장치를 심어놓은 것 같아요. 호수의 수력 에너지를 훔쳐 쓰는... 기생충 같은 거죠.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub1_007"
+}

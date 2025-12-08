@@ -1,0 +1,11 @@
+{
+  "node_id": "seocho_1_2_072",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
+  "character_sprite": null,
+  "dialogue_text": "서예나가 말한 ‘시간을 새로 쓰기’. 그게 뭔지 아직 모르지만, 써보겠다. 지금은 일단 발을 옮기는 것부터.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seocho_1_2_073"
+}

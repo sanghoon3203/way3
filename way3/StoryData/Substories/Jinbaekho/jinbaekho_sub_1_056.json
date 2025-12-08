@@ -1,0 +1,11 @@
+{
+  "node_id": "jinbaekho_sub_1_056",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Jinbaekho",
+  "character_sprite": null,
+  "dialogue_text": "네. 그 양반 화로라면, 이 씨앗을 담을 '그릇'을 만들 수 있을 거예요. 맨손으로 들고 다니면 또 질식하니까.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "jinbaekho_sub_1_057"
+}

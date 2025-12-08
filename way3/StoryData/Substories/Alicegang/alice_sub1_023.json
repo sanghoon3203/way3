@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub1_023",
+  "background_image": "bg_seorae_cafe_street",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "**(세 번째 좌표. 폐업한 카페의 간판이 바닥에 떨어져 뒹굴고 있었다. 'Le Petit...' 뒷글자는 깨져서 보이지 않았다.)**",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub1_024"
+}

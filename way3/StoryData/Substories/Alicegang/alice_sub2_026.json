@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_026",
+  "background_image": "밤",
+  "character_id": "Mechanic",
+  "character_sprite": null,
+  "dialogue_text": "여기는 초대받은 멤버십 회원만 들어올 수 있는 곳인데 말이야.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_027"
+}

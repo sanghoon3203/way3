@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_049",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "4시 45분.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_050"
+}

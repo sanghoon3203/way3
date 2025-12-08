@@ -3,7 +3,7 @@
   "background_image": null,
   "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "",
+  "dialogue_text": "\"거기 약초원을 관리하는 지월 스님께 이걸 돌려드려야 해요. 그래야 천년감로초를 다시 키울 수 있거든요.\"",
   "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seoyena_sub2_090"

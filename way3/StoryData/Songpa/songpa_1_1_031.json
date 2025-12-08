@@ -1,0 +1,11 @@
+{
+  "node_id": "songpa_1_1_031",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Alice Kang",
+  "character_sprite": null,
+  "dialogue_text": "씨앗이 반응해요. 꿈을 양분으로 삼을 수 있어요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "songpa_1_1_032"
+}

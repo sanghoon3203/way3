@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_1_040",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "바게트가 꼬리를 흔들며 진백호의 다리에 몸을 비볐다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_1_041"
+}

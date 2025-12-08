@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_041",
+  "background_image": "밤",
+  "character_id": "Alicegang",
+  "character_sprite": null,
+  "dialogue_text": "바게트, 이리 와봐. 새 옷 입자.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_042"
+}

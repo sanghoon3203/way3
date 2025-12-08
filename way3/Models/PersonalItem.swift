@@ -130,7 +130,7 @@ struct ItemEffect: Codable, Equatable {
         switch type {
         case .healthBoost:
             return "+\(value)"
-        case .tradeSuccessRate, .negotiationPower, .appraisalBonus, .movementSpeed, .experienceBonus:
+        case .tradeSuccessRate, .movementSpeed, .experienceBonus:
             return "+\(value)%"
         case .instantTeleport, .priceVisibility:
             return ""
@@ -142,10 +142,8 @@ struct ItemEffect: Codable, Equatable {
 enum EffectType: String, Codable, CaseIterable {
     case healthBoost = "health_boost"
     case tradeSuccessRate = "trade_success_rate"
-    case negotiationPower = "negotiation_power"
     case movementSpeed = "movement_speed"
     case experienceBonus = "experience_bonus"
-    case appraisalBonus = "appraisal_bonus"
     case instantTeleport = "instant_teleport"
     case priceVisibility = "price_visibility"
 
@@ -153,10 +151,8 @@ enum EffectType: String, Codable, CaseIterable {
         switch self {
         case .healthBoost: return "체력 회복"
         case .tradeSuccessRate: return "거래 성공률"
-        case .negotiationPower: return "가격 협상력"
         case .movementSpeed: return "이동 속도"
         case .experienceBonus: return "경험치 보너스"
-        case .appraisalBonus: return "감정 능력"
         case .instantTeleport: return "순간 이동"
         case .priceVisibility: return "가격 정보"
         }
@@ -166,10 +162,8 @@ enum EffectType: String, Codable, CaseIterable {
         switch self {
         case .healthBoost: return "heart.fill"
         case .tradeSuccessRate: return "chart.line.uptrend.xyaxis"
-        case .negotiationPower: return "person.2.fill"
         case .movementSpeed: return "figure.run"
         case .experienceBonus: return "star.fill"
-        case .appraisalBonus: return "eye.fill"
         case .instantTeleport: return "location.fill"
         case .priceVisibility: return "dollarsign.circle.fill"
         }
@@ -179,10 +173,8 @@ enum EffectType: String, Codable, CaseIterable {
         switch self {
         case .healthBoost: return .red
         case .tradeSuccessRate: return .green
-        case .negotiationPower: return .blue
         case .movementSpeed: return .orange
         case .experienceBonus: return .yellow
-        case .appraisalBonus: return .purple
         case .instantTeleport: return .cyan
         case .priceVisibility: return .mint
         }

@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_2_003",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "하지만 그들의 그림자는 하나로 엉겨 붙어 검은 늪이 되어 있었다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_2_004"
+}

@@ -1,0 +1,11 @@
+{
+  "node_id": "seocho_1_1_001",
+  "background_image": "bg_car_night",
+  "bgm": "bgm_car_rain",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "나는 조수석에 앉았다. 호버 모드가 풀린 차가 비를 밀어냈다. 서예나는 창밖보다 손목시계를 더 자주 봤다. 무릎 위 작은 캔버스 파우치에서 허브 냄새가 스며 나왔다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seocho_1_1_002"
+}

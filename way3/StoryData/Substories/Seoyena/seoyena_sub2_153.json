@@ -3,7 +3,7 @@
   "background_image": null,
   "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "",
+  "dialogue_text": "\"이 도감을 가져오신 것만으로는 천년감로초를 되살릴 수 없습니다.\"",
   "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seoyena_sub2_154"

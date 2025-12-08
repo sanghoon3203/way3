@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_1_039",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Jinbaekho",
+  "character_sprite": null,
+  "dialogue_text": "좋아요. 바게트도 데려가요. 녀석 코가 내 그라인더보다 정확하니까.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_1_040"
+}

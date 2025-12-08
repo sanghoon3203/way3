@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_024",
+  "background_image": "밤",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "**(셔터 밑으로 몸을 숙여 들어가자, 수십억을 호가하는 클래식 올드카들이 분해된 채 전시되어 있었다. 한쪽 벽면은 거대한 와인 저장고처럼 꾸며져 있었는데, 와인 병 대신 정밀 기계 부품들이 오와 열을 맞춰 진열되어 있었다.)**",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_025"
+}

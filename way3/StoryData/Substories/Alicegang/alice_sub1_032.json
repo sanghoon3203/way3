@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub1_032",
+  "background_image": "bg_seorae_cafe_street",
+  "character_id": "Alicegang",
+  "character_sprite": null,
+  "dialogue_text": "톱니바퀴에 기록된 마지막 로그를 읽어냈어요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub1_033"
+}

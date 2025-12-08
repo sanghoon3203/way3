@@ -1,10 +1,10 @@
 {
   "node_id": "alice_sub2_001",
-  "background_image": "bg_cafe_interior",
-  "character_id": "Alicegang",
+  "background_image": "bg_alice_greenhouse",
+  "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "\"몽마르뜨 공원에 새로운 허브 산책길이 생겼대요. 같이 다녀올래요?\"",
-  "dialogue_sound_id": "alice_sub2_001",
+  "dialogue_text": "**(밖에는 회색 비가 추적추적 내리고 있었다. 온실 유리창을 때리는 빗소리가 처량하게 들렸다. 작업대 위에는 바게트가 축 늘어져 끙끙거리고 있었다.)**",
+  "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "alice_sub2_002"
 }

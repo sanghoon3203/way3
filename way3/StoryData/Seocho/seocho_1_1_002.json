@@ -1,10 +1,11 @@
 {
   "node_id": "seocho_1_1_002",
-  "background_image": "bg_cafe_entrance",
-  "character_id": "typer_narrator",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Seoyena",
   "character_sprite": null,
-  "dialogue_text": "지하철에서 내리자 말끔한 프랑스풍 건물이 줄지어 있었다. 황금빛 강남과는 완전히 다른 고요한 분위기.",
-  "dialogue_sound_id": "seocho_1_1_002",
+  "dialogue_text": "4시 44분. 시계탑이 멈춘 시간. 감로초 기록도 그때 끊겼어요.",
+  "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seocho_1_1_003"
 }

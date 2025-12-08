@@ -1,0 +1,11 @@
+{
+  "node_id": "seocho_1_1_025",
+  "background_image": "bg_seorae_alley",
+  "bgm": "bgm_rain_drone",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "철제 대문에 노크했다. 틈 사이로 허브 향이 새어 나왔다. 문틈에서 닥스훈트가 얼굴을 내밀었다. 바게트. 코를 파우치에 대고 한 번, 두 번. 꼬리가 천천히 흔들렸다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seocho_1_1_026"
+}

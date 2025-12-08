@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub1_026",
+  "background_image": "bg_seorae_cafe_street",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "**(티스푼을 집어 들자, 따뜻한 커피 향기와 사람들의 웅성거림이 느껴졌다.)**",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub1_027"
+}

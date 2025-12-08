@@ -749,6 +749,123 @@
         ]
       },
       "unlock_condition": "story_tab_always_visible"
+    },
+    {
+      "district_id": "songpa_gu",
+      "chapter_id": "ch1_gangnam",
+      "name": "송파구",
+      "merchant": {
+        "merchant_id": "merchant_Anipark",
+        "name": "애니 박",
+        "location": {
+          "latitude": 37.5133,
+          "longitude": 127.1028,
+          "radius": 450
+        },
+        "main_story_id": "songpa_gu_main",
+        "sub_quests": [
+          {
+            "quest_id": "anipark_sub_01",
+            "title": "석촌호수 힐링 산책",
+            "type": "delivery",
+            "verification": "gps_location",
+            "requirements": {
+              "target_location": {
+                "latitude": 37.5088,
+                "longitude": 127.1026,
+                "radius": 80
+              }
+            },
+            "rewards": {
+              "money": 1200,
+              "exp": 180,
+              "relationship_change": {
+                "merchant_id": "merchant_Anipark",
+                "trust": 10
+              }
+            }
+          }
+        ]
+      },
+      "unlock_condition": "story_tab_always_visible"
+    },
+    {
+      "district_id": "gangdong_gu",
+      "chapter_id": "ch1_gangnam",
+      "name": "강동구",
+      "merchant": {
+        "merchant_id": "merchant_Jinbeakho",
+        "name": "진백호",
+        "location": {
+          "latitude": 37.5384,
+          "longitude": 127.1237,
+          "radius": 450
+        },
+        "main_story_id": "gangdong_gu_main",
+        "sub_quests": [
+          {
+            "quest_id": "jinbeakho_sub_01",
+            "title": "천호동 공구 거리 배달",
+            "type": "delivery",
+            "verification": "gps_location",
+            "requirements": {
+              "target_location": {
+                "latitude": 37.5390,
+                "longitude": 127.1250,
+                "radius": 60
+              }
+            },
+            "rewards": {
+              "money": 1500,
+              "exp": 200,
+              "relationship_change": {
+                "merchant_id": "merchant_Jinbeakho",
+                "trust": 10
+              }
+            }
+          }
+        ]
+      },
+      "unlock_condition": "story_tab_always_visible"
+    },
+    {
+      "district_id": "gwanak_gu",
+      "chapter_id": "ch1_gangnam",
+      "name": "관악구",
+      "merchant": {
+        "merchant_id": "merchant_Kimsehwui",
+        "name": "김세휘",
+        "location": {
+          "latitude": 37.4784,
+          "longitude": 126.9516,
+          "radius": 500
+        },
+        "main_story_id": "gwanak_gu_main",
+        "sub_quests": [
+          {
+            "quest_id": "kimsehwui_sub_01",
+            "title": "샤로수길 데이터 수집",
+            "type": "delivery",
+            "verification": "gps_location",
+            "requirements": {
+              "target_location": {
+                "latitude": 37.4800,
+                "longitude": 126.9525,
+                "radius": 70
+              }
+            },
+            "rewards": {
+              "money": 1800,
+              "exp": 250,
+              "relationship_change": {
+                "merchant_id": "merchant_Kimsehwui",
+                "trust": 10
+              }
+            }
+          }
+        ]
+      },
+      "unlock_condition": "story_tab_always_visible"
     }
   ]
 }

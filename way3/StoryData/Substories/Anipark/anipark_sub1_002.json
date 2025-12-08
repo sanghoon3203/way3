@@ -1,0 +1,10 @@
+{
+  "node_id": "anipark_sub1_002",
+  "background_image": "밤",
+  "character_id": "player",
+  "character_sprite": null,
+  "dialogue_text": "호수에 떠 있는 백조 튜브요? 귀엽기만 한데요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub1_003"
+}

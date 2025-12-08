@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub1_031",
+  "background_image": "bg_seorae_cafe_street",
+  "character_id": "Alicegang",
+  "character_sprite": null,
+  "dialogue_text": "(태블릿을 빠르게 조작하며) 데이터 복구율... 30%... 60%... 100%! 됐어요!",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub1_032"
+}

@@ -1,0 +1,11 @@
+{
+  "node_id": "songpa_1_1_037",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
+  "character_sprite": null,
+  "dialogue_text": "서초에서는 과거를 팠고, 여기서는 환상을 본다. 냄새는 여전히 달다. 머리가 지끈거린다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "songpa_1_1_038"
+}

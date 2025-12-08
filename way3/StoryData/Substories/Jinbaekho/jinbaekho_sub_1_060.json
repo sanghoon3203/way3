@@ -1,0 +1,11 @@
+{
+  "node_id": "jinbaekho_sub_1_060",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
+  "character_sprite": null,
+  "dialogue_text": "강동의 마지막 장인, 주불수를 만나러 갈 차례다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": null
+}

@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_013",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Jubulsu",
+  "character_sprite": null,
+  "dialogue_text": "좋아. 온도는 36.5도. 딱 사람 체온이네. 이 온도를 유지해 줄 그릇을 만든다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_014"
+}

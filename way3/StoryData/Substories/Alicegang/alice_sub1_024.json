@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub1_024",
+  "background_image": "bg_seorae_cafe_street",
+  "character_id": "player",
+  "character_sprite": null,
+  "dialogue_text": "여기도 회색병을 피하지 못했구나.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub1_025"
+}

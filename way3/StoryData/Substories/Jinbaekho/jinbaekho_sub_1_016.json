@@ -1,0 +1,11 @@
+{
+  "node_id": "jinbaekho_sub_1_016",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "이곳은 한강이 도시와 만나 숨을 고르는 곳이다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "jinbaekho_sub_1_017"
+}

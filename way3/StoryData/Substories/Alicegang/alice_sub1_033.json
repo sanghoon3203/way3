@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub1_033",
+  "background_image": "bg_seorae_cafe_street",
+  "character_id": "Alicegang",
+  "character_sprite": null,
+  "dialogue_text": "\"시간 수집가. 코드명 크로노스(Chronos). 송파구 드림랜드로 이동 중.\"",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub1_034"
+}

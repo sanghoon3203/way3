@@ -1,0 +1,10 @@
+{
+  "node_id": "anipark_sub1_001",
+  "background_image": "밤",
+  "character_id": "Anipark",
+  "character_sprite": null,
+  "dialogue_text": "(망원경으로 호수를 보며) 저거 보여요? 저 흉물스러운 거.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub1_002"
+}

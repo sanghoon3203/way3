@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_1_007",
+  "background_image": "bg_lotteworld_indoor",
+  "bgm": "bgm_creepy_parade",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "첫 번째 환상은 '영원한 축제'.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_1_008"
+}

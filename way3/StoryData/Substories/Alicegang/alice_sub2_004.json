@@ -1,10 +1,10 @@
 {
   "node_id": "alice_sub2_004",
-  "background_image": null,
+  "background_image": "bg_alice_greenhouse",
   "character_id": "Alicegang",
   "character_sprite": null,
-  "dialogue_text": "\"여기는 조금 미끄러우니까 발걸음을 작게 내딛는 게 좋아요. 뽀삐가 미끄러지면 다칠 수 있거든요.\"",
-  "dialogue_sound_id": "alice_sub2_004",
+  "dialogue_text": "(보호 장갑을 끼고 조심스럽게 그을린 장비를 분해하며) 미안해, 바게트. 내가 너무 무리시켰어. 조금만 참아. 금방 고쳐줄게.",
+  "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "alice_sub2_005"
 }

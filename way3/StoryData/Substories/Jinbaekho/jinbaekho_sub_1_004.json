@@ -1,0 +1,11 @@
+{
+  "node_id": "jinbaekho_sub_1_004",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "진백호의 말대로라면, 이곳의 흙에는 '시작의 기억'이 배어 있다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "jinbaekho_sub_1_005"
+}

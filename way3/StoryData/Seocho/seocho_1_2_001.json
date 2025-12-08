@@ -1,0 +1,11 @@
+{
+  "node_id": "seocho_1_2_001",
+  "background_image": "bg_alice_greenhouse",
+  "bgm": "bgm_sad_orgel",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "밤이 더 내려앉았다. 온실 천장에 부딪히던 빗소리가 멀어졌다. 바게트는 톱니처럼 생긴 작은 금속을 코끝에 대고 킁킁거렸다. 공기가 살짝 흔들렸다. 손목의 회중시계는 여전히 4시 44분에 멈춰 있었다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seocho_1_2_002"
+}

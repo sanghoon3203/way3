@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_008",
+  "background_image": "bg_alice_greenhouse",
+  "character_id": "player",
+  "character_sprite": null,
+  "dialogue_text": "그건 바게트 잘못이 아니에요. 장비가 낡았던 탓이죠. 상대는 군용 드론이었으니까요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_009"
+}

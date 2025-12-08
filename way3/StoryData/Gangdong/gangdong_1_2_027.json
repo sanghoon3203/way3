@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_027",
+  "background_image": "bg_gangil_sunrise",
+  "bgm": "bgm_sunrise_grand",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "케이스에 씨앗을 안전하게 담은 우리는 강일동으로 달렸다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_028"
+}

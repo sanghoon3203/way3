@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_2_028",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Annie Park",
+  "character_sprite": null,
+  "dialogue_text": "이제 들어갈 수 있어요. 가서 저 거짓말쟁이 서버를 박살 내죠.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_2_029"
+}

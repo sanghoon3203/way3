@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_1_001",
+  "background_image": "bg_lotte_tower_base",
+  "bgm": "bgm_tower_dissonance",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "타워 입구 회전문 앞. 보이지 않는 벽이 가로막고 있었다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_1_002"
+}

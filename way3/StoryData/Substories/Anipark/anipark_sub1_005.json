@@ -1,0 +1,10 @@
+{
+  "node_id": "anipark_sub1_005",
+  "background_image": "밤",
+  "character_id": "player",
+  "character_sprite": null,
+  "dialogue_text": "튜브가 물고기를 잡아먹어요? 괴담 같은데요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub1_006"
+}

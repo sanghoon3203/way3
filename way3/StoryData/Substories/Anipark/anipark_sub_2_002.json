@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_2_002",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "나홀로나무 주변에 수백 명의 사람들이 모여 서로 '좋아요'를 누르는 시늉을 하고 있었다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_2_003"
+}

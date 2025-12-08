@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_003",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "심장 박동 같은 망치 소리가 들려왔다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_004"
+}

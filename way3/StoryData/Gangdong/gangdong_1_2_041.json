@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_041",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "껍질이 완전히 깨졌다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_042"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_045",
+  "background_image": "밤",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "**(콰아앙-!! 쩌렁쩌렁한 울림이 온실 유리를 진동시켰다. 소리는 컸지만 귀가 아프지 않은, 맑고 강력한 충격파였다. 두꺼운 강철 표적지가 종잇장처럼 구겨져 저 멀리 날아갔다.)**",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_046"
+}

@@ -3,7 +3,7 @@
   "background_image": null,
   "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "'서예나 님이 왜 경매장에서 기다리고 있을까? 아니, 그보다 왜 이렇게 정확한 시간을 지정한 거지?'",
+  "dialogue_text": "\"익명 경매였거든요. 근데 내가 낙찰받은 걸 알고 화가 난 사람들이 좀 있어요. 특히...\"",
   "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seoyena_sub2_082"

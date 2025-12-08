@@ -3,7 +3,7 @@
   "background_image": null,
   "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "",
+  "dialogue_text": "\"서예나 님께서 특수 허가증을 발급받으셨더라고요~ 여기 픽업 확인서에 서명해주세요!\"",
   "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seoyena_sub2_031"

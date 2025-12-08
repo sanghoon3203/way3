@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_1_025",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Jinbaekho",
+  "character_sprite": null,
+  "dialogue_text": "서예나가 보낸 선수들이군요. 서초에서 기억을 팠고, 송파에서 꿈을 먹였고.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_1_026"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "anipark_sub1_016",
+  "background_image": "bg_swan_tube",
+  "character_id": "Security_Bot",
+  "character_sprite": null,
+  "dialogue_text": "침입자. 감지. 자산. 보호. 모드. 가동.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub1_017"
+}

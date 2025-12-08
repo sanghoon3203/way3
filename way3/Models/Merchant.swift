@@ -18,7 +18,6 @@ struct Merchant: Identifiable {
     let requiredLicense: LicenseLevel
     var inventory: [TradeItem]
     let priceModifier: Double
-    let negotiationDifficulty: Int // 1-5 (1이 쉬움)
     
     // 선호도 시스템
     let preferredItems: [String] // 카테고리 배열
@@ -52,7 +51,6 @@ struct Merchant: Identifiable {
         requiredLicense: LicenseLevel,
         inventory: [TradeItem] = [],
         priceModifier: Double = 1.0,
-        negotiationDifficulty: Int = 3,
         preferredItems: [String] = [],
         dislikedItems: [String] = [],
         reputationRequirement: Int = 0,
@@ -72,7 +70,6 @@ struct Merchant: Identifiable {
         self.requiredLicense = requiredLicense
         self.inventory = inventory
         self.priceModifier = priceModifier
-        self.negotiationDifficulty = negotiationDifficulty
         self.preferredItems = preferredItems
         self.dislikedItems = dislikedItems
         self.reputationRequirement = reputationRequirement
@@ -99,7 +96,6 @@ struct Merchant: Identifiable {
         self.requiredLicense = LicenseLevel(rawValue: serverMerchant.requiredLicense) ?? .beginner
         self.inventory = serverMerchant.inventory.map { TradeItem(from: $0) }
         self.priceModifier = serverMerchant.priceModifier
-        self.negotiationDifficulty = serverMerchant.negotiationDifficulty
         self.preferredItems = serverMerchant.preferredItems ?? []
         self.dislikedItems = serverMerchant.dislikedItems ?? []
         self.reputationRequirement = serverMerchant.reputationRequirement
@@ -178,7 +174,7 @@ extension Merchant: Codable {
     enum CodingKeys: String, CodingKey {
         case id, name, title, type, personality, district
         case coordinateLatitude, coordinateLongitude
-        case requiredLicense, inventory, priceModifier, negotiationDifficulty
+        case requiredLicense, inventory, priceModifier
         case preferredItems, dislikedItems, reputationRequirement
         case isActive, lastRestocked, imageFileName, distance
         case storyRole, hasActiveStory, initialStoryNode
@@ -201,7 +197,6 @@ extension Merchant: Codable {
         requiredLicense = try container.decode(LicenseLevel.self, forKey: .requiredLicense)
         inventory = try container.decode([TradeItem].self, forKey: .inventory)
         priceModifier = try container.decode(Double.self, forKey: .priceModifier)
-        negotiationDifficulty = try container.decode(Int.self, forKey: .negotiationDifficulty)
         preferredItems = try container.decode([String].self, forKey: .preferredItems)
         dislikedItems = try container.decode([String].self, forKey: .dislikedItems)
         reputationRequirement = try container.decode(Int.self, forKey: .reputationRequirement)
@@ -230,7 +225,6 @@ extension Merchant: Codable {
         try container.encode(requiredLicense, forKey: .requiredLicense)
         try container.encode(inventory, forKey: .inventory)
         try container.encode(priceModifier, forKey: .priceModifier)
-        try container.encode(negotiationDifficulty, forKey: .negotiationDifficulty)
         try container.encode(preferredItems, forKey: .preferredItems)
         try container.encode(dislikedItems, forKey: .dislikedItems)
         try container.encode(reputationRequirement, forKey: .reputationRequirement)
@@ -431,7 +425,6 @@ struct ServerMerchantResponse: Codable {
     let requiredLicense: Int
     let inventory: [ServerItemResponse]
     let priceModifier: Double
-    let negotiationDifficulty: Int
     let preferredItems: [String]?
     let dislikedItems: [String]?
     let reputationRequirement: Int

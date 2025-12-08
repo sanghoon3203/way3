@@ -1,10 +1,10 @@
 {
   "node_id": "alice_sub1_002",
-  "background_image": "bg_cafe_interior",
+  "background_image": "bg_alice_greenhouse",
   "character_id": "player",
   "character_sprite": null,
-  "dialogue_text": "\"물론이죠. 도와드릴게요.\"",
-  "dialogue_sound_id": "alice_sub1_002",
+  "dialogue_text": "그럼 헛수고한 건가요?",
+  "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "alice_sub1_003"
 }

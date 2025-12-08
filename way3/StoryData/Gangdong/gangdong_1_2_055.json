@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_055",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "바게트가 내 다리에 매달렸다. 나도 녀석의 머리를 쓰다듬었다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_056"
+}

@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_1_008",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "멈추지 않는 퍼레이드 행렬. 인형 탈을 쓴 연기자들은 기계처럼 춤추고 있었다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_1_009"
+}

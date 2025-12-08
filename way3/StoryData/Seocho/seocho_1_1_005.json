@@ -1,10 +1,11 @@
 {
   "node_id": "seocho_1_1_005",
-  "background_image": "bg_cafe_interior",
-  "character_id": "Alicegang",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
   "character_sprite": null,
-  "dialogue_text": "\"저희 가게 특제 회복 포션이에요. 네오-서울에서 가장 부드러운 회복을 선사하죠.\" 앨리스가 작은 유리병을 조심스럽게 건넸다.",
-  "dialogue_sound_id": "seocho_1_1_005",
+  "dialogue_text": "근데 왜 나?",
+  "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seocho_1_1_006"
 }

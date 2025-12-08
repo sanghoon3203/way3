@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_051",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
+  "character_sprite": null,
+  "dialogue_text": "아주 작은 한 걸음이지만, 멈춰 있던 세상이 다시 굴러가기 시작했다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_052"
+}

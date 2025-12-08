@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_052",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
+  "character_sprite": null,
+  "dialogue_text": "강남, 서초, 송파, 강동...",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_053"
+}

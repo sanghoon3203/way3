@@ -1,0 +1,11 @@
+{
+  "node_id": "jinbaekho_sub_1_039",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "System",
+  "character_sprite": null,
+  "dialogue_text": "[미션: 블렌딩 타이밍 맞추기] 진백호의 손짓에 맞춰 플레이어가 부채질을 한다. 향기가 흩어지지 않고 감로초 씨앗으로 향하도록.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "jinbaekho_sub_1_040"
+}

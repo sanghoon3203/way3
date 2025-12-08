@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub1_025",
+  "background_image": "bg_seorae_cafe_street",
+  "character_id": "player",
+  "character_sprite": null,
+  "dialogue_text": "(깨진 간판 조각 틈새에서 빛나는 무언가를 발견한다. 은색 티스푼이었다.)",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub1_026"
+}

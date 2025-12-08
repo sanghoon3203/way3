@@ -3,7 +3,7 @@
   "background_image": "bg_rodeo_arena_interior",
   "character_id": "typer_narrator",
   "character_sprite": null,
-  "dialogue_text": "[PLACEHOLDER] 서예나의 사무실로 향하는 노드입니다. 이후 대화 노드는 추후 추가 예정.",
+  "dialogue_text": "로데오 아레나의 비밀층, 차가운 에메랄드 불빛이 흘렀다. 서예나의 사무실 문 앞에서 잠시 숨을 고른다. 이 문을 열면, 강남 가격표의 진실이 또 한 겹 벗겨질 것이다.",
   "dialogue_sound_id": "chapter_gangnam_051",
   "sound_effect": null,
   "next_node_id": null

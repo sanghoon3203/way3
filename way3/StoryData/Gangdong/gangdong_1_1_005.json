@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_1_005",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "그녀가 캔버스 파우치를 떨어뜨렸다. 바닥에 떨어진 파우치에서 희뿌연 연기가 피어오르고 있었다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_1_006"
+}

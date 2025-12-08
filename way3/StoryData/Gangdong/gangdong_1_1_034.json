@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_1_034",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
+  "character_sprite": null,
+  "dialogue_text": "비 냄새, 흙냄새, 그리고 오래된 종이 냄새.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_1_035"
+}

@@ -3,7 +3,7 @@
   "background_image": null,
   "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "",
+  "dialogue_text": "서예나가 고서의 한 페이지를 펼쳤다. 거기에는 오래된 지도와 함께 한문으로 빼곡히 적힌 글씨가 있었다.",
   "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seoyena_sub2_140"

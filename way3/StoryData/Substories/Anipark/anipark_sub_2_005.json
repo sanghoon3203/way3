@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_2_005",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "앨리스의 섬광탄이 터지자, 가짜 '좋아요' 하트들이 재가 되어 사라졌다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_2_006"
+}

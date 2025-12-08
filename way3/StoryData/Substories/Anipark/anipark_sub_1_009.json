@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_1_009",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Annie Park",
+  "character_sprite": null,
+  "dialogue_text": "저들은 자면서 춤추고 있어요. 즐거움이라는 마약에 취해서.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_1_010"
+}

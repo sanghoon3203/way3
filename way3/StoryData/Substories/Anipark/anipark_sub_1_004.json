@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_1_004",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Annie Park",
+  "character_sprite": null,
+  "dialogue_text": "항체가 필요해요. 타워를 지탱하는 세 가지 거대한 환상... '쾌락, 인기, 포만'. 이것들을 깨부수고 '현실의 독'을 씨앗에 주입해야 해요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_1_005"
+}

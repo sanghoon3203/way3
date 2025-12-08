@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_048",
+  "background_image": "밤",
+  "character_id": "Alicegang",
+  "character_sprite": null,
+  "dialogue_text": "(플레이어의 두 손을 꼭 잡으며) 정말 감사합니다. 당신 덕분에 바게트도, 저도... 조금은 더 용기를 낼 수 있을 것 같아요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_049"
+}

@@ -20,8 +20,6 @@ class PlayerStats: ObservableObject, Codable {
 
     // MARK: - 거래 기술
     @Published var tradingSkill: Int = 1     // 거래 기술
-    @Published var negotiationSkill: Int = 1 // 협상 기술
-    @Published var appraisalSkill: Int = 1   // 감정 기술
 
     // MARK: - 초기화
     init() {}
@@ -29,7 +27,7 @@ class PlayerStats: ObservableObject, Codable {
     // MARK: - Codable 구현
     enum CodingKeys: String, CodingKey {
         case level, strength, intelligence, charisma, luck
-        case tradingSkill, negotiationSkill, appraisalSkill
+        case tradingSkill
     }
 
     required init(from decoder: Decoder) throws {
@@ -41,8 +39,6 @@ class PlayerStats: ObservableObject, Codable {
         charisma = try container.decode(Int.self, forKey: .charisma)
         luck = try container.decode(Int.self, forKey: .luck)
         tradingSkill = try container.decode(Int.self, forKey: .tradingSkill)
-        negotiationSkill = try container.decode(Int.self, forKey: .negotiationSkill)
-        appraisalSkill = try container.decode(Int.self, forKey: .appraisalSkill)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -54,8 +50,6 @@ class PlayerStats: ObservableObject, Codable {
         try container.encode(charisma, forKey: .charisma)
         try container.encode(luck, forKey: .luck)
         try container.encode(tradingSkill, forKey: .tradingSkill)
-        try container.encode(negotiationSkill, forKey: .negotiationSkill)
-        try container.encode(appraisalSkill, forKey: .appraisalSkill)
     }
 }
 
@@ -121,10 +115,6 @@ extension PlayerStats {
         switch skill {
         case .trading:
             tradingSkill = min(tradingSkill + amount, maxSkill)
-        case .negotiation:
-            negotiationSkill = min(negotiationSkill + amount, maxSkill)
-        case .appraisal:
-            appraisalSkill = min(appraisalSkill + amount, maxSkill)
         }
     }
 
@@ -132,8 +122,6 @@ extension PlayerStats {
     func getSkillLevel(_ skill: SkillType) -> Int {
         switch skill {
         case .trading: return tradingSkill
-        case .negotiation: return negotiationSkill
-        case .appraisal: return appraisalSkill
         }
     }
 
@@ -145,7 +133,7 @@ extension PlayerStats {
 
     // 평균 기술 레벨
     var averageSkillLevel: Double {
-        return Double(tradingSkill + negotiationSkill + appraisalSkill) / 3.0
+        return Double(tradingSkill) / 3.0
     }
 }
 
@@ -217,30 +205,22 @@ enum StatType: String, CaseIterable {
 // MARK: - 기술 타입
 enum SkillType: String, CaseIterable {
     case trading = "trading"
-    case negotiation = "negotiation"
-    case appraisal = "appraisal"
 
     var displayName: String {
         switch self {
         case .trading: return "거래 기술"
-        case .negotiation: return "협상 기술"
-        case .appraisal: return "감정 기술"
         }
     }
 
     var description: String {
         switch self {
         case .trading: return "전반적인 거래 능력이 향상됩니다"
-        case .negotiation: return "더 유리한 조건으로 거래할 수 있습니다"
-        case .appraisal: return "아이템의 정확한 가치를 파악할 수 있습니다"
         }
     }
 
     var icon: String {
         switch self {
         case .trading: return "arrow.left.arrow.right"
-        case .negotiation: return "person.2.wave.2"
-        case .appraisal: return "magnifyingglass"
         }
     }
 }

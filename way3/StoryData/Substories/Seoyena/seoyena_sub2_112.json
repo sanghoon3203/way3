@@ -3,7 +3,7 @@
   "background_image": null,
   "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "그녀가 손목시계를 확인했다. 7시 23분 40초.",
+  "dialogue_text": "서예나가 문을 열고 내렸다. 나도 따라 내렸다.",
   "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seoyena_sub2_113"

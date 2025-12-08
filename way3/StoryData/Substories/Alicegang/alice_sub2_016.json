@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_016",
+  "background_image": "bg_alice_greenhouse",
+  "character_id": "Alicegang",
+  "character_sprite": null,
+  "dialogue_text": "정말인가요? 하지만 쉽지 않을 거예요. 군용 등급의 '고출력 진공관 앰프'와 그 반동을 견딜 수 있는 '초경량 티타늄 합금 프레임'이 필요하거든요. 일반 상점에선 절대 구할 수 없는 금지 품목들이죠.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_017"
+}

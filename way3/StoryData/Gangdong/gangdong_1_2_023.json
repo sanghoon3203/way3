@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_023",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "그가 달궈진 케이스를 집게로 집어 내게 건넸다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_024"
+}

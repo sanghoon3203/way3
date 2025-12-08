@@ -1,0 +1,11 @@
+{
+  "node_id": "songpa_1_1_014",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "그때, 호수 한가운데서 뭔가 반짝였다. 오리배도, 백조 튜브도 아니었다. 물 위를 걷고 있는 여자.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "songpa_1_1_015"
+}

@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_2_006",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "사람들은 서로의 얼굴을 쳐다보다가, 서먹하게 거리를 벌렸다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_2_007"
+}

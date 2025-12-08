@@ -1,0 +1,11 @@
+{
+  "node_id": "seocho_1_1_020",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "내 냄새가 퍼지면 감시망이 바뀌어요. 감로초가 강남도 서초도 살려요. 부탁해요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seocho_1_1_021"
+}

@@ -1,0 +1,11 @@
+{
+  "node_id": "jinbaekho_sub_1_029",
+  "background_image": "bg_terra_coffee_night",
+  "bgm": "bgm_coffee_jazz",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "가게로 돌아오니 진백호가 기다리고 있었다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "jinbaekho_sub_1_030"
+}

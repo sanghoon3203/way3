@@ -1,0 +1,10 @@
+{
+  "node_id": "anipark_sub1_014",
+  "background_image": "bg_swan_tube",
+  "character_id": "player",
+  "character_sprite": null,
+  "dialogue_text": "하... 세상에. 호수에 불법 채굴장을 차렸어? 수력 발전 훔쳐서 전기세 아끼려고?",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub1_015"
+}

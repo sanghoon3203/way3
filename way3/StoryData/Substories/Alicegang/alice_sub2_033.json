@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_033",
+  "background_image": "밤",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "**(정비공은 벽에 걸린 '모나리자' 그림 뒤의 비밀 금고를 열어 묵직한 가방 두 개를 꺼냈다. 가방에는 프랑스 국기와 함께 '위험 물품' 마크가 선명하게 찍혀 있었다.)**",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_034"
+}

@@ -1,0 +1,11 @@
+{
+  "node_id": "seocho_1_1_035",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "그래서 너한테 왔어. 이 친구랑 같이 페이지를 살리고 시간 허브를 찾아줘. 나는 여기 더 못 버텨.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seocho_1_1_036"
+}

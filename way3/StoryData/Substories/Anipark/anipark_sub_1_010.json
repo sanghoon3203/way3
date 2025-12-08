@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_1_010",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "나는 퍼레이드 카의 전원 케이블을 끊었다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_1_011"
+}

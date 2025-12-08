@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_2_031",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "이번에는 보이지 않는 벽이 우리를 통과시켜 주었다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub_2_032"
+}

@@ -3,7 +3,7 @@
   "background_image": null,
   "character_id": null,
   "character_sprite": null,
-  "dialogue_text": "서예나가 핸드백에서 뭔가를 꺼냈다. 오래된 나무 상자. 그 안에는 고서와 말라붙은 약초 표본들이 가득했다.",
+  "dialogue_text": "\"'서래촌, 공주정원 근처, 물과 흙이 만나는 곳'이라...\"",
   "dialogue_sound_id": null,
   "sound_effect": null,
   "next_node_id": "seoyena_sub2_141"

@@ -1022,8 +1022,6 @@ struct PlayerDetail: Codable {
     let charisma: Int
     let luck: Int
     let tradingSkill: Int
-    let negotiationSkill: Int
-    let appraisalSkill: Int
     let currentLocation: LocationData?
     let totalTrades: Int
     let totalProfit: Int
@@ -1047,8 +1045,6 @@ struct PlayerDetail: Codable {
         case skillPoints = "skillPoints"
         case strength, intelligence, charisma, luck
         case tradingSkill = "tradingSkill"
-        case negotiationSkill = "negotiationSkill"
-        case appraisalSkill = "appraisalSkill"
         case currentLocation = "currentLocation"
         case totalTrades = "totalTrades"
         case totalProfit = "totalProfit"

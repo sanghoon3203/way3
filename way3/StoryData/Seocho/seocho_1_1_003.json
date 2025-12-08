@@ -1,10 +1,11 @@
 {
   "node_id": "seocho_1_1_003",
-  "background_image": "bg_cafe_interior",
-  "character_id": "Alicegang",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
   "character_sprite": null,
-  "dialogue_text": "\"Bienvenue! 허브 아포테케리에 오신 걸 환영해요.\" 밝은 목소리와 함께 검은 긴 머리의 여인이 인사했다.",
-  "dialogue_sound_id": "seocho_1_1_003",
-  "sound_effect": "sfx_shop_door_chime.mp3",
+  "dialogue_text": "천년감로초… 그게 그렇게 급해요?",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
   "next_node_id": "seocho_1_1_004"
 }

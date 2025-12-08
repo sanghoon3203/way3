@@ -1,0 +1,11 @@
+{
+  "node_id": "seocho_1_1_040",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Alice Kang",
+  "character_sprite": null,
+  "dialogue_text": "조심해서 돌아가요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seocho_1_1_041"
+}

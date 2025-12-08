@@ -1,0 +1,11 @@
+{
+  "node_id": "anipark_sub_1_018",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Annie Park",
+  "character_sprite": null,
+  "dialogue_text": "좋아요. 하나 해결. 다음은 올림픽공원이에요. 거기엔 '가짜 인기'가 넘쳐나거든요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": null
+}

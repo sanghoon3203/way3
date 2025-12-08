@@ -1,10 +1,11 @@
 {
   "node_id": "seocho_1_1_004",
-  "background_image": "bg_cafe_interior",
-  "character_id": "Poppy",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Seoyena",
   "character_sprite": null,
-  "dialogue_text": "\"왈왈! 새로운 손님이다!\" 옆에서 닥스훈트가 몸을 흔들며 다가왔다.",
-  "dialogue_sound_id": "seocho_1_1_004",
-  "sound_effect": "sfx_dog_bark_soft.wav",
+  "dialogue_text": "시간 허브의 상위종. 재배법이 사라지면 시간도 끊겨요. 강남 시계가 삐걱이고, 서초 시계탑이 멈춘 것도 그 때문.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
   "next_node_id": "seocho_1_1_005"
 }

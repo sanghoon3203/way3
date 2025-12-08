@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_047",
+  "background_image": "밤",
+  "character_id": "Alicegang",
+  "character_sprite": null,
+  "dialogue_text": "(환하게 웃으며) 성공이에요! 공명 주파수가 완벽해요. 이제 어떤 드론이 와도, 아니 탱크가 와도 한 방에 날려버릴 수 있어요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_048"
+}

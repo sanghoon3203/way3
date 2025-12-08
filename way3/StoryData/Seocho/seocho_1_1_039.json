@@ -1,0 +1,11 @@
+{
+  "node_id": "seocho_1_1_039",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Seoyena",
+  "character_sprite": null,
+  "dialogue_text": "4시 44분, 그 시간에 묶이지 마. 우리가 새로 써야 해.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seocho_1_1_040"
+}

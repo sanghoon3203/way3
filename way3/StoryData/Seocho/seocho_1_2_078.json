@@ -1,0 +1,11 @@
+{
+  "node_id": "seocho_1_2_078",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
+  "character_sprite": null,
+  "dialogue_text": "다음은 서리풀, 반포. 거기서 감로초의 조각을 채운다. 4시 44분을 넘어가기 전에.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seocho_1_2_079"
+}

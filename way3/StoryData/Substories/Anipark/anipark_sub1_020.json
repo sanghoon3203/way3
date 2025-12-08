@@ -1,0 +1,10 @@
+{
+  "node_id": "anipark_sub1_020",
+  "background_image": "bg_swan_tube",
+  "character_id": "Anipark",
+  "character_sprite": null,
+  "dialogue_text": "수고했어요. 이건 약속한 보상이에요. 그리고... 저 쭈글쭈글해진 백조는 내일 아침에 바로 철거할 거예요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub1_021"
+}

@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_006",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "주불수는 상의를 탈의한 채 벌겋게 달아오른 쇠를 두드리고 있었다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_007"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "anipark_sub1_018",
+  "background_image": "bg_swan_tube",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "**(치열한 전투 끝에 경비 로봇들을 고철로 만들고, 플레이어는 채굴기의 메인 전원 케이블을 뽑아버렸다. 웅웅거리는 소리가 멈추고, 팽팽하던 튜브가 바람 빠지는 소리를 내며 쪼그라들기 시작했다.)**",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub1_019"
+}

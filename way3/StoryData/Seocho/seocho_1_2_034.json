@@ -1,0 +1,11 @@
+{
+  "node_id": "seocho_1_2_034",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "앨리스가 뒤에서 외쳤다. 숨이 가빴다. 언제 따라온 걸까.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seocho_1_2_035"
+}

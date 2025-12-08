@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_039",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "진백호의 향기가 피어오르고, 주불수의 열기가 감싸고, 서초의 기억이 돌았다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_040"
+}

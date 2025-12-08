@@ -137,7 +137,6 @@ struct MerchantDetailResponse: Codable {
     let requiredLicense: Int
     let reputationRequirement: Int
     let priceModifier: Double
-    let negotiationDifficulty: Int
     let lastRestocked: String
     let preferredCategories: [String]
     let dislikedCategories: [String]
@@ -226,7 +225,6 @@ struct MerchantPreviewResponse: Codable {
     let requiredLicense: Int
     let reputationRequirement: Int
     let priceModifier: Double
-    let negotiationDifficulty: Int
     let inventoryCount: Int
     let lastRestocked: String
     let imageFileName: String?

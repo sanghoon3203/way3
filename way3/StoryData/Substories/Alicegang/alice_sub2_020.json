@@ -1,0 +1,10 @@
+{
+  "node_id": "alice_sub2_020",
+  "background_image": "bg_alice_greenhouse",
+  "character_id": "Alicegang",
+  "character_sprite": null,
+  "dialogue_text": "위험한 곳이지만... 당신이라면 거래를 성사시킬 수 있을 거예요. 이 '특제 정화 포션'을 가져가세요. 그곳 주인은 돈보다 '순수한 것'을 더 가치 있게 쳐주거든요.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "alice_sub2_021"
+}

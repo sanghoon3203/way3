@@ -1,0 +1,10 @@
+{
+  "node_id": "anipark_sub1_010",
+  "background_image": "bg_swan_tube",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "**(백조의 날개 밑부분에 인위적으로 찢어낸 틈이 보였다. 그 안에서 붉은 불빛과 함께 웅웅거리는 기계음, 그리고 뜨거운 열기가 새어 나오고 있었다.)**",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "anipark_sub1_011"
+}

@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_001",
+  "background_image": "bg_gangdong_forge",
+  "bgm": "bgm_forge_beat",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "진백호의 카페를 나와 골목 깊숙이 들어갔다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_002"
+}

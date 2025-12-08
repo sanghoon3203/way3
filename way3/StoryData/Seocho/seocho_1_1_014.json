@@ -1,0 +1,11 @@
+{
+  "node_id": "seocho_1_1_014",
+  "background_image": null,
+  "bgm": null,
+  "character_id": "Player",
+  "character_sprite": null,
+  "dialogue_text": "감로초, 시간 허브. 이름이 거창하다. 하지만 여기선 그런 이름이라도 붙잡고 싶다. 시간을 살릴 방법이라면 뭐든.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "seocho_1_1_015"
+}

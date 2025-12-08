@@ -1,0 +1,11 @@
+{
+  "node_id": "jinbaekho_sub_1_001",
+  "background_image": "bg_amsa_ruins",
+  "bgm": "bgm_nature_primitive",
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "도심 속에 갑자기 나타난 원시의 숲.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "jinbaekho_sub_1_002"
+}

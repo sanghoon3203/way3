@@ -1,0 +1,10 @@
+{
+  "node_id": "anipark_sub1_021",
+  "background_image": "bg_swan_tube",
+  "character_id": "Anipark",
+  "character_sprite": null,
+  "dialogue_text": "내 호수에 쓰레기는 필요 없으니까. 다음엔 더 예쁜 걸로 띄워놔야겠네요. 황금 오리라던가?",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": null
+}

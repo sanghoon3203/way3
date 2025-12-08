@@ -1,0 +1,11 @@
+{
+  "node_id": "gangdong_1_2_024",
+  "background_image": null,
+  "bgm": null,
+  "character_id": null,
+  "character_sprite": null,
+  "dialogue_text": "나는 떨리는 손으로 케이스를 물통에 담갔다.",
+  "dialogue_sound_id": null,
+  "sound_effect": null,
+  "next_node_id": "gangdong_1_2_025"
+}
