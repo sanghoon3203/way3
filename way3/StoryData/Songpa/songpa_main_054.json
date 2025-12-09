@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "진짜 행복은... 고통을 잊는 게 아니라, 고통을 이겨낸 뒤에 오는 겁니다. 당신의 친구들이, 서예나가, 그리고 당신을 기다리는 송파구의 주민들이 진짜 당신의 노래를 듣고 싶어 합니다.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_054",
+    "next_node_id":  "songpa_main_055",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

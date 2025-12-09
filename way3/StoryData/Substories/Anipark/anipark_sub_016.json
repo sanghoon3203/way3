@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "*...아무도 내 그림을 봐주지 않아...* (애니: \"저건 무지개 맛 젤리네요!\")",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_016",
+    "next_node_id":  "anipark_sub_017",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 수변 무대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

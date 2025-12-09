@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "악보에 그려진 콩나물 대가리들은 단순한 음표가 아니라 공원의 랜드마크를 가리키고 있었다. 케플러는 망원경으로 나를 지휘하기 시작했다.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_044",
+    "next_node_id":  "alice_sub_045",
+    "character_id":  "Narrator",
+    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

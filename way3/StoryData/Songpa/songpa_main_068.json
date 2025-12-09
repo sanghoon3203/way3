@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그녀의 눈에서 맑은 눈물이 흘러내렸다. 그것은 안개의 눈물보다 훨씬 순수한, \u0027후회의 눈물\u0027이었다.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_068",
+    "next_node_id":  "songpa_main_069",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

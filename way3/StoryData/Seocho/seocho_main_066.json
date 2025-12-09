@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그리고... 서두르셔야 해요. 이 아이는 제 온실을 벗어나면 금방 말라버려요. 다시 생명력을 불어넣으려면 송파구의 \u0027석촌호수\u0027에 있는 \u0027안개의 눈물\u0027이 필요해요. 그 물만이 아이비의 시간을 고정시킬 수 있거든요.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_066",
+    "next_node_id":  "seocho_main_067",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

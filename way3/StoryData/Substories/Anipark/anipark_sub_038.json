@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "회전목마 지하 기계실! 메인 기어에 \u0027악몽의 결정\u0027들이 끼어서 역회전을 유발하고 있습니다. 애니 님의 불안감이 실체화된 결정체들입니다! 제가 들어가기엔... 제 몸이 너무 커요!",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_038",
+    "next_node_id":  "anipark_sub_039",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

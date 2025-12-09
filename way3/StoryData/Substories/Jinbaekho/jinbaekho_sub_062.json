@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그렇지! 리듬을 타! 딴! 딴! 딴! 심장 소리에 맞춰!",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_062",
+    "next_node_id":  "jinbaekho_sub_063",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

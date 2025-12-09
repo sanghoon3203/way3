@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "홀로그램 스크린들이 노이즈를 일으키며 하나둘씩 꺼졌다. 가짜 행복의 영상이 사라지고, 그 자리에 현실의 송파구 모습이 비쳤다. 안개에 덮이고, 고통받는 사람들의 모습. 아이가 울고, 연인이 헤어지고, 노인이 한숨 쉬는 적나라한 현실.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_059",
+    "next_node_id":  "songpa_main_060",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

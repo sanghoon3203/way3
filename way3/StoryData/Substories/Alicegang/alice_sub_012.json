@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "하지만... 그녀가 온실 문을 닫고 사라지던 날, 제 시간도 함께 멈춰버렸습니다. 악보의 마지막 페이지가... 마치 지우개로 지운 것처럼 하얗게 변해버렸어요. 제 기억도 함께 찢겨져 나갔죠.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_012",
+    "next_node_id":  "alice_sub_013",
+    "character_id":  "Narrator",
+    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

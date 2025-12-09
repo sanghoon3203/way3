@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 주머니 속 크로노스 아이비를 꺼냈다. 송파구의 안개를 머금은 아이비가 마치 살아있는 뱀처럼 꿈틀거렸다.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_038",
+    "next_node_id":  "songpa_main_039",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

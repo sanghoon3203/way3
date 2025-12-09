@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "가게 안은 거대한 로스팅 기계들이 증기를 내뿜고 있었고, 바닥에는 생두 자루들이 쌓여 있었다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_002",
+    "next_node_id":  "jinbaekho_sub_003",
+    "character_id":  "Narrator",
+    "background_image":  "Terra Coffee House",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

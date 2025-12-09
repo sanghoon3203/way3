@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "진정한 아침이 밝아오고 있었다.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_024",
+    "next_node_id":  "gangdong_main_025",
+    "character_id":  "Narrator",
+    "background_image":  "광진교 - 해돋이 전망대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그녀는 온실 중앙의 수정 나무 뿌리 근처로 다가갔다. 영롱하게 빛나는 이끼 덩어리, 크로노스 아이비가 그곳에 있었다. 하지만 그녀는 망설였다. 손을 뻗었다가 거두기를 반복했다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_045",
+    "next_node_id":  "seocho_main_046",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

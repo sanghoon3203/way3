@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "역시... 예나 언니가 보냈군요. 언니는 항상... 제가 감당하기 힘든 숙제를 주는 것 같아요.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_028",
+    "next_node_id":  "seocho_main_029",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

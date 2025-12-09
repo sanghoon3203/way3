@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "골목 맞은편에 있는 레코드 가게는 시간이 정지된 듯 먼지가 두껍게 쌓여 있었다. 문을 열자 먼지 냄새와 함께 오래된 종이 냄새가 났다. 수만 장의 LP판들이 꽂혀 있는 선반들 사이에서, 유독 기묘한 빛을 내는 판 하나를 발견했다.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_019",
+    "next_node_id":  "alice_sub_020",
+    "character_id":  "Narrator",
+    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

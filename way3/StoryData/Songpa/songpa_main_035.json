@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "젠장, 역시 본능적인 방어기제는 만만치 않네. 야, 거기 여행자! 내가 시스템을 붙잡고 있는 동안 넌 물리적으로 접근해!",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_035",
+    "next_node_id":  "songpa_main_036",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

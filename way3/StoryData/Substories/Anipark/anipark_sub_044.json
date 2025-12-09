@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 크로노스 아이비의 덩굴을 채찍처럼 휘감아 수정을 잡아당겼다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_044",
+    "next_node_id":  "anipark_sub_045",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

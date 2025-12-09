@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "*화르륵!* 푸른 불꽃이 드럼을 감쌌다. 콩의 비릿한 풀냄새가 서서히 사라지고 구수한 냄새가 나기 시작했다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_019",
+    "next_node_id":  "jinbaekho_sub_020",
+    "character_id":  "Narrator",
+    "background_image":  "Terra Coffee House",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

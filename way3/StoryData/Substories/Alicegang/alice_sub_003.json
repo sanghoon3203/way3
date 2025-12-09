@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "낡은 갈색 정장 차림의 피아니스트. 그의 손가락은 마치 유령처럼 건반 위를 배회하고 있었다. 그는 건반 위에 손을 올린 채 끊임없이 같은 소절만을 반복해서 연주하고 있었다. 마치 고장 난 레코드판처럼.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_003",
+    "next_node_id":  "alice_sub_004",
+    "character_id":  "Narrator",
+    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

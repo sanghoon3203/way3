@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "앨리스는 휠체어를 힘겹게 돌려 나를 마주 보았다. 깊은 초록색 눈동자가 흔들리고 있었다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_029",
+    "next_node_id":  "seocho_main_030",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

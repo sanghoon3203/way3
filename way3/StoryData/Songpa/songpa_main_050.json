@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그것은 달콤한 유혹이었다. 현실의 고통을 잊고 영원한 안식에 머무르라는 속삭임. 나조차도 잠시 눈꺼풀이 무거워지는 것을 느꼈다.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_050",
+    "next_node_id":  "songpa_main_051",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

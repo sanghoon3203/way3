@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 천문학자의 지시에 따라 공원을 뛰기 시작했다. 숨이 턱까지 차올랐지만 멈출 수 없었다.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_046",
+    "next_node_id":  "alice_sub_047",
+    "character_id":  "Narrator",
+    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

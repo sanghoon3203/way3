@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "이 안개가 무서운 이유가 뭔지 알아? 단순히 시야를 가리는 게 아냐. 사람들의 마음속 \u0027온기\u0027를 뺏어가기 때문이지. 차갑게 식어버린 마음엔 꿈이고 뭐고 자라지 않거든. 그래서 우린 계속 볶아야 해. 이 마을의 심장이 식지 않게.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_008",
+    "next_node_id":  "jinbaekho_sub_009",
+    "character_id":  "Narrator",
+    "background_image":  "Terra Coffee House",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

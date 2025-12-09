@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 그 멜로디를 흥얼거리며 클럽으로 돌아왔다. 문을 열자마자 에디가 고개를 번쩍 들었다. 나를 보는 것이 아니라, 내 입에서 나오는 \u0027소리\u0027를 듣고 있었다.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_025",
+    "next_node_id":  "alice_sub_026",
+    "character_id":  "Narrator",
+    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

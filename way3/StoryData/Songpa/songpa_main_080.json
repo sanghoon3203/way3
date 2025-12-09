@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "이건 제 믿음의 증표예요. 그들에게 이걸 보여주면 당신을 도울 거예요. 부디... 그곳의 사람들에게도 전해주세요. 이제 꿈에서 깰 시간이라고.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_080",
+    "next_node_id":  "songpa_main_081",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

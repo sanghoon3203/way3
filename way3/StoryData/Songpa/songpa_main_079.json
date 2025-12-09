@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그녀는 자신의 드레스 자락을 찢어 리본을 만들더니, 내 손목에 묶어주었다.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_079",
+    "next_node_id":  "songpa_main_080",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

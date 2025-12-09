@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그냥 드릴 수는 없어요... 이 아이를 떼어내면, 저는 온실의 방어막을 처음부터 다시 짜야 해요. 그동안 저를 지켜줄 시간이 조금 필요해요.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_046",
+    "next_node_id":  "seocho_main_047",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

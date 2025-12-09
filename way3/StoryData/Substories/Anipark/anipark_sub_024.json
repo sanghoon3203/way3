@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "애니는 자신이 시킨 일이 안개를 없앴다는 사실조차 모르는 듯했다. 그녀는 여전히 꿈속의 무대 위에 있었다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_024",
+    "next_node_id":  "anipark_sub_025",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 수변 무대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

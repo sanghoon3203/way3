@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "주블수는 곁눈질로 나를 훑어보더니, 내 손에서 붉게 빛나는 팬던트에 시선을 고정했다. 그의 눈매는 날카로운 칼날 같았다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_045",
+    "next_node_id":  "jinbaekho_sub_046",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

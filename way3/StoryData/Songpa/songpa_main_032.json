@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "착각하지 마. 널 도우러 온 게 아니니까. 애니가 만든 이 바보 같은 안개 때문에 우리 쪽 배송 드론들이 죄다 길을 잃었어. 손해가 막심하다고.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_032",
+    "next_node_id":  "songpa_main_033",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

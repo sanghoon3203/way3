@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그녀는 창밖을 내려다보았다. 자신이 \u0027행복한 원더랜드\u0027라고 믿었던 곳은, 사실 지독한 안개와 악몽에 잠식된 폐허였다. 회전목마는 멈췄고, 사람들은 길을 잃고 헤매고 있었다.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_066",
+    "next_node_id":  "songpa_main_067",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

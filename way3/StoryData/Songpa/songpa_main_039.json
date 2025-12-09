@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "방화벽은 내가 잠시 무력화시켰어. 3분이야. 그 안에 그 녀석을 깨워. 더 이상 회사의 주가가 떨어지는 꼴은 못 보겠으니까.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_039",
+    "next_node_id":  "songpa_main_040",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

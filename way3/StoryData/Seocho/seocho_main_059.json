@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "*...밤새 약초를 달이는 앨리스. 아픈 친구를 위해, 시들어가는 꽃을 위해. 그녀의 손길이 닿은 곳마다 생명이 다시 숨을 쉬었다...*",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_059",
+    "next_node_id":  "seocho_main_060",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

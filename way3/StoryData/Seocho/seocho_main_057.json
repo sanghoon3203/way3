@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "예나 언니는... 항상 저를 기다려줬어요. 모두가 앞서갈 때, 유일하게 뒤를 돌아봐 준 사람이었죠.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_057",
+    "next_node_id":  "seocho_main_058",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

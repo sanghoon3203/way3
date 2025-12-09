@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 호수 산책로를 걸으며 안개 속의 목소리에 귀를 기울였다. 안개는 내 발목을 잡으며 저주를 퍼부었지만, 애니는 옆에서 해맑게 박수를 쳤다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_013",
+    "next_node_id":  "anipark_sub_014",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 수변 무대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

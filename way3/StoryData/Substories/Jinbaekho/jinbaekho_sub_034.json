@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "배출!!",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_034",
+    "next_node_id":  "jinbaekho_sub_035",
+    "character_id":  "Narrator",
+    "background_image":  "Terra Coffee House",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

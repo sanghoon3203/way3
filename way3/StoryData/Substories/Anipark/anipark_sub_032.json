@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "엄마... 집에 가고 싶어...",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_032",
+    "next_node_id":  "anipark_sub_033",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "주블수의 마지막 일격과 나의 풀무질이 완벽하게 겹쳐진 순간, 거대한 불기둥과 함께 눈부신 주황색 스파크가 튀어 올랐다. 그 불꽃은 사라지지 않고 공중에서 춤을 추다 내 손의 팬던트로 빨려 들어갔다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_071",
+    "next_node_id":  "jinbaekho_sub_072",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "내 말에 그녀의 손길이 멈췄다. 그녀가 쓰다듬던 보랏빛 덩굴 식물이 주인의 불안을 감지한 듯 바르르 떨었다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_027",
+    "next_node_id":  "seocho_main_028",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

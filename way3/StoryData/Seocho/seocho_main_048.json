@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그녀는 떨리는 손으로 작은 모종삽을 내밀었다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_048",
+    "next_node_id":  "seocho_main_049",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그깟 벽, 부숴버려! 네가 가진 그 이끼, 폼으로 들고 다니는 거 아니잖아?",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_037",
+    "next_node_id":  "songpa_main_038",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

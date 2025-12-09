@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "[From: 예나]",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_075",
+    "next_node_id":  "seocho_main_076",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

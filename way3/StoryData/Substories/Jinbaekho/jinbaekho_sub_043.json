@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "낡은 셔터 너머, 뜨거운 열기가 이글거리는 대장간 화덕 앞에는 거구의 사내가 서 있었다. 네오 서울 최고의 무기 장인, \u0027주블수\u0027였다. 그는 땀에 젖은 런닝셔츠 차림으로, 벌겋게 달아오른 쇠붙이를 노려보고 있었다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_043",
+    "next_node_id":  "jinbaekho_sub_044",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

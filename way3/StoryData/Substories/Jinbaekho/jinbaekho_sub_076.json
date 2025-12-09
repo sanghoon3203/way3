@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "하얀 수증기와 함께 날카롭고 아름다운 검이 완성되었다. 그의 뒤로, 안개가 걷힌 공구거리가 다시금 활기를 띠기 시작했다. 기계들이 돌아가고, 전구들이 켜졌다. 우리가 침묵을 깬 것이다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_076",
+    "next_node_id":  "jinbaekho_sub_077",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

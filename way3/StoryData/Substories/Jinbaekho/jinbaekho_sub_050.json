@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "방법은 간단해. 하지만 어려워. 내가 망치를 내리치는 순간, 자네가 풀무를 밟아 바람을 불어넣어. 엇박자가 나면 쇠는 깨지고 불꽃은 꺼진다. 내 호흡, 내 근육의 움직임을 읽어. 우린 한 몸이 되는 거야.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_050",
+    "next_node_id":  "jinbaekho_sub_051",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

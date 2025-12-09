@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 깨진 틈으로 걸어 들어갔다. 이제 오직 나와 애니, 둘 뿐이었다.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_044",
+    "next_node_id":  "songpa_main_045",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

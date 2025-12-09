@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그는 나에게 낡은 유리병 하나를 건네며 은밀하게 속삭였다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_008",
+    "next_node_id":  "anipark_sub_009",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 수변 무대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

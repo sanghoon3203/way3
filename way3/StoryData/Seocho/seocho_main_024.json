@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "앨리스 강. 창백하리만치 하얀 피부에, 부서질 듯 가느다란 손목. 긴 은발을 땋아 내린 그녀는 금방이라도 사라질 신기루처럼 연약해 보였다. 그녀는 무릎 덮개를 고쳐 덮으며 쓴웃음을 지었다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_024",
+    "next_node_id":  "seocho_main_025",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

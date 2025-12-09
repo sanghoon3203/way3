@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "저는 그저... 모두가 행복해지길 바랐어요. 현실이 너무 고달프니까, 내 꿈속에서라도 웃을 수 있게 해주고 싶었는데...",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_067",
+    "next_node_id":  "songpa_main_068",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

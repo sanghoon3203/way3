@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 반사적으로 풀무를 밟았다. *후욱-*",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_056",
+    "next_node_id":  "jinbaekho_sub_057",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "저기 구석에 시들어가는 \u0027기억의 백합\u0027들이 보여요? 저 아이들을 부디... 양지바른 곳으로 옮겨 심어주시겠어요? 제가 마법진을 그리는 동안... 저 대신 정원사가 되어주세요.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_049",
+    "next_node_id":  "seocho_main_050",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

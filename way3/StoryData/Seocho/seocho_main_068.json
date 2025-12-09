@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "송파구의 주인인 애니 언니는... 꿈을 너무 사랑해서 탈이에요. 가끔은 꿈과 현실을 헷갈려 하거든요. 순수하지만, 그래서 더 위험할 수도 있어요. 이 아이비가 그곳의 안개를 걷어내는 데도 도움이 될 거예요.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_068",
+    "next_node_id":  "seocho_main_069",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "아... 케플러 할아버지가... 에디가...",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_040",
+    "next_node_id":  "seocho_main_041",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

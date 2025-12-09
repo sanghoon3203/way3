@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 그에게 도움을 청했다. 이 지독한 송파의 안개를 걷어내기 위해선 더 뜨겁고 순수한 열기가 필요하다고. 백호는 피식 웃으며 손에 든 초록색 생두(Green Bean) 한 줌을 보여주었다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_007",
+    "next_node_id":  "jinbaekho_sub_008",
+    "character_id":  "Narrator",
+    "background_image":  "Terra Coffee House",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

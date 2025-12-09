@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "하하하! 완벽해! 봤어? 안개가 열기에 겁먹고 도망가는 꼴을!",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_037",
+    "next_node_id":  "jinbaekho_sub_038",
+    "character_id":  "Narrator",
+    "background_image":  "Terra Coffee House",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

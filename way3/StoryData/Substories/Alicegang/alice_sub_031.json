@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "앨리스 님의 정원은 눈으로 찾는 곳이 아닙니다. 소리로 열리는 곳이죠. 이 악보의 멜로디를 따라가세요. 셋잇단음표가 나오는 곳에서 왼쪽으로, 스타카토가 나오는 곳에서 멈추시면 됩니다. 그리고... 그곳에 도착하면 전해주세요. 저의 연주는 이제 끝났다고.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_031",
+    "next_node_id":  "alice_sub_032",
+    "character_id":  "Narrator",
+    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

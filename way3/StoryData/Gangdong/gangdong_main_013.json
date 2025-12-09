@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "두 번째 반응은 골목 깊은 곳에서 튀어 오르는 **\u0027날카롭고 강렬한 주황색 스파크(Spark)\u0027**. 쇠와 쇠가 부딪힐 때 나는 폭발적인 에너지였다.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_013",
+    "next_node_id":  "gangdong_main_014",
+    "character_id":  "Narrator",
+    "background_image":  "이스트 리버 - 강변 진입로]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

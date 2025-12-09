@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "주블수가 완성된 검을 물통에 담금질하며 호탕하게 웃었다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_074",
+    "next_node_id":  "jinbaekho_sub_075",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "지상의 빛이 하늘의 뒤틀린 별들을 강제로 끌어당겼다. 제멋대로 흩어져 있던 별들이 자석에 이끌리듯 제자리로 돌아왔다. 어지럽던 밤하늘이 정렬되자, 북극성 위치에서 거대한 빛기둥이 내려와 공원 구석의 덤불을 비췄다.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_055",
+    "next_node_id":  "alice_sub_056",
+    "character_id":  "Narrator",
+    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

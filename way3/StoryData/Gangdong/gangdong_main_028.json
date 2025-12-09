@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "축하해. 주가가 다시 오르고 있어. ...농담이고, 고생했어. 네오 서울의 하늘이 이렇게 깨끗한 건 10년 만이네. 약속대로 \u0027골드코인\u0027은 네 거야. 내 사무실로 와. 진짜 보상을 줄 테니까.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_028",
+    "next_node_id":  "gangdong_main_029",
+    "character_id":  "Narrator",
+    "background_image":  "광진교 - 해돋이 전망대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

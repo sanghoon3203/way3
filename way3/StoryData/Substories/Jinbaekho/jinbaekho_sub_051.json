@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "주블수가 거대한 망치를 높이 치켜들었다. 그의 등 근육이 산맥처럼 꿈틀거렸다. 나는 그의 거친 숨소리에 귀를 기울였다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_051",
+    "next_node_id":  "jinbaekho_sub_052",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

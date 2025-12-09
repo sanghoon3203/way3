@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "먼저 저쪽이다. 열기의 근원을 찾아야 해.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_016",
+    "next_node_id":  "gangdong_main_017",
+    "character_id":  "Narrator",
+    "background_image":  "이스트 리버 - 강변 진입로]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

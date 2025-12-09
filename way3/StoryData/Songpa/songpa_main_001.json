@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "서초구의 향기로운 바람을 뒤로하고 동쪽으로 향했다. 서예나의 문자가 계속 머릿속을 맴돌았다.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_001",
+    "next_node_id":  "songpa_main_002",
+    "character_id":  "Narrator",
+    "background_image":  null,
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

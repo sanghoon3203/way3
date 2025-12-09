@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "내가 그곳에 도착해 바닥을 짚는 순간, 지금까지 찍었던 빛의 점들이 연결되며 완벽한 별자리가 완성되었다. 바닥에 그려진 빛의 별자리가 하늘로 쏘아져 올라갔다.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_053",
+    "next_node_id":  "alice_sub_054",
+    "character_id":  "Narrator",
+    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

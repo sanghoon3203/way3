@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 큐브를 소중히 챙겨 정원을 나섰다. 큐브 속 아이비가 목이 마른 듯 희미하게 파동치고 있었다. 등 뒤에서 앨리스와 그녀의 강아지 \u0027뽀삐\u0027가 배웅하듯 손을 흔들고 있었다. 서초구의 향기로운 바람이 등을 떠밀었다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_072",
+    "next_node_id":  "seocho_main_073",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

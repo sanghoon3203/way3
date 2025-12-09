@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그녀의 공방은 지도에 표시조차 되어 있지 않았다. 다만 \u0027가장 향기로운 곳을 찾으라\u0027는 수수께끼 같은 메모만이 남아있을 뿐이었다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_009",
+    "next_node_id":  "seocho_main_010",
+    "character_id":  "Narrator",
+    "background_image":  "서초구 진입로 - 서래 가든 타운 입구]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

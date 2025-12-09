@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "녀석이 가리킨 곳은 좁고 구불구불한 골목길이었다. 그쪽에서는 희미하지만 애절한, 마치 누군가를 부르는 듯한 피아노 건반 소리가 흘러나오고 있었다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_016",
+    "next_node_id":  "seocho_main_017",
+    "character_id":  "Narrator",
+    "background_image":  "서초구 진입로 - 서래 가든 타운 입구]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

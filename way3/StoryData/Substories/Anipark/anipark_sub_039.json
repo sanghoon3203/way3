@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 회전목마 옆의 좁은 쪽문을 통해 지하로 내려갔다. 기계실은 지옥 같았다. 거대한 톱니바퀴들이 맞물려 돌아가는 소리로 귀가 먹먹했고, 기름 냄새와 썩은 냄새가 진동했다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_039",
+    "next_node_id":  "anipark_sub_040",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "*(End of Chapter Gangdong)*",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_030",
+    "next_node_id":  null,
+    "character_id":  "Narrator",
+    "background_image":  "광진교 - 해돋이 전망대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

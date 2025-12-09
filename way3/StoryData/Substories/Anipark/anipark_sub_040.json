@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "톱니바퀴 사이사이에는 검붉은 수정들이 박혀 삐걱거리는 끔찍한 소음을 내고 있었다. 애니의 무의식 깊은 곳에 박힌 트라우마 덩어리들이었다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_040",
+    "next_node_id":  "anipark_sub_041",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

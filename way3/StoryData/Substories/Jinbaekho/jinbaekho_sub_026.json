@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 땀을 뻘뻘 흘리며 댐퍼 레버를 닫았다. 카페 안의 온도가 치솟았다. 숨이 막힐 듯 뜨거웠지만 참아냈다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_026",
+    "next_node_id":  "jinbaekho_sub_027",
+    "character_id":  "Narrator",
+    "background_image":  "Terra Coffee House",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

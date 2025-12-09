@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "하지만 그때, 크로노스 아이비가 반응했다. 서초구에서 앨리스의 시간을 지켜줬던 아이비가, 이번에는 애니의 멈춰버린 시간을 흔들기 시작했다. 안개가 아닌, 명확한 현실의 시간 감각이 찌릿하게 전해져왔다.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_051",
+    "next_node_id":  "songpa_main_052",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

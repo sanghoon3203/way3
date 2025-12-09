@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "허허허... 훌륭해... 자네, 대장장이의 피가 흐르는데? 내 조수가 될 생각 없나?",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_073",
+    "next_node_id":  "jinbaekho_sub_074",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

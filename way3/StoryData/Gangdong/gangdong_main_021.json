@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "팬던트에서 응축된 에너지가 폭발하듯 뿜어져 나갔다. 거대한 빛의 파동이 강동구를 넘어 송파구, 그리고 서초구까지 뻗어 나갔다.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_021",
+    "next_node_id":  "gangdong_main_022",
+    "character_id":  "Narrator",
+    "background_image":  "광진교 - 해돋이 전망대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "3.  **세 번째 결정: 검은색 (공포)**",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_051",
+    "next_node_id":  "anipark_sub_052",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "*쿠구구궁-*",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_022",
+    "next_node_id":  "gangdong_main_023",
+    "character_id":  "Narrator",
+    "background_image":  "광진교 - 해돋이 전망대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

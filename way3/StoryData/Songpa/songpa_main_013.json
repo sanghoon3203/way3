@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "하지만... 공주님은 너무 바쁘셔서 직접 나오지 못하셨어요. 대신 제가 여러분을 안내해 드릴게요! 자, 저를 따라오세요!",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_013",
+    "next_node_id":  "songpa_main_014",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 서호 - 진입로]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

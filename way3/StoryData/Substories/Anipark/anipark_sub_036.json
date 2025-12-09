@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "여행자님! 도와주세요! 애니 님의 꿈 제어 장치가 폭주하고 있습니다! 이대로라면 아이들이 영원히 회전목마에 갇혀버려요!",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_036",
+    "next_node_id":  "anipark_sub_037",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

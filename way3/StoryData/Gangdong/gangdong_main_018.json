@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "백호의 열기와 주블수의 스파크를 머금은 팬던트는 이제 \u0027태양의 돌(Sun Stone)\u0027이나 다름없었다. 나는 그 빛을 들고 강동구에서 시야가 가장 트인 곳, 광진교 전망대로 달렸다.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_018",
+    "next_node_id":  "gangdong_main_019",
+    "character_id":  "Narrator",
+    "background_image":  "광진교 - 해돋이 전망대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

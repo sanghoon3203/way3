@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그녀는 휠체어를 밀어 내게 다가왔다. 그리고 투명한 유리 큐브에 크로노스 아이비를 담아 내게 건넸다. 큐브 안에서 이끼는 마치 살아있는 심장처럼 천천히, 그리고 힘차게 박동하고 있었다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_063",
+    "next_node_id":  "seocho_main_064",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "애니가 준 \u0027이상한 팬던트\u0027를 손에 쥐고 동쪽으로 달렸다. 송파의 끈적한 안개가 내 발목을 잡으려 했지만, 팬던트에서 뿜어져 나오는 미세한 열기가 길을 터주었다.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_001",
+    "next_node_id":  "gangdong_main_002",
+    "character_id":  "Narrator",
+    "background_image":  null,
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "상황이 명확해졌다. 애니의 망상을 이용해 현실의 오염 물질을 수거해야 한다. 나는 포그 워커의 병을 받아 들고 고개를 끄덕였다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_010",
+    "next_node_id":  "anipark_sub_011",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 수변 무대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

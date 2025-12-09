@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "앨리스의 하얀 손이 입가를 가렸다. 작은 신음이 새어 나왔다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_039",
+    "next_node_id":  "seocho_main_040",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

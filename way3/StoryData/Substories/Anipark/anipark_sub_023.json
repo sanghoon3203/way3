@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "어머? 안개가 걷히니까 무대가 더 잘 보이네요? 역시 여행자님은 마법사인가 봐요! 조명 감독님이 신경 좀 쓰셨는걸요?",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_023",
+    "next_node_id":  "anipark_sub_024",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 수변 무대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

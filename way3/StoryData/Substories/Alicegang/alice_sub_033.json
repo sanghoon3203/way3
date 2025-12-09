@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "에디가 준 악보 뒤편의 지도를 따라 언덕을 올랐다. \u0027몽마르뜨 공원\u0027. 이곳은 네오 서울의 다른 곳과는 완전히 다른 시간을 달리고 있었다. 분명 낮이어야 할 시간인데, 이곳의 하늘은 칠흑 같은 밤이었다. 그것도 수만 개의 별이 금방이라도 머리 위로 쏟아져 내릴 듯한 투명한 밤.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_033",
+    "next_node_id":  "alice_sub_034",
+    "character_id":  "Narrator",
+    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

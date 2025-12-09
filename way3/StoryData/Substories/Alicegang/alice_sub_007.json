@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "인기척을 느낀 에디가 천천히 고개를 돌렸다. 그의 눈은 초점이 없었고, 깊은 다크서클이 드리워져 있었다. \u0027시간병\u0027의 전형적인 증상이었다.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_007",
+    "next_node_id":  "alice_sub_008",
+    "character_id":  "Narrator",
+    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

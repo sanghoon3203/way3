@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "쉿... 저 아가씨 말은 반만 듣게. 저건 사탕이 아니라 사람들의 \u0027비탄\u0027이라네. 아주 독한 슬픔이지.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_007",
+    "next_node_id":  "anipark_sub_008",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 수변 무대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

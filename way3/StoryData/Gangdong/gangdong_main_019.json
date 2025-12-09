@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "전망대 아래로 안개에 잠긴 한강과 네오 서울이 보였다. 나는 난간 끝에 서서 팬던트를 하늘 높이 치켜들었다.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_019",
+    "next_node_id":  "gangdong_main_020",
+    "character_id":  "Narrator",
+    "background_image":  "광진교 - 해돋이 전망대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

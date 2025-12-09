@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "제가 어릴 땐... 친구가 별로 없었어요. 다들 제가 너무 느리다고 따돌렸거든요.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_053",
+    "next_node_id":  "seocho_main_054",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

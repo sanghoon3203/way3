@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "백호의 눈빛이 이글거렸다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_030",
+    "next_node_id":  "jinbaekho_sub_031",
+    "character_id":  "Narrator",
+    "background_image":  "Terra Coffee House",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

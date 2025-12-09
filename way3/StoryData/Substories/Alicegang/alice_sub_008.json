@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "오셨군요. 음악을... 아는 분인가요? 아니면 저처럼 길을 잃은 시간의 미아인가요?",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_008",
+    "next_node_id":  "alice_sub_009",
+    "character_id":  "Narrator",
+    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

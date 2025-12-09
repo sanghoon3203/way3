@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "모든 결정을 제거하자, 기계실의 붉은 경고등이 꺼지고 평온한 푸른 불이 들어왔다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_057",
+    "next_node_id":  "anipark_sub_058",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

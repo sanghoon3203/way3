@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "시간병이요?",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_031",
+    "next_node_id":  "seocho_main_032",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

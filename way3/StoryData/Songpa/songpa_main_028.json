@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "스크린에 익숙한 로데오 아레나의 로고, 아니 서예나의 차가운 눈빛이 나타났다.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_028",
+    "next_node_id":  "songpa_main_029",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

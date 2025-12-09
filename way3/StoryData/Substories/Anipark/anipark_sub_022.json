@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "시들어가던 아이비가 순식간에 선명한 초록색으로 생기를 되찾았다. 아이비의 잎사귀가 떨리며 주변의 탁한 안개를 밀어내는 강력한 파동을 뿜어냈다. 수변 무대 주변의 안개가 씻은 듯이 걷혔다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_022",
+    "next_node_id":  "anipark_sub_023",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 수변 무대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

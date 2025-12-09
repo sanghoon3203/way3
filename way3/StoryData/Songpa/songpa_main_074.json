@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "시스템 재부팅. 모드 전환: [Lucid Dream]에서 [Real Dream]으로.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_074",
+    "next_node_id":  "songpa_main_075",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "백호 놈이 보냈나? 그 녀석 가게의 원두 냄새가 여기까지 나는군.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_044",
+    "next_node_id":  "jinbaekho_sub_045",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "3.  **Phase 3: 절정 (Climax)**",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_064",
+    "next_node_id":  "jinbaekho_sub_065",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

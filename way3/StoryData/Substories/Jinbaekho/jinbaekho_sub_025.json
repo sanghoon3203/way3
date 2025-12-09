@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "젠장, 놈들이 방해하네! 댐퍼(Damper)를 조절해! 배기를 막고 열을 가둬!!",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_025",
+    "next_node_id":  "jinbaekho_sub_026",
+    "character_id":  "Narrator",
+    "background_image":  "Terra Coffee House",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

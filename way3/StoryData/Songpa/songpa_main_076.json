@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "아직 완전히 걷히진 않았어요. 이 안개는 강동구 쪽에서 불어오는 바람이 있어야 완전히 사라질 거예요.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_076",
+    "next_node_id":  "songpa_main_077",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

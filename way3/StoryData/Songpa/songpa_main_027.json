@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "[Bypassing Firewall... 30%... 60%...]",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_027",
+    "next_node_id":  "songpa_main_028",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

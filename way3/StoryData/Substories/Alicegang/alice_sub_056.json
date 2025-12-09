@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "해냈어! 해냈어! 별길이 열렸네! 오리온이 허리띠를 졸라맸어!",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_056",
+    "next_node_id":  "alice_sub_057",
+    "character_id":  "Narrator",
+    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

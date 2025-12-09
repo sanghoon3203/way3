@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "*...이번 오디션도 떨어졌어... 나는 쓰레기야...* (애니: \"우와! 폭신폭신한 마시멜로 같아요!\")",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_015",
+    "next_node_id":  "anipark_sub_016",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 수변 무대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

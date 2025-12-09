@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그는 자신의 애마인 거대한 붉은색 로스팅 기계, 일명 \u0027피닉스\u0027를 가리켰다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_009",
+    "next_node_id":  "jinbaekho_sub_010",
+    "character_id":  "Narrator",
+    "background_image":  "Terra Coffee House",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

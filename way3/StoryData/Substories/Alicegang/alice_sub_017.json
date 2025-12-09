@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "여행자님, 저를 좀 도와주실 수 있나요? 마지막 한 소절... 그것만 찾으면 이 지옥 같은 루프에서 벗어날 수 있을 텐데. 그녀가 자주 가던 골목 맞은편의 \u0027오래된 레코드 가게\u0027에 힌트가 있을지도 모릅니다. 앨리스 님이 좋아하던 LP판 속에... 답이 있을지도 몰라요. 하지만 전 이 무대를 떠날 수가 없군요. 발이... 피아노 페달에 묶여버린 것 같아요.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_017",
+    "next_node_id":  "alice_sub_018",
+    "character_id":  "Narrator",
+    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

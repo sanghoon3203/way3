@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "하지만 그녀의 비위를 맞춰주는 척해야 해. 꿈을 깨우려면 역설적으로 꿈을 더 깊게 만들어야 하거든. 그녀가 원하는 \u0027구름 사탕\u0027 재료... 사실은 안개 속에 뭉친 \u0027순수한 비탄\u0027을 걷어내야 이 지독한 안개가 걷히거든. 자네의 그 이끼에게도 정화된 물이 필요하지 않나?",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_009",
+    "next_node_id":  "anipark_sub_010",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 수변 무대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

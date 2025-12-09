@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "와아! 역시 여행자님은 미식가시네요! 기대할게요!",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_012",
+    "next_node_id":  "anipark_sub_013",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 수변 무대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

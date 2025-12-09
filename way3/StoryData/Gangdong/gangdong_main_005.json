@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 입을 막으며 기침을 했다. 축축하고 차가운 습기가 폐부 깊숙이 파고들었다. 이대로라면 나 또한 이 망각의 안개 속에 갇혀 길을 잃을지도 모른다는 공포가 엄습했다. 서예나가 말한 \u0027열정\u0027이 정말 이곳에 남아있는 걸까? 의심이 피어오르던 찰나였다.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_005",
+    "next_node_id":  "gangdong_main_006",
+    "character_id":  "Narrator",
+    "background_image":  "이스트 리버 - 강변 진입로]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

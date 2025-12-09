@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 팬던트가 이끄는 빛의 길을 따라 발걸음을 옮겼다. 안개를 뚫고 쌉싸름하고 고소한 냄새가 희미하게 풍겨왔다. 그것은 단순한 커피 향이 아니었다. 누군가가 밤을 새워 집중하며 무언가를 만들어낼 때 뿜어져 나오는, 뜨거운 \u0027몰입\u0027의 냄새였다.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_017",
+    "next_node_id":  "gangdong_main_018",
+    "character_id":  "Narrator",
+    "background_image":  "이스트 리버 - 강변 진입로]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

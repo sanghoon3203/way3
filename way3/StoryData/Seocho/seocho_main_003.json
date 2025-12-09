@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "서예나는 희미한 미소를 지으며 지도 한 장을 건넸다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_003",
+    "next_node_id":  "seocho_main_004",
+    "character_id":  "Narrator",
+    "background_image":  null,
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

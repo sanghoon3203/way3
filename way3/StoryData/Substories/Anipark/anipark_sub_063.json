@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "수리 완료! 행복 지수 정상화! 감사합니다! 정말 감사합니다!",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_063",
+    "next_node_id":  "anipark_sub_064",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

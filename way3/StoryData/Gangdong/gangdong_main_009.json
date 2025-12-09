@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "단순한 착각이 아니었다. 차갑게 식어있던 팬던트가 마치 심장이 뛰듯 규칙적으로 박동하기 시작했다. *두근, 두근, 두근.* 잿빛 안개 속에서 팬던트의 중심부가 붉은색으로 발광하며 온기를 뿜어냈다. 그 온기는 내 손바닥을 타고 올라와 얼어붙은 몸을 녹이고, 흐릿해지던 의식을 깨웠다.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_009",
+    "next_node_id":  "gangdong_main_010",
+    "character_id":  "Narrator",
+    "background_image":  "이스트 리버 - 강변 진입로]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

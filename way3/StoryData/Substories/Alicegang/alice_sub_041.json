@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "하늘의 지도가 엉망이 되었네. 이걸 바로잡으려면... 그래! \u0027지상의 별\u0027을 이어야 해! 하늘이 말을 안 들으면 땅에다 그리면 되지!",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_041",
+    "next_node_id":  "alice_sub_042",
+    "character_id":  "Narrator",
+    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

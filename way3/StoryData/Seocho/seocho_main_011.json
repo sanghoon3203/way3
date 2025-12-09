@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "길을 잃으셨나요, 여행자님?",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_011",
+    "next_node_id":  "seocho_main_012",
+    "character_id":  "Narrator",
+    "background_image":  "서초구 진입로 - 서래 가든 타운 입구]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

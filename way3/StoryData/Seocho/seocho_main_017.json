@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "방배동 카페 골목의 \u0027재즈 클럽\u0027으로 가보세요. 그곳의 피아니스트가 \u0027소리의 지도\u0027를 가지고 있을지도 모르니까요. 물론, 그가 연주를 멈출 수 있다면 말이죠.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_017",
+    "next_node_id":  "seocho_main_018",
+    "character_id":  "Narrator",
+    "background_image":  "서초구 진입로 - 서래 가든 타운 입구]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

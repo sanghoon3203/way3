@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "뜨겁습니다!",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_032",
+    "next_node_id":  "jinbaekho_sub_033",
+    "character_id":  "Narrator",
+    "background_image":  "Terra Coffee House",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

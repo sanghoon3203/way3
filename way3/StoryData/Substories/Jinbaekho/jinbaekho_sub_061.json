@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "속도가 빨라졌다. 그의 망치질은 정확하고 강력했다. 쇳덩이가 펴지며 붉은 스파크가 튀었다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_061",
+    "next_node_id":  "jinbaekho_sub_062",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

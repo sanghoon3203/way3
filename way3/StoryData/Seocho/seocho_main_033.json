@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그녀는 자신의 다리를 가리켰다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_033",
+    "next_node_id":  "seocho_main_034",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

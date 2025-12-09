@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그녀는 낡은 수변 무대 앞에서 멈춰 섰다. 무대는 덩굴과 이끼로 뒤덮여 있었지만, 그녀의 눈에는 화려한 조명이 비추는 카네기 홀처럼 보이는 듯했다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_002",
+    "next_node_id":  "anipark_sub_003",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 수변 무대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

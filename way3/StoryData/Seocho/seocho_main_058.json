@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "세 번째 백합. 흙을 덮어주자 따뜻한 온기가 손끝에 전해졌다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_058",
+    "next_node_id":  "seocho_main_059",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

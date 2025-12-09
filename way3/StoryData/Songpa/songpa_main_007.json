@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "바로 그때, 음침한 안개를 가르고 경쾌한 팡파르 소리가 울려 퍼졌다.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_007",
+    "next_node_id":  "songpa_main_008",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 서호 - 진입로]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

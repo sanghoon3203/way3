@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그녀가 엔터키를 누르자, 스카이 피어 꼭대기에서 거대한 빛의 파동이 펴져 나갔다. 그 빛은 송파구 전역을 휩쓸며 사람들을 가두고 있던 안개를 서서히 걷어내기 시작했다.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_075",
+    "next_node_id":  "songpa_main_076",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

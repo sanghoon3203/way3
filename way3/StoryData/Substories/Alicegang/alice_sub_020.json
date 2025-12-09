@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "[To Eddie - 나의 대답]",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_020",
+    "next_node_id":  "alice_sub_021",
+    "character_id":  "Narrator",
+    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

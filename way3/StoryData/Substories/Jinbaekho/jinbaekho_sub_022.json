@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "냄새 맡아봐. 고소한 빵 굽는 냄새가 나지? 이게 바로 화학 반응이야. 죽어있던 씨앗이 열을 받아 깨어나는 순간이지.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_022",
+    "next_node_id":  "jinbaekho_sub_023",
+    "character_id":  "Narrator",
+    "background_image":  "Terra Coffee House",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

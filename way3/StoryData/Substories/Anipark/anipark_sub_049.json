@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 포그 워커에게 받은 \u0027안개의 눈물\u0027을 부어 수정을 녹였다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_049",
+    "next_node_id":  "anipark_sub_050",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

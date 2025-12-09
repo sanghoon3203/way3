@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "공원 정상에는 거대한 황동 망원경을 붙잡고 안절부절못하는 늙은 노인이 있었다. 챙이 넓은 고깔모자를 쓴 그는 마치 동화 속 마법사처럼 보였다.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_034",
+    "next_node_id":  "alice_sub_035",
+    "character_id":  "Narrator",
+    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

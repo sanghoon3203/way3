@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "손에 쥔 팬던트에서 미약한 진동이 느껴졌다.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_007",
+    "next_node_id":  "gangdong_main_008",
+    "character_id":  "Narrator",
+    "background_image":  "이스트 리버 - 강변 진입로]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

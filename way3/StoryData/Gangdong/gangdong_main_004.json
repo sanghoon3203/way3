@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "젠장... 한 치 앞도 안 보이잖아.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_004",
+    "next_node_id":  "gangdong_main_005",
+    "character_id":  "Narrator",
+    "background_image":  "이스트 리버 - 강변 진입로]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

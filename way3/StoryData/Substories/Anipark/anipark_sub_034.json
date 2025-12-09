@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "비상! 비상! 시스템 오류 코드 404! 행복 회로 과부하! 동심 설정값이 \u0027악몽\u0027으로 반전되었습니다!",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_034",
+    "next_node_id":  "anipark_sub_035",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

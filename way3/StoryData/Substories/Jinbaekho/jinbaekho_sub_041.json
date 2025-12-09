@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "유일하게 들려오는 건, 거리 깊은 곳, 가장 오래된 대장간에서 울리는 규칙적인 금속음뿐이었다.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_041",
+    "next_node_id":  "jinbaekho_sub_042",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

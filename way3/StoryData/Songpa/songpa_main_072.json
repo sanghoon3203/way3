@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그녀는 자리에서 일어나 단호한 표정으로 메인 컴퓨터에 접속했다.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_072",
+    "next_node_id":  "songpa_main_073",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

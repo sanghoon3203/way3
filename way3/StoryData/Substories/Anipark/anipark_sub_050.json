@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "*치이익-* 수정이 물처럼 녹아내리며 기어가 부드럽게 돌아가기 시작했다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_050",
+    "next_node_id":  "anipark_sub_051",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

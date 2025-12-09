@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 숨을 고르며 빛나는 입구 앞에 섰다. 이제 시간의 마녀, 앨리스를 만날 차례였다.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_059",
+    "next_node_id":  null,
+    "character_id":  "Narrator",
+    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

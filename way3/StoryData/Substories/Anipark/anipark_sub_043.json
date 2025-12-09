@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "\"다 부숴버릴 거야! 나를 무시한 놈들!\" 수정에서 분노 찬 목소리가 들렸다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_043",
+    "next_node_id":  "anipark_sub_044",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

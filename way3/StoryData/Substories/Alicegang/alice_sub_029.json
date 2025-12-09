@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "고마워요. 이제야 비로소... 그녀에게 닿을 수 있게 되었군요. 제 시간은 이제 다시 흐르기 시작했습니다.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_029",
+    "next_node_id":  "alice_sub_030",
+    "character_id":  "Narrator",
+    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

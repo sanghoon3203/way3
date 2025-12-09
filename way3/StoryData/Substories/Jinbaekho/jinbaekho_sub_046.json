@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "호오... 열기는 확실히 채워왔군. 꽤나 뜨거워. 하지만... 그걸로는 부족해. 안개는 \u0027침묵\u0027이다. 세상을 조용히 질식시키지. 놈들을 몰아내려면 이 죽어버린 거리를 깨울, 심장을 때리는 거대한 \u0027파열음(Spark)\u0027이 필요해.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_046",
+    "next_node_id":  "jinbaekho_sub_047",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

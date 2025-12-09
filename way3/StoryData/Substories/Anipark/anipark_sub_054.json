@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "나는 팬던트(강동구에서 가져온 열기)를 수정에 갖다 댔다. 따뜻한 빛이 공포를 감싸 안았다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_054",
+    "next_node_id":  "anipark_sub_055",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

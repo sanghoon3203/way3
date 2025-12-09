@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "네. 환상이 만들어낸 박수갈채가 아니라, 거친 현실 속에서 당신의 목소리로 위로받고 싶은 진짜 사람들의 박수요.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_056",
+    "next_node_id":  "songpa_main_057",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "앨리스는 만났어? 그 아이, 맘이 약해서 걱정했는데 다행이네. 지금 송파 쪽에 파장이 아주 불안정해. 애니 녀석이 또 이상한 꿈을 꾸고 있나 봐. 서두르는 게 좋을 거야.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_076",
+    "next_node_id":  "seocho_main_077",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "안개가 걷힌 다리를 건너 호수 중앙의 섬, 롯데월드 매직 아일랜드로 향했다. 거대한 성이 위용을 자랑하고 있었지만, 상태가 기괴했다. 성벽은 녹아내리는 촛농처럼 일그러져 있었고, 모든 놀이기구가 멈춰 있었다. 자이로드롭은 중간에 걸려 있었고, 롤러코스터 레일은 끊어져 있었다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_026",
+    "next_node_id":  "anipark_sub_027",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

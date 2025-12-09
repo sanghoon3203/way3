@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그녀는 창밖 동쪽 하늘을 바라보았다. 멀리 송파구의 거대한 타워, \u0027스카이 피어\u0027가 구름을 뚫고 솟아 있었다. 그녀의 눈빛에 걱정과 그리움이 스쳤다.",
+    "sound_effect":  null,
+    "node_id":  "seocho_main_067",
+    "next_node_id":  "seocho_main_068",
+    "character_id":  "Narrator",
+    "background_image":  "앨리스 강의 아틀리에]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "*탕... 탕... 탕...*",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_042",
+    "next_node_id":  "jinbaekho_sub_043",
+    "character_id":  "Narrator",
+    "background_image":  "천호 크래프트 타운 - 대장간]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

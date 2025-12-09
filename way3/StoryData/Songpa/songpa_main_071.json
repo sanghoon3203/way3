@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "고마워요, 여행자님. 그리고 미안해요. 당신 덕분에 진짜 중요한 게 뭔지 깨달았어요.",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_071",
+    "next_node_id":  "songpa_main_072",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

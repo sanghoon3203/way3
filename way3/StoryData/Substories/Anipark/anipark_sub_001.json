@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "애니의 아바타는 물 위를 미끄러지듯 춤추며 나아갔다. 그녀가 지나간 자리에는 반짝이는 가루가 떨어졌지만, 이내 검게 변해 비릿한 냄새를 풍기며 사라졌다. 그녀의 꿈이 현실의 오염을 이기지 못하고 있는 것이다.",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_001",
+    "next_node_id":  "anipark_sub_002",
+    "character_id":  "Narrator",
+    "background_image":  "석촌호수 수변 무대]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

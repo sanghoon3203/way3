@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "강바람이 멈췄다. 언제나 세차게 불어오던 한강의 바람마저 집어삼킬 만큼 송파의 안개는 지독했다. 강변의 갈대들은 회색 빛으로 탈색되어 고개를 숙이고 있었고, 드론 공원의 프로펠러 소리도, 자전거 도로를 달리는 사람들의 활기찬 웃음소리도 들리지 않았다. 모든 것이 정지된 죽음의 도시 같았다.",
+    "sound_effect":  null,
+    "node_id":  "gangdong_main_003",
+    "next_node_id":  "gangdong_main_004",
+    "character_id":  "Narrator",
+    "background_image":  "이스트 리버 - 강변 진입로]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

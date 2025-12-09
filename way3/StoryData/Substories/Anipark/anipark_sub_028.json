@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "*끼릭... 끼리릭... 끼에에엑-*",
+    "sound_effect":  null,
+    "node_id":  "anipark_sub_028",
+    "next_node_id":  "anipark_sub_029",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

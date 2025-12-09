@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "그거... 애니 아가씨 물건이잖아? 그 귀한 \u0027믿음의 증표\u0027를 외부인에게 주다니. 당신, 그 까다로운 공주님한테 꽤나 인정받은 모양이네.",
+    "sound_effect":  null,
+    "node_id":  "jinbaekho_sub_006",
+    "next_node_id":  "jinbaekho_sub_007",
+    "character_id":  "Narrator",
+    "background_image":  "Terra Coffee House",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

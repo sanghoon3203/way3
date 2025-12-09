@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "서예나? 네가 왜 여기 있어?",
+    "sound_effect":  null,
+    "node_id":  "songpa_main_031",
+    "next_node_id":  "songpa_main_032",
+    "character_id":  "Narrator",
+    "background_image":  "롯데월드타워 - 123층 스카이 피어]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}

@@ -1,0 +1,10 @@
+﻿{
+    "dialogue_text":  "첫 번째 위치, 시계탑 아래에 섰다. 그러자 내 발밑에서 은은한 푸른 빛이 솟아올라 공중에 점을 찍었다.",
+    "sound_effect":  null,
+    "node_id":  "alice_sub_047",
+    "next_node_id":  "alice_sub_048",
+    "character_id":  "Narrator",
+    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+    "character_sprite":  null,
+    "dialogue_sound_id":  null
+}
