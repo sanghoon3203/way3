@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "1단계, 투입! 생두가 드럼에 들어간다!",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_012",
+    "next_node_id": "subquest_jinbaekho_013",
+    "character_id": "Jinbaekho",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

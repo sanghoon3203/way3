@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "잘 들어! 로스팅은 타이밍과 온도의 싸움이야. 총 3단계다. 수분 날리기, 메일라드 반응, 그리고 마지막 디벨롭먼트! 각 단계마다 필요한 온도가 달라. 내 눈빛만 봐도 알 수 있게 집중해!",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_010",
+    "next_node_id": "subquest_jinbaekho_011",
+    "character_id": "Jinbaekho",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

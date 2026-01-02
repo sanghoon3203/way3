@@ -1,1 +1,10 @@
-{ "node_id": "sub1_032", "background_image": null, "character_id": "플레이어(독백)", "character_sprite": null, "dialogue_text": "일단 프론트로 가보자..", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_033" }
+{
+    "node_id": "sub1_032",
+    "background_image": null,
+    "character_id": "플레이어(독백)",
+    "character_sprite": null,
+    "dialogue_text": "일단 프론트로 가보자..",
+    "dialogue_sound_id": null,
+    "sound_effect": null,
+    "next_node_id": "sub1_033"
+}

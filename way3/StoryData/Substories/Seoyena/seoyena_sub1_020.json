@@ -1,1 +1,10 @@
-{ "node_id": "sub1_020", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_normal", "dialogue_text": "현대 모터 스튜디오 서울, 거기에서는 축소 기능이 있는 자동차도 커스텀 메이드해주거든요. 다음 시험은 행동으로 증명하는 겁니다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_021" }
+{
+    "node_id": "sub1_020",
+    "background_image": null,
+    "character_id": "서예나",
+    "character_sprite": "seoyena_normal",
+    "dialogue_text": "현대 모터 스튜디오 서울로 심부름좀 다녀와요. ",
+    "dialogue_sound_id": null,
+    "sound_effect": null,
+    "next_node_id": "sub1_021"
+}

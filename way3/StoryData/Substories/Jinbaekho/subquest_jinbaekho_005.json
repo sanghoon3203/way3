@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "그는 내 손에서 붉게 진동하는 팬던트를 보더니 고개를 끄덕였다.",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_005",
+    "next_node_id": "subquest_jinbaekho_006",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

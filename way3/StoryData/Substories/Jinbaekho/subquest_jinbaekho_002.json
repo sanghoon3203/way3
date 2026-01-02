@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "안녕하세요! 킁킁? 어라? 자네, 몸에서 안개의 냄새가 잔뜩 배어있군.",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_002",
+    "next_node_id": "subquest_jinbaekho_003",
+    "character_id": "Jinbaekho",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

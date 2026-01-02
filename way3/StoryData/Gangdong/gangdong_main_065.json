@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "그리고 그 중심에, 그가 있었다.",
+    "sound_effect": null,
+    "node_id": "gangdong_main_065",
+    "next_node_id": "gangdong_main_066",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

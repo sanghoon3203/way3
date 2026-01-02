@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "보이지? 불이 숨을 못 쉬어. 쇠를 녹이려면 산소를 머금은 바람이 불어야 하는데, 지금 이 도시는 질식 직전이야. 저 PJy란 놈이 혼자 숨을 독차지하고 있거든.",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_005",
+    "next_node_id": "subquest_jubulsu_006",
+    "character_id": "Jubulsu",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

@@ -1,0 +1,74 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    background: radial-gradient(circle at bottom, #1a2a6c, #b21f1f, #fdbb2d);
+    /* Starry night vibes */
+    background: #000022;
+    color: #fff;
+}
+
+.starMap {
+    width: 100%;
+    aspect-ratio: 1;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+
+.lineAnim {
+    animation: dash 1s linear infinite;
+}
+
+.pulse {
+    animation: pulse 1.5s infinite;
+    stroke: rgba(255, 255, 255, 0.5);
+    stroke-width: 5;
+}
+
+@keyframes pulse {
+    0% {
+        stroke-width: 0;
+        opacity: 1;
+    }
+
+    100% {
+        stroke-width: 10;
+        opacity: 0;
+    }
+}
+
+.controls {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+}
+
+.gpsInfo {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #4d94ff;
+}
+
+.walkBtn {
+    padding: 15px;
+    background: #2ecc71;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.walkBtn:disabled {
+    background: #555;
+    cursor: not-allowed;
+}

@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "열정? 좋지. 하지만 연소될 공기가 없으면 열정은 재가 될 뿐이야. 내 망치질이 멈춘 것도 그 때문이지. 리듬이 끊겼어.",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_006",
+    "next_node_id": "subquest_jubulsu_007",
+    "character_id": "Jubulsu",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

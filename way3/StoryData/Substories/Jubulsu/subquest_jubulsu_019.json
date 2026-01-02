@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "주블수가 완성된 검을 물통에 담금질하며 호탕하게 웃었다. 하얀 수증기와 함께 날카롭고 아름다운 검이 완성되었다.",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_019",
+    "next_node_id": "subquest_jubulsu_020",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

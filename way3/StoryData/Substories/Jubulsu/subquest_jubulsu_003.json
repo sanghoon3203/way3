@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "낡은 셔터 너머, 뜨거운 열기가 이글거리는 대장간 화덕 앞에는 거구의 사내가 서 있었다. 네오 서울 최고의 무기 장인, 'Jubulsu'였다.",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_003",
+    "next_node_id": "subquest_jubulsu_004",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

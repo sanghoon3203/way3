@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "백호가 알려준 대로 만화거리를 지나, 거친 기계음이 가득한 천호동 공구거리에 들어섰다. 배관, 공구, 철물점들이 늘어선 이곳은 네오 서울을 지탱하는 뼈대가 만들어지는 곳이었다. 하지만 안개 속에 잠긴 거리는 죽은 듯이 고요했다.",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_001",
+    "next_node_id": "subquest_jubulsu_002",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

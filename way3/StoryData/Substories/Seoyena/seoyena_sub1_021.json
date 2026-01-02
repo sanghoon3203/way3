@@ -1,1 +1,10 @@
-{ "node_id": "sub1_021", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_normal", "dialogue_text": "강남의 숨은 명소들을 찾아가 진짜 가치를 보여주세요.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_022" }
+{
+    "node_id": "sub1_021",
+    "background_image": null,
+    "character_id": "서예나",
+    "character_sprite": "seoyena_normal",
+    "dialogue_text": "거기가서 제 차좀 픽업해오세요 .",
+    "dialogue_sound_id": null,
+    "sound_effect": null,
+    "next_node_id": "sub1_022"
+}

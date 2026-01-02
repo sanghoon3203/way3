@@ -1,1 +1,10 @@
-{ "node_id": "sub1_034", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "직원의 눈빛이 순간 달라졌다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_035" }
+{
+    "node_id": "sub1_034",
+    "background_image": null,
+    "character_id": "Narrator",
+    "character_sprite": null,
+    "dialogue_text": "직원의 눈빛이 순간 달라졌다.",
+    "dialogue_sound_id": null,
+    "sound_effect": null,
+    "next_node_id": "sub1_035"
+}

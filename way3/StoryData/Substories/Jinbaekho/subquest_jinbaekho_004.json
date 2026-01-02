@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "보이나? 연기가 올라가지 않아. 이놈의 공기가 꽉 막혀버렸어. 저 멀리 'PJy 타워' 쪽으로만 공기가 빨려 들어가고, 나머지는 진공 상태나 다름없지.",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_004",
+    "next_node_id": "subquest_jinbaekho_005",
+    "character_id": "Jinbaekho",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

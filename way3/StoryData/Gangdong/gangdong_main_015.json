@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "이 안개를 걷어내려면 이 두 가지 기운을 팬던트에 담아 \u0027태양의 힘\u0027으로 완성해야 했다. 팬던트가 더 강하고 급하게 반응하며 나를 재촉하는 쪽은 언덕 위의 붉은 열기였다.",
-    "sound_effect":  null,
-    "node_id":  "gangdong_main_015",
-    "next_node_id":  "gangdong_main_016",
-    "character_id":  "Narrator",
-    "background_image":  "이스트 리버 - 강변 진입로]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+    "dialogue_text": "이 도시의 숨통을 트려면, 저 빌딩으로 가서 공기를 되찾아야 한다. 하지만 지금 내 힘으로는 저곳에 접근조차 할 수 없다. 먼저 이 마을에서 버티고 있는 '생존자'들을 만나야 한다. 그들이라면 이 진공을 뚫을 방법을 알고 있을 것이다.",
+    "sound_effect": null,
+    "node_id": "gangdong_main_015",
+    "next_node_id": "gangdong_main_016",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
 }

@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "후우, 고생했어. 자네, 소질 있는데? 자, 이걸로 부족하다면 다음은 '불꽃'이야. 크래프트 타운의 대장장이 형님한테 가봐. 그 형님 망치질 한 방이면 죽은 불씨도 살아나니까.",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_026",
+    "next_node_id": "subquest_jubulsu_001",
+    "character_id": "Jinbaekho",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

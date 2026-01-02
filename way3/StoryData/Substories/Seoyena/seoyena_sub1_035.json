@@ -1,1 +1,10 @@
-{ "node_id": "sub1_035", "background_image": null, "character_id": "직원", "character_sprite": "npc_staff", "dialogue_text": "잠시만요..엇!!! 서예나 님.. 안쪽으로 모시겠습니다..", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_036" }
+{
+    "node_id": "sub1_035",
+    "background_image": null,
+    "character_id": "직원",
+    "character_sprite": "npc_staff",
+    "dialogue_text": "잠시만요..엇!!! 서예나 님.. 안쪽으로 모시겠습니다..",
+    "dialogue_sound_id": null,
+    "sound_effect": null,
+    "next_node_id": "sub1_036"
+}

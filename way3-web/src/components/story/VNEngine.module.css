@@ -1,0 +1,257 @@
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* Background Layer */
+.backgroundLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+.backgroundImage {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.defaultBackground {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    background: linear-gradient(145deg,
+            var(--color-primary) 0%,
+            var(--color-primary-light) 100%);
+}
+
+.chapterIcon {
+    font-size: 80px;
+    opacity: 0.9;
+}
+
+.chapterTitle {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-inverse);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Character Layer */
+.characterLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 140px;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.characterSprite {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.characterImage {
+    max-height: 75%;
+    max-width: 90%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
+}
+
+.characterPlaceholder {
+    font-size: 120px;
+    opacity: 0.8;
+    margin-bottom: 40px;
+}
+
+/* Dialogue Layer */
+.dialogueLayer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 80px;
+    z-index: 2;
+    padding: 0 var(--space-4);
+}
+
+.dialogueBox {
+    background: linear-gradient(180deg,
+            rgba(10, 14, 23, 0.92) 0%,
+            rgba(10, 14, 23, 0.98) 100%);
+    border: 1.5px solid var(--color-primary-light);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4) var(--space-5);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 0 20px var(--color-neon-glow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    min-height: 100px;
+}
+
+[data-theme="light"] .dialogueBox {
+    background: linear-gradient(180deg,
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(245, 247, 250, 0.98) 100%);
+}
+
+.dialogueBox.narration {
+    border-color: var(--color-border);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.speakerName {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    margin-bottom: var(--space-2);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    background-color: rgba(0, 255, 204, 0.15);
+    border-radius: var(--radius-full);
+}
+
+.dialogueText {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-inverse);
+    min-height: 48px;
+}
+
+[data-theme="light"] .dialogueText {
+    color: var(--color-text);
+}
+
+.cursor {
+    display: inline-block;
+    margin-left: 2px;
+    color: var(--color-accent);
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Progress Indicator */
+.progressIndicator {
+    position: absolute;
+    bottom: var(--space-4);
+    left: 0;
+    right: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-5);
+}
+
+.nodeIndex {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    background-color: var(--color-surface);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    opacity: 0.8;
+}
+
+.clickHint {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+/* End Screen */
+.endScreen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg,
+            var(--color-primary) 0%,
+            var(--color-primary-light) 100%);
+}
+
+.endContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    text-align: center;
+}
+
+.endIcon {
+    font-size: 80px;
+}
+
+.endTitle {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-inverse);
+    margin: 0;
+}
+
+.endText {
+    font-size: var(--font-size-md);
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+}
+
+.completeButton {
+    margin-top: var(--space-4);
+    padding: var(--space-3) var(--space-6);
+    background: var(--color-primary);
+    color: var(--color-background);
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
+}
+
+.completeButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 255, 204, 0.4);
+    background: var(--color-primary-light);
+}

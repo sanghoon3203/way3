@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "지금이야! 망치로 비트를 쪼개! 엇박자로!",
+    "sound_effect": null,
+    "node_id": "gangdong_main_074",
+    "next_node_id": "gangdong_main_075",
+    "character_id": "player",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

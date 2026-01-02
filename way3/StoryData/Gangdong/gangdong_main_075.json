@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "내가 소리치자, 나의 아바타가 망치를 들고 바닥을 두드리기 시작했다. 쿵! 짝! 쿵-쿵! 짝! PJy가 유지하던 고요한 심박수와 정반대되는, 아주 불경하고 거친 리듬이었다.",
+    "sound_effect": null,
+    "node_id": "gangdong_main_075",
+    "next_node_id": "gangdong_main_076",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "하아압!!",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_016",
+    "next_node_id": "subquest_jubulsu_017",
+    "character_id": "player",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

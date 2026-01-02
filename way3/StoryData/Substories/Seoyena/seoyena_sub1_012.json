@@ -1,1 +1,10 @@
-{ "node_id": "sub1_012", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_stern", "dialogue_text": "안 해요.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_013" }
+{
+    "node_id": "sub1_012",
+    "background_image": null,
+    "character_id": "서예나",
+    "character_sprite": "seoyena_stern",
+    "dialogue_text": "안 해요?",
+    "dialogue_sound_id": null,
+    "sound_effect": null,
+    "next_node_id": "sub1_013"
+}

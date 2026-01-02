@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "참아! 이 열기가 네 팬던트로 들어갈 거야! 너의 그 뜨거운 의지를 보여줘! 1분... 30초... 10초 전! 5, 4, 3, 2, 1... 배출!!",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_022",
+    "next_node_id": "subquest_jinbaekho_023",
+    "character_id": "Jinbaekho",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

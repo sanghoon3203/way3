@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "주블수의 마지막 일격과 나의 풀무질이 완벽하게 겹쳐진 순간, 거대한 불기둥과 함께 눈부신 주황색 스파크가 튀어 올랐다. 그 불꽃은 사라지지 않고 내 손의 팬던트로 빨려 들어갔다.",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_017",
+    "next_node_id": "subquest_jubulsu_018",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "나는 그에게 도움을 청했다. 이 침묵을 깨고 안개를 걷어내려면 강력한 '한 방'이 필요하다고.",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_007",
+    "next_node_id": "subquest_jinbaekho_008",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

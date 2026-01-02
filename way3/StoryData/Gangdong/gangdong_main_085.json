@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "PJy는 바닥에 쓰러져 헐떡였지만, 이미 엎질러진 물... 아니 공기였다. 그가 토해낸 '전설의 고음'은 송파구를 덮고 있던 끈적한 안개를 순식간에 밀어버렸다.",
+    "sound_effect": null,
+    "node_id": "gangdong_main_085",
+    "next_node_id": "gangdong_main_086",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

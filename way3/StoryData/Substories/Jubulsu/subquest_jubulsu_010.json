@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "준비됐나? 간다! 리듬을 타라!",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_010",
+    "next_node_id": "subquest_jubulsu_011",
+    "character_id": "Jubulsu",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

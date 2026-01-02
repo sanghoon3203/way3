@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "화력 유지해! 절대 쫄지 마! 이 향기를 폭발시켜야 해!",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_020",
+    "next_node_id": "subquest_jinbaekho_021",
+    "character_id": "Jinbaekho",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

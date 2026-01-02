@@ -1,0 +1,126 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    background-color: #2b2b2b;
+    color: #fff;
+}
+
+.statusPanel {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.tempDisplay {
+    font-size: 3rem;
+    font-weight: bold;
+    font-family: monospace;
+    color: #ffcc00;
+}
+
+.message {
+    font-size: 1rem;
+    color: #aaa;
+    margin-top: 5px;
+}
+
+.roaster {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.drum {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    z-index: 2;
+}
+
+.fire {
+    position: absolute;
+    bottom: 20px;
+    width: 60px;
+    background: linear-gradient(to top, #ff4d4d, #ffae42);
+    border-radius: 50% 50% 0 0;
+    z-index: 1;
+    filter: blur(5px);
+}
+
+.controls {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.controlGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.slider {
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: #444;
+    outline: none;
+    appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ffae42;
+    cursor: pointer;
+}
+
+.damperBtn {
+    padding: 12px;
+    border: 2px solid #555;
+    background: #333;
+    color: #fff;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.damperBtn.open {
+    background: #4d94ff;
+    border-color: #4d94ff;
+}
+
+.progressBar {
+    width: 100%;
+    height: 6px;
+    background: #444;
+    border-radius: 3px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: #00cc66;
+    transition: width 0.1s linear;
+}

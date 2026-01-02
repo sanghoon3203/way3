@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "1차 크랙(Crack)! 터졌다! 지금부터가 진짜야! 디벨롭먼트 타임! 여기서 맛과 향이 결정돼!",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_019",
+    "next_node_id": "subquest_jinbaekho_020",
+    "character_id": "Jinbaekho",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

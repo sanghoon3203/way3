@@ -1,1 +1,10 @@
-{ "node_id": "sub1_025", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "쾅 (경호원이 날 밀며 문을 닫는 소리.)", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_026" }
+{
+    "node_id": "sub1_025",
+    "background_image": null,
+    "character_id": "Narrator",
+    "character_sprite": null,
+    "dialogue_text": "쾅(문닫는소리)",
+    "dialogue_sound_id": null,
+    "sound_effect": null,
+    "next_node_id": "sub1_026"
+}

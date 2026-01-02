@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "한강 줄기를 따라 도착한 곳은 강동구, \u0027이스트 리버 빌리지(East River Village)\u0027. 이곳은 네오 서울의 마지막 보루이자, 가장 뜨거운 열정이 숨 쉬는 장인들의 마을이었다. 하지만 이곳마저도 송파에서 넘어온 회색 안개에 덮여 빛을 잃어가고 있었다.",
-    "sound_effect":  null,
-    "node_id":  "gangdong_main_002",
-    "next_node_id":  "gangdong_main_003",
-    "character_id":  "Narrator",
-    "background_image":  null,
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+    "dialogue_text": "한강 줄기를 따라 도착한 곳은 강동구, '이스트 리버 빌리지(East River Village)'. 이곳은 네오 서울의 마지막 보루이자, 가장 뜨거운 열정이 숨 쉬는 장인들의 마을이었다. 하지만....",
+    "sound_effect": null,
+    "node_id": "gangdong_main_002",
+    "next_node_id": "gangdong_main_003",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
 }

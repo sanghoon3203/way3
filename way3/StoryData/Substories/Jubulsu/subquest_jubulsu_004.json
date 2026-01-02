@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "백호 놈이 보냈나? 매운 내를 잔뜩 묻혀왔군.",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_004",
+    "next_node_id": "subquest_jubulsu_005",
+    "character_id": "Jubulsu",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

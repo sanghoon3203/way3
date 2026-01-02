@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "그래... 아직 꺼지지 않았어. 이 마을에는 아직 \u0027불씨\u0027가 살아있어.",
-    "sound_effect":  null,
-    "node_id":  "gangdong_main_014",
-    "next_node_id":  "gangdong_main_015",
-    "character_id":  "Narrator",
-    "background_image":  "이스트 리버 - 강변 진입로]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+    "dialogue_text": "그래... 아직 숨이 붙어있는 곳이 있어.",
+    "sound_effect": null,
+    "node_id": "gangdong_main_014",
+    "next_node_id": "gangdong_main_015",
+    "character_id": "player",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
 }

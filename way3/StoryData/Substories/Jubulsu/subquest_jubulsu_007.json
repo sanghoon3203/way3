@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "나는 백호의 '스파이시 블렌드' 계획을 이야기했다. 그 말을 들은 주블수의 눈에 이채가 돌았다.",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_007",
+    "next_node_id": "subquest_jubulsu_008",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

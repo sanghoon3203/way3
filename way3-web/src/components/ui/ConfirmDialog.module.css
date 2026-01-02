@@ -1,0 +1,173 @@
+/* =============================================================================
+   Confirm Dialog - Pixel Art Style
+   ============================================================================= */
+
+.overlay {
+    position: absolute;
+    /* 전체 화면(fixed) 대신 부모 컨테이너 기준(absolute)으로 변경 */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    /* 패널 내부에서 가장 위쪽 */
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.dialog {
+    background-color: var(--color-surface);
+    border: 3px solid var(--color-border);
+    /* 둥근 모서리 제거 */
+    border-radius: 0;
+    padding: 24px;
+    max-width: 280px;
+    width: 85%;
+
+    /* 픽셀 아트 그림자 효과 */
+    box-shadow:
+        4px 4px 0 rgba(0, 0, 0, 0.5),
+        inset 2px 2px 0 rgba(255, 255, 255, 0.05);
+
+    animation: slideIn 0.2s ease-out;
+
+    /* 도트 패턴 배경 */
+    background-image: radial-gradient(circle, var(--halftone-color) 0.5px, transparent 0.5px);
+    background-size: 4px 4px;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 장식용 코너 제거 (심플한 픽셀 보더로 대체) */
+.dialog::before {
+    display: none;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 3px solid var(--color-border);
+}
+
+.icon {
+    font-size: 32px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+.title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text);
+    text-align: center;
+}
+
+.message {
+    margin: 0 0 24px 0;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    text-align: center;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 12px;
+}
+
+.cancelButton,
+.confirmButton {
+    flex: 1;
+    padding: 12px 10px;
+    font-size: 13px;
+    font-weight: 700;
+    border: 2px solid;
+    border-radius: 0;
+    /* 둥근 모서리 제거 */
+    cursor: pointer;
+    transition: all 0.1s;
+    text-transform: uppercase;
+    position: relative;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.cancelButton {
+    background-color: var(--color-bg);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
+}
+
+.cancelButton:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+    color: var(--color-text);
+}
+
+.cancelButton:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+.confirmButton {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary-dark);
+    color: white;
+}
+
+.confirmButton:hover {
+    background-color: var(--color-primary-lighter);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+.confirmButton:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* 의사 요소 제거 */
+.cancelButton::before,
+.confirmButton::before,
+.confirmButton::after {
+    display: none;
+}

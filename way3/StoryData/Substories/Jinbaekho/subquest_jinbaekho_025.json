@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "하하하! 완벽해! 봤어? 안개가 열기에 겁먹고 도망가는 꼴을!",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_025",
+    "next_node_id": "subquest_jinbaekho_026",
+    "character_id": "Jinbaekho",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

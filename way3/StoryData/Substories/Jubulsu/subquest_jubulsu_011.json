@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "약해! 더 깊게 밟아! 폐부 깊숙이 공기를 불어넣어!",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_011",
+    "next_node_id": "subquest_jubulsu_012",
+    "character_id": "Jubulsu",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "손에 쥔 팬던트에서 미약한 진동이 느껴졌다.",
-    "sound_effect":  null,
-    "node_id":  "gangdong_main_007",
-    "next_node_id":  "gangdong_main_008",
-    "character_id":  "Narrator",
-    "background_image":  "이스트 리버 - 강변 진입로]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+    "dialogue_text": "건물 외벽에 거대한 파이프 오르간 같은 파이프들이 박혀 있는 그곳. 그곳이 바로 이 도시의 모든 숨결을 삼키고 있는 블랙홀이었다.",
+    "sound_effect": null,
+    "node_id": "gangdong_main_007",
+    "next_node_id": "gangdong_main_008",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
 }

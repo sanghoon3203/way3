@@ -1,1 +1,10 @@
-{ "node_id": "sub1_017", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_normal", "dialogue_text": "하지만 강남권은 화려한 만큼 어둠도 짙어요. 탐욕, 사기, 배신… 조심할 수 있겠어요?", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_018" }
+{
+    "node_id": "sub1_017",
+    "background_image": null,
+    "character_id": "서예나",
+    "character_sprite": "seoyena_normal",
+    "dialogue_text": "하지만 강남권은 당신이 생각한것 보다 훨씬 위험할거에요, 명심하세요. 가로수길 카페 사장같은 사람은 다신 볼 수 없을거에요.",
+    "dialogue_sound_id": null,
+    "sound_effect": null,
+    "next_node_id": "sub1_018"
+}

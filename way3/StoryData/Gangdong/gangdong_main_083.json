@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "그의 입에서 발사된 초고압의 음파와 공기포가 유리 부스를 산산조각 내고, 펜트하우스의 천장을 뚫고 하늘로 솟구쳤다. 그 거대한 기둥은 곧장 서쪽, 송파구로 휘어지며 날아갔다.",
+    "sound_effect": null,
+    "node_id": "gangdong_main_083",
+    "next_node_id": "gangdong_main_084",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "욕설인지 발성인지 알 수 없는 외마디 비명이 터져 나왔다. 그것은 단순한 소리가 아니었다. 압축되었던 대기의 대폭발이었다.",
+    "sound_effect": null,
+    "node_id": "gangdong_main_082",
+    "next_node_id": "gangdong_main_083",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

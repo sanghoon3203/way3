@@ -1,1 +1,10 @@
-{ "node_id": "sub1_013", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "단호하게 고개를 저었다.", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_014" }
+{
+    "node_id": "sub1_013",
+    "background_image": null,
+    "character_id": "Narrator",
+    "character_sprite": null,
+    "dialogue_text": "5초줄게요.1...2...3...4..",
+    "dialogue_sound_id": null,
+    "sound_effect": null,
+    "next_node_id": "sub1_014"
+}

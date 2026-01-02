@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "에이프런을 두른 젊은 사내, '진백호'가 기계 앞에서 고글을 벗으며 나를 맞이했다. 하지만 그의 표정은 어두웠다. 로스터기 위로 피어올라야 할 연기가 바닥으로 낮게 깔리고 있었다.",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_003",
+    "next_node_id": "subquest_jinbaekho_004",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

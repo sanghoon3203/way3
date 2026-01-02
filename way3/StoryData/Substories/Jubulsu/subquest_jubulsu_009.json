@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "자, 있는 힘껏 밟아. 놈이 훔쳐 간 공기를 억지로라도 뺏어와야 불이 붙는다. 우리가 먼저 거대한 '리듬의 파동'을 만들어서 놈에게 쏘아 보내는 거야.",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_009",
+    "next_node_id": "subquest_jubulsu_010",
+    "character_id": "Jubulsu",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

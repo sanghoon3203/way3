@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "호오... 그놈의 목을 간지럽혀서 토하게 만들겠다? 그렇다면 내 역할은 명확하군. 놈이 숨을 참지 못하게 '명치를 때리는' 박자가 필요해. 내 망치 소리로 놈의 심장 박동을 교란시키는 거지.",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_008",
+    "next_node_id": "subquest_jubulsu_009",
+    "character_id": "Jubulsu",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

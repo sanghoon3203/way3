@@ -1,0 +1,127 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #0f0f13;
+    color: #fff;
+    background-image:
+        radial-gradient(circle at 50% 50%, #1a1a2e 0%, #000 100%);
+}
+
+.card {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logoIcon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.logo h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #e0e0e0;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inputGroup label {
+    font-size: 14px;
+    color: #aaa;
+}
+
+.inputGroup input {
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+.inputGroup input:focus {
+    outline: none;
+    border-color: #4d94ff;
+}
+
+.error {
+    color: #ff4d4d;
+    font-size: 14px;
+    text-align: center;
+}
+
+.loginBtn {
+    margin-top: 10px;
+    padding: 14px;
+    background: linear-gradient(90deg, #4d94ff, #2980b9);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.loginBtn:hover {
+    filter: brightness(1.1);
+}
+
+.loginBtn:active {
+    transform: scale(0.98);
+}
+
+.footer {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.link {
+    color: #888;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+    color: #aaa;
+}
+
+.testBtn {
+    background: none;
+    border: 1px solid #333;
+    color: #444;
+    cursor: pointer;
+    font-size: 10px;
+    padding: 2px 5px;
+}

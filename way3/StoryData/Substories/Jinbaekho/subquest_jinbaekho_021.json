@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "뜨겁습니다!",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_021",
+    "next_node_id": "subquest_jinbaekho_022",
+    "character_id": "player",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

@@ -1,0 +1,262 @@
+{
+    "version": "1.0.0",
+    "buildTime": "2025-12-29",
+    "quests": [
+        {
+            "id": "prologue_main_001",
+            "title": "네오-서울에서의 첫 발걸음",
+            "description": "갑작스럽게 이세계로 넘어온 당신. 기주리의 도움을 받아 이 세계에 적응하세요.",
+            "questType": "dialogue",
+            "chapterId": "prologue",
+            "merchantId": "kijuri",
+            "objectives": [
+                {
+                    "id": "prologue_001_obj_01",
+                    "type": "story_completion",
+                    "description": "기주리의 설명 듣기",
+                    "storyNodeEnd": "prologue_42",
+                    "completed": false,
+                    "sortOrder": 1
+                },
+                {
+                    "id": "prologue_001_obj_02",
+                    "type": "story_completion",
+                    "description": "네오-서울 가이드북 읽기",
+                    "storyNodeEnd": "prologue_60",
+                    "completed": false,
+                    "sortOrder": 2
+                },
+                {
+                    "id": "prologue_001_obj_03",
+                    "type": "story_completion",
+                    "description": "5만 골드코인 받기",
+                    "storyNodeEnd": "prologue_72",
+                    "completed": false,
+                    "sortOrder": 3
+                }
+            ],
+            "rewards": {
+                "money": 50000,
+                "exp": 100
+            },
+            "unlocksQuestIds": [
+                "prologue_main_002"
+            ],
+            "unlocksDistricts": [
+                "gangnam"
+            ],
+            "isActive": true,
+            "isCompleted": false,
+            "isUnlocked": true,
+            "isMainQuest": true,
+            "sortOrder": 1,
+            "storySummary": "기주리가 네오-서울의 기본 시스템을 설명하고, 초기 자금을 제공합니다."
+        },
+        {
+            "id": "prologue_main_002",
+            "title": "인포메이션 센터로",
+            "description": "상인 자격증을 취득하기 위해 인포메이션 센터로 이동하세요.",
+            "questType": "delivery",
+            "chapterId": "prologue",
+            "objectives": [
+                {
+                    "id": "prologue_002_obj_01",
+                    "type": "gps_location",
+                    "description": "종로3가역 인포메이션 센터 방문",
+                    "targetLat": 37.5710,
+                    "targetLng": 126.9919,
+                    "targetRadius": 100,
+                    "locationName": "종로3가역 인포메이션 센터",
+                    "completed": false,
+                    "sortOrder": 1
+                }
+            ],
+            "rewards": {
+                "exp": 50,
+                "items": [
+                    {
+                        "itemId": "merchant_license_basic",
+                        "itemName": "초급 상인 자격증",
+                        "quantity": 1,
+                        "description": "거래를 시작할 수 있는 기본 자격증"
+                    }
+                ]
+            },
+            "requiresQuestIds": [
+                "prologue_main_001"
+            ],
+            "unlocksQuestIds": [
+                "gangnam_intro_001"
+            ],
+            "isActive": false,
+            "isCompleted": false,
+            "isUnlocked": false,
+            "isMainQuest": true,
+            "sortOrder": 2,
+            "storySummary": "상인 자격증을 취득하면 본격적인 거래를 시작할 수 있습니다."
+        },
+        {
+            "id": "gangnam_intro_001",
+            "title": "강남으로의 첫 걸음",
+            "description": "서예나를 만나기 위해 강남역으로 이동하세요.",
+            "questType": "delivery",
+            "chapterId": "gangnam",
+            "districtId": "gangnam_gu",
+            "objectives": [
+                {
+                    "id": "gangnam_001_obj_01",
+                    "type": "gps_location",
+                    "description": "강남역 도착",
+                    "targetLat": 37.4979,
+                    "targetLng": 127.0276,
+                    "targetRadius": 100,
+                    "locationName": "강남역",
+                    "completed": false,
+                    "sortOrder": 1
+                }
+            ],
+            "rewards": {
+                "exp": 100
+            },
+            "requiresQuestIds": [
+                "prologue_main_002"
+            ],
+            "unlocksQuestIds": [
+                "gangnam_seoyena_001"
+            ],
+            "isActive": false,
+            "isCompleted": false,
+            "isUnlocked": false,
+            "isMainQuest": true,
+            "sortOrder": 1,
+            "storySummary": "강남권의 실력자 서예나를 만나기 위해 강남역으로 이동합니다."
+        },
+        {
+            "id": "gangnam_seoyena_001",
+            "title": "서예나의 심문",
+            "description": "로데오 아레나의 서예나와 대화를 나누고 상인으로서의 가치관을 증명하세요.",
+            "questType": "dialogue",
+            "chapterId": "gangnam",
+            "districtId": "gangnam_gu",
+            "merchantId": "seoyena",
+            "objectives": [
+                {
+                    "id": "seoyena_001_obj_01",
+                    "type": "story_completion",
+                    "description": "서예나와 첫 대화",
+                    "storyNodeStart": "gangnam_001",
+                    "storyNodeEnd": "gangnam_020",
+                    "completed": false,
+                    "sortOrder": 1
+                },
+                {
+                    "id": "seoyena_001_obj_02",
+                    "type": "story_completion",
+                    "description": "세 가지 질문에 답하기",
+                    "storyNodeEnd": "gangnam_035",
+                    "completed": false,
+                    "sortOrder": 2
+                }
+            ],
+            "rewards": {
+                "exp": 200,
+                "items": [
+                    {
+                        "itemId": "rodeo_arena_pass",
+                        "itemName": "로데오 아레나 출입증",
+                        "quantity": 1,
+                        "description": "로데오 아레나를 자유롭게 드나들 수 있는 출입증"
+                    }
+                ]
+            },
+            "requiresQuestIds": [
+                "gangnam_intro_001"
+            ],
+            "unlocksQuestIds": [
+                "gangnam_seoyena_002"
+            ],
+            "isActive": false,
+            "isCompleted": false,
+            "isUnlocked": false,
+            "isMainQuest": false,
+            "sortOrder": 2,
+            "storySummary": "서예나가 세 가지 핵심 질문을 던지며 당신의 상인으로서의 마음가짐을 시험합니다."
+        },
+        {
+            "id": "gangnam_seoyena_002",
+            "title": "강남의 숨은 명소 탐방",
+            "description": "서예나가 알려준 강남의 숨은 명소 3곳을 방문하세요.",
+            "questType": "delivery",
+            "chapterId": "gangnam",
+            "districtId": "gangnam_gu",
+            "merchantId": "seoyena",
+            "objectives": [
+                {
+                    "id": "seoyena_002_obj_01",
+                    "type": "gps_location",
+                    "description": "현대 모터 스튜디오 방문",
+                    "targetLat": 37.5015,
+                    "targetLng": 127.0395,
+                    "targetRadius": 50,
+                    "locationName": "현대 모터 스튜디오 서울",
+                    "completed": false,
+                    "sortOrder": 1
+                },
+                {
+                    "id": "seoyena_002_obj_02",
+                    "type": "gps_location",
+                    "description": "봉은사 방문",
+                    "targetLat": 37.5147,
+                    "targetLng": 127.0591,
+                    "targetRadius": 100,
+                    "locationName": "봉은사",
+                    "completed": false,
+                    "sortOrder": 2
+                },
+                {
+                    "id": "seoyena_002_obj_03",
+                    "type": "gps_location",
+                    "description": "별마당 도서관 방문",
+                    "targetLat": 37.5126,
+                    "targetLng": 127.0591,
+                    "targetRadius": 50,
+                    "locationName": "코엑스 별마당 도서관",
+                    "completed": false,
+                    "sortOrder": 3
+                }
+            ],
+            "rewards": {
+                "exp": 300,
+                "items": [
+                    {
+                        "itemId": "proof_future",
+                        "itemName": "미래의 증표",
+                        "quantity": 1,
+                        "description": "현대 모터 스튜디오에서 얻은 미래 비전"
+                    },
+                    {
+                        "itemId": "proof_peace",
+                        "itemName": "고요의 증표",
+                        "quantity": 1,
+                        "description": "봉은사에서 얻은 마음의 평화"
+                    },
+                    {
+                        "itemId": "proof_wisdom",
+                        "itemName": "지혜의 증표",
+                        "quantity": 1,
+                        "description": "별마당 도서관에서 얻은 지식의 힘"
+                    }
+                ]
+            },
+            "requiresQuestIds": [
+                "gangnam_seoyena_001"
+            ],
+            "isActive": false,
+            "isCompleted": false,
+            "isUnlocked": false,
+            "isMainQuest": false,
+            "sortOrder": 3,
+            "storySummary": "강남의 숨은 명소 3곳을 탐방하며 미래, 고요, 지혜의 증표를 수집합니다."
+        }
+    ]
+}

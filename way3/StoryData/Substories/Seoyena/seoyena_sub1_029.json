@@ -1,1 +1,10 @@
-{ "node_id": "sub1_029", "background_image": "bg_hyundai_lobby", "character_id": "Narrator", "character_sprite": null, "dialogue_text": "로비에 들어서자마자 압도당했다. 각종 자동차 부품부터 옛날 자동차가 20대 이상...", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_030" }
+{
+    "node_id": "sub1_029",
+    "background_image": "bg_hyundai_lobby",
+    "character_id": "Narrator",
+    "character_sprite": null,
+    "dialogue_text": "로비에 들어서자마자 압도당했다. 각종 자동차 부품부터 옛날 자동차가 20대 이상...",
+    "dialogue_sound_id": null,
+    "sound_effect": null,
+    "next_node_id": "sub1_030"
+}

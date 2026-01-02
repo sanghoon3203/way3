@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "그래, 열정은 억누를수록 폭발하는 법이지. 내 커피 향이 저 진공을 뚫고 그 가수의 콧구멍을 간지럽힐 수만 있다면... 놈이 참지 못하고 숨을 토해낼 거야. 그때가 기회지.",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_008",
+    "next_node_id": "subquest_jinbaekho_009",
+    "character_id": "Jinbaekho",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

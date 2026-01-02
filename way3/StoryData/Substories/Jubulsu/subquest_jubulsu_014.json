@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "놈들이 온다! 안개가 불꽃을 덮으려 해! 마지막이다! 크레센도(Crescendo)! 자네의 모든 걸 실어!",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_014",
+    "next_node_id": "subquest_jubulsu_015",
+    "character_id": "Jubulsu",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

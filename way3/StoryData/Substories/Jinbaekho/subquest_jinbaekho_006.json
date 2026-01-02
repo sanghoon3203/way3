@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "그거... 애니 아가씨 물건이군. 열정을 가져왔나? 좋았어. 하지만 지금 이 상태론 아무리 볶아도 향기가 퍼질 수 없어. 바람이 없으니까. 저 욕심쟁이 가수가 '고음 득음'을 하겠다고 온 동네 공기를 다 들이마시고 있거든.",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_006",
+    "next_node_id": "subquest_jinbaekho_007",
+    "character_id": "Jinbaekho",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

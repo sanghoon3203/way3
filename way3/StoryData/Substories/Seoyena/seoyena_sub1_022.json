@@ -1,1 +1,10 @@
-{ "node_id": "sub1_022", "background_image": null, "character_id": "플레이어", "character_sprite": null, "dialogue_text": "뭐 그런 셈이죠. 쉽죠?", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_023" }
+{
+    "node_id": "sub1_022",
+    "background_image": null,
+    "character_id": "플레이어",
+    "character_sprite": null,
+    "dialogue_text": "네,,,?저는 면허도 없는데요..? 서예나씨랑 제가 친분을 증명할 그런거 없나요..?",
+    "dialogue_sound_id": null,
+    "sound_effect": null,
+    "next_node_id": "sub1_023"
+}

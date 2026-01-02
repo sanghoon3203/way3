@@ -1,1 +1,10 @@
-{ "node_id": "sub1_007", "background_image": null, "character_id": "서예나", "character_sprite": "seoyena_normal", "dialogue_text": "두 번째 질문입니다. 당신에게 ‘가치’란 무엇인가요? 가격? 희소성? 브랜드?", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_008" }
+{
+    "node_id": "sub1_007",
+    "background_image": null,
+    "character_id": "서예나",
+    "character_sprite": "seoyena_normal",
+    "dialogue_text": "두 번째 질문입니다. 당신에게 ‘가치’란 무엇인가요? 가격? 희소성? 브랜드?",
+    "dialogue_sound_id": null,
+    "sound_effect": null,
+    "next_node_id": "sub1_008"
+}

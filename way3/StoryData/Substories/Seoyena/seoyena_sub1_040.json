@@ -1,1 +1,10 @@
-{ "node_id": "sub1_040", "background_image": null, "character_id": "Narrator", "character_sprite": null, "dialogue_text": "수백 대의 미니어처카가 나열되어 있는 지하공간. 각종 무기 및 엔진, 배터리 등이 마치 박물관처럼 전시되어 있다. 아니, 잠깐. 무기?", "dialogue_sound_id": null, "sound_effect": null, "next_node_id": "sub1_041" }
+{
+    "node_id": "sub1_040",
+    "background_image": null,
+    "character_id": "Narrator",
+    "character_sprite": null,
+    "dialogue_text": "수백 대의 미니어처카가 나열되어 있는 지하공간. 각종 무기 및 엔진, 배터리 등이 마치 박물관처럼 전시되어 있다. 아니, 잠깐. 무기?",
+    "dialogue_sound_id": null,
+    "sound_effect": null,
+    "next_node_id": "sub1_041"
+}

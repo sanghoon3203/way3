@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  // --- 1. Identity ---
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String   @unique // 비밀번호 찾기 필수
+  password  String   // Hashed
+
+  // --- 2. Game State ---
+  currentChapter String  @default("prologue")
+  currentNodeId  String?
+  lastLat        Float?
+  lastLng        Float?
+  
+  // --- 3. Economy ---
+  credits        Int     @default(0)
+  inventorySlots Int     @default(20)
+
+  // --- 4. Progress (구역 해금) ---
+  unlockedDistricts String @default("[\"gangnam\"]") // JSON 배열: ["gangnam", "seocho", ...]
+
+  // --- 4. Meta ---
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- Relations ---
+  inventory       InventoryItem[]
+  quests          UserQuest[]
+  chapterProgress UserChapterProgress[]
+}
+
+model InventoryItem {
+  id        String  @id @default(uuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  
+  itemId    String  // 아이템 고유 코드 (예: "potion_hp_01")
+  slotIndex Int     // 인벤토리 몇 번째 칸에 있는지 (0 ~ inventorySlots-1)
+  quantity  Int     @default(1)
+  
+  @@unique([userId, slotIndex]) // 한 칸엔 하나의 아이템만!
+}
+
+model UserQuest {
+  id                    String    @id @default(uuid())
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id])
+  
+  questId               String
+  status                String    @default("LOCKED") // "LOCKED", "UNLOCKED", "ACTIVE", "COMPLETED"
+  completedObjectiveIds String    @default("[]") // JSON 배열 문자열 ["obj_01", "obj_02"]
+  startedAt             DateTime?
+  completedAt           DateTime?
+  
+  @@unique([userId, questId])
+}
+
+model UserChapterProgress {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  
+  chapterId   String    // "prologue", "gangnam", "northwest", "northeast", "southwest"
+  status      String    @default("NOT_STARTED") // "NOT_STARTED", "IN_PROGRESS", "COMPLETED"
+  completedAt DateTime?
+  startedAt   DateTime  @default(now())
+  
+  @@unique([userId, chapterId])
+}

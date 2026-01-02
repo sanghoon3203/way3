@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "자, 이번엔 평소보다 3배는 강하게 볶는다. '매운맛 스파이시 블렌드'! 놈의 기도를 자극할 '페퍼(Pepper)' 뉘앙스를 폭발시켜야 해. 도와주게!",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_009",
+    "next_node_id": "subquest_jinbaekho_010",
+    "character_id": "Jinbaekho",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

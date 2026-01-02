@@ -1,0 +1,598 @@
+﻿{
+    "nodeCount":  59,
+    "title":  "앨리스강 서브스토리",
+    "nodes":  [
+                  {
+                      "dialogue_text":  "방배 카페 골목은 낮임에도 불구하고 짙은 안개에 휩싸여 있었다. 가로등은 깜빡이고, 시간은 제멋대로 흐르고 있었다. 어디선가 색소폰과 피아노가 어우러진 느릿한 재즈 선율이 안개를 타고 흘러나왔다. 소리의 근원은 [Club Sepia]라는 낡은 네온사인이 간신히 빛을 내고 있는 지하 클럽이었다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_001",
+                      "next_node_id":  "alice_sub_002",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "끼이익- 무거운 나무 문을 열고 들어가자, 자욱한 담배 연기(혹은 굳어버린 안개) 사이로 텅 빈 객석이 보였다. 오직 무대 중앙의 핀 조명만이 한 남자를 외롭게 비추고 있었다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_002",
+                      "next_node_id":  "alice_sub_003",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "낡은 갈색 정장 차림의 피아니스트. 그의 손가락은 마치 유령처럼 건반 위를 배회하고 있었다. 그는 건반 위에 손을 올린 채 끊임없이 같은 소절만을 반복해서 연주하고 있었다. 마치 고장 난 레코드판처럼.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_003",
+                      "next_node_id":  "alice_sub_004",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "*띵... 띠딩... 띵...*",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_004",
+                      "next_node_id":  "alice_sub_005",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "거기가... 아니야. 도무지 기억나질 않아.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_005",
+                      "next_node_id":  "alice_sub_006",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "그의 이름은 \u0027에디(Eddie)\u0027. 서래마을에서 가장 오래된 연주자이자, 앨리스 강이 유일하게 마음을 열고 찾던 친구였다. 앨리스는 폭주하는 마력을 진정시키기 위해 밤마다 이곳에 들러 그의 연주를 듣곤 했다. 그녀는 감사의 표시로 자신의 정원으로 초대하는 \u0027소리의 지도\u0027를 그에게 선물했지만, 그는 아직 그 초대에 응하지 못하고 있었다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_006",
+                      "next_node_id":  "alice_sub_007",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "인기척을 느낀 에디가 천천히 고개를 돌렸다. 그의 눈은 초점이 없었고, 깊은 다크서클이 드리워져 있었다. \u0027시간병\u0027의 전형적인 증상이었다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_007",
+                      "next_node_id":  "alice_sub_008",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "오셨군요. 음악을... 아는 분인가요? 아니면 저처럼 길을 잃은 시간의 미아인가요?",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_008",
+                      "next_node_id":  "alice_sub_009",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "그는 쓴웃음을 지으며 건반을 쓰다듬었다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_009",
+                      "next_node_id":  "alice_sub_010",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "이 곡은... 그녀에게 바치는 곡이었어요. 앨리스 님에게. 이 곡이 완성되면 그녀의 정원에서 가장 먼저 연주해주고 싶었죠. 그리고... 용기를 내서 청혼하려고 했습니다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_010",
+                      "next_node_id":  "alice_sub_011",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "그의 목소리가 미세하게 떨렸다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_011",
+                      "next_node_id":  "alice_sub_012",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "하지만... 그녀가 온실 문을 닫고 사라지던 날, 제 시간도 함께 멈춰버렸습니다. 악보의 마지막 페이지가... 마치 지우개로 지운 것처럼 하얗게 변해버렸어요. 제 기억도 함께 찢겨져 나갔죠.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_012",
+                      "next_node_id":  "alice_sub_013",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "그는 다시 연주를 시작했다. 선율은 아름다웠지만, 결말이 없는 슬픔으로 가득 차 있었다. 곡이 클라이맥스로 향하려 할 때마다 그는 고통스러운 표정으로 건반을 내려쳤다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_013",
+                      "next_node_id":  "alice_sub_014",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "*쾅!*",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_014",
+                      "next_node_id":  "alice_sub_015",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "젠장! 왜! 왜 여기냐고! 그 다음 음이 뭐였지? 파#? 솔b? 아니야, 더 따뜻한 음이었어. 햇살 같은...",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_015",
+                      "next_node_id":  "alice_sub_016",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "그는 머리를 감싸 쥐었다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_016",
+                      "next_node_id":  "alice_sub_017",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "여행자님, 저를 좀 도와주실 수 있나요? 마지막 한 소절... 그것만 찾으면 이 지옥 같은 루프에서 벗어날 수 있을 텐데. 그녀가 자주 가던 골목 맞은편의 \u0027오래된 레코드 가게\u0027에 힌트가 있을지도 모릅니다. 앨리스 님이 좋아하던 LP판 속에... 답이 있을지도 몰라요. 하지만 전 이 무대를 떠날 수가 없군요. 발이... 피아노 페달에 묶여버린 것 같아요.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_017",
+                      "next_node_id":  "alice_sub_018",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "나는 기꺼이 그를 돕기로 했다. 그것은 단순한 정보 수집이 아니라, 한 예술가의 멈춰진 시간을 다시 흐르게 하는 일이었다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_018",
+                      "next_node_id":  "alice_sub_019",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "골목 맞은편에 있는 레코드 가게는 시간이 정지된 듯 먼지가 두껍게 쌓여 있었다. 문을 열자 먼지 냄새와 함께 오래된 종이 냄새가 났다. 수만 장의 LP판들이 꽂혀 있는 선반들 사이에서, 유독 기묘한 빛을 내는 판 하나를 발견했다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_019",
+                      "next_node_id":  "alice_sub_020",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "[To Eddie - 나의 대답]",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_020",
+                      "next_node_id":  "alice_sub_021",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "앨리스의 필체였다. 그녀는 이미 알고 있었던 것이다. 에디가 언젠가 이 곡을 완성하려 할 것임을.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_021",
+                      "next_node_id":  "alice_sub_022",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "판을 턴테이블에 올리고 바늘을 내렸다. 지직거리는 노이즈와 함께 익숙한 멜로디가 흘러나왔다. 에디가 치던 그 미완성의 곡이었다. 그리고 에디가 멈췄던 바로 그 부분에서, 피아노 선율 대신 맑고 고운 여성의 허밍이 이어졌다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_022",
+                      "next_node_id":  "alice_sub_023",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "*음~ 음음~ 으음~*",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_023",
+                      "next_node_id":  "alice_sub_024",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "그것은 단순한 멜로디가 아니었다. 위로였고, 격려였으며, 기다림의 약속이었다. 미완성 곡의 완벽한 피날레였다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_024",
+                      "next_node_id":  "alice_sub_025",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "나는 그 멜로디를 흥얼거리며 클럽으로 돌아왔다. 문을 열자마자 에디가 고개를 번쩍 들었다. 나를 보는 것이 아니라, 내 입에서 나오는 \u0027소리\u0027를 듣고 있었다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_025",
+                      "next_node_id":  "alice_sub_026",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "그거였어... 바로 그거였어! 내가 잊고 있었던 건 테크닉이 아니었어. 그녀의 목소리였어!",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_026",
+                      "next_node_id":  "alice_sub_027",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "그의 손가락이 춤추듯 건반 위를 달리기 시작했다. 내가 가져온 멜로디와 그의 연주가 합쳐지자, 클럽 안을 메우고 있던 회색 안개가 걷히고 황홀한 화음이 퍼져 나갔다. 멈춰 있던 벽시계의 초침이 다시 *탁, 탁* 움직이기 시작했다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_027",
+                      "next_node_id":  "alice_sub_028",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "연주가 끝나는 순간, 그의 얼굴에는 더없는 평온함이 깃들었다. 그는 피아노 덮개를 천천히 닫았다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_028",
+                      "next_node_id":  "alice_sub_029",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "고마워요. 이제야 비로소... 그녀에게 닿을 수 있게 되었군요. 제 시간은 이제 다시 흐르기 시작했습니다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_029",
+                      "next_node_id":  "alice_sub_030",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "에디는 피아노 위에 놓여있던 낡고 바랜 악보 한 장을 건넸다. 악보 뒷면에는 복잡한 음표들로 그려진 지도가 있었다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_030",
+                      "next_node_id":  "alice_sub_031",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "앨리스 님의 정원은 눈으로 찾는 곳이 아닙니다. 소리로 열리는 곳이죠. 이 악보의 멜로디를 따라가세요. 셋잇단음표가 나오는 곳에서 왼쪽으로, 스타카토가 나오는 곳에서 멈추시면 됩니다. 그리고... 그곳에 도착하면 전해주세요. 저의 연주는 이제 끝났다고.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_031",
+                      "next_node_id":  "alice_sub_032",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "그는 자리에서 일어났다. 그의 형체가 서서히 투명해지며 빛의 입자로 변해 사라졌다. 무대 위에는 오직 그가 남긴 악보만이 덩그러니 남아, 다음 목적지를 가리키고 있었다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_032",
+                      "next_node_id":  "alice_sub_033",
+                      "character_id":  "Narrator",
+                      "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "에디가 준 악보 뒤편의 지도를 따라 언덕을 올랐다. \u0027몽마르뜨 공원\u0027. 이곳은 네오 서울의 다른 곳과는 완전히 다른 시간을 달리고 있었다. 분명 낮이어야 할 시간인데, 이곳의 하늘은 칠흑 같은 밤이었다. 그것도 수만 개의 별이 금방이라도 머리 위로 쏟아져 내릴 듯한 투명한 밤.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_033",
+                      "next_node_id":  "alice_sub_034",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "공원 정상에는 거대한 황동 망원경을 붙잡고 안절부절못하는 늙은 노인이 있었다. 챙이 넓은 고깔모자를 쓴 그는 마치 동화 속 마법사처럼 보였다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_034",
+                      "next_node_id":  "alice_sub_035",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "아니야, 아니야! 이 각도가 아니야! 북극성이 왜 저기에 있지? 카시오페이아가... 허리가 끊어졌잖아!",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_035",
+                      "next_node_id":  "alice_sub_036",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "그는 망원경의 렌즈를 벅벅 닦으며 비명을 질렀다. 그의 이름은 \u0027케플러(Kepler)\u0027. 앨리스 강의 정원이 열리는 시간을 예측하는 점성술사이자 천문학자였다. 하지만 시간의 왜곡으로 하늘의 별들이 제자리를 잃어버려, 입구를 여는 타이밍을 계산할 수 없게 된 것이다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_036",
+                      "next_node_id":  "alice_sub_037",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "이보게! 거기 젊은이! 내 안경 좀 찾아주게! 아니, 내 별들 좀 찾아줘! 하늘이 미쳤어! 오리온자리의 벨트가 풀려버렸다고!",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_037",
+                      "next_node_id":  "alice_sub_038",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "케플러는 나를 붙잡고 하소연했다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_038",
+                      "next_node_id":  "alice_sub_039",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "시간병이 심해져서 이제 별들이 춤추는 것처럼 보여. 앨리스 님을 만나야 하는데... 오늘 밤이 \u0027블루문\u0027이 뜨는 날인데, 입구를 못 찾겠어!",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_039",
+                      "next_node_id":  "alice_sub_040",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "진정하세요. 제가 도울 일이 있습니까?",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_040",
+                      "next_node_id":  "alice_sub_041",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "하늘의 지도가 엉망이 되었네. 이걸 바로잡으려면... 그래! \u0027지상의 별\u0027을 이어야 해! 하늘이 말을 안 들으면 땅에다 그리면 되지!",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_041",
+                      "next_node_id":  "alice_sub_042",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "케플러는 내 손에 들린 에디의 악보를 보더니 눈을 번쩍 떴다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_042",
+                      "next_node_id":  "alice_sub_043",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "호오! 그 악보! 그 음표들이 바로 별들의 좌표야! 에디 녀석, 역시 천재였어. 자네가 직접 움직여서 이 땅 위에 별자리를 그려주게! 자네가 \u0027움직이는 별\u0027이 되는 거야!",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_043",
+                      "next_node_id":  "alice_sub_044",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "악보에 그려진 콩나물 대가리들은 단순한 음표가 아니라 공원의 랜드마크를 가리키고 있었다. 케플러는 망원경으로 나를 지휘하기 시작했다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_044",
+                      "next_node_id":  "alice_sub_045",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "자, 뛰어! 첫 번째 별은 \u0027높은음자리표\u0027야! 바로 저기 시계탑 아래!",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_045",
+                      "next_node_id":  "alice_sub_046",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "나는 천문학자의 지시에 따라 공원을 뛰기 시작했다. 숨이 턱까지 차올랐지만 멈출 수 없었다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_046",
+                      "next_node_id":  "alice_sub_047",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "첫 번째 위치, 시계탑 아래에 섰다. 그러자 내 발밑에서 은은한 푸른 빛이 솟아올라 공중에 점을 찍었다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_047",
+                      "next_node_id":  "alice_sub_048",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "좋아! 좌표 고정! 다음은 4분 쉼표! 벤치 옆의 가로등이야! 서둘러! 별빛이 흐려지고 있어!",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_048",
+                      "next_node_id":  "alice_sub_049",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "나는 다음 지점으로 달렸다. 내가 움직이는 궤적을 따라 빛의 선이 이어졌다. 시계탑에서 가로등으로, 다시 장미 덤불로. 그것은 마치 대지 위에 거대한 빛의 마법진을 그리는 춤과 같았다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_049",
+                      "next_node_id":  "alice_sub_050",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "거기서 오른쪽으로 30도! 아니, 그건 40도잖아! 토끼풀 꽃밭을 지나서!",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_050",
+                      "next_node_id":  "alice_sub_051",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "케플러의 고함소리가 밤하늘에 울렸다. 나는 땀범벅이 되어 마지막 위치인 공원 중앙의 토끼 조각상 앞으로 달렸다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_051",
+                      "next_node_id":  "alice_sub_052",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "마지막이다! 북극성의 위치! 점을 찍어!",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_052",
+                      "next_node_id":  "alice_sub_053",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "내가 그곳에 도착해 바닥을 짚는 순간, 지금까지 찍었던 빛의 점들이 연결되며 완벽한 별자리가 완성되었다. 바닥에 그려진 빛의 별자리가 하늘로 쏘아져 올라갔다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_053",
+                      "next_node_id":  "alice_sub_054",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "*쿠구구궁-*",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_054",
+                      "next_node_id":  "alice_sub_055",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "지상의 빛이 하늘의 뒤틀린 별들을 강제로 끌어당겼다. 제멋대로 흩어져 있던 별들이 자석에 이끌리듯 제자리로 돌아왔다. 어지럽던 밤하늘이 정렬되자, 북극성 위치에서 거대한 빛기둥이 내려와 공원 구석의 덤불을 비췄다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_055",
+                      "next_node_id":  "alice_sub_056",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "해냈어! 해냈어! 별길이 열렸네! 오리온이 허리띠를 졸라맸어!",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_056",
+                      "next_node_id":  "alice_sub_057",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "케플러가 아이처럼 환호성을 지르며 망원경을 접었다. 빛기둥이 닿은 곳에서 공간이 *지직*거리며 갈라졌다. 비밀스러운 온실의 입구가 모습을 드러냈다. 단순한 마법이 아닌, 음악과 별과 나의 땀방울이 만들어낸 기적의 통로였다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_057",
+                      "next_node_id":  "alice_sub_058",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "고맙네, 정말 고마워. 자네 덕분에 오늘 밤은 편히 잘 수 있겠어. 앨리스 님에게 안부 전해주게. 늙은 케플러가... 별을 보며 기다리고 있다고.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_058",
+                      "next_node_id":  "alice_sub_059",
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  },
+                  {
+                      "dialogue_text":  "나는 숨을 고르며 빛나는 입구 앞에 섰다. 이제 시간의 마녀, 앨리스를 만날 차례였다.",
+                      "sound_effect":  null,
+                      "node_id":  "alice_sub_059",
+                      "next_node_id":  null,
+                      "character_id":  "Narrator",
+                      "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
+                      "character_sprite":  null,
+                      "dialogue_sound_id":  null
+                  }
+              ],
+    "id":  "alicegang_substory",
+    "startNodeId":  "alice_sub_001"
+}

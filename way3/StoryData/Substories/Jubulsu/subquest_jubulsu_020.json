@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "자, 가보게! 내가 만들어준 그 '리듬'과 백호의 '열기'라면 충분해. 저 산꼭대기의 PJy 타워로 가서, 그 욕심쟁이의 입을 열어버려! 놈이 삼킨 바람을 되찾아오라고!",
+    "sound_effect": null,
+    "node_id": "subquest_jubulsu_020",
+    "next_node_id": "gangdong_main_064",
+    "character_id": "Jubulsu",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

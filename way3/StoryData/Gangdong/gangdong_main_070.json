@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "비켜! 그 숨, 이제 뱉게 해주지.",
+    "sound_effect": null,
+    "node_id": "gangdong_main_070",
+    "next_node_id": "gangdong_main_071",
+    "character_id": "player",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}

@@ -1,0 +1,63 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+}
+
+.gears {
+    display: flex;
+    gap: 20px;
+    position: relative;
+    width: 100%;
+    height: 200px;
+    align-items: center;
+    justify-content: center;
+    background-image: repeating-conic-gradient(#333 0 15deg, #222 15deg 30deg);
+    border-radius: 50%;
+    /* Gear look background */
+}
+
+.crystal {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    /* Or diamond shape */
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 0 10px currentColor;
+}
+
+.red {
+    background-color: #ff4d4d;
+    color: #ffcccc;
+    /* Shaking animation handled in JS or keyframes here */
+}
+
+.blue {
+    background-color: #4d94ff;
+    color: #cce0ff;
+}
+
+.black {
+    background-color: #1a1a1a;
+    border: 2px solid #555;
+    color: #888;
+}
+
+.successMessage {
+    font-size: 24px;
+    color: #ffd700;
+    font-weight: bold;
+    text-shadow: 0 0 10px orange;
+}

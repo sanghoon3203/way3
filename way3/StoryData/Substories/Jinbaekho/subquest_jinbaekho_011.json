@@ -1,0 +1,10 @@
+{
+    "dialogue_text": "기계가 굉음을 내며 돌아가기 시작했다. 드럼이 회전하며 열을 받았다.",
+    "sound_effect": null,
+    "node_id": "subquest_jinbaekho_011",
+    "next_node_id": "subquest_jinbaekho_012",
+    "character_id": "typer_narrator",
+    "background_image": null,
+    "character_sprite": null,
+    "dialogue_sound_id": null
+}
