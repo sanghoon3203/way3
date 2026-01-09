@@ -179,10 +179,26 @@ export default function MapboxMap({ onMapClick, variant = 'desktop' }: MapboxMap
             .setLngLat([currentLng, currentLat])
             .addTo(map.current);
 
-        map.current.flyTo({
-            center: [currentLng, currentLat],
-            duration: 500,
-        });
+        // 현재 지도 중심과 새 위치 사이 거리 계산
+        const currentCenter = map.current.getCenter();
+        const distance = Math.sqrt(
+            Math.pow(currentCenter.lat - currentLat, 2) +
+            Math.pow(currentCenter.lng - currentLng, 2)
+        );
+
+        // 거리에 따라 이동 방식 변경 (0.01 ≈ 약 1km)
+        if (distance > 0.05) {
+            // 먼 거리: 즉시 이동 (freezing 방지)
+            map.current.jumpTo({
+                center: [currentLng, currentLat],
+            });
+        } else {
+            // 가까운 거리: 부드럽게 이동
+            map.current.easeTo({
+                center: [currentLng, currentLat],
+                duration: 300,
+            });
+        }
     }, [currentLat, currentLng]);
 
     // 상인 마커 업데이트

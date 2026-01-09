@@ -79,11 +79,13 @@ export async function POST(req: Request) {
 
     } catch (error: any) {
         console.error('Login error:', error);
-        require('fs').appendFileSync('error.log', `Login error: ${JSON.stringify(error, Object.getOwnPropertyNames(error))}\n`);
+        console.error('Error stack:', error.stack);
         return NextResponse.json(
             {
                 error: '로그인 중 오류가 발생했습니다.',
-                details: error.message
+                details: error.message,
+                stack: error.stack,
+                name: error.name
             },
             { status: 500 }
         );

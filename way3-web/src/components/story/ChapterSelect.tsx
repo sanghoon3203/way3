@@ -1,10 +1,11 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './ChapterSelect.module.css';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 
 interface Chapter {
-    id: number;
+    id: string;  // 'prologue', 'gangnam', etc.
+    numericId: number;
     title: string;
     subtitle: string;
     icon: string;
@@ -12,46 +13,42 @@ interface Chapter {
     isInProgress: boolean;
 }
 
-const chapters: Chapter[] = [
+// 기본 챕터 정의 (해금 상태는 동적으로 설정됨)
+const defaultChapters: Omit<Chapter, 'isUnlocked' | 'isInProgress'>[] = [
     {
-        id: 0,
+        id: 'prologue',
+        numericId: 0,
         title: '프롤로그',
         subtitle: 'PROLOGUE',
         icon: '📖',
-        isUnlocked: true,
-        isInProgress: true,
     },
     {
-        id: 1,
+        id: 'gangnam',
+        numericId: 1,
         title: '강남권',
         subtitle: 'GANGNAM',
         icon: '🏙️',
-        isUnlocked: false,
-        isInProgress: false,
     },
     {
-        id: 2,
-        title: '서북권',
-        subtitle: 'NORTHWEST',
+        id: 'seocho',
+        numericId: 2,
+        title: '서초권',
+        subtitle: 'SEOCHO',
         icon: '🌲',
-        isUnlocked: false,
-        isInProgress: false,
     },
     {
-        id: 3,
-        title: '동북권',
-        subtitle: 'NORTHEAST',
+        id: 'songpa',
+        numericId: 3,
+        title: '송파권',
+        subtitle: 'SONGPA',
         icon: '⛰️',
-        isUnlocked: false,
-        isInProgress: false,
     },
     {
-        id: 4,
-        title: '서남권',
-        subtitle: 'SOUTHWEST',
+        id: 'gangdong',
+        numericId: 4,
+        title: '강동권',
+        subtitle: 'GANGDONG',
         icon: '🌊',
-        isUnlocked: false,
-        isInProgress: false,
     },
 ];
 
@@ -62,6 +59,62 @@ interface ChapterSelectProps {
 export default function ChapterSelect({ onSelectChapter }: ChapterSelectProps) {
     const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+    const [chapters, setChapters] = useState<Chapter[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [currentChapter, setCurrentChapter] = useState<string>('prologue');
+
+    // 유저 정보 가져오기
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch('/api/user/me', {
+                    credentials: 'include',
+                });
+
+                if (!response.ok) {
+                    // 로그인 안 된 상태 - 프롤로그만 해금
+                    setChapters(defaultChapters.map(ch => ({
+                        ...ch,
+                        isUnlocked: ch.id === 'prologue',
+                        isInProgress: ch.id === 'prologue',
+                    })));
+                    setIsLoading(false);
+                    return;
+                }
+
+                const data = await response.json();
+                const user = data.user;
+
+                // unlockedDistricts 파싱 (JSON 문자열)
+                const unlockedDistricts: string[] = JSON.parse(user.unlockedDistricts || '[]');
+                const userCurrentChapter = user.currentChapter || 'prologue';
+                setCurrentChapter(userCurrentChapter);
+
+                // 챕터 상태 설정
+                const updatedChapters: Chapter[] = defaultChapters.map(ch => ({
+                    ...ch,
+                    // 프롤로그는 항상 해금, 나머지는 unlockedDistricts 체크
+                    isUnlocked: ch.id === 'prologue' || unlockedDistricts.includes(ch.id),
+                    // 현재 진행 중인 챕터 표시
+                    isInProgress: ch.id === userCurrentChapter,
+                }));
+
+                setChapters(updatedChapters);
+            } catch (error) {
+                console.error('Failed to fetch user data:', error);
+                // 에러 시 프롤로그만 해금
+                setChapters(defaultChapters.map(ch => ({
+                    ...ch,
+                    isUnlocked: ch.id === 'prologue',
+                    isInProgress: ch.id === 'prologue',
+                })));
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     const handleChapterClick = (chapter: Chapter) => {
         if (chapter.isUnlocked) {
@@ -72,7 +125,7 @@ export default function ChapterSelect({ onSelectChapter }: ChapterSelectProps) {
 
     const handleConfirm = () => {
         if (selectedChapter) {
-            onSelectChapter(selectedChapter.id);
+            onSelectChapter(selectedChapter.numericId);
         }
         setShowConfirmDialog(false);
         setSelectedChapter(null);
@@ -82,6 +135,20 @@ export default function ChapterSelect({ onSelectChapter }: ChapterSelectProps) {
         setShowConfirmDialog(false);
         setSelectedChapter(null);
     };
+
+    if (isLoading) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.header}>
+                    <h2 className={styles.title}>📚 스토리 선택</h2>
+                    <p className={styles.subtitle}>CHAPTER SELECT</p>
+                </div>
+                <div className={styles.loading}>
+                    <span>로딩 중...</span>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className={styles.container}>
@@ -102,7 +169,7 @@ export default function ChapterSelect({ onSelectChapter }: ChapterSelectProps) {
                         <div className={styles.cardIcon}>{chapter.icon}</div>
                         <div className={styles.cardContent}>
                             <span className={styles.chapterNumber}>
-                                {chapter.id === 0 ? 'PROLOGUE' : `CHAPTER ${chapter.id}`}
+                                {chapter.numericId === 0 ? 'PROLOGUE' : `CHAPTER ${chapter.numericId}`}
                             </span>
                             <span className={styles.chapterTitle}>{chapter.title}</span>
                             <span className={styles.chapterSubtitle}>{chapter.subtitle}</span>
@@ -125,7 +192,7 @@ export default function ChapterSelect({ onSelectChapter }: ChapterSelectProps) {
             </div>
 
             <div className={styles.hint}>
-                <span>💡 프롤로그를 완료하면 다음 챕터가 해금됩니다</span>
+                <span>💡 퀘스트를 완료하면 다음 챕터가 해금됩니다</span>
             </div>
 
             {/* 챕터 시작 확인 다이얼로그 */}
@@ -141,4 +208,3 @@ export default function ChapterSelect({ onSelectChapter }: ChapterSelectProps) {
         </div>
     );
 }
-

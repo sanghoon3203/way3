@@ -14,6 +14,15 @@
     /* 다이얼로그 절대 위치 기준점 */
 }
 
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-md);
+}
+
 /* 헤더 */
 .header {
     text-align: center;

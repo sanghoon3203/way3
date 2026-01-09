@@ -1,9 +1,12 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuestStore } from '@/lib/store/questStore';
 import { useStoryStore } from '@/lib/store/storyStore';
 import type { Quest, QuestObjective } from '@/lib/types/quest';
 import styles from './QuestPanel.module.css';
+
+// 뷰 모드 타입
+type ViewMode = 'detail' | 'list';
 
 // 퀘스트 타입 아이콘
 function getQuestTypeIcon(questType: string): string {
@@ -23,6 +26,52 @@ function getObjectiveTypeIcon(objectiveType: string): string {
     }
 }
 
+// 챕터 이름 변환
+function getChapterName(chapterId: string): string {
+    switch (chapterId) {
+        case 'prologue': return '프롤로그';
+        case 'gangnam': return '강남';
+        case 'seocho': return '서초';
+        case 'songpa': return '송파';
+        case 'gangdong': return '강동';
+        default: return chapterId;
+    }
+}
+
+// 퀘스트 카드 컴포넌트 (목록용)
+function QuestCard({ quest, onClick }: { quest: Quest; onClick: () => void }) {
+    const { getObjectiveProgress } = useQuestStore();
+    const { completed, total } = getObjectiveProgress(quest.id);
+    const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    return (
+        <div className={styles.questCard} onClick={onClick}>
+            <div className={styles.questCardHeader}>
+                <span className={styles.questCardIcon}>
+                    {getQuestTypeIcon(quest.questType)}
+                </span>
+                <h4 className={styles.questCardTitle}>{quest.title}</h4>
+                {quest.isMainQuest && (
+                    <span className={styles.mainQuestBadge}>메인</span>
+                )}
+            </div>
+            <div className={styles.questCardProgress}>
+                <div className={styles.progressBar}>
+                    <div
+                        className={styles.progressFill}
+                        style={{ width: `${progress}%` }}
+                    />
+                </div>
+                <span className={styles.questCardProgressText}>{progress}%</span>
+            </div>
+            <div className={styles.questCardChapter}>
+                <span className={styles.chapterIcon}>📖</span>
+                <span className={styles.chapterName}>{getChapterName(quest.chapterId)}</span>
+            </div>
+        </div>
+    );
+}
+
 export default function QuestPanel() {
     const {
         currentQuest,
@@ -31,16 +80,31 @@ export default function QuestPanel() {
         loadQuests,
         isLoading,
         getObjectiveProgress,
+        selectQuest,
     } = useQuestStore();
 
     const { currentNode } = useStoryStore();
+
+    // 뷰 모드 상태 (detail: 상세 뷰, list: 목록 뷰)
+    const [viewMode, setViewMode] = useState<ViewMode>('detail');
 
     // 컴포넌트 마운트 시 퀘스트 로드
     useEffect(() => {
         loadQuests();
     }, [loadQuests]);
 
-    // 현재 퀘스트가 없으면 빈 상태 표시
+    // 퀘스트 선택 시 상세 뷰로 전환
+    const handleSelectQuest = (questId: string) => {
+        selectQuest(questId);
+        setViewMode('detail');
+    };
+
+    // 목록 뷰로 전환
+    const handleShowList = () => {
+        setViewMode('list');
+    };
+
+    // 로딩 상태
     if (isLoading) {
         return (
             <div className={`${styles.container} panel halftone-bg`}>
@@ -58,6 +122,65 @@ export default function QuestPanel() {
         );
     }
 
+    // 목록 뷰 렌더링
+    if (viewMode === 'list') {
+        return (
+            <div className={`${styles.container} panel halftone-bg`}>
+                <div className={styles.header}>
+                    <div className={styles.headerLeft}>
+                        <span className={styles.icon}>📋</span>
+                        <h3 className={styles.title}>진행중인 퀘스트</h3>
+                        <button
+                            onClick={() => loadQuests()}
+                            className={styles.refreshBtn}
+                            title="새로고침"
+                            style={{ marginLeft: '8px', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem' }}
+                        >
+                            ↻
+                        </button>
+                    </div>
+                    <div className={styles.progressBadge}>
+                        {activeQuests.length}개 진행 중
+                    </div>
+                </div>
+
+                <div className={styles.questListContent}>
+                    {activeQuests.length === 0 ? (
+                        <div className={styles.emptyState}>
+                            <span className={styles.emptyIcon}>✨</span>
+                            <p className={styles.emptyText}>진행 중인 퀘스트가 없습니다</p>
+                        </div>
+                    ) : (
+                        <div className={styles.questCardList}>
+                            {activeQuests.map((quest) => (
+                                <QuestCard
+                                    key={quest.id}
+                                    quest={quest}
+                                    onClick={() => handleSelectQuest(quest.id)}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* Footer */}
+                <div className={styles.questStats}>
+                    <div
+                        className={`${styles.statItem} ${styles.statItemActive}`}
+                    >
+                        <span className={styles.statLabel}>진행 중</span>
+                        <span className={styles.statValue}>{activeQuests.length}</span>
+                    </div>
+                    <div className={styles.statItem}>
+                        <span className={styles.statLabel}>완료됨</span>
+                        <span className={styles.statValue}>{completedQuests.length}</span>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // 상세 뷰 - 퀘스트가 없는 경우
     if (!currentQuest) {
         return (
             <div className={`${styles.container} panel halftone-bg`}>
@@ -71,6 +194,20 @@ export default function QuestPanel() {
                     <span className={styles.emptyIcon}>✨</span>
                     <p className={styles.emptyText}>진행 중인 퀘스트가 없습니다</p>
                 </div>
+                {/* Footer with clickable stats */}
+                <div className={styles.questStats}>
+                    <div
+                        className={`${styles.statItem} ${styles.statItemClickable}`}
+                        onClick={handleShowList}
+                    >
+                        <span className={styles.statLabel}>진행 중</span>
+                        <span className={styles.statValue}>{activeQuests.length}</span>
+                    </div>
+                    <div className={styles.statItem}>
+                        <span className={styles.statLabel}>완료됨</span>
+                        <span className={styles.statValue}>{completedQuests.length}</span>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -78,9 +215,9 @@ export default function QuestPanel() {
     const { completed: completedCount, total: totalCount } = getObjectiveProgress(currentQuest.id);
     const progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
+    // 상세 뷰 렌더링
     return (
         <div className={`${styles.container} panel halftone-bg`}>
-            {/* Header */}
             {/* Header */}
             <div className={styles.header}>
                 <div className={styles.headerLeft}>
@@ -174,9 +311,7 @@ export default function QuestPanel() {
                             <div className={styles.chapterInfo}>
                                 <span className={styles.chapterIcon}>📖</span>
                                 <span className={styles.chapterName}>
-                                    {currentQuest.chapterId === 'prologue' ? '프롤로그' :
-                                        currentQuest.chapterId === 'gangnam' ? '강남' :
-                                            currentQuest.chapterId}
+                                    {getChapterName(currentQuest.chapterId)}
                                 </span>
                             </div>
                         </div>
@@ -218,9 +353,12 @@ export default function QuestPanel() {
 
             </div>
 
-            {/* Quest Stats Footer */}
+            {/* Quest Stats Footer - 클릭 가능 */}
             <div className={styles.questStats}>
-                <div className={styles.statItem}>
+                <div
+                    className={`${styles.statItem} ${styles.statItemClickable}`}
+                    onClick={handleShowList}
+                >
                     <span className={styles.statLabel}>진행 중</span>
                     <span className={styles.statValue}>{activeQuests.length}</span>
                 </div>

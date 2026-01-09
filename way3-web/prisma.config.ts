@@ -3,13 +3,14 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
-// Use simple relative path from the project root
+// Use SQLite for local development
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env.DATABASE_URL || "file:./dev.db",
+    url: "file:./prisma/dev.db",
   },
 });
+

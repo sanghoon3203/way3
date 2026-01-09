@@ -8,6 +8,11 @@
     padding-top: 10px;
 }
 
+/* 전체 화면 모드 (채팅/VN 재생 시) */
+.fullscreen {
+    padding-top: 0;
+}
+
 /* Content Area */
 .content {
     flex: 1;
@@ -74,6 +79,32 @@
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 4px;
     width: fit-content;
+}
+
+/* 클릭 가능한 아이템 */
+.personItem {
+    cursor: pointer;
+}
+
+/* 스토리가 있는 캐릭터 */
+.hasStory {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, var(--color-bg-secondary) 0%, rgba(77, 148, 255, 0.1) 100%);
+}
+
+.hasStory:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 10px rgba(77, 148, 255, 0.3);
+}
+
+/* 스토리 배지 */
+.storyBadge {
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    padding: 2px 8px;
+    background: rgba(77, 148, 255, 0.2);
+    border-radius: 12px;
+    margin-top: 4px;
 }
 
 /* Placeholder Styles */
