@@ -85,11 +85,14 @@
 
 .phoneScreen {
     flex: 1;
-    background-color: #fff;
+    background-color: #1a1f35;
     overflow: hidden;
     position: relative;
     border-radius: 32px;
     margin: 8px;
+    margin-top: 0;
+    border-top-left-radius: 32px;
+    border-top-right-radius: 32px;
     /* Frame border thickness inside */
 }
 

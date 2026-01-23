@@ -283,24 +283,18 @@ export default function StoryPanel() {
         }
     };
 
-    // 채팅이나 VN 엔진 재생 중일 때 전체 화면 모드
-    const isFullscreen = selectedMerchant !== null;
-
     return (
-        <div className={`${styles.container} ${isFullscreen ? styles.fullscreen : ''} panel halftone-bg`}>
+        <div className={`${styles.container} panel halftone-bg`}>
             {/* Content Area */}
             <div className={styles.content}>
                 <InventoryTooltip />
                 {renderContent()}
             </div>
 
-            {/* Tab Navigation - 전체 화면 모드에서는 숨김 */}
-            {!isFullscreen && (
-                <div className={styles.tabContainer}>
-                    <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
-                </div>
-            )}
+            {/* Tab Navigation */}
+            <div className={styles.tabContainer}>
+                <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
+            </div>
         </div>
     );
 }
-

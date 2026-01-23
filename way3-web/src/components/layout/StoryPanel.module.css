@@ -8,11 +8,6 @@
     padding-top: 10px;
 }
 
-/* 전체 화면 모드 (채팅/VN 재생 시) */
-.fullscreen {
-    padding-top: 0;
-}
-
 /* Content Area */
 .content {
     flex: 1;
