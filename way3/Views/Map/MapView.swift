@@ -144,10 +144,6 @@ struct MapView: View {
 
             // 서버 응답을 Merchant 모델로 변환
             var merchants = response.merchants.map { merchantData in
-                let tradeDistanceLimit = merchantData.tradeDistanceLimit.map(Double.init)
-                let meetsRequirements = merchantData.meetsRequirements ?? true
-                let withinTradeDistance = merchantData.withinTradeDistance ?? true
-
                 let imageFileName = resolveMerchantImageFileName(
                     serverFileName: merchantData.imageFileName,
                     merchantName: merchantData.name
@@ -164,10 +160,7 @@ struct MapView: View {
                     ),
                     requiredLicense: LicenseLevel(rawValue: merchantData.requiredLicense) ?? .beginner,
                     isActive: merchantData.canTrade,
-                    imageFileName: imageFileName,
-                    withinTradeDistance: withinTradeDistance,
-                    tradeDistanceLimit: tradeDistanceLimit,
-                    meetsRequirements: meetsRequirements
+                    imageFileName: imageFileName
                 )
                 merchant.distance = Double(merchantData.distance)
                 return merchant
@@ -185,9 +178,10 @@ struct MapView: View {
                 )
 
                 let fallbackMerchants = fallbackResponse.merchants.map { merchantData in
-                    let tradeDistanceLimit = merchantData.tradeDistanceLimit.map(Double.init)
-                    let meetsRequirements = merchantData.meetsRequirements ?? true
-                    let withinTradeDistance = merchantData.withinTradeDistance ?? true
+                    let imageFileName = resolveMerchantImageFileName(
+                        serverFileName: merchantData.imageFileName,
+                        merchantName: merchantData.name
+                    )
 
                     var merchant = Merchant(
                         id: merchantData.id,
@@ -200,13 +194,7 @@ struct MapView: View {
                         ),
                         requiredLicense: LicenseLevel(rawValue: merchantData.requiredLicense) ?? .beginner,
                         isActive: merchantData.canTrade,
-                        imageFileName: resolveMerchantImageFileName(
-                            serverFileName: merchantData.imageFileName,
-                            merchantName: merchantData.name
-                        ),
-                        withinTradeDistance: withinTradeDistance,
-                        tradeDistanceLimit: tradeDistanceLimit,
-                        meetsRequirements: meetsRequirements
+                        imageFileName: imageFileName
                     )
                     merchant.distance = Double(merchantData.distance)
                     return merchant

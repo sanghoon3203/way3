@@ -36,6 +36,11 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
     @Published var currentLocation: CLLocationCoordinate2D?
     @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
+    
+    /// 현재 위치 정보 사용 가능 여부
+    var isLocationAvailable: Bool {
+        currentLocation != nil
+    }
 
     override init() {
         super.init()

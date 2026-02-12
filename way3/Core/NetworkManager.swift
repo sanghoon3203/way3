@@ -731,6 +731,25 @@ extension NetworkManager {
         )
     }
     
+    /// 서브퀘스트 완료 등으로 인한 상인 관계도 진행 상황을 서버에 반영
+    /// - Parameters:
+    ///   - merchantId: 상인 ID
+    ///   - questId: 진행에 사용된 퀘스트 ID
+    /// - Returns: 기본 성공/에러 응답
+    func recordMerchantRelationshipProgress(merchantId: String, questId: String) async throws -> BaseResponse {
+        let body: [String: Any] = [
+            "questId": questId
+        ]
+        
+        return try await makeRequest(
+            endpoint: "/api/merchants/\(merchantId)/relationship/progress",
+            method: .POST,
+            body: body,
+            requiresAuth: true,
+            responseType: BaseResponse.self
+        )
+    }
+    
     // ✅ 거래 API
     func buyItem(merchantId: String, itemName: String) async throws -> TradeResponse {
         let body = [

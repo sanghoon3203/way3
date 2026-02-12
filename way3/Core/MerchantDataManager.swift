@@ -103,6 +103,19 @@ class MerchantDataManager: ObservableObject {
 
         return response.merchants.map { MerchantPreview(from: $0) }
     }
+    
+    // MARK: - 관계도 진행 기록
+    /// 서브퀘스트 완료 등으로 인한 상인 관계도 진행을 서버에 기록
+    /// - Parameters:
+    ///   - merchantId: 상인 ID
+    ///   - questId: 진행에 사용된 퀘스트 ID
+    /// - Returns: 기본 성공/에러 응답
+    func recordRelationshipProgress(merchantId: String, questId: String) async throws -> BaseResponse {
+        return try await networkManager.recordMerchantRelationshipProgress(
+            merchantId: merchantId,
+            questId: questId
+        )
+    }
 
     // MARK: - 캐시 관리
     /// 특정 상인의 캐시를 무효화

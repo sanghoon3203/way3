@@ -20,23 +20,22 @@ struct StoryHubTabView: View {
     @State private var selectedEpisode: StoryEpisodeDefinition?
 
     @EnvironmentObject private var progressManager: ProgressManager
-
+    
     var body: some View {
-        GameScreen {
-            VStack(spacing: 0) {
-                header
-                segmentedControl
-                Divider().overlay(Color.cyberpunkBorder)
-
-                Group {
-                    switch filter {
-                    case .main: mainList
-                    case .merchant: merchantList
-                    }
+        VStack(spacing: 0) {
+            header
+            segmentedControl
+            Divider().overlay(Color.cyberpunkBorder)
+            
+            Group {
+                switch filter {
+                case .main: mainList
+                case .merchant: merchantList
                 }
-                .animation(.easeInOut, value: filter)
             }
+            .animation(.easeInOut, value: filter)
         }
+        .background(Color.cyberpunkDarkBg.ignoresSafeArea())
         .fullScreenCover(item: Binding(
             get: { startNode.map { NodeKey(id: $0) } },
             set: { _ in

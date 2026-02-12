@@ -136,7 +136,7 @@ struct QuestDetailView: View {
         let progress = progressManager.progress
         let playerLevel = gameManager.currentPlayer?.core.level ?? 1
         let meetsLevel = quest.requirements.required_level.map { playerLevel >= $0 } ?? true
-        let hasItems = quest.requirements.requiredItems.allSatisfy { progress.hasKeyItem($0) }
+        let hasItems = (quest.requirements.requiredItems ?? []).allSatisfy { progress.hasKeyItem($0) }
         let hasStoryPieces = quest.requirements.requiredStoryPieces.allSatisfy { progress.hasStoryPiece($0) }
         let hasMainQuests = quest.requirements.requiredMainQuests.allSatisfy { progress.isMainQuestCompleted($0) }
         let hasSubQuests = quest.requirements.requiredSubQuests.allSatisfy { progress.isSubQuestCompleted($0) }
@@ -153,8 +153,7 @@ struct QuestDetailView: View {
                 }
                 if let location = quest.requirements.location {
                     requirementRow(icon: "location.circle.fill", text: "반경 \(location.radius)m 내")
-                    if locationManager.isLocationAvailable {
-                        let userLoc = locationManager.currentLocation
+                    if locationManager.isLocationAvailable, let userLoc = locationManager.currentLocation {
                         let merchantLoc = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
                         let distance = userLoc.distance(to: merchantLoc)
                         requirementRow(
@@ -186,10 +185,10 @@ struct QuestDetailView: View {
                 requirementRow(icon: "arrow.up.circle.fill", text: "필요 레벨: \(requiredLevel)", color: meetsLevel ? .cyberpunkTextPrimary : .cyberpunkError)
             }
 
-            if !quest.requirements.requiredItems.isEmpty {
+            if let requiredItems = quest.requirements.requiredItems, !requiredItems.isEmpty {
                 requirementRow(
                     icon: "cube.box.fill",
-                    text: "필요 아이템: \(quest.requirements.requiredItems.joined(separator: ", "))",
+                    text: "필요 아이템: \(requiredItems.joined(separator: ", "))",
                     color: hasItems ? .cyberpunkTextPrimary : .cyberpunkError
                 )
             }
@@ -447,10 +446,20 @@ struct QuestDetailView: View {
 
         Task {
             do {
+                guard let userLocation = locationManager.currentLocation else {
+                    await MainActor.run {
+                        isSuccess = false
+                        resultMessage = "현재 위치 정보를 가져올 수 없습니다."
+                        showResult = true
+                        isProcessing = false
+                    }
+                    return
+                }
+
                 let result = try await questManager.executeTradingQuest(
                     quest: quest,
                     receiptImage: image,
-                    userLocation: locationManager.currentLocation
+                    userLocation: userLocation
                 )
 
                 await MainActor.run {
@@ -477,9 +486,19 @@ struct QuestDetailView: View {
 
         Task {
             do {
+                guard let coord = locationManager.currentLocation else {
+                    await MainActor.run {
+                        isSuccess = false
+                        resultMessage = "현재 위치 정보를 가져올 수 없습니다."
+                        showResult = true
+                        isProcessing = false
+                    }
+                    return
+                }
+
                 let userLocation = CLLocation(
-                    latitude: locationManager.currentLocation.latitude,
-                    longitude: locationManager.currentLocation.longitude
+                    latitude: coord.latitude,
+                    longitude: coord.longitude
                 )
 
                 let result = try await questManager.executeDeliveryQuest(
@@ -516,11 +535,17 @@ struct QuestDetailView: View {
         )
 
         // Initial distance
-        currentDistance = locationManager.currentLocation.distance(to: targetLoc)
+        if let current = locationManager.currentLocation {
+            currentDistance = current.distance(to: targetLoc)
+        } else {
+            currentDistance = .infinity
+        }
 
         // Update every 2 seconds
         distanceTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
-            currentDistance = locationManager.currentLocation.distance(to: targetLoc)
+            if let current = locationManager.currentLocation {
+                currentDistance = current.distance(to: targetLoc)
+            }
         }
     }
 

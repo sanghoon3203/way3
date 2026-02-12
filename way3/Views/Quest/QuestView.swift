@@ -44,14 +44,14 @@ extension QuestData {
     var rewardDisplayString: String {
         var rewardStrings: [String] = []
 
-        if rewards.money > 0 {
-            rewardStrings.append("₩\(rewards.money)")
+        if let money = rewards.money, money > 0 {
+            rewardStrings.append("₩\(money)")
         }
-        if rewards.experience > 0 {
-            rewardStrings.append("경험치 \(rewards.experience)")
+        if let exp = rewards.exp ?? rewards.experience, exp > 0 {
+            rewardStrings.append("경험치 \(exp)")
         }
-        if rewards.trustPoints > 0 {
-            rewardStrings.append("신뢰도 \(rewards.trustPoints)")
+        if let trust = rewards.trustPoints, trust > 0 {
+            rewardStrings.append("신뢰도 \(trust)")
         }
         if let items = rewards.items, !items.isEmpty {
             for item in items {

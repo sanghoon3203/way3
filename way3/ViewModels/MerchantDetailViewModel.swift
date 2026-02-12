@@ -262,6 +262,26 @@ class MerchantDetailViewModel: ObservableObject {
         selectedItem = nil
     }
 
+    // MARK: - 거래 잠금 정보
+    struct TradeLockInfo {
+        let isLocked: Bool
+        let reason: String?
+    }
+
+    /// 아이템별 거래 가능 여부와 잠금 사유를 계산
+    func tradeLockInfo(for item: TradeItem) -> TradeLockInfo {
+        let playerLicense = gameManager.currentPlayer?.core.currentLicense ?? .beginner
+
+        if item.requiredLicense.rawValue > playerLicense.rawValue {
+            return TradeLockInfo(
+                isLocked: true,
+                reason: "허가증 레벨이 부족합니다."
+            )
+        }
+
+        return TradeLockInfo(isLocked: false, reason: nil)
+    }
+
     /// 거래 실행
     func executeTrade() async {
         guard !cartManager.items.isEmpty else { return }

@@ -290,14 +290,18 @@ private struct SubQuestCard: View {
                     title: "레벨",
                     satisfied: item.quest.requirements.required_level.map { playerLevel >= $0 } ?? true
                 )
-                if !item.quest.requirements.requiredItems.isEmpty {
-                    let satisfied = item.quest.requirements.requiredItems.allSatisfy { progress.hasKeyItem($0) }
-                    let text = item.quest.requirements.requiredItems.joined(separator: ", ")
+                
+                let requiredItems = item.quest.requirements.requiredItems ?? []
+                if !requiredItems.isEmpty {
+                    let satisfied = requiredItems.allSatisfy { progress.hasKeyItem($0) }
+                    let text = requiredItems.joined(separator: ", ")
                     requirementIndicator(title: "아이템", satisfied: satisfied, detail: text)
                 }
-                if !item.quest.requirements.requiredStoryPieces.isEmpty {
-                    let satisfied = item.quest.requirements.requiredStoryPieces.allSatisfy { progress.hasStoryPiece($0) }
-                    let text = item.quest.requirements.requiredStoryPieces.joined(separator: ", ")
+                
+                let requiredStoryPieces = item.quest.requirements.requiredStoryPieces
+                if !requiredStoryPieces.isEmpty {
+                    let satisfied = requiredStoryPieces.allSatisfy { progress.hasStoryPiece($0) }
+                    let text = requiredStoryPieces.joined(separator: ", ")
                     requirementIndicator(title: "스토리 조각", satisfied: satisfied, detail: text)
                 }
             }

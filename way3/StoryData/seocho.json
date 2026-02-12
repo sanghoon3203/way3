@@ -1,0 +1,778 @@
+{
+  "id": "seocho",
+  "title": "서초",
+  "nodeCount": 77,
+  "startNodeId": "seocho_main_001",
+  "nodes": [
+    {
+      "node_id": "seocho_main_001",
+      "background_image": null,
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "서예나와의 거래는 생각보다 길었다. 로데오 아레나의 차가운 공기 속에서 그녀가 건넨 것은 단순한 정보 이상의 무게를 지니고 있었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_002"
+    },
+    {
+      "node_id": "seocho_main_002",
+      "background_image": null,
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "크로노스 아이비... 그게 시간을 안정시키는 열쇠야.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_003"
+    },
+    {
+      "node_id": "seocho_main_003",
+      "background_image": null,
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "서예나는 희미한 미소를 지으며 지도 한 장을 건넸다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_004"
+    },
+    {
+      "node_id": "seocho_main_004",
+      "background_image": null,
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "만약에 찾는다면 앨리스가 잘 나에게 전해줄거야 너는 크로노스 아이비를 찾는거에 집중해",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_005"
+    },
+    {
+      "node_id": "seocho_main_005",
+      "background_image": null,
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그렇게 말하고는 서예나는 홀연히 사라졌다. 강남의 화려한 황금빛이 서서히 잦아들고, 공기의 냄새가 바뀌기 시작했다. 매연과 향수 냄새 대신, 젖은 흙내음과 달콤한 꽃향기가 코끝을 스쳤다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_006"
+    },
+    {
+      "node_id": "seocho_main_006",
+      "background_image": "서초구 진입로 - 서래 가든 타운 입구]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "네오 서울의 남쪽, 황금탑 지구를 벗어나자마자 풍경은 거짓말처럼 변했다. 서초구, 일명 '서래 가든 타운'. 이곳은 도시라기보다는 거대한 정원에 가까웠다. 도로 위를 덮은 덩굴 식물들이 아스팔트의 열기를 식히고 있었고, 가로등 대신 빛나는 유리꽃들이 거리를 비추고 있었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_007"
+    },
+    {
+      "node_id": "seocho_main_007",
+      "background_image": "서초구 진입로 - 서래 가든 타운 입구]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "나의 목적은 단 하나, '크로노스 아이비'를 찾는 것. 시간의 틈새에서만 자란다는 전설의 이끼다. 서예나의 정보에 따르면, 이 희귀한 식물을 관리할 수 있는 유일한 식물학자가 이곳에 살고 있다고 했다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_008"
+    },
+    {
+      "node_id": "seocho_main_008",
+      "background_image": "서초구 진입로 - 서래 가든 타운 입구]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "앨리스 강... 서래의 약한 마법사.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_009"
+    },
+    {
+      "node_id": "seocho_main_009",
+      "background_image": "서초구 진입로 - 서래 가든 타운 입구]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그녀의 공방은 지도에 표시조차 되어 있지 않았다. 다만 '가장 향기로운 곳을 찾으라'는 수수께끼 같은 메모만이 남아있을 뿐이었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_010"
+    },
+    {
+      "node_id": "seocho_main_010",
+      "background_image": "서초구 진입로 - 서래 가든 타운 입구]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "거리를 걷다 보니 이상한 점이 눈에 띄었다. 이곳의 시계들은 제각각이었다. 어떤 시계는 거꾸로 돌아가고, 어떤 시계는 멈춰 있었다. 시간의 왜곡이 이미 이곳까지 영향을 미치고 있는 것이다. 지나가는 주민들의 표정은 평온해 보였지만, 그들의 눈동자에는 초점 없는 불안감이 서려 있었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_011"
+    },
+    {
+      "node_id": "seocho_main_011",
+      "background_image": "서초구 진입로 - 서래 가든 타운 입구]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "길을 잃으셨나요, 여행자님?",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_012"
+    },
+    {
+      "node_id": "seocho_main_012",
+      "background_image": "서초구 진입로 - 서래 가든 타운 입구]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "갑자기 덤불 속에서 작은 목소리가 들렸다. 돌아보니 턱시도 같은 무늬를 가진 고양이 한 마리가 담장 위에 우아하게 앉아 꼬리를 살랑이고 있었다. 고양이의 눈동자는 시계태엽처럼 미세하게 회전하고 있었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_013"
+    },
+    {
+      "node_id": "seocho_main_013",
+      "background_image": "서초구 진입로 - 서래 가든 타운 입구]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "앨리스 님을 찾고 계시군요. 그분의 정원은 초대받지 않은 손님에게는 보이지 않아요. 게다가 지금은 시간의 틈새가 불안정해서 입구가 계속 이동하고 있거든요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_014"
+    },
+    {
+      "node_id": "seocho_main_014",
+      "background_image": "서초구 진입로 - 서래 가든 타운 입구]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "고양이는 앞발로 수염을 다듬으며 나를 빤히 쳐다보았다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_015"
+    },
+    {
+      "node_id": "seocho_main_015",
+      "background_image": "서초구 진입로 - 서래 가든 타운 입구]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "하지만 방법이 없는 건 아니죠. 소리를 따라가 보세요. 시간은 속일 수 있어도 멜로디는 속일 수 없으니까요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_016"
+    },
+    {
+      "node_id": "seocho_main_016",
+      "background_image": "서초구 진입로 - 서래 가든 타운 입구]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "녀석이 가리킨 곳은 좁고 구불구불한 골목길이었다. 그쪽에서는 희미하지만 애절한, 마치 누군가를 부르는 듯한 피아노 건반 소리가 흘러나오고 있었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_017"
+    },
+    {
+      "node_id": "seocho_main_017",
+      "background_image": "서초구 진입로 - 서래 가든 타운 입구]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "방배동 카페 골목의 '재즈 클럽'으로 가보세요. 그곳의 피아니스트가 '소리의 지도'를 가지고 있을지도 모르니까요. 물론, 그가 연주를 멈출 수 있다면 말이죠.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_018"
+    },
+    {
+      "node_id": "seocho_main_018",
+      "background_image": "서초구 진입로 - 서래 가든 타운 입구]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "말을 마친 고양이는 연기처럼 흩어졌다. 남은 것은 허공에 떠다니는 묘한 웃음소리뿐이었다. 나는 녀석이 가리킨 방향으로 발걸음을 옮겼다. 한 걸음 내딛을 때마다 피아노 선율이 선명해졌다. 뒤틀린 시간의 파도 속에서 유일하게 믿을 수 있는 이정표였다. 서래마을의 평온한 풍경 뒤에 감춰진 비밀의 문이 서서히 열리고 있었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_019"
+    },
+    {
+      "node_id": "seocho_main_019",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "눈을 뜨자 펼쳐진 광경은 실로 경이로웠다. 천장은 투명한 돔으로 되어 있어 네오 서울의 하늘이 보였지만, 온실 안의 계절은 밖과 달랐다. 벚꽃잎이 눈처럼 흩날리는가 하면, 반대편에서는 붉은 단풍이 불타오르고 있었다. 시간의 파편들이 제각기 다른 계절을 품고 숨 쉬는 곳, '시간의 온실'이었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_020"
+    },
+    {
+      "node_id": "seocho_main_020",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "공중에는 물방울들이 중력을 거스른 채 영롱하게 떠다니고 있었고, 그 사이를 빛나는 나비들이 유영했다. 그리고 그 중심, 거대한 수정 나무 아래 휠체어에 앉아 있는 한 여자가 있었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_021"
+    },
+    {
+      "node_id": "seocho_main_021",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "어머... 손님이 올 줄은 몰랐네요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_022"
+    },
+    {
+      "node_id": "seocho_main_022",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그녀의 목소리는 유리잔이 부딪히는 소리처럼 맑았지만, 깊은 피로감이 배어 있었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_023"
+    },
+    {
+      "node_id": "seocho_main_023",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "저의 서툰 별자리가 길을 열어주던가요? 케플러 할아버지가 꽤나 고생하셨겠어요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_024"
+    },
+    {
+      "node_id": "seocho_main_024",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "앨리스 강. 창백하리만치 하얀 피부에, 부서질 듯 가느다란 손목. 긴 은발을 땋아 내린 그녀는 금방이라도 사라질 신기루처럼 연약해 보였다. 그녀는 무릎 덮개를 고쳐 덮으며 쓴웃음을 지었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_025"
+    },
+    {
+      "node_id": "seocho_main_025",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "놀라셨나요? 소문과는 좀 다르죠? '시간을 지배하는 마녀'치고는 꼴이 좀 우습잖아요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_026"
+    },
+    {
+      "node_id": "seocho_main_026",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "크로노스 아이비를 찾으러 왔습니다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_027"
+    },
+    {
+      "node_id": "seocho_main_027",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "내 말에 그녀의 손길이 멈췄다. 그녀가 쓰다듬던 보랏빛 덩굴 식물이 주인의 불안을 감지한 듯 바르르 떨었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_028"
+    },
+    {
+      "node_id": "seocho_main_028",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "역시... 예나 언니가 보냈군요. 언니는 항상... 제가 감당하기 힘든 숙제를 주는 것 같아요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_029"
+    },
+    {
+      "node_id": "seocho_main_029",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "앨리스는 휠체어를 힘겹게 돌려 나를 마주 보았다. 깊은 초록색 눈동자가 흔들리고 있었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_030"
+    },
+    {
+      "node_id": "seocho_main_030",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "당신도 '시간병'에 대해 들어보셨나요?",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_031"
+    },
+    {
+      "node_id": "seocho_main_031",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "시간병이요?",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_032"
+    },
+    {
+      "node_id": "seocho_main_032",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "네오 서울의 시간은 너무 빨라요. 모두가 1분 1초를 쪼개서 살아가죠. 그러다 보면 영혼이 속도를 따라가지 못해 찢어지는 순간이 와요. 그게 시간병이에요. 저처럼요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_033"
+    },
+    {
+      "node_id": "seocho_main_033",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그녀는 자신의 다리를 가리켰다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_034"
+    },
+    {
+      "node_id": "seocho_main_034",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "저는 시간을 너무 많이 만졌어요. 과거를 그리워하고, 미래를 두려워하다가... 현재를 잃어버렸죠. 크로노스 아이비는 저 같은 환자들에게 유일한 진통제예요. 엉킨 시간을 풀어주고, 흐르는 속도를 늦춰주거든요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_035"
+    },
+    {
+      "node_id": "seocho_main_035",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "이 아이가 없으면, 이곳의 엉켜버린 시간들이 폭주해서... 저 같은 건 한순간에 삼켜버릴지도 몰라요. 제가 너무 약해서... 아이비가 대신 아파해주고 있는 거거든요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_036"
+    },
+    {
+      "node_id": "seocho_main_036",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그녀는 슬픈 표정으로 덩굴을 어루만졌다. 그것은 단순한 소유욕이 아니었다. 서로를 의지하며 버텨온 생명체 간의 깊은 유대였다. 하지만 물러설 수 없었다. 도시 전체의 균형이 무너지고 있다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_037"
+    },
+    {
+      "node_id": "seocho_main_037",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "당신의 아픔을 모르는 건 아닙니다. 하지만 이대로 두면 서래 가든뿐만 아니라, 당신이 사랑하는 이 온실마저 시간의 틈새로 영원히 사라질 겁니다. 밖에서는 이미... 당신의 친구들이 비명을 지르고 있어요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_038"
+    },
+    {
+      "node_id": "seocho_main_038",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "나는 몽마르뜨 공원에서 목격한 별들의 추락과 케플러의 절규를 전했다. 에디가 피아노 건반 위에서 겪었던 무한한 고통에 대해서도.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_039"
+    },
+    {
+      "node_id": "seocho_main_039",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "앨리스의 하얀 손이 입가를 가렸다. 작은 신음이 새어 나왔다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_040"
+    },
+    {
+      "node_id": "seocho_main_040",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "아... 케플러 할아버지가... 에디가...",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_041"
+    },
+    {
+      "node_id": "seocho_main_041",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그녀의 눈에서 투명한 눈물이 흘러내려 공중으로 떠올랐다. 눈물방울 안에서 지나간 기억들이 홀로그램처럼 비쳤다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_042"
+    },
+    {
+      "node_id": "seocho_main_042",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "제 탓이네요. 제가 너무 이 안에만 숨어 있었나 봐요. 저를 지키겠다고... 소중한 사람들을 다치게 했어요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_043"
+    },
+    {
+      "node_id": "seocho_main_043",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "긴 침묵이 이어졌다. 온실의 꽃들도 숨을 죽인 듯 고요했다. 마침내 앨리스가 고개를 들었다. 그녀의 눈가는 붉어져 있었지만, 눈빛은 전보다 단단해져 있었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_044"
+    },
+    {
+      "node_id": "seocho_main_044",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "알겠어요... 여행자님 말씀이 맞아요. 더 이상 귀를 막고 있을 수는 없겠죠. 이 아이도... 더 넓은 세상에서 쓰이길 원할 테니까요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_045"
+    },
+    {
+      "node_id": "seocho_main_045",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그녀는 온실 중앙의 수정 나무 뿌리 근처로 다가갔다. 영롱하게 빛나는 이끼 덩어리, 크로노스 아이비가 그곳에 있었다. 하지만 그녀는 망설였다. 손을 뻗었다가 거두기를 반복했다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_046"
+    },
+    {
+      "node_id": "seocho_main_046",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그냥 드릴 수는 없어요... 이 아이를 떼어내면, 저는 온실의 방어막을 처음부터 다시 짜야 해요. 그동안 저를 지켜줄 시간이 조금 필요해요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_047"
+    },
+    {
+      "node_id": "seocho_main_047",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "제가 무엇을 하면 됩니까?",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_048"
+    },
+    {
+      "node_id": "seocho_main_048",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그녀는 떨리는 손으로 작은 모종삽을 내밀었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_049"
+    },
+    {
+      "node_id": "seocho_main_049",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "저기 구석에 시들어가는 '기억의 백합'들이 보여요? 저 아이들을 부디... 양지바른 곳으로 옮겨 심어주시겠어요? 제가 마법진을 그리는 동안... 저 대신 정원사가 되어주세요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_050"
+    },
+    {
+      "node_id": "seocho_main_050",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그녀의 부탁은 간절했다. 나는 모종삽을 받아 들고 백합 화단으로 향했다. 흙은 차갑지만 부드러웠다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_051"
+    },
+    {
+      "node_id": "seocho_main_051",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "첫 번째 백합을 파내자, 뿌리에서 희미한 빛이 피어올랐다. 그 빛은 누군가의 기억이었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_052"
+    },
+    {
+      "node_id": "seocho_main_052",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "*...마법 학교의 도서관. 책 냄새. 창가에 앉아 조용히 책을 읽는 어린 소녀. 앨리스였다. 그녀는 혼자였지만 외로워 보이지 않았다. 책 속의 시간만이 그녀의 친구였다...*",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_053"
+    },
+    {
+      "node_id": "seocho_main_053",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "제가 어릴 땐... 친구가 별로 없었어요. 다들 제가 너무 느리다고 따돌렸거든요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_054"
+    },
+    {
+      "node_id": "seocho_main_054",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "앨리스가 등 뒤에서 조용히 말했다. 그녀는 바닥에 마법진을 그리며 자신의 과거를 이야기했다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_055"
+    },
+    {
+      "node_id": "seocho_main_055",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "두 번째 백합을 옮겨 심었다. 이번엔 다른 기억이 흘러나왔다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_056"
+    },
+    {
+      "node_id": "seocho_main_056",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "*...폭발 실험실. 검댕을 뒤집어쓰고 울먹이는 앨리스. 그 옆에서 묵묵히 등을 토닥여주는 한 소녀. 서예나였다. '괜찮아, 앨리스. 넌 틀린 게 아냐. 조금 다른 시간대를 사는 것뿐이야.'...*",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_057"
+    },
+    {
+      "node_id": "seocho_main_057",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "예나 언니는... 항상 저를 기다려줬어요. 모두가 앞서갈 때, 유일하게 뒤를 돌아봐 준 사람이었죠.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_058"
+    },
+    {
+      "node_id": "seocho_main_058",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "세 번째 백합. 흙을 덮어주자 따뜻한 온기가 손끝에 전해졌다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_059"
+    },
+    {
+      "node_id": "seocho_main_059",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "*...밤새 약초를 달이는 앨리스. 아픈 친구를 위해, 시들어가는 꽃을 위해. 그녀의 손길이 닿은 곳마다 생명이 다시 숨을 쉬었다...*",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_060"
+    },
+    {
+      "node_id": "seocho_main_060",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그래서 저도 누군가를 기다려주고 싶었어요. 치유해주고 싶었고... 이 온실은 저 같은 사람들을 위한 작은 쉼터였는데...",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_061"
+    },
+    {
+      "node_id": "seocho_main_061",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "모든 백합을 옮겨 심자, 온실의 공기가 한결 부드러워졌다. 앨리스의 이마에는 식은땀이 맺혀 있었지만, 표정은 맑게 개인 하늘처럼 편안해 보였다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_062"
+    },
+    {
+      "node_id": "seocho_main_062",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "고마워요... 정말 따뜻한 손길이네요. 당신의 손에서는... 흙 냄새가 나요. 아주 건강하고 정직한 시간의 냄새가.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_063"
+    },
+    {
+      "node_id": "seocho_main_063",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그녀는 휠체어를 밀어 내게 다가왔다. 그리고 투명한 유리 큐브에 크로노스 아이비를 담아 내게 건넸다. 큐브 안에서 이끼는 마치 살아있는 심장처럼 천천히, 그리고 힘차게 박동하고 있었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_064"
+    },
+    {
+      "node_id": "seocho_main_064",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "이걸 가져가세요. 부디... 조심하셔야 해요. 시간은 흐르는 물과 같아서, 억지로 막으려 하면 넘쳐버리니까요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_065"
+    },
+    {
+      "node_id": "seocho_main_065",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그녀는 투명 큐브 속에서 조금씩 시들기 시작하는 아이비를 걱정스레 바라보았다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_066"
+    },
+    {
+      "node_id": "seocho_main_066",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그리고... 서두르셔야 해요. 이 아이는 제 온실을 벗어나면 금방 말라버려요. 다시 생명력을 불어넣으려면 송파구의 '석촌호수'에 있는 '안개의 눈물'이 필요해요. 그 물만이 아이비의 시간을 고정시킬 수 있거든요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_067"
+    },
+    {
+      "node_id": "seocho_main_067",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "그녀는 창밖 동쪽 하늘을 바라보았다. 멀리 송파구의 거대한 타워, '스카이 피어'가 구름을 뚫고 솟아 있었다. 그녀의 눈빛에 걱정과 그리움이 스쳤다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_068"
+    },
+    {
+      "node_id": "seocho_main_068",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "송파구의 주인인 애니 언니는... 꿈을 너무 사랑해서 탈이에요. 가끔은 꿈과 현실을 헷갈려 하거든요. 순수하지만, 그래서 더 위험할 수도 있어요. 이 아이비가 그곳의 안개를 걷어내는 데도 도움이 될 거예요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_069"
+    },
+    {
+      "node_id": "seocho_main_069",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "명심하겠습니다. 당신의 정원은... 제가 본 곳 중 가장 아름다웠습니다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_070"
+    },
+    {
+      "node_id": "seocho_main_070",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "나의 인사에 앨리스는 수줍게 미소 지었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_071"
+    },
+    {
+      "node_id": "seocho_main_071",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "언젠가... 시간이 다시 흐르게 되면, 그때는 차 한 잔 하러 오세요. 제가 직접 키운 찻잎으로... 아주 천천히 우려낸 차를 대접할게요.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_072"
+    },
+    {
+      "node_id": "seocho_main_072",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "나는 큐브를 소중히 챙겨 정원을 나섰다. 큐브 속 아이비가 목이 마른 듯 희미하게 파동치고 있었다. 등 뒤에서 앨리스와 그녀의 강아지 '뽀삐'가 배웅하듯 손을 흔들고 있었다. 서초구의 향기로운 바람이 등을 떠밀었다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_073"
+    },
+    {
+      "node_id": "seocho_main_073",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "*징-*",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_074"
+    },
+    {
+      "node_id": "seocho_main_074",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "주머니 속 단말기가 짧게 진동했다. 서예나였다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_075"
+    },
+    {
+      "node_id": "seocho_main_075",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "[From: 예나]",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_076"
+    },
+    {
+      "node_id": "seocho_main_076",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "앨리스는 만났어? 그 아이, 맘이 약해서 걱정했는데 다행이네. 지금 송파 쪽에 파장이 아주 불안정해. 애니 녀석이 또 이상한 꿈을 꾸고 있나 봐. 서두르는 게 좋을 거야.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": "seocho_main_077"
+    },
+    {
+      "node_id": "seocho_main_077",
+      "background_image": "앨리스 강의 아틀리에]",
+      "character_id": "Narrator",
+      "character_sprite": null,
+      "dialogue_text": "짧고 건조한 문자였지만, 그 속에 담긴 다급함이 느껴졌다. 나는 발걸음을 재촉했다. 이제 꿈과 환상의 호수, 송파구로 향할 차례였다.",
+      "dialogue_sound_id": null,
+      "sound_effect": null,
+      "next_node_id": null
+    }
+  ]
+}

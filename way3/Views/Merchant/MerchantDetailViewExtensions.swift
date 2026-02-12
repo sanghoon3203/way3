@@ -159,7 +159,7 @@ extension MerchantDetailView {
 
     var CartHeaderView: some View {
         HStack {
-            Button(action: { currentMode = .trading }) {
+            Button(action: { viewModel.startTrading() }) {
                 HStack {
                     Image(systemName: "arrow.left")
                     Text("거래로 돌아가기")

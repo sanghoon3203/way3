@@ -454,7 +454,6 @@ struct MerchantDetailView: View {
                             questNotification = nil
                         }
                         isPresented = false
-                        gameManager.activeMainTab = 2
                     }
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -891,16 +890,14 @@ struct TradeActionFooter: View {
                 Text("📊 선택: \(cartManager.items.count)건")
                     .font(.cyberpunkBody())
                     .foregroundColor(.cyberpunkTextSecondary)
-
+                
                 Spacer()
-
-                let totalBuy = cartManager.totalBuyCost
-                let totalSell = cartManager.totalSellRevenue
-                let displayAmount = totalBuy > 0 ? totalBuy : totalSell
-
+                
+                let displayAmount = cartManager.totalAmount
+                
                 Text("총액: ₩\(displayAmount)")
                     .font(.cyberpunkHeading(size: 18))
-                    .foregroundColor(totalBuy > 0 ? .cyberpunkYellow : .cyberpunkGreen)
+                    .foregroundColor(.cyberpunkYellow)
             }
 
             // 거래 실행 버튼

@@ -462,9 +462,6 @@ struct StoryView: View {
         if wasCompleted {
             onStoryComplete?()
         }
-        if returnToMapOnCompletion {
-            GameManager.shared.activeMainTab = 0
-        }
         dismiss()
     }
 

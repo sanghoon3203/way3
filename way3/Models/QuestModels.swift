@@ -241,6 +241,16 @@ struct QuestRequirements: Codable, Hashable {
     }
 }
 
+// MARK: - Convenience Accessors
+extension QuestRequirements {
+    /// 스토리 조각 요구사항 (snake_case 필드 래핑)
+    var requiredStoryPieces: [String] { required_story_pieces }
+    /// 선행 메인 퀘스트 요구사항
+    var requiredMainQuests: [String] { required_main_quests }
+    /// 선행 서브 퀘스트 요구사항
+    var requiredSubQuests: [String] { required_sub_quests }
+}
+
 struct QuestRewards: Codable, Hashable {
     // Server fields
     let experience: Int?
