@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>connect:seoul UI 리디자인 컨셉 — 조선사이버펑크</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Share+Tech+Mono&family=Cinzel+Decorative:wght@400;700&display=swap');
+
+    :root {
+      /* === 오방색 네온 팔레트 === */
+      --cheong: #00E5CC;       /* 청(靑) — Electric Teal */
+      --jeok: #FF2D55;         /* 적(赤) — Crimson Neon */
+      --hwang: #FFB800;        /* 황(黃) — Amber Gold */
+      --baek: #E8E0D5;         /* 백(白) — Hanji Pearl */
+      --heuk: #0A0A0F;         /* 흑(黑) — Deep Ink */
+
+      /* Extended */
+      --heuk-panel: #111118;
+      --heuk-card: #16161F;
+      --hanji: rgba(232, 224, 213, 0.07);
+      --border-dim: rgba(232, 224, 213, 0.12);
+      --border-glow: rgba(0, 229, 204, 0.4);
+
+      /* Typography */
+      --font-joseon: 'Noto Serif KR', serif;   /* ChosunCentennial 대체 미리보기 */
+      --font-body: 'Noto Sans KR', sans-serif;
+      --font-mono: 'Share Tech Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--heuk);
+      color: var(--baek);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* 한지 텍스처 오버레이 */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.6;
+    }
+
+    /* ===== LAYOUT ===== */
+    .page-header {
+      padding: 60px 40px 40px;
+      border-bottom: 1px solid var(--border-dim);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::after {
+      content: '朝鮮';
+      position: absolute;
+      right: 40px;
+      top: 20px;
+      font-family: var(--font-joseon);
+      font-size: 120px;
+      font-weight: 900;
+      color: rgba(255, 184, 0, 0.04);
+      letter-spacing: -10px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--cheong);
+      border: 1px solid var(--cheong);
+      padding: 3px 10px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-family: var(--font-joseon);
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--baek);
+      margin-bottom: 8px;
+    }
+
+    h1 span {
+      color: var(--hwang);
+      font-style: italic;
+    }
+
+    .subtitle {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: rgba(232, 224, 213, 0.4);
+      letter-spacing: 2px;
+    }
+
+    .section {
+      padding: 60px 40px;
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--hwang);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      font-family: var(--font-joseon);
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--baek);
+    }
+
+    h2 .kr {
+      font-size: 14px;
+      color: rgba(232, 224, 213, 0.4);
+      font-family: var(--font-mono);
+      letter-spacing: 2px;
+      margin-left: 10px;
+    }
+
+    .section-desc {
+      color: rgba(232, 224, 213, 0.5);
+      font-size: 14px;
+      margin-bottom: 40px;
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .page-header { padding: 40px 24px 30px; }
+      .section { padding: 40px 24px; }
+    }
+
+    /* ===== COLOR PALETTE ===== */
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .swatch {
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .swatch-color {
+      height: 70px;
+      position: relative;
+    }
+
+    .swatch-color::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+    }
+
+    .swatch-info {
+      padding: 10px;
+      background: var(--heuk-card);
+      border: 1px solid var(--border-dim);
+      border-top: none;
+    }
+
+    .swatch-kr {
+      font-family: var(--font-joseon);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .swatch-name {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: rgba(232, 224, 213, 0.4);
+      margin-top: 2px;
+    }
+
+    .swatch-hex {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: rgba(232, 224, 213, 0.6);
+      margin-top: 4px;
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    .type-demo {
+      background: var(--heuk-panel);
+      border: 1px solid var(--border-dim);
+      padding: 28px;
+      position: relative;
+    }
+
+    .type-demo::before {
+      content: attr(data-label);
+      position: absolute;
+      top: -1px;
+      left: 20px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--cheong);
+      background: var(--heuk-panel);
+      padding: 0 8px;
+      transform: translateY(-50%);
+    }
+
+    .type-joseon-xl {
+      font-family: var(--font-joseon);
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--baek);
+      line-height: 1;
+    }
+
+    .type-joseon-lg {
+      font-family: var(--font-joseon);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--hwang);
+    }
+
+    .type-joseon-md {
+      font-family: var(--font-joseon);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--cheong);
+    }
+
+    .type-mono {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: rgba(232, 224, 213, 0.5);
+      letter-spacing: 2px;
+    }
+
+    .type-body {
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--baek);
+      line-height: 1.8;
+    }
+
+    /* ===== DIALOGUE BOX — 교서(敎書) 스타일 ===== */
+    .dialogue-box {
+      background: #0D0C10;
+      border: 1px solid var(--border-dim);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 단청 문양 상단 바 */
+    .dialogue-dancheong {
+      height: 4px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--hwang) 0px, var(--hwang) 12px,
+        var(--jeok) 12px, var(--jeok) 24px,
+        var(--cheong) 24px, var(--cheong) 36px,
+        var(--jeok) 36px, var(--jeok) 48px,
+        var(--hwang) 48px, var(--hwang) 60px
+      );
+    }
+
+    .dialogue-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px 12px;
+      border-bottom: 1px solid var(--border-dim);
+      position: relative;
+    }
+
+    .merchant-seal {
+      width: 36px;
+      height: 36px;
+      border: 2px solid var(--jeok);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-joseon);
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--jeok);
+      flex-shrink: 0;
+      position: relative;
+      box-shadow: 0 0 12px rgba(255, 45, 85, 0.3), inset 0 0 8px rgba(255, 45, 85, 0.1);
+    }
+
+    .merchant-seal::before {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border: 1px solid rgba(255, 45, 85, 0.3);
+    }
+
+    .merchant-info {
+      margin-left: 12px;
+      flex: 1;
+    }
+
+    .merchant-name {
+      font-family: var(--font-joseon);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--hwang);
+      display: block;
+    }
+
+    .merchant-district {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: rgba(232, 224, 213, 0.35);
+    }
+
+    .connection-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      color: var(--cheong);
+    }
+
+    .pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cheong);
+      animation: pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 6px var(--cheong);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .dialogue-body {
+      padding: 20px 18px;
+      min-height: 100px;
+      background: linear-gradient(180deg, rgba(232, 224, 213, 0.02) 0%, transparent 100%);
+    }
+
+    .dialogue-text {
+      font-family: var(--font-joseon);
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.9;
+      color: rgba(232, 224, 213, 0.92);
+    }
+
+    .dialogue-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 18px;
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .dialogue-meta {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: rgba(232, 224, 213, 0.2);
+    }
+
+    .next-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-joseon);
+      font-size: 11px;
+      color: var(--hwang);
+    }
+
+    .next-arrow {
+      font-size: 14px;
+      animation: arrowPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes arrowPulse {
+      0%, 100% { transform: translateX(0); opacity: 1; }
+      50% { transform: translateX(4px); opacity: 0.5; }
+    }
+
+    /* ===== QUEST CARD — 허가증(許可證) 스타일 ===== */
+    .quest-card {
+      background: var(--heuk-card);
+      border: 1px solid var(--border-dim);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .quest-card:hover {
+      border-color: var(--hwang);
+      box-shadow: 0 0 20px rgba(255, 184, 0, 0.1);
+    }
+
+    .quest-card-accent {
+      width: 4px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+    }
+
+    .quest-card-inner {
+      padding: 16px 16px 16px 20px;
+    }
+
+    .quest-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      padding: 2px 8px;
+      border: 1px solid;
+      margin-bottom: 10px;
+    }
+
+    .quest-title-kr {
+      font-family: var(--font-joseon);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--baek);
+      margin-bottom: 4px;
+    }
+
+    .quest-desc {
+      font-size: 12px;
+      color: rgba(232, 224, 213, 0.45);
+      line-height: 1.6;
+      font-family: var(--font-body);
+      margin-bottom: 14px;
+    }
+
+    .quest-rewards {
+      display: flex;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .reward-chip {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--hwang);
+    }
+
+    .reward-chip span {
+      color: rgba(232, 224, 213, 0.4);
+      margin-right: 3px;
+    }
+
+    /* ===== LICENSE CARD — 허가증 등급 ===== */
+    .license-row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .license-card {
+      flex-shrink: 0;
+      width: 160px;
+      border: 1px solid var(--border-dim);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .license-card.active {
+      border-color: var(--hwang);
+      box-shadow: 0 0 24px rgba(255, 184, 0, 0.2);
+    }
+
+    .license-top {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .license-seal-number {
+      font-family: var(--font-joseon);
+      font-size: 48px;
+      font-weight: 900;
+      opacity: 0.12;
+      position: absolute;
+    }
+
+    .license-icon {
+      font-size: 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .license-body {
+      padding: 12px;
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .license-level {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: rgba(232, 224, 213, 0.35);
+      margin-bottom: 4px;
+    }
+
+    .license-title-kr {
+      font-family: var(--font-joseon);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--baek);
+    }
+
+    .license-dots {
+      display: flex;
+      gap: 4px;
+      margin-top: 10px;
+    }
+
+    .license-dot {
+      width: 8px;
+      height: 8px;
+      border: 1px solid var(--border-dim);
+    }
+
+    .license-dot.filled {
+      background: var(--hwang);
+      border-color: var(--hwang);
+      box-shadow: 0 0 6px rgba(255, 184, 0, 0.5);
+    }
+
+    /* ===== TAB BAR — 기와(瓦) 스타일 ===== */
+    .tab-bar-preview {
+      background: #080810;
+      border: 1px solid var(--border-dim);
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .tab-bar-top {
+      height: 1px;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent 0px, transparent 40px,
+        var(--border-dim) 40px, var(--border-dim) 41px
+      );
+    }
+
+    .tab-bar {
+      display: flex;
+    }
+
+    .tab-item {
+      flex: 1;
+      padding: 14px 0 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .tab-item.active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 20%;
+      right: 20%;
+      height: 2px;
+      background: var(--hwang);
+      box-shadow: 0 0 8px var(--hwang);
+    }
+
+    .tab-icon {
+      font-size: 20px;
+      opacity: 0.4;
+      transition: all 0.2s;
+    }
+
+    .tab-item.active .tab-icon {
+      opacity: 1;
+    }
+
+    .tab-label {
+      font-family: var(--font-joseon);
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(232, 224, 213, 0.35);
+      transition: all 0.2s;
+    }
+
+    .tab-item.active .tab-label {
+      color: var(--hwang);
+    }
+
+    /* ===== STAT BAR — 오행 스탯 ===== */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .stat-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .stat-name-kr {
+      font-family: var(--font-joseon);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: rgba(232, 224, 213, 0.5);
+    }
+
+    .stat-bar-track {
+      height: 3px;
+      background: rgba(232, 224, 213, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-bar-fill {
+      height: 100%;
+      position: relative;
+      transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .stat-bar-fill::after {
+      content: '';
+      position: absolute;
+      right: -2px;
+      top: -2px;
+      bottom: -2px;
+      width: 4px;
+      background: inherit;
+      filter: blur(3px);
+    }
+
+    /* ===== MAP MARKER CONCEPT ===== */
+    .map-preview {
+      background: #0A0C14;
+      border: 1px solid var(--border-dim);
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+      min-height: 260px;
+    }
+
+    .map-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,204,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,204,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .map-marker {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .marker-seal {
+      width: 44px;
+      height: 44px;
+      border: 2px solid var(--jeok);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-joseon);
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--jeok);
+      background: rgba(255, 45, 85, 0.1);
+      position: relative;
+      box-shadow: 0 0 20px rgba(255, 45, 85, 0.3);
+      transition: all 0.3s;
+    }
+
+    .marker-seal::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 1px solid rgba(255, 45, 85, 0.3);
+    }
+
+    .marker-seal::after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 45, 85, 0.15);
+      animation: radarPulse 3s ease-out infinite;
+    }
+
+    @keyframes radarPulse {
+      0% { transform: scale(0.8); opacity: 1; }
+      100% { transform: scale(2); opacity: 0; }
+    }
+
+    .marker-name {
+      font-family: var(--font-joseon);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--jeok);
+      margin-top: 6px;
+      white-space: nowrap;
+      text-shadow: 0 0 8px rgba(255, 45, 85, 0.6);
+    }
+
+    .marker-gold .marker-seal {
+      border-color: var(--hwang);
+      color: var(--hwang);
+      background: rgba(255, 184, 0, 0.1);
+      box-shadow: 0 0 20px rgba(255, 184, 0, 0.3);
+    }
+
+    .marker-gold .marker-seal::before { border-color: rgba(255, 184, 0, 0.3); }
+    .marker-gold .marker-seal::after { border-color: rgba(255, 184, 0, 0.15); }
+    .marker-gold .marker-name { color: var(--hwang); text-shadow: 0 0 8px rgba(255, 184, 0, 0.6); }
+
+    .map-hud {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .hud-chip {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--cheong);
+      background: rgba(0, 229, 204, 0.08);
+      border: 1px solid rgba(0, 229, 204, 0.2);
+      padding: 4px 10px;
+    }
+
+    /* ===== RELATIONSHIP METER — 서예(書藝) 진행 ===== */
+    .relationship-preview {
+      background: var(--heuk-card);
+      border: 1px solid var(--border-dim);
+      padding: 24px;
+    }
+
+    .rel-merchant {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .rel-avatar {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--hwang);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      background: rgba(255, 184, 0, 0.05);
+    }
+
+    .rel-stage-display {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .rel-stage-char {
+      font-family: var(--font-joseon);
+      font-size: 40px;
+      font-weight: 900;
+      line-height: 1;
+      position: relative;
+    }
+
+    .rel-stage-char.filled { color: var(--hwang); text-shadow: 0 0 16px rgba(255,184,0,0.5); }
+    .rel-stage-char.empty { color: rgba(232, 224, 213, 0.08); }
+
+    .rel-stages {
+      display: flex;
+      gap: 6px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .rel-stage-node {
+      flex: 1;
+      height: 3px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .rel-stage-track {
+      width: 100%;
+      height: 100%;
+      background: rgba(232, 224, 213, 0.08);
+    }
+
+    .rel-stage-fill {
+      height: 100%;
+      background: var(--hwang);
+      box-shadow: 0 0 6px var(--hwang);
+    }
+
+    /* ===== COMPARISON: BEFORE/AFTER ===== */
+    .compare-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .compare-panel {
+      padding: 20px;
+      position: relative;
+    }
+
+    .compare-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 3px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .compare-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-dim);
+    }
+
+    /* BEFORE style */
+    .before-dialogue {
+      background: #0D0F14;
+      border: 1px solid rgba(48, 56, 64, 0.8);
+    }
+
+    .before-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: #080A0E;
+      border-bottom: 1px solid rgba(255, 185, 0, 0.3);
+    }
+
+    .before-label-text {
+      font-family: monospace;
+      font-size: 10px;
+      color: rgba(128, 144, 160, 0.8);
+      letter-spacing: 1px;
+    }
+
+    .before-merchant-text {
+      font-family: monospace;
+      font-size: 10px;
+      color: #FFB900;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .before-body {
+      padding: 12px;
+      font-family: system-ui;
+      font-size: 14px;
+      color: #FFFFFF;
+      line-height: 1.6;
+    }
+
+    .before-footer {
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-between;
+      font-family: monospace;
+      font-size: 9px;
+      color: rgba(0, 229, 204, 0.6);
+    }
+
+    /* ===== SECTION: MOTION LANGUAGE ===== */
+    .motion-card {
+      background: var(--heuk-card);
+      border: 1px solid var(--border-dim);
+      padding: 20px;
+    }
+
+    .motion-title {
+      font-family: var(--font-joseon);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--hwang);
+      margin-bottom: 6px;
+    }
+
+    .motion-desc {
+      font-size: 12px;
+      color: rgba(232, 224, 213, 0.4);
+      line-height: 1.6;
+    }
+
+    .motion-demo {
+      margin-top: 14px;
+      height: 48px;
+      position: relative;
+      overflow: hidden;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .ink-reveal {
+      animation: inkBleed 3s ease-out infinite;
+      background: var(--heuk-card);
+      height: 100%;
+    }
+
+    @keyframes inkBleed {
+      0% { clip-path: circle(0% at 20% 50%); }
+      60% { clip-path: circle(80% at 50% 50%); }
+      100% { clip-path: circle(0% at 80% 50%); opacity: 0; }
+    }
+
+    .stamp-demo {
+      width: 44px;
+      height: 44px;
+      border: 2px solid var(--jeok);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-joseon);
+      font-size: 20px;
+      color: var(--jeok);
+      animation: stampDown 2s ease-out infinite;
+      box-shadow: 0 0 16px rgba(255, 45, 85, 0.4);
+    }
+
+    @keyframes stampDown {
+      0% { transform: scale(1.5) translateY(-10px); opacity: 0; box-shadow: 0 0 40px rgba(255,45,85,0.8); }
+      20% { transform: scale(0.95) translateY(0); opacity: 1; }
+      30% { transform: scale(1); }
+      80%, 100% { transform: scale(1); opacity: 1; }
+    }
+
+    .scan-demo {
+      position: relative;
+      background: rgba(0, 229, 204, 0.03);
+      border: 1px solid rgba(0, 229, 204, 0.1);
+      height: 48px;
+      overflow: hidden;
+    }
+
+    .scan-line {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cheong), transparent);
+      box-shadow: 0 0 10px var(--cheong);
+      animation: scanMove 2s ease-in-out infinite;
+    }
+
+    @keyframes scanMove {
+      0% { top: 0; opacity: 1; }
+      100% { top: 100%; opacity: 0.3; }
+    }
+
+    /* ===== DIVIDERS ===== */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-dim) 20%, var(--border-dim) 80%, transparent);
+      margin: 0 40px;
+    }
+
+    /* ===== PRIORITY TABLE ===== */
+    .priority-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .priority-table th {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: rgba(232, 224, 213, 0.35);
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .priority-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(232, 224, 213, 0.05);
+      vertical-align: top;
+    }
+
+    .priority-table tr:hover td {
+      background: rgba(232, 224, 213, 0.02);
+    }
+
+    .p-badge {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 1px;
+      padding: 2px 8px;
+      border: 1px solid;
+    }
+
+    .p-badge.p1 { color: var(--jeok); border-color: var(--jeok); background: rgba(255, 45, 85, 0.08); }
+    .p-badge.p2 { color: var(--hwang); border-color: var(--hwang); background: rgba(255, 184, 0, 0.08); }
+    .p-badge.p3 { color: var(--cheong); border-color: var(--cheong); background: rgba(0, 229, 204, 0.08); }
+
+    .component-name {
+      font-family: var(--font-joseon);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--baek);
+      margin-bottom: 2px;
+    }
+
+    .component-file {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: rgba(232, 224, 213, 0.3);
+    }
+
+    .effort-dots {
+      display: flex;
+      gap: 3px;
+    }
+
+    .effort-dot {
+      width: 6px;
+      height: 6px;
+      border: 1px solid var(--border-dim);
+    }
+
+    .effort-dot.on { background: var(--hwang); border-color: var(--hwang); }
+
+    /* Footer */
+    .page-footer {
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .footer-logo {
+      font-family: var(--font-joseon);
+      font-size: 24px;
+      font-weight: 900;
+      color: rgba(232, 224, 213, 0.15);
+      margin-bottom: 8px;
+    }
+
+    .footer-meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: rgba(232, 224, 213, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="page-header">
+    <div class="badge">UI REDESIGN PROPOSAL — connect:seoul</div>
+    <h1>조선사이버펑크<br><span>Joseon Cyberpunk</span></h1>
+    <p class="subtitle">DESIGN DIRECTION / 2026.02 / CONCEPT v1.0</p>
+  </header>
+
+  <!-- ===== SECTION 1: PHILOSOPHY ===== -->
+  <section class="section">
+    <div class="section-label">01 — DESIGN PHILOSOPHY</div>
+    <h2>왜 지금 UI를 바꿔야 하나<span class="kr">THE PROBLEM</span></h2>
+    <p class="section-desc">
+      현재 WAY3의 UI는 <strong style="color: var(--jeok)">어디서나 볼 수 있는 제네릭 사이버펑크</strong>입니다.
+      COMM_LINK, CONNECTED, 청록색 네온 — 이 패턴은 Cyberpunk 2077, 수백 개의 인디 게임에서 이미 소비됐습니다.
+      서울 25개 구를 무대로 하는 조선 세계관 게임으로서, 우리는 <strong style="color: var(--hwang)">아무도 본 적 없는 UI</strong>를 가질 기회가 있습니다.
+    </p>
+
+    <div class="grid-3">
+      <div class="motion-card" style="border-left: 3px solid var(--jeok);">
+        <div class="motion-title">문제: 정체성 없음</div>
+        <div class="motion-desc">현재 UI를 보면 "이게 WAY3야" 라는 느낌이 없습니다. 어떤 게임에나 붙여넣을 수 있는 제네릭 다크 사이버펑크.</div>
+      </div>
+      <div class="motion-card" style="border-left: 3px solid var(--hwang);">
+        <div class="motion-title">기회: 조선 × 사이버펑크</div>
+        <div class="motion-desc">단청, 한지, 교서, 도장 — 이 시각 언어는 아직 게임 UI에서 제대로 쓰인 적이 없습니다. 우리가 최초가 될 수 있습니다.</div>
+      </div>
+      <div class="motion-card" style="border-left: 3px solid var(--cheong);">
+        <div class="motion-title">전략: 유산에서 혁신</div>
+        <div class="motion-desc">전통 한국 시각 문화를 미래적으로 재해석합니다. 오방색을 네온으로, 교서를 홀로그램 패널로, 도장을 스탬프 애니메이션으로.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 2: COLOR SYSTEM ===== -->
+  <section class="section">
+    <div class="section-label">02 — COLOR SYSTEM</div>
+    <h2>오방색 네온<span class="kr">五方色 NEON PALETTE</span></h2>
+    <p class="section-desc">전통 한국의 오방색(五方色)을 사이버펑크 네온으로 재해석합니다. 각 색상은 방위·원소·의미를 그대로 계승하되, 디지털 발광 버전으로 재탄생합니다.</p>
+
+    <div class="palette-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background: #00E5CC; background: linear-gradient(135deg, #00E5CC, #00B8A0);"></div>
+        <div class="swatch-info">
+          <div class="swatch-kr" style="color: #00E5CC;">청</div>
+          <div class="swatch-name">CHEONG · ELECTRIC TEAL</div>
+          <div class="swatch-hex">#00E5CC</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #FF2D55, #CC0040);"></div>
+        <div class="swatch-info">
+          <div class="swatch-kr" style="color: #FF2D55;">적</div>
+          <div class="swatch-name">JEOK · CRIMSON NEON</div>
+          <div class="swatch-hex">#FF2D55</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #FFB800, #E09000);"></div>
+        <div class="swatch-info">
+          <div class="swatch-kr" style="color: #FFB800;">황</div>
+          <div class="swatch-name">HWANG · AMBER GOLD</div>
+          <div class="swatch-hex">#FFB800</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #E8E0D5, #C8C0B5);"></div>
+        <div class="swatch-info">
+          <div class="swatch-kr" style="color: #C8C0B5;">백</div>
+          <div class="swatch-name">BAEK · HANJI PEARL</div>
+          <div class="swatch-hex">#E8E0D5</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: linear-gradient(135deg, #111118, #050508);"></div>
+        <div class="swatch-info">
+          <div class="swatch-kr" style="color: #444455;">흑</div>
+          <div class="swatch-name">HEUK · DEEP INK</div>
+          <div class="swatch-hex">#0A0A0F</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 16px; padding: 14px 18px; background: var(--heuk-panel); border: 1px solid var(--border-dim); font-size: 12px; color: rgba(232,224,213,0.45); line-height: 1.7;">
+      <strong style="color: var(--baek); font-family: var(--font-joseon);">색상 사용 원칙:</strong>
+      청(靑)은 탐색/이동 관련 UI, 적(赤)은 도장·스탬프·긴급 알림, 황(黃)은 거래·보상·강조, 백(白)은 본문 텍스트, 흑(黑)은 배경. 단, 배경에 순수 흑색 대신 <span style="color: var(--cheong)">한지(韓紙) 노이즈 텍스처</span>를 7% 불투명도로 항상 덧씌웁니다.
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3: TYPOGRAPHY ===== -->
+  <section class="section">
+    <div class="section-label">03 — TYPOGRAPHY</div>
+    <h2>서체 시스템<span class="kr">FONT SYSTEM</span></h2>
+    <p class="section-desc">ChosunCentennial(조선센테니얼)을 단순한 '대화 폰트'에서 게임 전체의 '정체성 폰트'로 승격시킵니다. 모노스페이스는 기술 데이터 전용으로 제한합니다.</p>
+
+    <div class="grid-2">
+      <div class="type-demo" data-label="DISPLAY — ChosunCentennial">
+        <div class="type-joseon-xl">서예나</div>
+        <div class="type-joseon-lg" style="margin-top: 8px;">강남권: 번영의 그림자</div>
+        <div class="type-joseon-md" style="margin-top: 6px;">압구정 로데오 거리</div>
+        <div style="margin-top: 12px; font-family: var(--font-mono); font-size: 9px; color: rgba(232,224,213,0.25); letter-spacing: 2px;">MERCHANT NAME / CHAPTER / LOCATION — ChosunCentennial 900/700/600</div>
+      </div>
+      <div class="type-demo" data-label="TECHNICAL — Share Tech Mono">
+        <div class="type-mono" style="font-size: 10px; margin-bottom: 6px;">SYS :: GPS_LOCK = 37.5279, 127.0388</div>
+        <div class="type-mono" style="font-size: 11px; color: var(--cheong);">TRADER_LV = 12 / LICENSE = 0x02</div>
+        <div class="type-mono" style="font-size: 10px; margin-top: 6px; color: rgba(232,224,213,0.3);">NODE_ID: chapter_gangnam_015 → 016a</div>
+        <div style="margin-top: 12px; font-family: var(--font-mono); font-size: 9px; color: rgba(232,224,213,0.25); letter-spacing: 2px;">COORDINATES / IDs / TECHNICAL — Monospace ONLY</div>
+      </div>
+      <div class="type-demo" data-label="BODY — Noto Sans KR (기존 한글 본문)">
+        <div class="type-body">"가치란 무엇일까요? 저는 오랫동안 이 질문과 씨름해왔습니다. 당신은 어떻게 생각하시나요?"</div>
+        <div style="margin-top: 12px; font-family: var(--font-mono); font-size: 9px; color: rgba(232,224,213,0.25); letter-spacing: 2px;">DIALOGUE / DESCRIPTION — 본문 대화 (현행 유지)</div>
+      </div>
+      <div class="type-demo" data-label="PAIRING RULE — 사용 규칙">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <div style="font-family: var(--font-joseon); font-size: 18px; font-weight: 900; color: var(--hwang); width: 80px;">챕터명</div>
+            <div style="font-family: var(--font-mono); font-size: 9px; color: rgba(232,224,213,0.35); letter-spacing: 1px;">→ ChosunCentennial 900</div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <div style="font-family: var(--font-joseon); font-size: 14px; font-weight: 700; color: var(--baek); width: 80px;">상인 이름</div>
+            <div style="font-family: var(--font-mono); font-size: 9px; color: rgba(232,224,213,0.35); letter-spacing: 1px;">→ ChosunCentennial 700</div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <div style="font-family: var(--font-body); font-size: 14px; color: var(--baek); width: 80px;">본문 대화</div>
+            <div style="font-family: var(--font-mono); font-size: 9px; color: rgba(232,224,213,0.35); letter-spacing: 1px;">→ Noto Sans KR / 시스템체</div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <div style="font-family: var(--font-mono); font-size: 12px; color: var(--cheong); width: 80px;">GPS / ID</div>
+            <div style="font-family: var(--font-mono); font-size: 9px; color: rgba(232,224,213,0.35); letter-spacing: 1px;">→ Monospace 전용</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4: BEFORE / AFTER — DIALOGUE ===== -->
+  <section class="section">
+    <div class="section-label">04 — DIALOGUE BOX</div>
+    <h2>교서(敎書) 대화창<span class="kr">BEFORE → AFTER</span></h2>
+    <p class="section-desc">가장 플레이어가 오래 보는 화면입니다. "COMM_LINK / CONNECTED" 패턴을 조선 관문서 스타일로 전환합니다. 단청 바, 도장 씰, 한지 질감이 핵심입니다.</p>
+
+    <div class="compare-box">
+      <div class="compare-panel" style="background: #0A0C10;">
+        <div class="compare-label" style="color: var(--jeok);">BEFORE — 현행</div>
+        <div class="before-dialogue">
+          <div class="before-header">
+            <span class="before-label-text">COMM_LINK</span>
+            <span class="before-merchant-text">서예나</span>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <div style="width: 5px; height: 5px; border-radius: 50%; background: #00FF4D;"></div>
+              <span style="font-family: monospace; font-size: 9px; color: #00FF4D;">CONNECTED</span>
+            </div>
+          </div>
+          <div class="before-body">
+            "가치란 무엇일까요? 저는 오랫동안 이 질문과 씨름해왔습니다."
+          </div>
+          <div class="before-footer">
+            <span>NODE_ID: sub1_014</span>
+            <span>▶ 계속</span>
+          </div>
+        </div>
+        <div style="margin-top: 12px; font-size: 11px; color: rgba(232,224,213,0.3); line-height: 1.6;">
+          문제: 서양 SF 느낌. 도대체 한국 어디에 있는 게임인지 모름. ChosunCentennial 미사용.
+        </div>
+      </div>
+      <div class="compare-panel" style="background: #08090E;">
+        <div class="compare-label" style="color: var(--cheong);">AFTER — 조선사이버펑크</div>
+        <div class="dialogue-box">
+          <div class="dialogue-dancheong"></div>
+          <div class="dialogue-header">
+            <div class="merchant-seal">예</div>
+            <div class="merchant-info">
+              <span class="merchant-name">서예나</span>
+              <span class="merchant-district">강남구 · 압구정 로데오 · 허가증 Lv.0</span>
+            </div>
+            <div class="connection-status">
+              <div class="pulse"></div>
+              접속중
+            </div>
+          </div>
+          <div class="dialogue-body">
+            <div class="dialogue-text">
+              "가치란 무엇일까요? 저는 오랫동안 이 질문과 씨름해왔습니다."
+            </div>
+          </div>
+          <div class="dialogue-footer">
+            <span class="dialogue-meta">NODE · sub1_014</span>
+            <div class="next-indicator">
+              계속 <span class="next-arrow">▶</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 12px; font-size: 11px; color: rgba(232,224,213,0.3); line-height: 1.6;">
+          개선: 단청 바, 도장 씰(한자), 한국어 상태 표시, ChosunCentennial 상인명.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 5: QUEST CARDS ===== -->
+  <section class="section">
+    <div class="section-label">05 — QUEST SYSTEM</div>
+    <h2>허가증(許可證) UI<span class="kr">LICENSE & QUEST</span></h2>
+    <p class="section-desc">퀘스트 카드와 라이선스 시스템을 조선 관아(官衙)의 허가증 미학으로 재설계합니다.</p>
+
+    <div class="grid-2" style="margin-bottom: 32px;">
+      <div>
+        <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; color: rgba(232,224,213,0.3); margin-bottom: 12px;">QUEST CARDS</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+
+          <div class="quest-card">
+            <div class="quest-card-accent" style="background: var(--cheong);"></div>
+            <div class="quest-card-inner">
+              <div class="quest-type-badge" style="color: var(--cheong); border-color: rgba(0,229,204,0.3);">
+                <span>💬</span> 대화 퀘스트
+              </div>
+              <div class="quest-title-kr">서예나의 첫 번째 시험</div>
+              <div class="quest-desc">서예나와 대화를 나누며 그녀의 신뢰를 얻어라. 그녀가 던지는 질문에 진심으로 답하라.</div>
+              <div class="quest-rewards">
+                <span class="reward-chip"><span>EXP</span>200</span>
+                <span class="reward-chip"><span>₩</span>50,000</span>
+                <span class="reward-chip"><span>친밀도</span>+100</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quest-card">
+            <div class="quest-card-accent" style="background: var(--jeok);"></div>
+            <div class="quest-card-inner">
+              <div class="quest-type-badge" style="color: var(--jeok); border-color: rgba(255,45,85,0.3);">
+                <span>📍</span> 배달 퀘스트
+              </div>
+              <div class="quest-title-kr">현대 모터스튜디오까지</div>
+              <div class="quest-desc">실제 위치 인증이 필요합니다. 100m 이내 접근 시 자동 완료.</div>
+              <div class="quest-rewards">
+                <span class="reward-chip"><span>EXP</span>350</span>
+                <span class="reward-chip"><span>₩</span>80,000</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; color: rgba(232,224,213,0.3); margin-bottom: 12px;">LICENSE PROGRESSION — 허가증 등급</div>
+        <div class="license-row" style="flex-direction: column; overflow: visible;">
+          <div style="display: flex; gap: 10px;">
+
+            <div class="license-card" style="width: 120px;">
+              <div class="license-top" style="background: rgba(232,224,213,0.03);">
+                <div class="license-seal-number" style="color: var(--baek);">0</div>
+                <div class="license-icon">📜</div>
+              </div>
+              <div class="license-body">
+                <div class="license-level">LEVEL 0</div>
+                <div class="license-title-kr">초보상인</div>
+                <div class="license-dots">
+                  <div class="license-dot filled"></div>
+                  <div class="license-dot"></div>
+                  <div class="license-dot"></div>
+                  <div class="license-dot"></div>
+                  <div class="license-dot"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="license-card active" style="width: 120px;">
+              <div class="license-top" style="background: rgba(255,184,0,0.06);">
+                <div class="license-seal-number" style="color: var(--hwang);">2</div>
+                <div class="license-icon">🔖</div>
+              </div>
+              <div class="license-body">
+                <div class="license-level">LEVEL 2</div>
+                <div class="license-title-kr">거상</div>
+                <div class="license-dots">
+                  <div class="license-dot filled"></div>
+                  <div class="license-dot filled"></div>
+                  <div class="license-dot filled"></div>
+                  <div class="license-dot"></div>
+                  <div class="license-dot"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="license-card" style="width: 120px; opacity: 0.5;">
+              <div class="license-top" style="background: rgba(255,45,85,0.04);">
+                <div class="license-seal-number" style="color: var(--jeok);">4</div>
+                <div class="license-icon">🔮</div>
+              </div>
+              <div class="license-body">
+                <div class="license-level">LEVEL 4</div>
+                <div class="license-title-kr">전설의 상인</div>
+                <div class="license-dots">
+                  <div class="license-dot filled"></div>
+                  <div class="license-dot filled"></div>
+                  <div class="license-dot filled"></div>
+                  <div class="license-dot filled"></div>
+                  <div class="license-dot filled"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 6: MAP + STAT + TABBAR ===== -->
+  <section class="section">
+    <div class="section-label">06 — MAP & NAVIGATION</div>
+    <h2>지도 마커 & 탭바<span class="kr">MAP & TABBAR</span></h2>
+
+    <div class="grid-2">
+      <div>
+        <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; color: rgba(232,224,213,0.3); margin-bottom: 12px;">MAP MARKERS — 도장(圖章) 스타일</div>
+        <div class="map-preview">
+          <div class="map-grid"></div>
+          <div class="map-hud">
+            <div class="hud-chip">GPS · LOCKED</div>
+            <div class="hud-chip">강남구 · 압구정</div>
+          </div>
+
+          <div class="map-marker" style="left: 30%; top: 45%;">
+            <div class="marker-seal">예</div>
+            <div class="marker-name">서예나</div>
+          </div>
+
+          <div class="map-marker marker-gold" style="left: 60%; top: 55%;">
+            <div class="marker-seal">앨</div>
+            <div class="marker-name">앨리스강</div>
+          </div>
+
+          <div style="position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 9px; color: rgba(232,224,213,0.3); letter-spacing: 2px; white-space: nowrap;">2개 상인 발견 · 반경 500m</div>
+        </div>
+        <div style="margin-top: 10px; font-size: 11px; color: rgba(232,224,213,0.3); line-height: 1.6;">
+          상인별 도장 캐릭터(한자 이니셜) · 레이더 펄스 애니메이션 · 황금/적 색상 구분
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; color: rgba(232,224,213,0.3); margin-bottom: 12px;">TAB BAR — 기와(瓦) 스타일</div>
+        <div class="tab-bar-preview">
+          <div class="tab-bar-top"></div>
+          <div class="tab-bar">
+            <div class="tab-item">
+              <div class="tab-icon">🗺</div>
+              <div class="tab-label">지도</div>
+            </div>
+            <div class="tab-item active">
+              <div class="tab-icon">⚡</div>
+              <div class="tab-label">퀘스트</div>
+            </div>
+            <div class="tab-item">
+              <div class="tab-icon">📖</div>
+              <div class="tab-label">스토리</div>
+            </div>
+            <div class="tab-item">
+              <div class="tab-icon">🏪</div>
+              <div class="tab-label">상점</div>
+            </div>
+            <div class="tab-item">
+              <div class="tab-icon">👤</div>
+              <div class="tab-label">내정보</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px;">
+          <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; color: rgba(232,224,213,0.3); margin-bottom: 12px;">STATS — 오행(五行) 스탯 바</div>
+          <div class="relationship-preview" style="padding: 16px;">
+            <div class="stat-grid">
+              <div class="stat-row">
+                <div class="stat-header">
+                  <span class="stat-name-kr" style="color: var(--jeok);">힘 (力)</span>
+                  <span class="stat-value">72 / 100</span>
+                </div>
+                <div class="stat-bar-track">
+                  <div class="stat-bar-fill" style="width: 72%; background: var(--jeok); box-shadow: 0 0 8px rgba(255,45,85,0.6);"></div>
+                </div>
+              </div>
+              <div class="stat-row">
+                <div class="stat-header">
+                  <span class="stat-name-kr" style="color: var(--cheong);">지능 (智)</span>
+                  <span class="stat-value">85 / 100</span>
+                </div>
+                <div class="stat-bar-track">
+                  <div class="stat-bar-fill" style="width: 85%; background: var(--cheong); box-shadow: 0 0 8px rgba(0,229,204,0.6);"></div>
+                </div>
+              </div>
+              <div class="stat-row">
+                <div class="stat-header">
+                  <span class="stat-name-kr" style="color: #FF88BB;">매력 (魅)</span>
+                  <span class="stat-value">91 / 100</span>
+                </div>
+                <div class="stat-bar-track">
+                  <div class="stat-bar-fill" style="width: 91%; background: #FF88BB; box-shadow: 0 0 8px rgba(255,136,187,0.6);"></div>
+                </div>
+              </div>
+              <div class="stat-row">
+                <div class="stat-header">
+                  <span class="stat-name-kr" style="color: var(--hwang);">행운 (幸)</span>
+                  <span class="stat-value">58 / 100</span>
+                </div>
+                <div class="stat-bar-track">
+                  <div class="stat-bar-fill" style="width: 58%; background: var(--hwang); box-shadow: 0 0 8px rgba(255,184,0,0.6);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 7: RELATIONSHIP SYSTEM ===== -->
+  <section class="section">
+    <div class="section-label">07 — RELATIONSHIP SYSTEM</div>
+    <h2>서예(書藝) 친밀도<span class="kr">RELATIONSHIP METER</span></h2>
+    <p class="section-desc">관계도 0→4 단계 진행을 붓글씨 획이 완성되어가는 시각으로 표현합니다. 숫자 대신 글자로.</p>
+
+    <div class="grid-2">
+      <div class="relationship-preview">
+        <div class="rel-merchant">
+          <div class="rel-avatar">🌸</div>
+          <div>
+            <div style="font-family: var(--font-joseon); font-size: 16px; font-weight: 700; color: var(--hwang);">서예나</div>
+            <div style="font-family: var(--font-mono); font-size: 9px; color: rgba(232,224,213,0.3); letter-spacing: 1px;">강남구 · 단계 3 / 4</div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin: 10px 0;">
+          <div class="rel-stage-char" style="font-size: 72px;">
+            <span class="rel-stage-char filled">친</span>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 9px; color: rgba(232,224,213,0.3); letter-spacing: 2px; margin-top: 4px;">친(親) — CLOSE FRIEND</div>
+        </div>
+
+        <div class="rel-stages">
+          <div class="rel-stage-node">
+            <div class="rel-stage-track">
+              <div class="rel-stage-fill" style="width: 100%;"></div>
+            </div>
+          </div>
+          <div class="rel-stage-node">
+            <div class="rel-stage-track">
+              <div class="rel-stage-fill" style="width: 100%;"></div>
+            </div>
+          </div>
+          <div class="rel-stage-node">
+            <div class="rel-stage-track">
+              <div class="rel-stage-fill" style="width: 100%;"></div>
+            </div>
+          </div>
+          <div class="rel-stage-node">
+            <div class="rel-stage-track">
+              <div class="rel-stage-fill" style="width: 60%;"></div>
+            </div>
+          </div>
+          <div class="rel-stage-node">
+            <div class="rel-stage-track">
+              <div class="rel-stage-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 6px; font-family: var(--font-joseon); font-size: 10px; color: rgba(232,224,213,0.25);">
+          <span>초(初)</span><span>안(安)</span><span>친(親)</span><span>동(同)</span><span>반(伴)</span>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; color: rgba(232,224,213,0.3);">관계도 단계별 한자 캐릭터</div>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <div style="text-align: center;">
+            <div style="font-family: var(--font-joseon); font-size: 36px; font-weight: 900; color: rgba(232,224,213,0.15);">초</div>
+            <div style="font-family: var(--font-mono); font-size: 8px; color: rgba(232,224,213,0.2); letter-spacing: 1px;">初·초면</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-family: var(--font-joseon); font-size: 36px; font-weight: 900; color: rgba(232,224,213,0.3);">안</div>
+            <div style="font-family: var(--font-mono); font-size: 8px; color: rgba(232,224,213,0.2); letter-spacing: 1px;">安·안면</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-family: var(--font-joseon); font-size: 36px; font-weight: 900; color: rgba(255,184,0,0.6);">친</div>
+            <div style="font-family: var(--font-mono); font-size: 8px; color: rgba(255,184,0,0.4); letter-spacing: 1px;">親·친구</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-family: var(--font-joseon); font-size: 36px; font-weight: 900; color: rgba(232,224,213,0.15);">동</div>
+            <div style="font-family: var(--font-mono); font-size: 8px; color: rgba(232,224,213,0.2); letter-spacing: 1px;">同·동료</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-family: var(--font-joseon); font-size: 36px; font-weight: 900; color: rgba(255,45,85,0.4);">반</div>
+            <div style="font-family: var(--font-mono); font-size: 8px; color: rgba(255,45,85,0.3); letter-spacing: 1px;">伴·파트너</div>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: rgba(232,224,213,0.35); line-height: 1.7; margin-top: 8px;">
+          각 단계 달성 시 <strong style="color: var(--hwang);">도장 스탬프 애니메이션</strong>이 화면에 찍힙니다.
+          한자 캐릭터가 붓글씨 획으로 그려지는 reveal 애니메이션과 함께.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 8: MOTION LANGUAGE ===== -->
+  <section class="section">
+    <div class="section-label">08 — MOTION LANGUAGE</div>
+    <h2>애니메이션 언어<span class="kr">MOTION SYSTEM</span></h2>
+    <p class="section-desc">모든 전환과 피드백에 조선사이버펑크 모션 언어를 적용합니다. 각 애니메이션은 단 하나의 문화적 은유를 담습니다.</p>
+
+    <div class="grid-3">
+
+      <div class="motion-card">
+        <div class="motion-title">수묵 전환 (水墨 Reveal)</div>
+        <div class="motion-desc">화면 전환 시 먹물이 번지듯 새 화면이 나타납니다. clip-path circle 기반 0→100% 확장.</div>
+        <div class="motion-demo" style="background: rgba(0,0,0,0.5);">
+          <div style="position: absolute; inset: 0; display: flex; align-items: center; padding-left: 16px;">
+            <span style="font-family: var(--font-joseon); font-size: 14px; color: var(--baek); opacity: 0.4;">강남구로 이동 중</span>
+          </div>
+          <div style="position: absolute; inset: 0; background: var(--heuk-card); animation: inkBleed 4s ease-out infinite;"></div>
+        </div>
+      </div>
+
+      <div class="motion-card">
+        <div class="motion-title">도장 스탬프 (圖章 Stamp)</div>
+        <div class="motion-desc">퀘스트 완료, 관계도 상승 시 도장이 찍히는 애니메이션. 위에서 쾅 내려찍히는 모션.</div>
+        <div class="motion-demo" style="display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3);">
+          <div class="stamp-demo">완</div>
+        </div>
+      </div>
+
+      <div class="motion-card">
+        <div class="motion-title">위성 스캔 (衛星 Scan)</div>
+        <div class="motion-desc">GPS 위치 인증 중 스캔 라인이 위→아래로 이동합니다. 군사 위성 또는 지도 스캔 느낌.</div>
+        <div class="scan-demo">
+          <div class="scan-line"></div>
+          <div style="position: absolute; inset: 0; display: flex; align-items: center; padding: 0 14px; justify-content: space-between;">
+            <span style="font-family: var(--font-mono); font-size: 9px; color: rgba(0,229,204,0.5);">GPS_LOCK</span>
+            <span style="font-family: var(--font-mono); font-size: 9px; color: rgba(0,229,204,0.5);">37.5279N</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="motion-card">
+        <div class="motion-title">단청 바 슬라이드</div>
+        <div class="motion-desc">화면 상단/하단 단청 패턴 바가 슬라이드인하며 UI 프레임을 구성합니다. 첫 진입 시 인상적.</div>
+        <div class="motion-demo" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="height: 4px; background: repeating-linear-gradient(90deg, var(--hwang) 0, var(--hwang) 12px, var(--jeok) 12px, var(--jeok) 24px, var(--cheong) 24px, var(--cheong) 36px, var(--jeok) 36px, var(--jeok) 48px); animation: slideInLeft 3s ease-out infinite;"></div>
+          <div style="height: 4px; background: repeating-linear-gradient(90deg, var(--cheong) 0, var(--cheong) 12px, var(--jeok) 12px, var(--jeok) 24px, var(--hwang) 24px, var(--hwang) 36px, var(--jeok) 36px, var(--jeok) 48px); animation: slideInRight 3s ease-out infinite;"></div>
+        </div>
+      </div>
+
+      <div class="motion-card">
+        <div class="motion-title">타이핑 + 먹물 커서</div>
+        <div class="motion-desc">대화 타이핑 애니메이션의 커서를 기본 블록 대신 붓펜 모양으로. 타이핑 완료 시 먹물 번짐 효과.</div>
+        <div class="motion-demo" style="display: flex; align-items: center; padding: 0 14px;">
+          <span style="font-family: var(--font-joseon); font-size: 15px; color: rgba(232,224,213,0.8);">"가치란</span>
+          <span style="font-family: var(--font-joseon); font-size: 18px; color: var(--hwang); animation: pulse 0.8s ease-in-out infinite; margin-left: 1px;">丨</span>
+        </div>
+      </div>
+
+      <div class="motion-card">
+        <div class="motion-title">보상 파티클</div>
+        <div class="motion-desc">경험치/돈 획득 시 위로 올라가는 파티클. 한자 '복(福)' '재(財)' 문자 파티클 사용.</div>
+        <div class="motion-demo" style="display: flex; align-items: center; justify-content: center; gap: 16px; background: rgba(0,0,0,0.3);">
+          <span style="font-family: var(--font-joseon); font-size: 20px; color: var(--hwang); animation: floatUp 2s ease-out infinite; text-shadow: 0 0 10px rgba(255,184,0,0.8);">재</span>
+          <span style="font-family: var(--font-joseon); font-size: 16px; color: var(--hwang); animation: floatUp 2.5s ease-out 0.3s infinite; opacity: 0.6; text-shadow: 0 0 10px rgba(255,184,0,0.8);">+200 EXP</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <style>
+    @keyframes slideInLeft {
+      0% { transform: translateX(-100%); }
+      30%, 100% { transform: translateX(0); }
+    }
+    @keyframes slideInRight {
+      0% { transform: translateX(100%); }
+      30%, 100% { transform: translateX(0); }
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(20px); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-20px); opacity: 0; }
+    }
+  </style>
+
+  <!-- ===== SECTION 9: IMPLEMENTATION PRIORITY ===== -->
+  <section class="section">
+    <div class="section-label">09 — IMPLEMENTATION PLAN</div>
+    <h2>구현 우선순위<span class="kr">SPRINT PLAN</span></h2>
+    <p class="section-desc">임팩트 대비 작업량이 낮은 항목부터 우선합니다. 대화창과 색상 시스템이 핵심입니다.</p>
+
+    <table class="priority-table">
+      <thead>
+        <tr>
+          <th>우선순위</th>
+          <th>컴포넌트 / 파일</th>
+          <th>변경 내용</th>
+          <th>임팩트</th>
+          <th>작업량</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="p-badge p1">P1 즉시</span></td>
+          <td>
+            <div class="component-name">CyberpunkDesignSystem.swift</div>
+            <div class="component-file">Utils/CyberpunkDesignSystem.swift</div>
+          </td>
+          <td style="font-size: 12px; color: rgba(232,224,213,0.55); line-height: 1.6;">오방색 팔레트 추가. cyberpunkYellow→hwangGold, 적(赤) 추가, 배경에 hanji 텍스처 색상 변수화</td>
+          <td>🔴 최고</td>
+          <td><div class="effort-dots"><div class="effort-dot on"></div><div class="effort-dot"></div><div class="effort-dot"></div></div></td>
+        </tr>
+        <tr>
+          <td><span class="p-badge p1">P1 즉시</span></td>
+          <td>
+            <div class="component-name">Font+ChosunSystem.swift</div>
+            <div class="component-file">Extensions/Font+ChosunSystem.swift</div>
+          </td>
+          <td style="font-size: 12px; color: rgba(232,224,213,0.55); line-height: 1.6;">모든 UI 헤더/타이틀에 ChosunCentennial 적용. 시스템 모노스페이스는 technical 데이터만.</td>
+          <td>🔴 최고</td>
+          <td><div class="effort-dots"><div class="effort-dot on"></div><div class="effort-dot on"></div><div class="effort-dot"></div></div></td>
+        </tr>
+        <tr>
+          <td><span class="p-badge p1">P1 즉시</span></td>
+          <td>
+            <div class="component-name">CyberpunkComponents.swift</div>
+            <div class="component-file">Components/CyberpunkComponents.swift</div>
+          </td>
+          <td style="font-size: 12px; color: rgba(232,224,213,0.55); line-height: 1.6;">대화창 헤더 "COMM_LINK/CONNECTED" → 단청 바 + 도장 씰 + 한국어 상태. 임팩트 최대.</td>
+          <td>🔴 최고</td>
+          <td><div class="effort-dots"><div class="effort-dot on"></div><div class="effort-dot on"></div><div class="effort-dot"></div></div></td>
+        </tr>
+        <tr>
+          <td><span class="p-badge p2">P2 단기</span></td>
+          <td>
+            <div class="component-name">CyberpunkQuestComponents.swift</div>
+            <div class="component-file">Components/CyberpunkQuestComponents.swift</div>
+          </td>
+          <td style="font-size: 12px; color: rgba(232,224,213,0.55); line-height: 1.6;">퀘스트 카드 좌측 accent 바 + ChosunCentennial 제목 + 보상 chip 스타일 정비</td>
+          <td>🟡 높음</td>
+          <td><div class="effort-dots"><div class="effort-dot on"></div><div class="effort-dot on"></div><div class="effort-dot"></div></div></td>
+        </tr>
+        <tr>
+          <td><span class="p-badge p2">P2 단기</span></td>
+          <td>
+            <div class="component-name">CyberpunkProfileComponents.swift</div>
+            <div class="component-file">Components/CyberpunkProfileComponents.swift</div>
+          </td>
+          <td style="font-size: 12px; color: rgba(232,224,213,0.55); line-height: 1.6;">스탯 바를 오방색(힘/지능/매력/행운)으로, 라벨을 "힘(力)" 형식의 한자 포함으로</td>
+          <td>🟡 높음</td>
+          <td><div class="effort-dots"><div class="effort-dot on"></div><div class="effort-dot on"></div><div class="effort-dot"></div></div></td>
+        </tr>
+        <tr>
+          <td><span class="p-badge p2">P2 단기</span></td>
+          <td>
+            <div class="component-name">MainTabView.swift</div>
+            <div class="component-file">Views/Game/MainTabView.swift</div>
+          </td>
+          <td style="font-size: 12px; color: rgba(232,224,213,0.55); line-height: 1.6;">탭 레이블 한국어화 + 활성 탭 상단 단청 라인 + ChosunCentennial 탭 라벨</td>
+          <td>🟡 높음</td>
+          <td><div class="effort-dots"><div class="effort-dot on"></div><div class="effort-dot"></div><div class="effort-dot"></div></div></td>
+        </tr>
+        <tr>
+          <td><span class="p-badge p3">P3 중기</span></td>
+          <td>
+            <div class="component-name">MapView.swift</div>
+            <div class="component-file">Views/Map/MapView.swift</div>
+          </td>
+          <td style="font-size: 12px; color: rgba(232,224,213,0.55); line-height: 1.6;">상인 마커를 도장(한자 이니셜) + 레이더 펄스 스타일로. 커스텀 Mapbox 어노테이션.</td>
+          <td>🟢 중간</td>
+          <td><div class="effort-dots"><div class="effort-dot on"></div><div class="effort-dot on"></div><div class="effort-dot on"></div></div></td>
+        </tr>
+        <tr>
+          <td><span class="p-badge p3">P3 중기</span></td>
+          <td>
+            <div class="component-name">StoryFlowManager.swift</div>
+            <div class="component-file">Managers/StoryFlowManager.swift</div>
+          </td>
+          <td style="font-size: 12px; color: rgba(232,224,213,0.55); line-height: 1.6;">화면 전환 시 수묵 reveal 트랜지션 추가. 에피소드 완료 시 도장 스탬프 애니메이션.</td>
+          <td>🟢 중간</td>
+          <td><div class="effort-dots"><div class="effort-dot on"></div><div class="effort-dot on"></div><div class="effort-dot on"></div></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="page-footer">
+    <div class="footer-logo">connect:seoul — 조선사이버펑크</div>
+    <div class="footer-meta">UI CONCEPT PROPOSAL · 2026.02 · V1.0 · FOR INTERNAL REVIEW</div>
+  </footer>
+
+</body>
+</html>
