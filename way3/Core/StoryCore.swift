@@ -323,25 +323,149 @@ extension VNNode {
     }
 }
 
-// MARK: - Loader
+// MARK: - Loader (Unified JSON Support)
+
+// 통합 챕터 파일 디코딩 구조체
+private struct UnifiedChapterFile: Decodable {
+    let id: String
+    let nodes: [VNNode]
+}
+
+private struct ChapterIndex: Decodable {
+    let chapters: [ChapterIndexEntry]
+}
+
+private struct ChapterIndexEntry: Decodable {
+    let id: String
+}
 
 enum VNLoader {
-    /// Flexible story node loader - searches multiple locations
+
+    // MARK: - Cache (inner class: enum은 stored property 불가)
+    private final class NodeCache {
+        var nodes: [String: VNNode] = [:]       // node_id → VNNode
+        var loadedChapterIds: Set<String> = []   // 로드 시도한 챕터 ID
+    }
+    private static let cache = NodeCache()
+
+    // index.json에서 읽어온 메인 챕터 ID 목록
+    private static let mainChapterIds: Set<String> = loadMainChapterIds()
+
+    // MARK: - Public Interface
+
+    /// 통합 JSON 캐시 → 개별 파일 fallback 순으로 노드 로드
     static func loadNode(id: String) -> VNNode? {
         let name = id.replacingOccurrences(of: ".json", with: "")
-        guard let url = nodeURL(for: name) else {
-            AppLog.loader.error("❌ file not found: \(name).json in bundle")
-            AppLog.loader.error("   searched: main bundle + subdirs: \(searchDirectories.joined(separator: ", "))")
-            return nil
+
+        // 1단계: 캐시 확인
+        if let cached = cache.nodes[name] {
+            AppLog.loader.debug("⚡️ cache hit: \(name, privacy: .public)")
+            return cached
         }
 
+        // 2단계: 통합 JSON에서 로드
+        if let chapterId = chapterIdForNode(name) {
+            if !cache.loadedChapterIds.contains(chapterId) {
+                _ = loadUnifiedChapter(id: chapterId)
+            }
+            if let node = cache.nodes[name] {
+                return node
+            }
+            AppLog.loader.warning("⚠️ '\(name, privacy: .public)' not in unified '\(chapterId, privacy: .public)', trying fallback")
+        }
+
+        // 3단계: 기존 개별 파일 fallback (Substories 등)
+        guard let url = nodeURL(for: name) else {
+            AppLog.loader.error("❌ file not found: \(name, privacy: .public).json")
+            AppLog.loader.error("   searched: unified files + subdirs: \(searchDirectories.joined(separator: ", "))")
+            return nil
+        }
         return decodeNode(from: url)
     }
 
     static func canLoadNode(id: String) -> Bool {
         let name = id.replacingOccurrences(of: ".json", with: "")
+
+        if cache.nodes[name] != nil { return true }
+
+        if let chapterId = chapterIdForNode(name) {
+            if !cache.loadedChapterIds.contains(chapterId) {
+                _ = loadUnifiedChapter(id: chapterId)
+            }
+            if cache.nodes[name] != nil { return true }
+        }
+
         return nodeURL(for: name) != nil
     }
+
+    // MARK: - Unified JSON Loading
+
+    /// index.json을 읽어 챕터 ID Set 반환
+    private static func loadMainChapterIds() -> Set<String> {
+        let candidates = [
+            Bundle.main.path(forResource: "index", ofType: "json", inDirectory: "StoryData"),
+            Bundle.main.path(forResource: "index", ofType: "json")
+        ]
+        for path in candidates.compactMap({ $0 }) {
+            guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
+                  let index = try? JSONDecoder().decode(ChapterIndex.self, from: data) else { continue }
+            let ids = Set(index.chapters.map(\.id))
+            AppLog.loader.info("📋 index.json loaded: \(ids.sorted().joined(separator: ", "), privacy: .public)")
+            return ids
+        }
+        AppLog.loader.warning("⚠️ index.json not found, using hardcoded chapter IDs")
+        return ["prologue", "gangnam", "gangdong", "seocho", "songpa"]
+    }
+
+    /// 노드 ID → 챕터 ID 추정
+    /// "chapter_gangnam_001" → "gangnam" / "prologue_01" → "prologue"
+    private static func chapterIdForNode(_ nodeId: String) -> String? {
+        for chapterId in mainChapterIds {
+            if nodeId.contains(chapterId) {
+                return chapterId
+            }
+        }
+        return nil
+    }
+
+    /// 통합 챕터 JSON을 로드하여 캐시에 등록
+    @discardableResult
+    private static func loadUnifiedChapter(id: String) -> Bool {
+        cache.loadedChapterIds.insert(id)
+
+        let searchPaths: [(String?, String)] = [
+            ("StoryData", id),
+            (nil, id)
+        ]
+
+        for (directory, resource) in searchPaths {
+            let path: String?
+            if let dir = directory {
+                path = Bundle.main.path(forResource: resource, ofType: "json", inDirectory: dir)
+            } else {
+                path = Bundle.main.path(forResource: resource, ofType: "json")
+            }
+
+            guard let filePath = path,
+                  let data = try? Data(contentsOf: URL(fileURLWithPath: filePath)) else { continue }
+
+            do {
+                let chapter = try JSONDecoder().decode(UnifiedChapterFile.self, from: data)
+                for node in chapter.nodes {
+                    cache.nodes[node.nodeId] = node
+                }
+                AppLog.loader.info("✅ unified '\(id, privacy: .public)' loaded: \(chapter.nodes.count) nodes")
+                return true
+            } catch {
+                AppLog.loader.error("❌ unified '\(id, privacy: .public)' decode error: \(error.localizedDescription, privacy: .public)")
+            }
+        }
+
+        AppLog.loader.warning("⚠️ unified chapter file '\(id, privacy: .public).json' not found in bundle")
+        return false
+    }
+
+    // MARK: - Individual File Fallback (Substories 등)
 
     private static func decodeNode(from url: URL) -> VNNode? {
         do {
@@ -356,12 +480,15 @@ enum VNLoader {
         }
     }
 
+    // Substories 개별 파일 탐색 경로 (메인 챕터 폴더 제거)
     private static let searchDirectories = [
         "StoryData",
-        "StoryData/Prologue",
-        "StoryData/Gangnam",
+        "StoryData/Substories/Seoyena",
+        "StoryData/Substories/Alicegang",
+        "StoryData/Substories/Anipark",
+        "StoryData/Substories/Jinbaekho",
+        "StoryData/Substories/Jubulsu",
         "Resources/Story",
-        "Resources/StoryData/prologue",
         "Story"
     ]
 
@@ -395,12 +522,16 @@ enum VNLoader {
         }
 
         let fm = FileManager.default
-        guard let enumerator = fm.enumerator(at: baseURL, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles], errorHandler: nil) else {
-            return nil
-        }
+        guard let enumerator = fm.enumerator(
+            at: baseURL,
+            includingPropertiesForKeys: nil,
+            options: [.skipsHiddenFiles],
+            errorHandler: nil
+        ) else { return nil }
 
         for case let fileURL as URL in enumerator {
-            if fileURL.pathExtension == "json" && fileURL.deletingPathExtension().lastPathComponent == name {
+            if fileURL.pathExtension == "json" &&
+               fileURL.deletingPathExtension().lastPathComponent == name {
                 AppLog.loader.debug("➡️ found \(name).json via recursive StoryData search")
                 return fileURL
             }
