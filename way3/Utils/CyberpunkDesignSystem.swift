@@ -10,16 +10,27 @@ import SwiftUI
 
 // MARK: - Cyberpunk Color Palette
 extension Color {
+    // MARK: - 오방색 네온 팔레트 (五方色 Neon — 조선사이버펑크)
+    static let joseonCheong  = Color(hex: "00E5CC")   // 청(靑) 동·나무·탐색
+    static let joseonJeok    = Color(hex: "FF2D55")   // 적(赤) 남·불·도장·긴급
+    static let joseonHwang   = Color(hex: "FFB800")   // 황(黃) 중앙·흙·거래·보상
+    static let joseonBaek    = Color(hex: "E8E0D5")   // 백(白) 서·금·한지 크림
+    static let joseonHeuk    = Color(hex: "0A0A0F")   // 흑(黑) 북·물·딥 잉크
+    static let joseonPanel   = Color(hex: "111118")
+    static let joseonCard    = Color(hex: "16161F")
+    static let joseonBorderDim  = Color(hex: "E8E0D5").opacity(0.12)
+    static let joseonBorderGlow = Color(hex: "00E5CC").opacity(0.35)
+
     // Primary Colors (Based on Cyberpunk_UI.webp)
-    static let cyberpunkYellow = Color(red: 1.0, green: 0.85, blue: 0.0)          // 노란색 강조
-    static let cyberpunkGold = Color(red: 1.0, green: 0.75, blue: 0.0)            // 금색 액센트
-    static let cyberpunkCyan = Color(red: 0.0, green: 0.9, blue: 0.9)             // 사이안 강조
-    static let cyberpunkGreen = Color(red: 0.0, green: 1.0, blue: 0.3)            // 네온 그린
+    static let cyberpunkYellow  = Color(hex: "FFB800")   // 황(黃) 앰버 골드
+    static let cyberpunkGold    = Color(hex: "E09000")   // 황 딥
+    static let cyberpunkCyan    = Color(hex: "00E5CC")   // 청(靑) 일렉트릭 틸
+    static let cyberpunkGreen   = Color(hex: "00FF66")   // 성공 상태 (유지)
 
     // Background Colors
-    static let cyberpunkDarkBg = Color(red: 0.05, green: 0.05, blue: 0.08)        // 메인 다크 배경
-    static let cyberpunkPanelBg = Color(red: 0.1, green: 0.12, blue: 0.15)        // 패널 배경
-    static let cyberpunkCardBg = Color(red: 0.15, green: 0.18, blue: 0.22)        // 카드 배경
+    static let cyberpunkDarkBg  = Color(hex: "0A0A0F")   // 흑(黑) 딥 잉크
+    static let cyberpunkPanelBg = Color(hex: "111118")   // 패널
+    static let cyberpunkCardBg  = Color(hex: "16161F")   // 카드
 
     // Border and Line Colors
     static let cyberpunkBorder = Color(red: 0.3, green: 0.35, blue: 0.4)          // 기본 보더
@@ -369,5 +380,60 @@ struct CyberpunkProgressBar: View {
         }
         .frame(height: height)
         .clipShape(Rectangle())
+    }
+}
+
+// MARK: - 단청 장식 바 (DancheongBar)
+/// 단청(丹靑) 패턴을 모방한 색동 수평 바. 대화창 상단, 화면 진입 트랜지션에 사용.
+struct DancheongBar: View {
+    var height: CGFloat = 4
+
+    var body: some View {
+        GeometryReader { geo in
+            HStack(spacing: 0) {
+                Rectangle().fill(Color.joseonHwang)
+                    .frame(width: geo.size.width / 5)
+                Rectangle().fill(Color.joseonJeok)
+                    .frame(width: geo.size.width / 5)
+                Rectangle().fill(Color.joseonCheong)
+                    .frame(width: geo.size.width / 5)
+                Rectangle().fill(Color.joseonJeok)
+                    .frame(width: geo.size.width / 5)
+                Rectangle().fill(Color.joseonHwang)
+                    .frame(width: geo.size.width / 5)
+            }
+        }
+        .frame(height: height)
+    }
+}
+
+// MARK: - 도장 씰 배지 (JoseonSealBadge)
+/// 조선 관아 도장(圖章) 스타일. 상인 이니셜 한 글자를 적(赤) 테두리 사각형에 표시.
+struct JoseonSealBadge: View {
+    let character: String
+    var size: CGFloat = 36
+    var color: Color = .joseonJeok
+
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .fill(color.opacity(0.12))
+                .frame(width: size, height: size)
+                .overlay(
+                    Rectangle()
+                        .stroke(color, lineWidth: 1.5)
+                )
+                .overlay(
+                    Rectangle()
+                        .stroke(color.opacity(0.3), lineWidth: 0.5)
+                        .padding(4)
+                )
+
+            Text(character)
+                .font(.custom("ChosunCentennial", size: size * 0.5))
+                .fontWeight(.bold)
+                .foregroundColor(color)
+        }
+        .shadow(color: color.opacity(0.3), radius: 6)
     }
 }
