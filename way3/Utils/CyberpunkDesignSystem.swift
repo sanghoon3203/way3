@@ -11,26 +11,26 @@ import SwiftUI
 // MARK: - Cyberpunk Color Palette
 extension Color {
     // MARK: - 오방색 네온 팔레트 (五方色 Neon — 조선사이버펑크)
-    static let joseonCheong  = Color(hex: "00E5CC")   // 청(靑) 동·나무·탐색
-    static let joseonJeok    = Color(hex: "FF2D55")   // 적(赤) 남·불·도장·긴급
-    static let joseonHwang   = Color(hex: "FFB800")   // 황(黃) 중앙·흙·거래·보상
-    static let joseonBaek    = Color(hex: "E8E0D5")   // 백(白) 서·금·한지 크림
-    static let joseonHeuk    = Color(hex: "0A0A0F")   // 흑(黑) 북·물·딥 잉크
-    static let joseonPanel   = Color(hex: "111118")
-    static let joseonCard    = Color(hex: "16161F")
-    static let joseonBorderDim  = Color(hex: "E8E0D5").opacity(0.12)
-    static let joseonBorderGlow = Color(hex: "00E5CC").opacity(0.35)
+    static let joseonCheong  = Color(red: 0/255,   green: 229/255, blue: 204/255)  // 청(靑) #00E5CC
+    static let joseonJeok    = Color(red: 255/255,  green: 45/255,  blue: 85/255)   // 적(赤) #FF2D55
+    static let joseonHwang   = Color(red: 255/255,  green: 184/255, blue: 0/255)    // 황(黃) #FFB800
+    static let joseonBaek    = Color(red: 232/255,  green: 224/255, blue: 213/255)  // 백(白) #E8E0D5
+    static let joseonHeuk    = Color(red: 10/255,   green: 10/255,  blue: 15/255)   // 흑(黑) #0A0A0F
+    static let joseonPanel   = Color(red: 17/255,   green: 17/255,  blue: 24/255)   // #111118
+    static let joseonCard    = Color(red: 22/255,   green: 22/255,  blue: 31/255)   // #16161F
+    static let joseonBorderDim  = Color(red: 232/255, green: 224/255, blue: 213/255).opacity(0.12)
+    static let joseonBorderGlow = Color(red: 0/255,   green: 229/255, blue: 204/255).opacity(0.35)
 
     // Primary Colors (Based on Cyberpunk_UI.webp)
-    static let cyberpunkYellow  = Color(hex: "FFB800")   // 황(黃) 앰버 골드
-    static let cyberpunkGold    = Color(hex: "E09000")   // 황 딥
-    static let cyberpunkCyan    = Color(hex: "00E5CC")   // 청(靑) 일렉트릭 틸
-    static let cyberpunkGreen   = Color(hex: "00FF66")   // 성공 상태 (유지)
+    static let cyberpunkYellow  = Color(red: 255/255, green: 184/255, blue: 0/255)    // #FFB800 황(黃)
+    static let cyberpunkGold    = Color(red: 224/255, green: 144/255, blue: 0/255)    // #E09000
+    static let cyberpunkCyan    = Color(red: 0/255,   green: 229/255, blue: 204/255)  // #00E5CC 청(靑)
+    static let cyberpunkGreen   = Color(red: 0/255,   green: 255/255, blue: 102/255)  // #00FF66
 
     // Background Colors
-    static let cyberpunkDarkBg  = Color(hex: "0A0A0F")   // 흑(黑) 딥 잉크
-    static let cyberpunkPanelBg = Color(hex: "111118")   // 패널
-    static let cyberpunkCardBg  = Color(hex: "16161F")   // 카드
+    static let cyberpunkDarkBg  = Color(red: 10/255,  green: 10/255,  blue: 15/255)   // #0A0A0F 흑(黑)
+    static let cyberpunkPanelBg = Color(red: 17/255,  green: 17/255,  blue: 24/255)   // #111118
+    static let cyberpunkCardBg  = Color(red: 22/255,  green: 22/255,  blue: 31/255)   // #16161F
 
     // Border and Line Colors
     static let cyberpunkBorder = Color(red: 0.3, green: 0.35, blue: 0.4)          // 기본 보더
