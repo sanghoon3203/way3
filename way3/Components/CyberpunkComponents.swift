@@ -18,40 +18,49 @@ struct CyberpunkDialogueBox: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            // Technical Header with Merchant Name
-            HStack {
-                Text("COMM_LINK")
-                    .font(.cyberpunkTechnical())
-                    .foregroundColor(.cyberpunkTextSecondary)
+            // 교서(敎書) 스타일 헤더 — 단청 바 + 도장 씰 + 한국어
+            VStack(spacing: 0) {
+                DancheongBar(height: 4)
 
-                Spacer()
+                HStack(spacing: 10) {
+                    JoseonSealBadge(
+                        character: String(merchantName.prefix(1)),
+                        size: 34
+                    )
 
-                Text(merchantName.uppercased())
-                    .font(.cyberpunkCaption())
-                    .foregroundColor(.cyberpunkYellow)
-                    .fontWeight(.semibold)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(merchantName)
+                            .font(.cyberpunkHeading(size: 15))
+                            .foregroundColor(.joseonHwang)
 
-                // Connection Status
-                HStack(spacing: 4) {
-                    Circle()
-                        .fill(Color.cyberpunkGreen)
-                        .frame(width: 6, height: 6)
-                        .animation(CyberpunkAnimations.slowGlow, value: UUID())
+                        Text("접속중")
+                            .font(.cyberpunkTechnical())
+                            .foregroundColor(.joseonCheong)
+                    }
 
-                    Text("CONNECTED")
-                        .font(.cyberpunkTechnical())
-                        .foregroundColor(.cyberpunkGreen)
+                    Spacer()
+
+                    HStack(spacing: 4) {
+                        Circle()
+                            .fill(Color.joseonCheong)
+                            .frame(width: 5, height: 5)
+                            .shadow(color: .joseonCheong, radius: 3)
+
+                        Text("연결됨")
+                            .font(.cyberpunkTechnical())
+                            .foregroundColor(.joseonCheong)
+                    }
                 }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(Color.cyberpunkDarkBg)
+                .overlay(
+                    Rectangle()
+                        .fill(Color.joseonBorderDim)
+                        .frame(height: 1),
+                    alignment: .bottom
+                )
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 6)
-            .background(Color.cyberpunkDarkBg)
-            .overlay(
-                Rectangle()
-                    .fill(Color.cyberpunkYellow)
-                    .frame(height: 1),
-                alignment: .bottom
-            )
 
             // Message Content Area
             ScrollView {
@@ -87,9 +96,9 @@ struct CyberpunkDialogueBox: View {
                                 )
                         }
 
-                        Text("DATA_TRANSFER")
+                        Text("전송 중")
                             .font(.cyberpunkTechnical())
-                            .foregroundColor(.cyberpunkCyan)
+                            .foregroundColor(.joseonCheong)
                     }
                 }
 
@@ -99,18 +108,13 @@ struct CyberpunkDialogueBox: View {
                 if showNextArrow {
                     Button(action: onContinue) {
                         HStack(spacing: 4) {
-                            Text("CONTINUE")
+                            Text("계속")
                                 .font(.cyberpunkTechnical())
-                                .foregroundColor(.cyberpunkYellow)
+                                .foregroundColor(.joseonHwang)
 
-                            Text(">")
-                                .font(.cyberpunkCaption())
-                                .foregroundColor(.cyberpunkYellow)
-                                .offset(x: sin(Date().timeIntervalSince1970 * 3) * 2)
-                                .animation(
-                                    CyberpunkAnimations.slowGlow,
-                                    value: UUID()
-                                )
+                            Text("▶")
+                                .font(.system(size: 10))
+                                .foregroundColor(.joseonHwang)
                         }
                     }
                     .buttonStyle(PlainButtonStyle())
