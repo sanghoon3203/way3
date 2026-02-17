@@ -141,15 +141,15 @@ struct CyberpunkChoiceMenu: View {
         VStack(alignment: .leading, spacing: 2) {
             // Menu Header
             HStack {
-                Text("ACTION_MENU")
+                Text("선택")
                     .font(.cyberpunkTechnical())
                     .foregroundColor(.cyberpunkTextSecondary)
 
                 Spacer()
 
-                Text("[SELECT]")
+                Text("▼")
                     .font(.cyberpunkTechnical())
-                    .foregroundColor(.cyberpunkYellow)
+                    .foregroundColor(.joseonHwang)
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 6)

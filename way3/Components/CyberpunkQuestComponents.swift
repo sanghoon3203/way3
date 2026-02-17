@@ -16,102 +16,109 @@ struct CyberpunkQuestCard: View {
     @State private var isProcessing = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            // Quest Header with status
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(quest.title.uppercased())
-                        .font(.cyberpunkHeading(size: 16))
-                        .fontWeight(.bold)
-                        .foregroundColor(.cyberpunkTextPrimary)
+        HStack(spacing: 0) {
+            // 퀘스트 타입 색상 바
+            Rectangle()
+                .fill(questTypeAccentColor)
+                .frame(width: 4)
 
-                    Text("CATEGORY: \(quest.category.uppercased())")
-                        .font(.cyberpunkTechnical())
-                        .foregroundColor(.cyberpunkTextSecondary)
-                }
+            VStack(alignment: .leading, spacing: 16) {
+                // Quest Header with status
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(quest.title)
+                            .font(.cyberpunkHeading(size: 16))
+                            .fontWeight(.bold)
+                            .foregroundColor(.cyberpunkTextPrimary)
 
-                Spacer()
-
-                // Status Badge
-                HStack(spacing: 8) {
-                    // Difficulty Badge
-                    Text(difficultyText)
-                        .font(.cyberpunkTechnical())
-                        .fontWeight(.medium)
-                        .foregroundColor(.cyberpunkDarkBg)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(difficultyColor)
-
-                    // Status Badge
-                    Text(questStatusText)
-                        .font(.cyberpunkTechnical())
-                        .fontWeight(.medium)
-                        .foregroundColor(.cyberpunkDarkBg)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(questStatusColor)
-                }
-            }
-
-            // Quest Description
-            Text(quest.description)
-                .font(.cyberpunkBody())
-                .foregroundColor(.cyberpunkTextPrimary)
-                .lineLimit(3)
-                .multilineTextAlignment(.leading)
-
-            // Progress (for active quests)
-            if quest.status == "active" {
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text("PROGRESS")
+                        Text("분류 · \(quest.category)")
                             .font(.cyberpunkTechnical())
                             .foregroundColor(.cyberpunkTextSecondary)
-
-                        Spacer()
-
-                        Text("\(quest.currentProgress)/\(quest.maxProgress)")
-                            .font(.cyberpunkCaption())
-                            .fontWeight(.medium)
-                            .foregroundColor(.cyberpunkCyan)
                     }
 
-                    CyberpunkProgressBar(
-                        progress: progressPercentage,
-                        color: .cyberpunkCyan,
-                        height: 4
-                    )
+                    Spacer()
+
+                    // Status Badge
+                    HStack(spacing: 8) {
+                        // Difficulty Badge
+                        Text(difficultyText)
+                            .font(.cyberpunkTechnical())
+                            .fontWeight(.medium)
+                            .foregroundColor(.cyberpunkDarkBg)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(difficultyColor)
+
+                        // Status Badge
+                        Text(questStatusText)
+                            .font(.cyberpunkTechnical())
+                            .fontWeight(.medium)
+                            .foregroundColor(.cyberpunkDarkBg)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(questStatusColor)
+                    }
                 }
-            }
 
-            // Reward Info
-            VStack(alignment: .leading, spacing: 4) {
-                Text("REWARD_PACKAGE:")
-                    .font(.cyberpunkTechnical())
-                    .foregroundColor(.cyberpunkTextSecondary)
+                // Quest Description
+                Text(quest.description)
+                    .font(.cyberpunkBody())
+                    .foregroundColor(.cyberpunkTextPrimary)
+                    .lineLimit(3)
+                    .multilineTextAlignment(.leading)
 
-                Text(rewardDisplayString)
-                    .font(.cyberpunkCaption())
-                    .fontWeight(.medium)
-                    .foregroundColor(.cyberpunkGold)
-                    .lineLimit(2)
-            }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 8)
-            .background(Color.cyberpunkDarkBg.opacity(0.6))
+                // Progress (for active quests)
+                if quest.status == "active" {
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text("진행도")
+                                .font(.cyberpunkTechnical())
+                                .foregroundColor(.cyberpunkTextSecondary)
 
-            // Action Button
-            CyberpunkButton(
-                title: actionButtonText,
-                style: buttonStyle,
-                action: {
-                    showActionAlert = true
+                            Spacer()
+
+                            Text("\(quest.currentProgress)/\(quest.maxProgress)")
+                                .font(.cyberpunkCaption())
+                                .fontWeight(.medium)
+                                .foregroundColor(.cyberpunkCyan)
+                        }
+
+                        CyberpunkProgressBar(
+                            progress: progressPercentage,
+                            color: .cyberpunkCyan,
+                            height: 4
+                        )
+                    }
                 }
-            )
-            .disabled(!canPerformAction)
+
+                // Reward Info
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("보상 :")
+                        .font(.cyberpunkTechnical())
+                        .foregroundColor(.cyberpunkTextSecondary)
+
+                    Text(rewardDisplayString)
+                        .font(.cyberpunkCaption())
+                        .fontWeight(.medium)
+                        .foregroundColor(.cyberpunkGold)
+                        .lineLimit(2)
+                }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 8)
+                .background(Color.cyberpunkDarkBg.opacity(0.6))
+
+                // Action Button
+                CyberpunkButton(
+                    title: actionButtonText,
+                    style: buttonStyle,
+                    action: {
+                        showActionAlert = true
+                    }
+                )
+                .disabled(!canPerformAction)
+            }
+            .padding(CyberpunkLayout.cardPadding)
         }
-        .padding(16)
         .cyberpunkCard()
         .alert(alertTitle, isPresented: $showActionAlert) {
             Button("CANCEL", role: .cancel) { }
@@ -125,6 +132,15 @@ struct CyberpunkQuestCard: View {
     }
 
     // MARK: - Computed Properties
+    private var questTypeAccentColor: Color {
+        switch quest.category.lowercased() {
+        case "dialogue", "대화": return .joseonCheong
+        case "delivery", "배달": return .joseonJeok
+        case "trading", "거래":  return .joseonHwang
+        default: return .cyberpunkBorder
+        }
+    }
+
     private var difficultyText: String {
         switch quest.priority {
         case 1: return "EASY"
