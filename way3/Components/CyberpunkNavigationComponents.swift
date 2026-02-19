@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 // MARK: - Cyberpunk Status Bar
 struct CyberpunkStatusBar: View {
