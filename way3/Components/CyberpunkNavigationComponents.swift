@@ -20,11 +20,11 @@ struct CyberpunkStatusBar: View {
         HStack(spacing: 16) {
             // System Status
             HStack(spacing: 6) {
-                Text("SYSTEM_STATUS:")
+                Text("시스템 :")
                     .font(.cyberpunkTechnical())
                     .foregroundColor(.cyberpunkTextSecondary)
 
-                Text("ONLINE")
+                Text("온라인")
                     .font(.cyberpunkTechnical())
                     .foregroundColor(.cyberpunkGreen)
                     .opacity(statusPulse ? 0.6 : 1.0)
@@ -37,7 +37,7 @@ struct CyberpunkStatusBar: View {
             HStack(spacing: 20) {
                 // Credits Display
                 CyberpunkResourceIndicator(
-                    label: "CREDITS",
+                    label: "자금",
                     value: "₩\(formatCredits(credits))",
                     color: .cyberpunkYellow,
                     icon: "creditcard.fill"
@@ -45,7 +45,7 @@ struct CyberpunkStatusBar: View {
 
                 // Level Display
                 CyberpunkResourceIndicator(
-                    label: "LVL",
+                    label: "레벨",
                     value: String(format: "%02d", level),
                     color: .cyberpunkCyan,
                     icon: "star.fill"
@@ -53,7 +53,7 @@ struct CyberpunkStatusBar: View {
 
                 // Connection Status
                 CyberpunkResourceIndicator(
-                    label: "SYNC",
+                    label: "동기화",
                     value: "\(connectionStatus)%",
                     color: .cyberpunkGreen,
                     icon: "wifi"
@@ -326,14 +326,14 @@ struct CyberpunkFooterBar: View {
     var body: some View {
         HStack {
             // System timestamp
-            Text("SYS_TIME: \(systemTime, formatter: corporateTimeFormatter)")
+            Text("시각 : \(systemTime, formatter: corporateTimeFormatter)")
                 .font(.cyberpunkTechnical())
                 .foregroundColor(.cyberpunkTextSecondary)
 
             Spacer()
 
             // Corporate branding
-            Text("NEO-SEOUL_TRADING_CORP")
+            Text("네오서울 무역상단")
                 .font(.cyberpunkTechnical())
                 .foregroundColor(.cyberpunkYellow)
         }

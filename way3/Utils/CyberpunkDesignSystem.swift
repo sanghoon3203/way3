@@ -196,10 +196,10 @@ extension View {
     }
 
     // Technical Status Bar
-    func cyberpunkStatusBar(title: String, status: String = "ONLINE") -> some View {
+    func cyberpunkStatusBar(title: String, status: String = "온라인") -> some View {
         VStack {
             HStack {
-                Text(title.uppercased())
+                Text(title)
                     .font(.cyberpunkTechnical())
                     .foregroundColor(.cyberpunkTextSecondary)
 

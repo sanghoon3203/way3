@@ -49,7 +49,7 @@ struct ProfileView: View {
             .background(Color.cyberpunkDarkBg)
             .navigationTitle("")
             .navigationBarHidden(true)
-            .cyberpunkStatusBar(title: "OPERATIVE_PROFILE", status: "ONLINE")
+            .cyberpunkStatusBar(title: "상인 프로필", status: "온라인")
         }
         .onAppear {
             loadProfile()

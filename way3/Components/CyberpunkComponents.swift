@@ -286,13 +286,13 @@ struct CyberpunkSectionHeader: View {
         VStack(spacing: 4) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(title.uppercased())
+                    Text(title)
                         .font(.cyberpunkHeading())
                         .foregroundColor(.cyberpunkYellow)
                         .fontWeight(.bold)
 
                     if let subtitle = subtitle {
-                        Text(subtitle.uppercased())
+                        Text(subtitle)
                             .font(.cyberpunkTechnical())
                             .foregroundColor(.cyberpunkTextSecondary)
                     }
@@ -301,7 +301,7 @@ struct CyberpunkSectionHeader: View {
                 Spacer()
 
                 if let rightContent = rightContent {
-                    Text(rightContent.uppercased())
+                    Text(rightContent)
                         .font(.cyberpunkCaption())
                         .foregroundColor(.cyberpunkGreen)
                         .fontWeight(.semibold)
