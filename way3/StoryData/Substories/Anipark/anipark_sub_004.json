@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "애니는 안개 속에서 일렁이는 괴로운 영혼의 형상들을 가리켰다. 그것은 실직한 가장의 한숨, 병든 노인의 기침, 길 잃은 아이의 울음소리가 뭉쳐진 끔찍한 덩어리였다. 하지만 그녀의 왜곡된 필터는 그것을 달콤한 솜사탕으로 해석하고 있었다.",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_004",
-    "next_node_id":  "anipark_sub_005",
-    "character_id":  "Narrator",
-    "background_image":  "석촌호수 수변 무대]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "애니는 안개 속에서 일렁이는 괴로운 영혼의 형상들을 가리켰다. 그것은 실직한 가장의 한숨, 병든 노인의 기침, 길 잃은 아이의 울음소리가 뭉쳐진 끔찍한 덩어리였다. 하지만 그녀의 왜곡된 필터는 그것을 달콤한 솜사탕으로 해석하고 있었다.",
+  "sound_effect": null,
+  "node_id": "anipark_sub_004",
+  "next_node_id": "anipark_sub_005",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

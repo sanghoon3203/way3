@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "그의 목소리가 미세하게 떨렸다.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_011",
-    "next_node_id":  "alice_sub_012",
-    "character_id":  "Narrator",
-    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "그의 목소리가 미세하게 떨렸다.",
+  "sound_effect": null,
+  "node_id": "alice_sub_011",
+  "next_node_id": "alice_sub_012",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "자, 뛰어! 첫 번째 별은 \u0027높은음자리표\u0027야! 바로 저기 시계탑 아래!",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_045",
-    "next_node_id":  "alice_sub_046",
-    "character_id":  "Narrator",
-    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "자, 뛰어! 첫 번째 별은 '높은음자리표'야! 바로 저기 시계탑 아래!",
+  "sound_effect": null,
+  "node_id": "alice_sub_045",
+  "next_node_id": "alice_sub_046",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

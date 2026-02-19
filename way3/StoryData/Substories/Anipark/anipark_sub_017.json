@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "소름 끼치는 대비였다. 나는 비탄의 안개를 병에 담았다. 병에 담긴 검은 안개는 서서히 푸르스름하고 투명한 액체, \u0027안개의 눈물\u0027로 변했다. 슬픔이 정제되어 순수한 에너지로 바뀐 것이다.",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_017",
-    "next_node_id":  "anipark_sub_018",
-    "character_id":  "Narrator",
-    "background_image":  "석촌호수 수변 무대]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "소름 끼치는 대비였다. 나는 비탄의 안개를 병에 담았다. 병에 담긴 검은 안개는 서서히 푸르스름하고 투명한 액체, '안개의 눈물'로 변했다. 슬픔이 정제되어 순수한 에너지로 바뀐 것이다.",
+  "sound_effect": null,
+  "node_id": "anipark_sub_017",
+  "next_node_id": "anipark_sub_018",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

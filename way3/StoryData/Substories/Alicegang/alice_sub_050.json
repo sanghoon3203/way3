@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "거기서 오른쪽으로 30도! 아니, 그건 40도잖아! 토끼풀 꽃밭을 지나서!",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_050",
-    "next_node_id":  "alice_sub_051",
-    "character_id":  "Narrator",
-    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "거기서 오른쪽으로 30도! 아니, 그건 40도잖아! 토끼풀 꽃밭을 지나서!",
+  "sound_effect": null,
+  "node_id": "alice_sub_050",
+  "next_node_id": "alice_sub_051",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

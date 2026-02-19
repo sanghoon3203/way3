@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "좋아! 좌표 고정! 다음은 4분 쉼표! 벤치 옆의 가로등이야! 서둘러! 별빛이 흐려지고 있어!",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_048",
-    "next_node_id":  "alice_sub_049",
-    "character_id":  "Narrator",
-    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "좋아! 좌표 고정! 다음은 4분 쉼표! 벤치 옆의 가로등이야! 서둘러! 별빛이 흐려지고 있어!",
+  "sound_effect": null,
+  "node_id": "alice_sub_048",
+  "next_node_id": "alice_sub_049",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

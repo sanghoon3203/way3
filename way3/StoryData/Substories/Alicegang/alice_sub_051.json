@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "케플러의 고함소리가 밤하늘에 울렸다. 나는 땀범벅이 되어 마지막 위치인 공원 중앙의 토끼 조각상 앞으로 달렸다.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_051",
-    "next_node_id":  "alice_sub_052",
-    "character_id":  "Narrator",
-    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "케플러의 고함소리가 밤하늘에 울렸다. 나는 땀범벅이 되어 마지막 위치인 공원 중앙의 토끼 조각상 앞으로 달렸다.",
+  "sound_effect": null,
+  "node_id": "alice_sub_051",
+  "next_node_id": "alice_sub_052",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "저기 보세요! 여행자님! 안개 속에 \u0027구름 사탕\u0027 재료들이 둥둥 떠다니고 있어요! 정말 맛있어 보이지 않나요?",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_003",
-    "next_node_id":  "anipark_sub_004",
-    "character_id":  "Narrator",
-    "background_image":  "석촌호수 수변 무대]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "저기 보세요! 여행자님! 안개 속에 '구름 사탕' 재료들이 둥둥 떠다니고 있어요! 정말 맛있어 보이지 않나요?",
+  "sound_effect": null,
+  "node_id": "anipark_sub_003",
+  "next_node_id": "anipark_sub_004",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

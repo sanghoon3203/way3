@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "자, 이제 에피타이저는 끝났어요! 메인 코스로 가요! 놀이공원에 정말 스펙터클한 놀이기구가 기다리고 있거든요!",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_025",
-    "next_node_id":  "anipark_sub_026",
-    "character_id":  "Narrator",
-    "background_image":  "석촌호수 수변 무대]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "자, 이제 에피타이저는 끝났어요! 메인 코스로 가요! 놀이공원에 정말 스펙터클한 놀이기구가 기다리고 있거든요!",
+  "sound_effect": null,
+  "node_id": "anipark_sub_025",
+  "next_node_id": "anipark_sub_026",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

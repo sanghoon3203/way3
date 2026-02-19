@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "미친 듯이 돌아가던 회전목마가 서서히 멈췄다가, 다시 정방향으로, 아주 부드럽게 돌아가기 시작했다. 아이들의 비명소리는 경쾌하고 따뜻한 오르골 멜로디로 바뀌었다.",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_059",
-    "next_node_id":  "anipark_sub_060",
-    "character_id":  "Narrator",
-    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "미친 듯이 돌아가던 회전목마가 서서히 멈췄다가, 다시 정방향으로, 아주 부드럽게 돌아가기 시작했다. 아이들의 비명소리는 경쾌하고 따뜻한 오르골 멜로디로 바뀌었다.",
+  "sound_effect": null,
+  "node_id": "anipark_sub_059",
+  "next_node_id": "anipark_sub_060",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

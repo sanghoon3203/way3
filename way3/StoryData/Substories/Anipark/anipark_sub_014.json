@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "*...지겨워... 매일 같은 야근... 숨 막혀...* (애니: \"어머! 톡 쏘는 레몬 맛이 나겠어요!\")",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_014",
-    "next_node_id":  "anipark_sub_015",
-    "character_id":  "Narrator",
-    "background_image":  "석촌호수 수변 무대]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "*...지겨워... 매일 같은 야근... 숨 막혀...* (애니: \"어머! 톡 쏘는 레몬 맛이 나겠어요!\")",
+  "sound_effect": null,
+  "node_id": "anipark_sub_014",
+  "next_node_id": "anipark_sub_015",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

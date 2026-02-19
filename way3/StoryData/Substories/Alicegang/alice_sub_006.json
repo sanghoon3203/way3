@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "그의 이름은 \u0027에디(Eddie)\u0027. 서래마을에서 가장 오래된 연주자이자, 앨리스 강이 유일하게 마음을 열고 찾던 친구였다. 앨리스는 폭주하는 마력을 진정시키기 위해 밤마다 이곳에 들러 그의 연주를 듣곤 했다. 그녀는 감사의 표시로 자신의 정원으로 초대하는 \u0027소리의 지도\u0027를 그에게 선물했지만, 그는 아직 그 초대에 응하지 못하고 있었다.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_006",
-    "next_node_id":  "alice_sub_007",
-    "character_id":  "Narrator",
-    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "그의 이름은 '에디(Eddie)'. 서래마을에서 가장 오래된 연주자이자, 앨리스 강이 유일하게 마음을 열고 찾던 친구였다. 앨리스는 폭주하는 마력을 진정시키기 위해 밤마다 이곳에 들러 그의 연주를 듣곤 했다. 그녀는 감사의 표시로 자신의 정원으로 초대하는 '소리의 지도'를 그에게 선물했지만, 그는 아직 그 초대에 응하지 못하고 있었다.",
+  "sound_effect": null,
+  "node_id": "alice_sub_006",
+  "next_node_id": "alice_sub_007",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

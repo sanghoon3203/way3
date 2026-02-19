@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "그는 쓴웃음을 지으며 건반을 쓰다듬었다.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_009",
-    "next_node_id":  "alice_sub_010",
-    "character_id":  "Narrator",
-    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "그는 쓴웃음을 지으며 건반을 쓰다듬었다.",
+  "sound_effect": null,
+  "node_id": "alice_sub_009",
+  "next_node_id": "alice_sub_010",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

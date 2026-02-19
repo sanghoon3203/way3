@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "거대한 메인 기어 사이에 박힌 붉은 수정이 보였다.",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_042",
-    "next_node_id":  "anipark_sub_043",
-    "character_id":  "Narrator",
-    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "거대한 메인 기어 사이에 박힌 붉은 수정이 보였다.",
+  "sound_effect": null,
+  "node_id": "anipark_sub_042",
+  "next_node_id": "anipark_sub_043",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

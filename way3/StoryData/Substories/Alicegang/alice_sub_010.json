@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "이 곡은... 그녀에게 바치는 곡이었어요. 앨리스 님에게. 이 곡이 완성되면 그녀의 정원에서 가장 먼저 연주해주고 싶었죠. 그리고... 용기를 내서 청혼하려고 했습니다.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_010",
-    "next_node_id":  "alice_sub_011",
-    "character_id":  "Narrator",
-    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "이 곡은... 그녀에게 바치는 곡이었어요. 앨리스 님에게. 이 곡이 완성되면 그녀의 정원에서 가장 먼저 연주해주고 싶었죠. 그리고... 용기를 내서 청혼하려고 했습니다.",
+  "sound_effect": null,
+  "node_id": "alice_sub_010",
+  "next_node_id": "alice_sub_011",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

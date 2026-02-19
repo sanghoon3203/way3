@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "좋아요, 애니. 이 세상에서... 가장 진하고 기억에 남는 맛으로 모아오죠.",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_011",
-    "next_node_id":  "anipark_sub_012",
-    "character_id":  "Narrator",
-    "background_image":  "석촌호수 수변 무대]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "좋아요, 애니. 이 세상에서... 가장 진하고 기억에 남는 맛으로 모아오죠.",
+  "sound_effect": null,
+  "node_id": "anipark_sub_011",
+  "next_node_id": "anipark_sub_012",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

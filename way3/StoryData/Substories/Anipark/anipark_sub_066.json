@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "나는 고개를 들어 까마득한 타워의 꼭대기를 바라보았다. 이제 마지막 무대, 공주님을 깨우러 갈 시간이었다.",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_066",
-    "next_node_id":  null,
-    "character_id":  "Narrator",
-    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "나는 고개를 들어 까마득한 타워의 꼭대기를 바라보았다. 이제 마지막 무대, 공주님을 깨우러 갈 시간이었다.",
+  "sound_effect": null,
+  "node_id": "anipark_sub_066",
+  "next_node_id": null,
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

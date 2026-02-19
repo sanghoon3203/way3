@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "끼이익- 무거운 나무 문을 열고 들어가자, 자욱한 담배 연기(혹은 굳어버린 안개) 사이로 텅 빈 객석이 보였다. 오직 무대 중앙의 핀 조명만이 한 남자를 외롭게 비추고 있었다.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_002",
-    "next_node_id":  "alice_sub_003",
-    "character_id":  "Narrator",
-    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "끼이익- 무거운 나무 문을 열고 들어가자, 자욱한 담배 연기(혹은 굳어버린 안개) 사이로 텅 빈 객석이 보였다. 오직 무대 중앙의 핀 조명만이 한 남자를 외롭게 비추고 있었다.",
+  "sound_effect": null,
+  "node_id": "alice_sub_002",
+  "next_node_id": "alice_sub_003",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

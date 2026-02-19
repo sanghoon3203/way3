@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "이보게! 거기 젊은이! 내 안경 좀 찾아주게! 아니, 내 별들 좀 찾아줘! 하늘이 미쳤어! 오리온자리의 벨트가 풀려버렸다고!",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_037",
-    "next_node_id":  "alice_sub_038",
-    "character_id":  "Narrator",
-    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "이보게! 거기 젊은이! 내 안경 좀 찾아주게! 아니, 내 별들 좀 찾아줘! 하늘이 미쳤어! 오리온자리의 벨트가 풀려버렸다고!",
+  "sound_effect": null,
+  "node_id": "alice_sub_037",
+  "next_node_id": "alice_sub_038",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

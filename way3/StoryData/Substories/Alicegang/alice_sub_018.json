@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "나는 기꺼이 그를 돕기로 했다. 그것은 단순한 정보 수집이 아니라, 한 예술가의 멈춰진 시간을 다시 흐르게 하는 일이었다.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_018",
-    "next_node_id":  "alice_sub_019",
-    "character_id":  "Narrator",
-    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "나는 기꺼이 그를 돕기로 했다. 그것은 단순한 정보 수집이 아니라, 한 예술가의 멈춰진 시간을 다시 흐르게 하는 일이었다.",
+  "sound_effect": null,
+  "node_id": "alice_sub_018",
+  "next_node_id": "alice_sub_019",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

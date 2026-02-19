@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "단 하나, 회전목마만이 미친 듯이 돌아가고 있었다. 그것도 거꾸로.",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_027",
-    "next_node_id":  "anipark_sub_028",
-    "character_id":  "Narrator",
-    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "단 하나, 회전목마만이 미친 듯이 돌아가고 있었다. 그것도 거꾸로.",
+  "sound_effect": null,
+  "node_id": "anipark_sub_027",
+  "next_node_id": "anipark_sub_028",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

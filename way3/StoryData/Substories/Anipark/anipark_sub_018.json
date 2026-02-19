@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "여기 있습니다. 당신이 주문한... 특제 구름 사탕 재료입니다.",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_018",
-    "next_node_id":  "anipark_sub_019",
-    "character_id":  "Narrator",
-    "background_image":  "석촌호수 수변 무대]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "여기 있습니다. 당신이 주문한... 특제 구름 사탕 재료입니다.",
+  "sound_effect": null,
+  "node_id": "anipark_sub_018",
+  "next_node_id": "anipark_sub_019",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

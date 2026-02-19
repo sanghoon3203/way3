@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "꺄아! 세상에! 이렇게 영롱한 색깔이라니! 이걸 공주님께 가져가면 정말 좋아하실 거예요!",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_019",
-    "next_node_id":  "anipark_sub_020",
-    "character_id":  "Narrator",
-    "background_image":  "석촌호수 수변 무대]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "꺄아! 세상에! 이렇게 영롱한 색깔이라니! 이걸 공주님께 가져가면 정말 좋아하실 거예요!",
+  "sound_effect": null,
+  "node_id": "anipark_sub_019",
+  "next_node_id": "anipark_sub_020",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

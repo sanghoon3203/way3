@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "아이들의 유령이 웃으며 하늘로 승천했다. 피에로 로봇이 감격하며 춤을 췄다.",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_062",
-    "next_node_id":  "anipark_sub_063",
-    "character_id":  "Narrator",
-    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "아이들의 유령이 웃으며 하늘로 승천했다. 피에로 로봇이 감격하며 춤을 췄다.",
+  "sound_effect": null,
+  "node_id": "anipark_sub_062",
+  "next_node_id": "anipark_sub_063",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

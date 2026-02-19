@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "그는 망원경의 렌즈를 벅벅 닦으며 비명을 질렀다. 그의 이름은 \u0027케플러(Kepler)\u0027. 앨리스 강의 정원이 열리는 시간을 예측하는 점성술사이자 천문학자였다. 하지만 시간의 왜곡으로 하늘의 별들이 제자리를 잃어버려, 입구를 여는 타이밍을 계산할 수 없게 된 것이다.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_036",
-    "next_node_id":  "alice_sub_037",
-    "character_id":  "Narrator",
-    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "그는 망원경의 렌즈를 벅벅 닦으며 비명을 질렀다. 그의 이름은 '케플러(Kepler)'. 앨리스 강의 정원이 열리는 시간을 예측하는 점성술사이자 천문학자였다. 하지만 시간의 왜곡으로 하늘의 별들이 제자리를 잃어버려, 입구를 여는 타이밍을 계산할 수 없게 된 것이다.",
+  "sound_effect": null,
+  "node_id": "alice_sub_036",
+  "next_node_id": "alice_sub_037",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

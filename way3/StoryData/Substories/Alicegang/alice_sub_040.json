@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "진정하세요. 제가 도울 일이 있습니까?",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_040",
-    "next_node_id":  "alice_sub_041",
-    "character_id":  "Narrator",
-    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "진정하세요. 제가 도울 일이 있습니까?",
+  "sound_effect": null,
+  "node_id": "alice_sub_040",
+  "next_node_id": "alice_sub_041",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

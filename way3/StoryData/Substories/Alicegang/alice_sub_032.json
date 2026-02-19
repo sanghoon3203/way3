@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "그는 자리에서 일어났다. 그의 형체가 서서히 투명해지며 빛의 입자로 변해 사라졌다. 무대 위에는 오직 그가 남긴 악보만이 덩그러니 남아, 다음 목적지를 가리키고 있었다.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_032",
-    "next_node_id":  "alice_sub_033",
-    "character_id":  "Narrator",
-    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "그는 자리에서 일어났다. 그의 형체가 서서히 투명해지며 빛의 입자로 변해 사라졌다. 무대 위에는 오직 그가 남긴 악보만이 덩그러니 남아, 다음 목적지를 가리키고 있었다.",
+  "sound_effect": null,
+  "node_id": "alice_sub_032",
+  "next_node_id": "alice_sub_033",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

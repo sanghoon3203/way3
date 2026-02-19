@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "방배 카페 골목은 낮임에도 불구하고 짙은 안개에 휩싸여 있었다. 가로등은 깜빡이고, 시간은 제멋대로 흐르고 있었다. 어디선가 색소폰과 피아노가 어우러진 느릿한 재즈 선율이 안개를 타고 흘러나왔다. 소리의 근원은 [Club Sepia]라는 낡은 네온사인이 간신히 빛을 내고 있는 지하 클럽이었다.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_001",
-    "next_node_id":  "alice_sub_002",
-    "character_id":  "Narrator",
-    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "방배 카페 골목은 낮임에도 불구하고 짙은 안개에 휩싸여 있었다. 가로등은 깜빡이고, 시간은 제멋대로 흐르고 있었다. 어디선가 색소폰과 피아노가 어우러진 느릿한 재즈 선율이 안개를 타고 흘러나왔다. 소리의 근원은 [Club Sepia]라는 낡은 네온사인이 간신히 빛을 내고 있는 지하 클럽이었다.",
+  "sound_effect": null,
+  "node_id": "alice_sub_001",
+  "next_node_id": "alice_sub_002",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

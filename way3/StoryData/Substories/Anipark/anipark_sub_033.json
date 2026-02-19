@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "회전목마에 탄 유령 같은 아이들의 형상이 비명을 지르고 있었다. 그 앞에는 낡은 피에로 로봇이 머리 뚜껑을 연 채 연기를 내뿜으며 서 있었다.",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_033",
-    "next_node_id":  "anipark_sub_034",
-    "character_id":  "Narrator",
-    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "회전목마에 탄 유령 같은 아이들의 형상이 비명을 지르고 있었다. 그 앞에는 낡은 피에로 로봇이 머리 뚜껑을 연 채 연기를 내뿜으며 서 있었다.",
+  "sound_effect": null,
+  "node_id": "anipark_sub_033",
+  "next_node_id": "anipark_sub_034",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

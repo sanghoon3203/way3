@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "회전축 베어링에 낀 푸른 수정. 냉기를 뿜어내고 있었다.",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_047",
-    "next_node_id":  "anipark_sub_048",
-    "character_id":  "Narrator",
-    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "회전축 베어링에 낀 푸른 수정. 냉기를 뿜어내고 있었다.",
+  "sound_effect": null,
+  "node_id": "anipark_sub_047",
+  "next_node_id": "anipark_sub_048",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

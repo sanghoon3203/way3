@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "거기가... 아니야. 도무지 기억나질 않아.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_005",
-    "next_node_id":  "alice_sub_006",
-    "character_id":  "Narrator",
-    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "거기가... 아니야. 도무지 기억나질 않아.",
+  "sound_effect": null,
+  "node_id": "alice_sub_005",
+  "next_node_id": "alice_sub_006",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

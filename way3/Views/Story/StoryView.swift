@@ -399,14 +399,25 @@ struct StoryView: View {
         guard !trimmed.isEmpty else {
             return lastBackgroundName
         }
-        return UIImage(named: trimmed) != nil ? trimmed : lastBackgroundName
+        if let found = findBundleImage(trimmed) { return found }
+        return lastBackgroundName
     }
 
     private func cacheBackgroundIfValid(_ candidate: String?) {
         guard let trimmed = candidate?.trimmingCharacters(in: .whitespacesAndNewlines),
-              !trimmed.isEmpty,
-              UIImage(named: trimmed) != nil else { return }
-        lastBackgroundName = trimmed
+              !trimmed.isEmpty else { return }
+        if let found = findBundleImage(trimmed) {
+            lastBackgroundName = found
+        }
+    }
+
+    /// 이미지 이름으로 번들에서 이미지를 찾습니다.
+    /// 확장자 없이도 `.png`를 자동 시도합니다.
+    private func findBundleImage(_ name: String) -> String? {
+        if UIImage(named: name) != nil { return name }
+        let withPng = name + ".png"
+        if UIImage(named: withPng) != nil { return withPng }
+        return nil
     }
 
     private func resolvedCharacterImage(from resource: String) -> UIImage? {

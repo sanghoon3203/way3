@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "애니는 병을 받아 들고 왈츠를 추듯 빙글빙글 돌았다. 나는 그 틈을 타 큐브를 열고, 애니가 흘린(혹은 병에서 넘친) \u0027안개의 눈물\u0027 한 방울을 크로노스 아이비에게 떨어뜨렸다.",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_020",
-    "next_node_id":  "anipark_sub_021",
-    "character_id":  "Narrator",
-    "background_image":  "석촌호수 수변 무대]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "애니는 병을 받아 들고 왈츠를 추듯 빙글빙글 돌았다. 나는 그 틈을 타 큐브를 열고, 애니가 흘린(혹은 병에서 넘친) '안개의 눈물' 한 방울을 크로노스 아이비에게 떨어뜨렸다.",
+  "sound_effect": null,
+  "node_id": "anipark_sub_020",
+  "next_node_id": "anipark_sub_021",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

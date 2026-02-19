@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "앨리스의 필체였다. 그녀는 이미 알고 있었던 것이다. 에디가 언젠가 이 곡을 완성하려 할 것임을.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_021",
-    "next_node_id":  "alice_sub_022",
-    "character_id":  "Narrator",
-    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "앨리스의 필체였다. 그녀는 이미 알고 있었던 것이다. 에디가 언젠가 이 곡을 완성하려 할 것임을.",
+  "sound_effect": null,
+  "node_id": "alice_sub_021",
+  "next_node_id": "alice_sub_022",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

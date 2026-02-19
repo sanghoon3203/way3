@@ -6,7 +6,7 @@
   "nodes": [
     {
       "node_id": "chapter_gangnam_001",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_001.png",
+      "background_image": "Gangnamgu_001",
       "character_id": "typer_narrator",
       "character_sprite": null,
       "dialogue_text": "종로3가역에서 나왔다. 전광판과 네온사인 사이로 싸늘한 바람이 스쳤다.",
@@ -66,7 +66,7 @@
     },
     {
       "node_id": "chapter_gangnam_007",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_002.png",
+      "background_image": "Gangnamgu_002",
       "character_id": "player",
       "character_sprite": "sprite_player_uniform_default.png",
       "dialogue_text": "“굶어죽을 순 없어… 정보를 찾아야 해.” 누구든 여기에 대해 잘 아는 사람을 만나야 했다.",
@@ -126,7 +126,7 @@
     },
     {
       "node_id": "chapter_gangnam_013",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_003.png",
+      "background_image": "Gangnamgu_003",
       "character_id": "player",
       "character_sprite": null,
       "dialogue_text": "높은 계단 위 쪽으로 거대한 황금빛이 눈앞을 가렸다.계단을 오를 수 밖에 없는건가.. 힘겹게 올라갔다",
@@ -136,7 +136,7 @@
     },
     {
       "node_id": "chapter_gangnam_014",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_004.png",
+      "background_image": "Gangnamgu_004",
       "character_id": "player",
       "character_sprite": "sprite_player_uniform_default.png",
       "dialogue_text": "우와,,,엄청난 높이의 건물이다.. 엄청난 인원수의 보디가드..? 이상한 보디가드 복장을 하고있네...",
@@ -146,7 +146,7 @@
     },
     {
       "node_id": "chapter_gangnam_015",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_004.png",
+      "background_image": "Gangnamgu_004",
       "character_id": "typer_narrator",
       "character_sprite": null,
       "dialogue_text": "저게 로데오 아레나 본관인가... 이런데에 짓다니 엄청 부자 건물인건 분명하네...",
@@ -156,7 +156,7 @@
     },
     {
       "node_id": "chapter_gangnam_016",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_004.png",
+      "background_image": "Gangnamgu_004",
       "character_id": "NPC",
       "character_sprite": "guard.png",
       "dialogue_text": "허가증 보여주세요. (로데오 아레나 입구에서 경비가 손바닥을 내밀었다)",
@@ -166,7 +166,7 @@
     },
     {
       "node_id": "chapter_gangnam_017",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_004.png",
+      "background_image": "Gangnamgu_004",
       "character_id": "player",
       "character_sprite": "guard.png",
       "dialogue_text": "아, 여기요. (임시 허가증을 내밀자 경비가 차갑게 스캔 장치를 가져다 댔다)",
@@ -176,7 +176,7 @@
     },
     {
       "node_id": "chapter_gangnam_018",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_004.png",
+      "background_image": "Gangnamgu_004",
       "character_id": "NPC",
       "character_sprite": "guard.png",
       "dialogue_text": "(삐— 삐— 삐—) 임시 허가증이네요. 학생용은 일반 상점만 이용 가능합니다. 돌아가세요.",
@@ -186,7 +186,7 @@
     },
     {
       "node_id": "chapter_gangnam_019",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_005.png",
+      "background_image": "Gangnamgu_005",
       "character_id": "player",
       "character_sprite": "sprite_player_uniform_default.png",
       "dialogue_text": "쫓겨나듯 골목으로 밀려났다. “하아…” 허탈한 한숨이 저절로 나왔다.",
@@ -196,7 +196,7 @@
     },
     {
       "node_id": "chapter_gangnam_020",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_005.png",
+      "background_image": "Gangnamgu_005",
       "character_id": "typer_narrator",
       "character_sprite": null,
       "dialogue_text": "배고픔이 파도처럼 밀려왔다. 옆 골목에  소박한 간판이 눈에 들어왔다.",
@@ -206,7 +206,7 @@
     },
     {
       "node_id": "chapter_gangnam_021",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_006.png",
+      "background_image": "Gangnamgu_006",
       "character_id": "typer_narrator",
       "character_sprite": null,
       "dialogue_text": "카페 문이 열리며 한 여성이 나왔다. 검은 양복, 매끄러운 헤어스타일, 얼음처럼 차가운 눈빛.",
@@ -216,7 +216,7 @@
     },
     {
       "node_id": "chapter_gangnam_022",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_006.png",
+      "background_image": "Gangnamgu_006",
       "character_id": "player",
       "character_sprite": "sprite_player_uniform_default.png",
       "dialogue_text": "그녀가 나를 스쳐 지나갔다. 순간 시간이 멈춘 것 같았다. 평범한 상인은 아닌 게 분명했다.",
@@ -226,7 +226,7 @@
     },
     {
       "node_id": "chapter_gangnam_023",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_007.png",
+      "background_image": "Gangnamgu_007",
       "character_id": "???",
       "character_sprite": null,
       "dialogue_text": "“저기요.” 카페 안에서 누군가가 나를 불렀다. 따뜻한 커피 향기가 문틈 사이로 새어 나왔다.",
@@ -236,7 +236,7 @@
     },
     {
       "node_id": "chapter_gangnam_024",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_007.png",
+      "background_image": "Gangnamgu_007",
       "character_id": "CafeManger",
       "character_sprite": null,
       "dialogue_text": "배고파 보이시네요. 앉으세요. 동안의 카페 주인이 미소 지으며 자리를 권했다.",
@@ -246,7 +246,7 @@
     },
     {
       "node_id": "chapter_gangnam_025",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_007.png",
+      "background_image": "Gangnamgu_007",
       "character_id": "player",
       "character_sprite": null,
       "dialogue_text": "“아니, 저는…” 머뭇거리자 주인이 웃었다. “괜찮아요. 신규 상인 환영 서비스랍니다 일단 들어오세요!.”",
@@ -256,7 +256,7 @@
     },
     {
       "node_id": "chapter_gangnam_026",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_007.png",
+      "background_image": "Gangnamgu_007",
       "character_id": "CafeManger",
       "character_sprite": "CafeManger.png",
       "dialogue_text": "농담을 건네며 그는 따뜻한 커피와 크로와상을 내왔다.",
@@ -266,7 +266,7 @@
     },
     {
       "node_id": "chapter_gangnam_027",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_008.png",
+      "background_image": "Gangnamgu_008",
       "character_id": "CafeManger",
       "character_sprite": "CafeManger.png",
       "dialogue_text": "처음이시죠? 네오-서울에 오신 분들 표정이 똑같거든요.",
@@ -276,7 +276,7 @@
     },
     {
       "node_id": "chapter_gangnam_028",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_008.png",
+      "background_image": "Gangnamgu_008",
       "character_id": "player",
       "character_sprite": null,
       "dialogue_text": "“강남권이 이렇게 어려운 곳인지 몰랐어요… 로데오 아레나에서 방금 쫓겨났거든요.”",
@@ -286,7 +286,7 @@
     },
     {
       "node_id": "chapter_gangnam_029",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_008.png",
+      "background_image": "Gangnamgu_008",
       "character_id": "CafeManger",
       "character_sprite": "CafeManger.png",
       "dialogue_text": "당연하죠. 정식 허가증 없으면 못 들어갑니다. 상인회 시험을 통과해야 해요. (그의 말투가 진지해졌다)",
@@ -296,7 +296,7 @@
     },
     {
       "node_id": "chapter_gangnam_030",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_008.png",
+      "background_image": "Gangnamgu_008",
       "character_id": "player",
       "character_sprite": null,
       "dialogue_text": "“방금 나간 분… 양복 입은 분은 누구예요?” 차가운 시선이 머릿속을 맴돌았다.",
@@ -306,7 +306,7 @@
     },
     {
       "node_id": "chapter_gangnam_031",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_008.png",
+      "background_image": "Gangnamgu_008",
       "character_id": "CafeManger",
       "character_sprite": "CafeManger.png",
       "dialogue_text": "“아, 서예나 씨 말씀이군요. 로데오 아레나 점장이자 ‘경매의 여왕’이라 불리는 분이죠.”",
@@ -316,7 +316,7 @@
     },
     {
       "node_id": "chapter_gangnam_032",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_008.png",
+      "background_image": "Gangnamgu_008",
       "character_id": "player",
       "character_sprite": null,
       "dialogue_text": "“점장…? 그 차가운 분위기가요?” 서예나의 존재감이 다시 한번 머리를 스쳤다.",
@@ -326,7 +326,7 @@
     },
     {
       "node_id": "chapter_gangnam_033",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_008.png",
+      "background_image": "Gangnamgu_008",
       "character_id": "CafeManger",
       "character_sprite": "CafeManger.png",
       "dialogue_text": "“서예나 씨는 어떤 아이템이든 정확한 가치를 알아냅니다. 강남권에선 그게 생명줄이죠.”",
@@ -336,7 +336,7 @@
     },
     {
       "node_id": "chapter_gangnam_034",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_008.png",
+      "background_image": "Gangnamgu_008",
       "character_id": "CafeManger",
       "character_sprite": "CafeManger.png",
       "dialogue_text": "뭐~ 무서워도 그런 사람은 아니에요, 저도 약간은 도움 받고 있고요 ㅎㅎ",
@@ -346,7 +346,7 @@
     },
     {
       "node_id": "chapter_gangnam_035",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_008.png",
+      "background_image": "Gangnamgu_008",
       "character_id": "CafeManger",
       "character_sprite": "CafeManger.png",
       "dialogue_text": "(작은 쿠폰을 흘리며) ,, 아이고 이게 무슨 일이야~ 서예나 씨랑 이야기 할 수도 있을지 모르는 쿠폰을 떨어뜨렸잖아? 나는 도저히 안보이네~(찡긋)",
@@ -356,7 +356,7 @@
     },
     {
       "node_id": "chapter_gangnam_036",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_008.png",
+      "background_image": "Gangnamgu_008",
       "character_id": "player",
       "character_sprite": "sprite_player_uniform_default.png",
       "dialogue_text": "(쿠폰을 주으며)커피 감사합니다!! 그리고 도와주셔서 정말 감사해요!!",
@@ -366,7 +366,7 @@
     },
     {
       "node_id": "chapter_gangnam_037",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_003.png",
+      "background_image": "Gangnamgu_003",
       "character_id": "typer_narrator",
       "character_sprite": null,
       "dialogue_text": "카페 문을 다시 나서며 얼른 로데오 아레나로 향했다 ",
@@ -376,7 +376,7 @@
     },
     {
       "node_id": "chapter_gangnam_038",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_004.png",
+      "background_image": "Gangnamgu_004",
       "character_id": "typer_narrator",
       "character_sprite": "Merchant_seoyena.png",
       "dialogue_text": "다시 도착하자 웅성거리는 소리와 함께 어제 카페에서 봤던 여자의 얼굴이 보였다.",
@@ -386,7 +386,7 @@
     },
     {
       "node_id": "chapter_gangnam_039",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_004.png",
+      "background_image": "Gangnamgu_004",
       "character_id": "typer_narrator",
       "character_sprite": null,
       "dialogue_text": "문이 열리며 서예나가 모습을 드러냈다. 완벽한 양복과 얼음빛 눈동자가 다시 나를 꿰뚫었다.",
@@ -396,7 +396,7 @@
     },
     {
       "node_id": "chapter_gangnam_040",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_004.png",
+      "background_image": "Gangnamgu_004",
       "character_id": "Seoyena",
       "character_sprite": "Merchant_seoyena.png",
       "dialogue_text": "“무슨 일이죠?” 서예나의 목소리는 차갑고 명료했다.",
@@ -406,7 +406,7 @@
     },
     {
       "node_id": "chapter_gangnam_041",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_004.png",
+      "background_image": "Gangnamgu_004",
       "character_id": "player",
       "character_sprite": null,
       "dialogue_text": "“저는…” 말이 막혔다...손이 덜덜 떨리며 손에 든 쿠폰이 떨어졌다 ",
@@ -416,7 +416,7 @@
     },
     {
       "node_id": "chapter_gangnam_042",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_004.png",
+      "background_image": "Gangnamgu_004",
       "character_id": "Seoyena",
       "character_sprite": null,
       "dialogue_text": "음? 이건....흠...(쿠폰과 나를 흘겨보았다)",
@@ -426,7 +426,7 @@
     },
     {
       "node_id": "chapter_gangnam_043",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_004.png",
+      "background_image": "Gangnamgu_004",
       "character_id": "Seoyena",
       "character_sprite": null,
       "dialogue_text": "일단 뭐 따라와요",
@@ -436,7 +436,7 @@
     },
     {
       "node_id": "chapter_gangnam_044",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_004.png",
+      "background_image": "Gangnamgu_004",
       "character_id": "player",
       "character_sprite": null,
       "dialogue_text": "네....(나는 그녀의 포스에 그냥 따라갈 수 밖에 없었다)",
@@ -446,7 +446,7 @@
     },
     {
       "node_id": "chapter_gangnam_045",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_009.png",
+      "background_image": "Gangnamgu_009",
       "character_id": "Seoyena",
       "character_sprite": null,
       "dialogue_text": "좀 크죠? 번쩍거리고?",
@@ -456,7 +456,7 @@
     },
     {
       "node_id": "chapter_gangnam_046",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_009.png",
+      "background_image": "Gangnamgu_009",
       "character_id": "Seoyena",
       "character_sprite": null,
       "dialogue_text": "근데 카페매니저님하고는 어떻게 안거에요? 그사람은 절대 부탁하는 사람이 아닌데?",
@@ -466,7 +466,7 @@
     },
     {
       "node_id": "chapter_gangnam_047",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_009.png",
+      "background_image": "Gangnamgu_009",
       "character_id": "player",
       "character_sprite": null,
       "dialogue_text": "어... 그냥 저에게 커피도 주시고 그냥 쿠폰을 주셨어요...",
@@ -476,7 +476,7 @@
     },
     {
       "node_id": "chapter_gangnam_048",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_009.png",
+      "background_image": "Gangnamgu_009",
       "character_id": "Seoyena",
       "character_sprite": null,
       "dialogue_text": "흠...그것만으로 나에게 부탁했다고요... 흠 뭔가 있나보네..",
@@ -486,7 +486,7 @@
     },
     {
       "node_id": "chapter_gangnam_049",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_009.png",
+      "background_image": "Gangnamgu_009",
       "character_id": "Seoyena",
       "character_sprite": null,
       "dialogue_text": "일단 제 사무실 까지 가죠",
@@ -496,7 +496,7 @@
     },
     {
       "node_id": "chapter_gangnam_050",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_010.png",
+      "background_image": "Gangnamgu_010",
       "character_id": "player",
       "character_sprite": null,
       "dialogue_text": "서예나를 따라 엘레베이터를 타고 엄청나게 높이 올라갔다. 서예나의 사무실은 비밀공간으로 가는것 같았다.",
@@ -506,7 +506,7 @@
     },
     {
       "node_id": "chapter_gangnam_051",
-      "background_image": "Gangnam/Main/Gangnamgu/Gangnamgu_010.png",
+      "background_image": "Gangnamgu_010",
       "character_id": "player",
       "character_sprite": null,
       "dialogue_text": "하아....정말 어떻게 될런지....모르겠다....",

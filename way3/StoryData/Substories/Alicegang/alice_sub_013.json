@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "그는 다시 연주를 시작했다. 선율은 아름다웠지만, 결말이 없는 슬픔으로 가득 차 있었다. 곡이 클라이맥스로 향하려 할 때마다 그는 고통스러운 표정으로 건반을 내려쳤다.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_013",
-    "next_node_id":  "alice_sub_014",
-    "character_id":  "Narrator",
-    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "그는 다시 연주를 시작했다. 선율은 아름다웠지만, 결말이 없는 슬픔으로 가득 차 있었다. 곡이 클라이맥스로 향하려 할 때마다 그는 고통스러운 표정으로 건반을 내려쳤다.",
+  "sound_effect": null,
+  "node_id": "alice_sub_013",
+  "next_node_id": "alice_sub_014",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "젠장! 왜! 왜 여기냐고! 그 다음 음이 뭐였지? 파#? 솔b? 아니야, 더 따뜻한 음이었어. 햇살 같은...",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_015",
-    "next_node_id":  "alice_sub_016",
-    "character_id":  "Narrator",
-    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "젠장! 왜! 왜 여기냐고! 그 다음 음이 뭐였지? 파#? 솔b? 아니야, 더 따뜻한 음이었어. 햇살 같은...",
+  "sound_effect": null,
+  "node_id": "alice_sub_015",
+  "next_node_id": "alice_sub_016",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "호오! 그 악보! 그 음표들이 바로 별들의 좌표야! 에디 녀석, 역시 천재였어. 자네가 직접 움직여서 이 땅 위에 별자리를 그려주게! 자네가 \u0027움직이는 별\u0027이 되는 거야!",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_043",
-    "next_node_id":  "alice_sub_044",
-    "character_id":  "Narrator",
-    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "호오! 그 악보! 그 음표들이 바로 별들의 좌표야! 에디 녀석, 역시 천재였어. 자네가 직접 움직여서 이 땅 위에 별자리를 그려주게! 자네가 '움직이는 별'이 되는 거야!",
+  "sound_effect": null,
+  "node_id": "alice_sub_043",
+  "next_node_id": "alice_sub_044",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

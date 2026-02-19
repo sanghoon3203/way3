@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "판을 턴테이블에 올리고 바늘을 내렸다. 지직거리는 노이즈와 함께 익숙한 멜로디가 흘러나왔다. 에디가 치던 그 미완성의 곡이었다. 그리고 에디가 멈췄던 바로 그 부분에서, 피아노 선율 대신 맑고 고운 여성의 허밍이 이어졌다.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_022",
-    "next_node_id":  "alice_sub_023",
-    "character_id":  "Narrator",
-    "background_image":  "방배동 카페 골목 - 재즈 클럽 \u0027세피아\u0027]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "판을 턴테이블에 올리고 바늘을 내렸다. 지직거리는 노이즈와 함께 익숙한 멜로디가 흘러나왔다. 에디가 치던 그 미완성의 곡이었다. 그리고 에디가 멈췄던 바로 그 부분에서, 피아노 선율 대신 맑고 고운 여성의 허밍이 이어졌다.",
+  "sound_effect": null,
+  "node_id": "alice_sub_022",
+  "next_node_id": "alice_sub_023",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

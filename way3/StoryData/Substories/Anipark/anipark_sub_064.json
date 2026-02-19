@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "피에로는 매직 아일랜드의 중심, 구름을 뚫고 솟아있는 거대한 탑을 가리켰다.",
-    "sound_effect":  null,
-    "node_id":  "anipark_sub_064",
-    "next_node_id":  "anipark_sub_065",
-    "character_id":  "Narrator",
-    "background_image":  "롯데월드 어드벤처 - 매직 아일랜드]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "피에로는 매직 아일랜드의 중심, 구름을 뚫고 솟아있는 거대한 탑을 가리켰다.",
+  "sound_effect": null,
+  "node_id": "anipark_sub_064",
+  "next_node_id": "anipark_sub_065",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

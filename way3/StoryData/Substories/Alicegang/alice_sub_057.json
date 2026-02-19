@@ -1,10 +1,10 @@
-﻿{
-    "dialogue_text":  "케플러가 아이처럼 환호성을 지르며 망원경을 접었다. 빛기둥이 닿은 곳에서 공간이 *지직*거리며 갈라졌다. 비밀스러운 온실의 입구가 모습을 드러냈다. 단순한 마법이 아닌, 음악과 별과 나의 땀방울이 만들어낸 기적의 통로였다.",
-    "sound_effect":  null,
-    "node_id":  "alice_sub_057",
-    "next_node_id":  "alice_sub_058",
-    "character_id":  "Narrator",
-    "background_image":  "몽마르뜨 공원 - 별들이 추락한 언덕]",
-    "character_sprite":  null,
-    "dialogue_sound_id":  null
+{
+  "dialogue_text": "케플러가 아이처럼 환호성을 지르며 망원경을 접었다. 빛기둥이 닿은 곳에서 공간이 *지직*거리며 갈라졌다. 비밀스러운 온실의 입구가 모습을 드러냈다. 단순한 마법이 아닌, 음악과 별과 나의 땀방울이 만들어낸 기적의 통로였다.",
+  "sound_effect": null,
+  "node_id": "alice_sub_057",
+  "next_node_id": "alice_sub_058",
+  "character_id": "Narrator",
+  "background_image": null,
+  "character_sprite": null,
+  "dialogue_sound_id": null
 }

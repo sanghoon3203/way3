@@ -52,9 +52,11 @@ extension Color {
 
 // MARK: - Cyberpunk Typography
 extension Font {
-    // 디스플레이 폰트 — ChosunCentennial (조선센테니얼)
-    // 제목/헤딩/버튼: 한국 전통 세리프체로 게임 정체성 표현
-    // 캡션/테크니컬: 시스템 모노스페이스 유지 (기술 데이터·좌표 전용)
+    // ─── 폰트 체계 ────────────────────────────────────────────────────────────
+    // ChosunCentennial : 제목 / 헤딩 / 버튼 — 조선 전통 세리프, 게임 정체성
+    // Pretendard       : 본문 / 캡션 / 테크니컬 — 한국어 최적화 고딕, 가독성
+    // ─────────────────────────────────────────────────────────────────────────
+
     static func cyberpunkTitle(size: CGFloat = 24) -> Font {
         return .custom("ChosunCentennial", size: size).weight(.bold)
     }
@@ -64,15 +66,15 @@ extension Font {
     }
 
     static func cyberpunkBody(size: CGFloat = 14) -> Font {
-        return .system(size: size, weight: .regular)   // 본문 가독성 우선
+        return .custom("Pretendard-Regular", size: size)
     }
 
     static func cyberpunkCaption(size: CGFloat = 12) -> Font {
-        return .system(size: size, weight: .regular, design: .monospaced)
+        return .custom("Pretendard-Medium", size: size)
     }
 
     static func cyberpunkTechnical(size: CGFloat = 10) -> Font {
-        return .system(size: size, weight: .medium, design: .monospaced)
+        return .custom("Pretendard-SemiBold", size: size)
     }
 
     static func cyberpunkButton(size: CGFloat = 16) -> Font {
