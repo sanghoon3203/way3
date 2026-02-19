@@ -153,6 +153,9 @@ struct ProfileContentView: View {
                         onEditProfile: onEditProfile
                     )
 
+                    // 오방색 스탯 패널
+                    CyberpunkStatsPanel(player: player)
+
                     // Cyberpunk Trading Dashboard
                     CyberpunkTradingDashboard(profile: player)
 

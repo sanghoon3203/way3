@@ -17,10 +17,10 @@ struct CyberpunkProfileHeader: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            // Biometric Scanner Header
+            // 상인 프로필 헤더
             CyberpunkSectionHeader(
-                title: "OPERATIVE_PROFILE",
-                subtitle: "BIOMETRIC_ACCESS_GRANTED"
+                title: "상인 프로필",
+                subtitle: "신원 인증 완료"
             )
 
             HStack(spacing: 20) {
@@ -71,7 +71,7 @@ struct CyberpunkProfileHeader: View {
                 VStack(alignment: .leading, spacing: 8) {
                     // Operative Handle
                     HStack {
-                        Text("TRADER_ID:")
+                        Text("상인 ID :")
                             .font(.cyberpunkTechnical())
                             .foregroundColor(.cyberpunkTextSecondary)
 
@@ -81,7 +81,7 @@ struct CyberpunkProfileHeader: View {
                     }
 
                     // Name Display
-                    Text(profile.core.name.uppercased())
+                    Text(profile.core.name)
                         .font(.cyberpunkHeading())
                         .foregroundColor(.cyberpunkTextPrimary)
                         .fontWeight(.bold)
@@ -109,7 +109,7 @@ struct CyberpunkProfileHeader: View {
                             .scaleEffect(statusPulse ? 1.2 : 1.0)
                             .animation(CyberpunkAnimations.slowGlow, value: statusPulse)
 
-                        Text("ONLINE_STATUS: ACTIVE")
+                        Text("접속 중 · 활동")
                             .font(.cyberpunkTechnical())
                             .foregroundColor(.cyberpunkGreen)
                     }
@@ -739,6 +739,52 @@ struct CyberpunkEmergencyButton: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 pulseEffect.toggle()
             }
+        }
+    }
+}
+
+// MARK: - 오방색 스탯 패널
+struct CyberpunkStatsPanel: View {
+    let player: Player
+
+    var body: some View {
+        VStack(spacing: 16) {
+            CyberpunkSectionHeader(
+                title: "능력치",
+                subtitle: "오방색 적성 지수"
+            )
+
+            VStack(spacing: 10) {
+                statRow(label: "힘 (力)",   value: player.stats.strength,     color: .joseonJeok)
+                statRow(label: "지능 (智)", value: player.stats.intelligence, color: .joseonCheong)
+                statRow(label: "매력 (魅)", value: player.stats.charisma,     color: Color(red: 255/255, green: 136/255, blue: 187/255))
+                statRow(label: "행운 (幸)", value: player.stats.luck,         color: .joseonHwang)
+            }
+        }
+        .padding(16)
+        .cyberpunkCard()
+    }
+
+    private func statRow(label: String, value: Int, color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text(label)
+                    .font(.cyberpunkTechnical())
+                    .foregroundColor(.cyberpunkTextSecondary)
+
+                Spacer()
+
+                Text("\(value) / 100")
+                    .font(.cyberpunkCaption())
+                    .foregroundColor(color)
+                    .fontWeight(.semibold)
+            }
+
+            CyberpunkProgressBar(
+                progress: Double(value) / 100.0,
+                color: color,
+                height: 3
+            )
         }
     }
 }
