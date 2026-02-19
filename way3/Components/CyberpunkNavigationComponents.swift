@@ -251,32 +251,6 @@ struct CyberpunkScanLineEffect: View {
     }
 }
 
-// MARK: - Corporate Tab Configuration
-struct CyberpunkTabConfiguration {
-    static let tabs: [(String, String, String)] = [
-        ("map.fill", "맵", "SURVEILLANCE_GRID"),
-        ("backpack.fill", "인벤토리", "CARGO_MANIFEST"),
-        ("flag.fill", "퀘스트", "MISSION_QUEUE"),
-        ("storefront.fill", "상점", "TRADE_EXCHANGE"),
-        ("person.fill", "프로필", "OPERATIVE_PROFILE")
-    ]
-
-    static func corporateTitle(for index: Int) -> String {
-        guard index < tabs.count else { return "UNKNOWN" }
-        return tabs[index].2
-    }
-
-    static func hasNotification(for index: Int) -> Bool {
-        // This would be connected to actual notification state
-        // For now, return mock data
-        switch index {
-        case 2: return true  // Quest notifications
-        case 3: return true  // Shop updates
-        default: return false
-        }
-    }
-}
-
 // MARK: - Enhanced Tab View Wrapper
 struct CyberpunkEnhancedTabView<Content: View>: View {
     @Binding var selectedTab: Int

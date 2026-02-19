@@ -121,8 +121,8 @@ struct CyberpunkQuestCard: View {
         }
         .cyberpunkCard()
         .alert(alertTitle, isPresented: $showActionAlert) {
-            Button("CANCEL", role: .cancel) { }
-            Button("CONFIRM") {
+            Button("취소", role: .cancel) { }
+            Button("확인") {
                 performAction()
             }
         } message: {
@@ -143,10 +143,10 @@ struct CyberpunkQuestCard: View {
 
     private var difficultyText: String {
         switch quest.priority {
-        case 1: return "EASY"
-        case 2: return "NORMAL"
-        case 3...Int.max: return "HARD"
-        default: return "UNKNOWN"
+        case 1: return "쉬움"
+        case 2: return "보통"
+        case 3...Int.max: return "어려움"
+        default: return "알 수 없음"
         }
     }
 
@@ -161,10 +161,10 @@ struct CyberpunkQuestCard: View {
 
     private var questStatusText: String {
         switch quest.status {
-        case "available": return "AVAILABLE"
-        case "active": return "ACTIVE"
-        case "completed": return quest.rewardClaimed ? "CLAIMED" : "COMPLETE"
-        default: return "UNKNOWN"
+        case "available": return "수락 가능"
+        case "active": return "진행중"
+        case "completed": return quest.rewardClaimed ? "수령 완료" : "완료"
+        default: return "알 수 없음"
         }
     }
 
@@ -184,14 +184,14 @@ struct CyberpunkQuestCard: View {
 
     private var actionButtonText: String {
         if isProcessing {
-            return "PROCESSING..."
+            return "처리중..."
         }
 
         switch quest.status {
-        case "available": return "ACCEPT_MISSION"
-        case "active": return "IN_PROGRESS"
-        case "completed": return quest.rewardClaimed ? "CLAIMED" : "CLAIM_REWARD"
-        default: return "UNAVAILABLE"
+        case "available": return "의뢰 수락"
+        case "active": return "진행중"
+        case "completed": return quest.rewardClaimed ? "수령 완료" : "보상 수령"
+        default: return "수락 불가"
         }
     }
 
@@ -224,10 +224,10 @@ struct CyberpunkQuestCard: View {
             rewardStrings.append("₩\(money)")
         }
         if let exp = quest.rewards.exp ?? quest.rewards.experience {
-            rewardStrings.append("EXP +\(exp)")
+            rewardStrings.append("경험치 +\(exp)")
         }
         if let trust = quest.rewards.trustPoints {
-            rewardStrings.append("TRUST +\(trust)")
+            rewardStrings.append("신뢰 +\(trust)")
         }
         if let items = quest.rewards.items, !items.isEmpty {
             for item in items {
@@ -235,21 +235,21 @@ struct CyberpunkQuestCard: View {
             }
         }
 
-        return rewardStrings.isEmpty ? "NO_REWARD" : rewardStrings.joined(separator: " | ")
+        return rewardStrings.isEmpty ? "보상 없음" : rewardStrings.joined(separator: " | ")
     }
 
     private var alertTitle: String {
         switch quest.status {
-        case "available": return "ACCEPT_MISSION?"
-        case "completed": return "CLAIM_REWARD?"
-        default: return "CONFIRM_ACTION"
+        case "available": return "의뢰 수락?"
+        case "completed": return "보상 수령?"
+        default: return "확인"
         }
     }
 
     private var alertMessage: String {
         switch quest.status {
-        case "available": return "Accept mission '\(quest.title)'? Time limit will be enforced."
-        case "completed": return "Claim reward: \(rewardDisplayString)"
+        case "available": return "'\(quest.title)' 의뢰를 수락하시겠습니까? 제한 시간이 적용됩니다."
+        case "completed": return "보상을 수령하시겠습니까? \(rewardDisplayString)"
         default: return ""
         }
     }
@@ -270,70 +270,3 @@ struct CyberpunkQuestCard: View {
     }
 }
 
-// MARK: - Mission Status Indicator
-struct CyberpunkMissionStatusIndicator: View {
-    let isActive: Bool
-    let completedCount: Int
-    let totalCount: Int
-
-    var body: some View {
-        HStack(spacing: 8) {
-            // Status LED
-            Circle()
-                .fill(isActive ? Color.cyberpunkGreen : Color.cyberpunkError)
-                .frame(width: 8, height: 8)
-
-            Text(isActive ? "MISSION_SYSTEM_ACTIVE" : "DAILY_LIMIT_REACHED")
-                .font(.cyberpunkTechnical())
-                .foregroundColor(isActive ? .cyberpunkGreen : .cyberpunkError)
-
-            Spacer()
-
-            // Progress indicator
-            Text("\(completedCount)/\(totalCount)")
-                .font(.cyberpunkCaption())
-                .foregroundColor(.cyberpunkCyan)
-                .fontWeight(.semibold)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .cyberpunkPanel()
-        .overlay(
-            Rectangle()
-                .stroke(isActive ? Color.cyberpunkGreen : Color.cyberpunkError, lineWidth: 1)
-        )
-    }
-}
-
-// MARK: - Cyberpunk Progress Bar for Quests
-struct CyberpunkQuestProgressBar: View {
-    let currentQuests: Int
-    let maxQuests: Int
-
-    private var progress: Double {
-        return Double(currentQuests) / Double(maxQuests)
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text("DAILY_QUEST_PROGRESS")
-                    .font(.cyberpunkTechnical())
-                    .foregroundColor(.cyberpunkTextSecondary)
-
-                Spacer()
-
-                Text("\(currentQuests)/\(maxQuests)")
-                    .font(.cyberpunkCaption())
-                    .foregroundColor(.cyberpunkCyan)
-                    .fontWeight(.semibold)
-            }
-
-            CyberpunkProgressBar(
-                progress: progress,
-                color: .cyberpunkGreen,
-                height: 6
-            )
-        }
-    }
-}

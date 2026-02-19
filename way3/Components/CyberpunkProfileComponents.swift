@@ -89,13 +89,13 @@ struct CyberpunkProfileHeader: View {
                     // Status Indicators
                     HStack(spacing: 12) {
                         CyberpunkDataDisplay(
-                            label: "AGE",
+                            label: "나이",
                             value: "\(profile.core.age)",
                             valueColor: .cyberpunkCyan
                         )
 
                         CyberpunkDataDisplay(
-                            label: "LVL",
+                            label: "레벨",
                             value: String(format: "%02d", profile.core.level),
                             valueColor: .cyberpunkGreen
                         )
@@ -123,7 +123,7 @@ struct CyberpunkProfileHeader: View {
 
             // Edit Profile Button
             CyberpunkButton(
-                title: "EDIT_PROFILE",
+                title: "프로필 편집",
                 style: .secondary,
                 action: onEditProfile
             )
@@ -142,15 +142,15 @@ struct CyberpunkTradingDashboard: View {
         VStack(spacing: 16) {
             // Dashboard Header
             CyberpunkSectionHeader(
-                title: "TRADING_TERMINAL_v3.7",
-                subtitle: "REAL_TIME_METRICS"
+                title: "무역 터미널",
+                subtitle: "실시간 지표"
             )
 
             VStack(spacing: 12) {
                 // Profit Metrics Row
                 HStack(spacing: 16) {
                     CyberpunkMetricCard(
-                        label: "TOTAL_PROFIT",
+                        label: "총 수익",
                         value: "₩\(formatCurrency(profile.core.money))",
                         trend: "+2.3%",
                         trendPositive: true,
@@ -158,9 +158,9 @@ struct CyberpunkTradingDashboard: View {
                     )
 
                     CyberpunkMetricCard(
-                        label: "OPERATION_DAYS",
+                        label: "활동 일수",
                         value: String(format: "%03d", daysSinceCreated(profile.core.createdAt)),
-                        trend: "ACTIVE",
+                        trend: "활동중",
                         trendPositive: true,
                         icon: "calendar.badge.clock"
                     )
@@ -169,17 +169,17 @@ struct CyberpunkTradingDashboard: View {
                 // Performance Metrics Row
                 HStack(spacing: 16) {
                     CyberpunkMetricCard(
-                        label: "SUCCESS_RATE",
+                        label: "성공률",
                         value: "87.3%",
-                        trend: "ABOVE_AVG",
+                        trend: "평균 이상",
                         trendPositive: true,
                         icon: "target"
                     )
 
                     CyberpunkMetricCard(
-                        label: "MARKET_RANK",
-                        value: "LVL_\(String(format: "%02d", profile.core.level))",
-                        trend: "ASCENDING",
+                        label: "시장 등급",
+                        value: "Lv.\(String(format: "%02d", profile.core.level))",
+                        trend: "상승중",
                         trendPositive: true,
                         icon: "star.fill"
                     )
@@ -188,7 +188,7 @@ struct CyberpunkTradingDashboard: View {
                 // System Performance Bar
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text("SYSTEM_PERFORMANCE")
+                        Text("시스템 성능")
                             .font(.cyberpunkTechnical())
                             .foregroundColor(.cyberpunkTextSecondary)
 
@@ -244,7 +244,7 @@ struct CyberpunkBiographyPanel: View {
                         .font(.cyberpunkTechnical())
                         .foregroundColor(.cyberpunkYellow)
 
-                    Text("CORPORATE_LINEAGE_FILE")
+                    Text("상인 가문 기록")
                         .font(.cyberpunkHeading())
                         .foregroundColor(.cyberpunkYellow)
                         .fontWeight(.bold)
@@ -253,7 +253,7 @@ struct CyberpunkBiographyPanel: View {
                 Spacer()
 
                 // Classification Level
-                Text("[CLASSIFIED_LEVEL_3]")
+                Text("[기밀 3등급]")
                     .font(.cyberpunkTechnical())
                     .foregroundColor(.cyberpunkError)
                     .padding(.horizontal, 8)
@@ -271,7 +271,7 @@ struct CyberpunkBiographyPanel: View {
             // Corporate Timeline
             VStack(alignment: .leading, spacing: 12) {
                 CyberpunkTimelineEntry(
-                    era: "FOUNDING_ERA",
+                    era: "창업 시대",
                     period: "Late Joseon Period (1800s)",
                     description: "조선 후기 대상인 가문 창립",
                     icon: "building.columns",
@@ -279,7 +279,7 @@ struct CyberpunkBiographyPanel: View {
                 )
 
                 CyberpunkTimelineEntry(
-                    era: "MODERNIZATION",
+                    era: "근대화",
                     period: "Meiji Integration Protocol",
                     description: "개화기 해외 진출 및 근대화",
                     icon: "globe.asia.australia",
@@ -287,7 +287,7 @@ struct CyberpunkBiographyPanel: View {
                 )
 
                 CyberpunkTimelineEntry(
-                    era: "DIGITAL_TRANSITION",
+                    era: "디지털 전환",
                     period: "2020s Corporate Uprising",
                     description: "디지털 무역 제국 구축",
                     icon: "network",
@@ -295,8 +295,8 @@ struct CyberpunkBiographyPanel: View {
                 )
 
                 CyberpunkTimelineEntry(
-                    era: "CURRENT_OPERATIVE",
-                    period: "[USER_DESIGNATION]",
+                    era: "현재 상인",
+                    period: "현재 진행 중",
                     description: "Neo-Seoul 무역 패권 도전",
                     icon: "person.badge.key",
                     isRevealed: revealAnimation
@@ -309,13 +309,13 @@ struct CyberpunkBiographyPanel: View {
                     .foregroundColor(.cyberpunkGreen)
                     .font(.cyberpunkTechnical())
 
-                Text("BIOMETRIC_ACCESS_VERIFIED")
+                Text("생체 인증 완료")
                     .font(.cyberpunkTechnical())
                     .foregroundColor(.cyberpunkGreen)
 
                 Spacer()
 
-                Text("CLEARANCE: ALPHA")
+                Text("허가 등급 : 알파")
                     .font(.cyberpunkTechnical())
                     .foregroundColor(.cyberpunkTextSecondary)
             }
@@ -467,36 +467,36 @@ struct CyberpunkControlPanel: View {
         VStack(spacing: 16) {
             // Control Panel Header
             CyberpunkSectionHeader(
-                title: "SYSTEM_CONTROL_PANEL",
-                subtitle: "SECURITY_CLEARANCE: ALPHA"
+                title: "시스템 설정",
+                subtitle: "보안 등급 : 알파"
             )
 
             VStack(spacing: 12) {
                 // Notification Protocols
                 CyberpunkControlRow(
                     icon: "bell.badge",
-                    label: "NOTIFICATION_PROTOCOLS",
-                    description: "Push alerts and system updates",
+                    label: "알림 설정",
+                    description: "푸시 알림 및 시스템 업데이트",
                     isEnabled: $notificationsEnabled,
-                    securityLevel: "STANDARD"
+                    securityLevel: "표준"
                 )
 
                 // Auto-Save Configuration
                 CyberpunkControlRow(
                     icon: "arrow.clockwise.icloud",
-                    label: "AUTO_SAVE_PROTOCOL",
-                    description: "Automatic data synchronization",
+                    label: "자동 저장",
+                    description: "자동 데이터 동기화",
                     isEnabled: $autoSaveEnabled,
-                    securityLevel: "ENHANCED"
+                    securityLevel: "강화"
                 )
 
                 // System Diagnostics
                 CyberpunkControlRow(
                     icon: "checklist",
-                    label: "SYSTEM_DIAGNOSTICS",
-                    description: "Performance monitoring and logs",
+                    label: "시스템 진단",
+                    description: "성능 모니터링 및 로그",
                     isEnabled: $systemDiagnostics,
-                    securityLevel: "CLASSIFIED"
+                    securityLevel: "기밀"
                 )
 
                 // Security Level Selector
@@ -506,13 +506,13 @@ struct CyberpunkControlPanel: View {
                             .font(.cyberpunkTechnical())
                             .foregroundColor(.cyberpunkYellow)
 
-                        Text("SECURITY_LEVEL")
+                        Text("보안 등급")
                             .font(.cyberpunkTechnical())
                             .foregroundColor(.cyberpunkTextPrimary)
 
                         Spacer()
 
-                        Text("LEVEL_\(securityLevel)")
+                        Text("\(securityLevel)등급")
                             .font(.cyberpunkTechnical())
                             .foregroundColor(.cyberpunkCyan)
                     }
@@ -663,7 +663,7 @@ struct CyberpunkToggleSwitch: View {
 // MARK: - Security Level Picker
 struct CyberpunkSecurityLevelPicker: View {
     @Binding var selectedLevel: Int
-    private let levels = ["BASIC", "STANDARD", "ENHANCED", "CLASSIFIED"]
+    private let levels = ["기본", "표준", "강화", "기밀"]
 
     var body: some View {
         HStack(spacing: 8) {
@@ -707,14 +707,14 @@ struct CyberpunkEmergencyButton: View {
                     .font(.cyberpunkTechnical())
                     .foregroundColor(.cyberpunkError)
 
-                Text("EMERGENCY_LOGOUT")
+                Text("긴급 로그아웃")
                     .font(.cyberpunkCaption())
                     .foregroundColor(.cyberpunkError)
                     .fontWeight(.semibold)
 
                 Spacer()
 
-                Text("█ AUTHORIZED ONLY █")
+                Text("█ 인가자 전용 █")
                     .font(.system(size: 8))
                     .foregroundColor(.cyberpunkError)
             }

@@ -372,7 +372,7 @@ struct CyberpunkButton: View {
     var body: some View {
         Button(action: action) {
             HStack {
-                Text(title.uppercased())
+                Text(title)
                     .font(.cyberpunkButton())
                     .foregroundColor(style.textColor)
                     .fontWeight(.semibold)
