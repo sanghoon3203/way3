@@ -306,12 +306,12 @@ npm run dev
 - 서북권 서브스토리 JSON 작성 (기주리, 카타리나 최, 마리, 김세휘)
 - ch3 동북권 이후 콘텐츠 전개
 - 영수증 OCR 인증 구현 (Vision framework)
-- 경매 시스템 (REST API 방식으로 재설계, Socket.IO 제거됨)
+- 상점 시스템 구현 (ShopView 현재 stub 상태)
 - MainQuestDefinition 디코딩 버그 수정
 
 ### 알려진 버그 🐛
 - `MainQuestDefinition.swift`: `requiredEpisodes`/`requiredSubQuests` 필드가 JSON에서 읽히지 않고 `= []`로 고정됨
-- 경매 기능 미구현
+- 상점 시스템 미구현 (ShopView stub)
 
 ---
 

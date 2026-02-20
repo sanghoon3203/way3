@@ -80,7 +80,7 @@ Resources/    — 이미지, 영상, 사운드, font/ (ChosunCentennial + Preten
 ## 알려진 버그 (우선순위순)
 1. **🔴** `Models/MainQuestDefinition.swift`: `requiredEpisodes`/`requiredSubQuests`가 `= []`로 하드코딩 — JSON 디코딩 안 됨
 2. **🔴** `StoryData/Gangdong/`: 018~063 번호 누락 (46개 노드 필요)
-3. **🟡** `Core/AuctionManager.swift`: 경매 이벤트 미구현 (Socket.IO 제거됨, REST API 방식 재설계 필요)
+3. **🟡** `Views/Shop/ShopView.swift`: 상점 시스템 미구현 (stub 상태)
 4. **🟡** `StoryData/Substories/`: 서북권 4명 서브스토리 JSON 없음
 
 ## 빌드

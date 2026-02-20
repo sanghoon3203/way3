@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Stub placeholder while the shop/auction experience gets rebuilt.
+/// Stub placeholder — 상점 시스템 추후 구현 예정
 struct ShopView: View {
     var body: some View {
         NavigationView {
@@ -9,11 +9,11 @@ struct ShopView: View {
                     .font(.system(size: 64))
                     .foregroundColor(.secondary)
 
-                Text("상점 시스템 개편 중")
+                Text("상점 시스템 준비 중")
                     .font(.chosunH2)
                     .fontWeight(.semibold)
 
-                Text("새로운 상점/경매 경험을 준비하고 있어요.\n완료되면 이 화면에서 바로 만나볼 수 있습니다.")
+                Text("새로운 상점 경험을 준비하고 있어요.\n완료되면 이 화면에서 바로 만나볼 수 있습니다.")
                     .font(.cyberpunkBody())
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
