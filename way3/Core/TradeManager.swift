@@ -365,15 +365,15 @@ struct TradeConfirmationView: View {
                         
                         Image(systemName: merchant.iconName)
                             .foregroundColor(.white)
-                            .font(.title2)
+                            .font(.chosunH2)
                     }
                     
                     VStack(alignment: .leading) {
                         Text(merchant.name)
-                            .font(.custom("ChosunCentennial", size: 18))
+                            .font(.chosunH3)
                             .fontWeight(.semibold)
                         Text("거래 확인")
-                            .font(.custom("ChosunCentennial", size: 14))
+                            .font(.chosunCaption)
                             .foregroundColor(.secondary)
                     }
                     
@@ -400,30 +400,30 @@ struct TradeConfirmationView: View {
                 VStack(spacing: 12) {
                     HStack {
                         Text("총 아이템 수")
-                            .font(.custom("ChosunCentennial", size: 16))
+                            .font(.chosunBody)
                         Spacer()
                         Text("\(tradeManager.selectedItems.count)개")
-                            .font(.custom("ChosunCentennial", size: 16))
+                            .font(.chosunBody)
                             .fontWeight(.medium)
                     }
                     
                     HStack {
                         Text("총 거래 금액")
-                            .font(.custom("ChosunCentennial", size: 18))
+                            .font(.chosunH3)
                             .fontWeight(.semibold)
                         Spacer()
                         Text("₩\(tradeManager.totalAmount)")
-                            .font(.custom("ChosunCentennial", size: 20))
+                            .font(.chosunH2)
                             .fontWeight(.bold)
                             .foregroundColor(.blue)
                     }
                     
                     HStack {
                         Text("예상 수익")
-                            .font(.custom("ChosunCentennial", size: 16))
+                            .font(.chosunBody)
                         Spacer()
                         Text("₩\(tradeManager.calculatePotentialProfit())")
-                            .font(.custom("ChosunCentennial", size: 16))
+                            .font(.chosunBody)
                             .fontWeight(.medium)
                             .foregroundColor(.green)
                     }
@@ -455,7 +455,7 @@ struct TradeConfirmationView: View {
                         }
                         
                         Text(tradeManager.isLoading ? "거래 중..." : "거래 확정")
-                            .font(.custom("ChosunCentennial", size: 18))
+                            .font(.chosunH3)
                             .fontWeight(.semibold)
                     }
                     .foregroundColor(.white)
@@ -471,7 +471,7 @@ struct TradeConfirmationView: View {
                 // 에러 메시지
                 if !tradeManager.errorMessage.isEmpty {
                     Text(tradeManager.errorMessage)
-                        .font(.custom("ChosunCentennial", size: 14))
+                        .font(.chosunCaption)
                         .foregroundColor(.red)
                         .multilineTextAlignment(.center)
                 }
@@ -484,7 +484,7 @@ struct TradeConfirmationView: View {
                     Button("취소") {
                         isPresented = false
                     }
-                    .font(.custom("ChosunCentennial", size: 16))
+                    .font(.chosunBody)
                 }
             }
         }
@@ -514,17 +514,17 @@ struct TradeItemRow: View {
                 
                 Image(systemName: item.iconName)
                     .foregroundColor(item.grade.color)
-                    .font(.title3)
+                    .font(.chosunH3)
             }
             
             // 아이템 정보
             VStack(alignment: .leading, spacing: 4) {
                 Text(item.name)
-                    .font(.custom("ChosunCentennial", size: 16))
+                    .font(.chosunBody)
                     .fontWeight(.medium)
                 
                 Text(item.grade.displayName)
-                    .font(.custom("ChosunCentennial", size: 12))
+                    .font(.chosunSmall)
                     .foregroundColor(item.grade.color)
             }
             
@@ -533,11 +533,11 @@ struct TradeItemRow: View {
             // 가격과 수량
             VStack(alignment: .trailing, spacing: 4) {
                 Text("₩\(item.currentPrice)")
-                    .font(.custom("ChosunCentennial", size: 16))
+                    .font(.chosunBody)
                     .fontWeight(.semibold)
                 
                 Text("\(item.quantity)개")
-                    .font(.custom("ChosunCentennial", size: 12))
+                    .font(.chosunSmall)
                     .foregroundColor(.secondary)
             }
         }

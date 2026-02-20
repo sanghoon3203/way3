@@ -92,35 +92,35 @@ struct ItemDetailView: View {
                 
                 VStack(spacing: 12) {
                     Text(item.name)
-                        .font(.custom("ChosunCentennial", size: 28))
+                        .font(.chosunTitle)
                         .fontWeight(.bold)
                     
                     HStack(spacing: 20) {
                         VStack {
                             Text("등급")
-                                .font(.custom("ChosunCentennial", size: 14))
+                                .font(.chosunCaption)
                                 .foregroundColor(.secondary)
                             Text(item.grade.displayName)
-                                .font(.custom("ChosunCentennial", size: 16))
+                                .font(.chosunBody)
                                 .fontWeight(.semibold)
                                 .foregroundColor(item.grade.color)
                         }
                         
                         VStack {
                             Text("카테고리")
-                                .font(.custom("ChosunCentennial", size: 14))
+                                .font(.chosunCaption)
                                 .foregroundColor(.secondary)
                             Text(item.category)
-                                .font(.custom("ChosunCentennial", size: 16))
+                                .font(.chosunBody)
                                 .fontWeight(.semibold)
                         }
                         
                         VStack {
                             Text("보유 수량")
-                                .font(.custom("ChosunCentennial", size: 14))
+                                .font(.chosunCaption)
                                 .foregroundColor(.secondary)
                             Text("\(item.quantity)개")
-                                .font(.custom("ChosunCentennial", size: 16))
+                                .font(.chosunBody)
                                 .fontWeight(.semibold)
                         }
                     }
@@ -130,20 +130,20 @@ struct ItemDetailView: View {
                     VStack(spacing: 8) {
                         HStack {
                             Text("현재 가치")
-                                .font(.custom("ChosunCentennial", size: 16))
+                                .font(.chosunBody)
                             Spacer()
                             Text("₩\(item.currentPrice)")
-                                .font(.custom("ChosunCentennial", size: 18))
+                                .font(.chosunH3)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.blue)
                         }
                         
                         HStack {
                             Text("총 가치")
-                                .font(.custom("ChosunCentennial", size: 16))
+                                .font(.chosunBody)
                             Spacer()
                             Text("₩\(item.currentPrice * item.quantity)")
-                                .font(.custom("ChosunCentennial", size: 18))
+                                .font(.chosunH3)
                                 .fontWeight(.bold)
                                 .foregroundColor(.green)
                         }
@@ -158,7 +158,7 @@ struct ItemDetailView: View {
                         // 판매하기
                     }) {
                         Text("판매하기")
-                            .font(.custom("ChosunCentennial", size: 18))
+                            .font(.chosunH3)
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -173,7 +173,7 @@ struct ItemDetailView: View {
                         // 사용하기 (소모품인 경우)
                     }) {
                         Text("사용하기")
-                            .font(.custom("ChosunCentennial", size: 18))
+                            .font(.chosunH3)
                             .fontWeight(.semibold)
                             .foregroundColor(.blue)
                             .frame(maxWidth: .infinity)
@@ -193,7 +193,7 @@ struct ItemDetailView: View {
                     Button("닫기") {
                         isPresented = false
                     }
-                    .font(.custom("ChosunCentennial", size: 16))
+                    .font(.chosunBody)
                 }
             }
         }

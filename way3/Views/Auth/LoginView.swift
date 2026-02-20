@@ -197,7 +197,7 @@ extension LoginView {
                         .scaleEffect(0.8)
                 } else {
                     Image(systemName: "arrow.right.circle.fill")
-                        .font(.title2)
+                        .font(.chosunH2)
                 }
 
                 Text(loginButtonText)
@@ -262,7 +262,7 @@ struct IDTextField: View {
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
-                .font(.title2)
+                .font(.chosunH2)
                 .foregroundColor(.cyan.opacity(0.7))
                 .frame(width: 25)
 
@@ -296,7 +296,7 @@ struct NeoSeoulSecureField: View {
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: "lock.fill")
-                .font(.title2)
+                .font(.chosunH2)
                 .foregroundColor(.cyan.opacity(0.7))
                 .frame(width: 25)
 
@@ -318,7 +318,7 @@ struct NeoSeoulSecureField: View {
                 showPassword.toggle()
             }) {
                 Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
-                    .font(.title3)
+                    .font(.chosunH3)
                     .foregroundColor(.white.opacity(0.6))
             }
         }

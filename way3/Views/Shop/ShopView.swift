@@ -10,11 +10,11 @@ struct ShopView: View {
                     .foregroundColor(.secondary)
 
                 Text("상점 시스템 개편 중")
-                    .font(.title2)
+                    .font(.chosunH2)
                     .fontWeight(.semibold)
 
                 Text("새로운 상점/경매 경험을 준비하고 있어요.\n완료되면 이 화면에서 바로 만나볼 수 있습니다.")
-                    .font(.body)
+                    .font(.cyberpunkBody())
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)

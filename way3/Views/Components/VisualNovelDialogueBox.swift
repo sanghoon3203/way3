@@ -22,7 +22,7 @@ struct VisualNovelDialogueBox: View {
         VStack(alignment: .leading, spacing: 0) {
             // 상인 이름 (좌측 상단)
             Text(merchantName)
-                .font(.system(size: 16, weight: .bold))
+                .font(.cyberpunkHeading(size: 16))
                 .foregroundColor(.white)
                 .padding(.horizontal, 20)
                 .padding(.top, 16)
@@ -30,7 +30,7 @@ struct VisualNovelDialogueBox: View {
             // 대사 텍스트
             ScrollView {
                 Text(dialogue)
-                    .font(.system(size: 15))
+                    .font(.cyberpunkBody(size: 15))
                     .foregroundColor(.white)
                     .lineSpacing(4)
                     .padding(.horizontal, 20)
@@ -44,11 +44,11 @@ struct VisualNovelDialogueBox: View {
                 Button(action: onContinue) {
                     HStack(spacing: 4) {
                         Text("CONTINUE")
-                            .font(.system(size: 12, weight: .medium))
+                            .font(.cyberpunkCaption())
                             .foregroundColor(.white.opacity(0.9))
 
                         Image(systemName: "chevron.down")
-                            .font(.system(size: 10))
+                            .font(.cyberpunkTechnical())
                             .foregroundColor(.white.opacity(0.9))
                     }
                     .padding(.horizontal, 16)

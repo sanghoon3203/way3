@@ -15,7 +15,6 @@ struct way3App: App {
     @StateObject private var locationManager = LocationManager()
     @StateObject private var gameManager = GameManager.shared
     @StateObject private var authManager = AuthManager.shared
-    @StateObject private var socketManager = SocketManager.shared
 
     var body: some Scene {
         WindowGroup {
@@ -24,7 +23,6 @@ struct way3App: App {
                 .environmentObject(locationManager)
                 .environmentObject(gameManager)
                 .environmentObject(authManager)
-                .environmentObject(socketManager)
         }
     }
 }

@@ -102,7 +102,7 @@ extension ForgotPasswordView {
                 }) {
                     HStack(spacing: 8) {
                         Image(systemName: "chevron.left")
-                            .font(.title2)
+                            .font(.chosunH2)
 
                         Text("로그인")
                             .font(.chosunOrFallback(size: 16))
@@ -223,7 +223,7 @@ extension ForgotPasswordView {
                         .scaleEffect(0.8)
                 } else {
                     Image(systemName: "paperplane.fill")
-                        .font(.title2)
+                        .font(.chosunH2)
                 }
 
                 Text(isLoading ? "전송 중..." : "인증번호 전송")
@@ -300,7 +300,7 @@ extension ForgotPasswordView {
         VStack(alignment: .leading, spacing: 5) {
             HStack(spacing: 12) {
                 Image(systemName: "number.circle.fill")
-                    .font(.title2)
+                    .font(.chosunH2)
                     .foregroundColor(.cyan.opacity(0.7))
                     .frame(width: 25)
 
@@ -392,7 +392,7 @@ extension ForgotPasswordView {
                         .scaleEffect(0.8)
                 } else {
                     Image(systemName: "key.fill")
-                        .font(.title2)
+                        .font(.chosunH2)
                 }
 
                 Text(isLoading ? "변경 중..." : "비밀번호 변경")
@@ -419,7 +419,7 @@ extension ForgotPasswordView {
             }) {
                 HStack {
                     Image(systemName: "arrow.clockwise")
-                        .font(.caption)
+                        .font(.cyberpunkCaption())
 
                     if resendCooldown > 0 {
                         Text("재전송 (\(resendCooldown)초 후 가능)")

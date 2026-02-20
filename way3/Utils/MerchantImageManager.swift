@@ -465,7 +465,7 @@ struct JRPGMerchantPlaceholder: View {
 
                 // 상인 이름 (축약)
                 Text(abbreviatedName)
-                    .font(.jrpgUI())
+                    .font(.cyberpunkHeading())
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                     .shadow(color: .black.opacity(0.5), radius: 1)

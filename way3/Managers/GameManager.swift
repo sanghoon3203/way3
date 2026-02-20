@@ -55,7 +55,6 @@ class GameManager: ObservableObject {
     private var locationManager: LocationManager
     private var tradeManager: TradeManager
     private var authManager: AuthManager
-    private var socketManager: SocketManager
 
     // MARK: - Private Properties
     private var cancellables = Set<AnyCancellable>()
@@ -68,7 +67,6 @@ class GameManager: ObservableObject {
         self.locationManager = LocationManager.shared
         self.tradeManager = TradeManager.shared
         self.authManager = AuthManager.shared
-        self.socketManager = SocketManager.shared
 
         setupObservers()
         setupAutoSave()

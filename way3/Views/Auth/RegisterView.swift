@@ -91,7 +91,7 @@ extension RegisterView {
             }) {
                 HStack(spacing: 8) {
                     Image(systemName: "chevron.left")
-                        .font(.title2)
+                        .font(.chosunH2)
 
                     Text("로그인")
                         .font(.chosunOrFallback(size: 16))
@@ -358,7 +358,7 @@ extension RegisterView {
                         .scaleEffect(0.8)
                 } else {
                     Image(systemName: "person.badge.plus")
-                        .font(.title2)
+                        .font(.chosunH2)
                 }
 
                 Text(isRegistering ? "계정 생성 중..." : "회원가입")

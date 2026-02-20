@@ -214,7 +214,7 @@ extension ProfileInputView {
                                     .foregroundColor(.cyan)
 
                                 Image(systemName: "arrow.right.circle.fill")
-                                    .font(.title2)
+                                    .font(.chosunH2)
                                     .foregroundColor(.cyan)
                                     .opacity(canProceed ? 1.0 : 0.3)
                             }
@@ -791,7 +791,7 @@ struct NeoSeoulTextField: View {
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
-                .font(.title2)
+                .font(.chosunH2)
                 .foregroundColor(.cyan.opacity(0.7))
                 .frame(width: 25)
 

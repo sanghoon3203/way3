@@ -277,6 +277,7 @@ enum MerchantDetailTab: Int {
     case dialogue
     case trade
     case story
+    case chat
 }
 
 // MARK: - Main View
@@ -391,6 +392,7 @@ struct MerchantDetailView: View {
                                     },
                                     onStory: merchant.hasActiveStory ? { selectTab(.story) } : nil,
                                     onTrade: { triggerFullScreenTVSwitch(to: .trade) },
+                                    onChat: { selectTab(.chat) },
                                     onExit: { isPresented = false }
                                 )
                                 .padding(.top, 24)
@@ -406,6 +408,13 @@ struct MerchantDetailView: View {
                             case .trade:
                                 // 이 경우는 TV 애니메이션 중
                                 EmptyView()
+
+                            case .chat:
+                                MerchantAIChatView(merchant: merchant) { episode in
+                                    // AI 대화로 언락된 에피소드 → 바로 재생
+                                    activeEpisode = episode
+                                    startNodeForStory = episode.entry_node
+                                }
                             }
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -604,6 +613,7 @@ struct MerchantActionMenu: View {
     let onDialogue: () -> Void
     let onStory: (() -> Void)?
     let onTrade: () -> Void
+    let onChat: () -> Void
     let onExit: () -> Void
 
     var body: some View {
@@ -621,6 +631,13 @@ struct MerchantActionMenu: View {
                     action: onStory
                 )
             }
+
+            // AI 자유 대화 버튼
+            UnifiedActionButton(
+                title: "AI와 대화하기",
+                accentColor: .joseonHwang,
+                action: onChat
+            )
 
             UnifiedActionButton(
                 title: "거래하기",

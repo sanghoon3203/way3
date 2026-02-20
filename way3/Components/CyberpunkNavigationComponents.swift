@@ -142,14 +142,14 @@ private func setupCyberpunkTabBarAppearance() {
     appearance.stackedLayoutAppearance.normal.iconColor = UIColor(Color.cyberpunkTextSecondary)
     appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
         .foregroundColor: UIColor(Color.cyberpunkTextSecondary),
-        .font: UIFont(name: "ChosunCentennial_otf", size: 11) ?? UIFont.systemFont(ofSize: 11, weight: .regular)
+        .font: UIFont(name: "ChosunCentennial", size: 11) ?? UIFont.systemFont(ofSize: 11, weight: .regular)
     ]
 
     // Selected tab styling with enhanced glow
     appearance.stackedLayoutAppearance.selected.iconColor = UIColor(Color.cyberpunkCyan)
     appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
         .foregroundColor: UIColor(Color.cyberpunkCyan),
-        .font: UIFont(name: "ChosunCentennial_otf", size: 11) ?? UIFont.systemFont(ofSize: 11, weight: .medium)
+        .font: UIFont(name: "ChosunCentennial", size: 11) ?? UIFont.systemFont(ofSize: 11, weight: .medium)
     ]
 
     // Apply enhanced appearance

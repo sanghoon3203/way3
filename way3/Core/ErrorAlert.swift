@@ -76,25 +76,25 @@ struct ErrorAlertView: View {
         VStack(spacing: 16) {
             // 에러 아이콘
             Image(systemName: "exclamationmark.triangle.fill")
-                .font(.largeTitle)
+                .font(.cyberpunkTitle())
                 .foregroundColor(.red)
 
             // 제목
             Text(alertData.title)
-                .font(.headline)
+                .font(.cyberpunkHeading())
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
 
             // 메시지
             Text(alertData.message)
-                .font(.body)
+                .font(.cyberpunkBody())
                 .multilineTextAlignment(.center)
                 .foregroundColor(.primary)
 
             // 제안사항 (있는 경우만)
             if let suggestion = alertData.suggestion, !suggestion.isEmpty {
                 Text(suggestion)
-                    .font(.caption)
+                    .font(.cyberpunkCaption())
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
                     .padding(.horizontal)

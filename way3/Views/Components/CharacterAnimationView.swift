@@ -31,7 +31,7 @@ struct CharacterAnimationView: View {
                                 .font(.system(size: 40))
                                 .foregroundColor(.white.opacity(0.5))
                             Text(capitalizedName)
-                                .font(.caption)
+                                .font(.cyberpunkCaption())
                                 .foregroundColor(.white.opacity(0.5))
                         }
                     )

@@ -9,7 +9,7 @@ struct TypewriterText: View {
 
     var body: some View {
         Text(engine.displayed)
-            .font(.system(size: 17, weight: .regular, design: .rounded))
+            .font(.cyberpunkBody(size: 17))
             .foregroundStyle(Color.white)
             .lineSpacing(6)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -57,7 +57,7 @@ struct BottomProceedBar: View {
             Button(action: onTap) {
                 HStack(spacing: 8) {
                     Image(systemName: isCompleted ? "arrow.right.circle.fill" : "bolt.fill")
-                        .font(.system(size: 18, weight: .heavy))
+                        .font(.cyberpunkTitle(size: 18))
                     Text(isCompleted ? "NEXT" : "CONTINUE")
                         .font(.system(size: 16, weight: .heavy, design: .monospaced))
                 }
@@ -93,12 +93,12 @@ struct DecisionChoiceList: View {
                 Button(action: { onChoice(choice) }) {
                     HStack {
                         Text(choice.text)
-                            .font(.system(size: 15, weight: .semibold, design: .rounded))
+                            .font(.cyberpunkBody(size: 15))
                             .foregroundColor(.black)
                             .multilineTextAlignment(.leading)
                         Spacer()
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 14, weight: .bold))
+                            .font(.cyberpunkCaption(size: 14))
                             .foregroundColor(.black.opacity(0.6))
                     }
                     .padding(.horizontal, 16)
@@ -122,7 +122,7 @@ struct PendingNodeOverlay: View {
 
     var body: some View {
         Text(message)
-            .font(.system(size: 14, weight: .semibold, design: .rounded))
+            .font(.cyberpunkBody(size: 14))
             .foregroundColor(.cyberpunkTextSecondary)
             .multilineTextAlignment(.center)
             .padding(18)

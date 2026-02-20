@@ -542,52 +542,47 @@ extension NetworkManager {
             responseType: AuthResponse.self
         )
         
-        // ✅ 성공 시 토큰 저장 및 Socket 연결
+        // ✅ 성공 시 토큰 저장
         if response.success, let authData = response.data {
             let token = authData.token
             await MainActor.run {
                 self.authToken = token
-                SocketManager.shared.connect(with: token)
             }
         }
-        
+
         return response
     }
-    
+
     func login(email: String, password: String) async throws -> AuthResponse {
         let body = [
             "email": email,
             "password": password
         ]
-        
+
         let response: AuthResponse = try await makeRequest(
             endpoint: "/auth/login",
             method: .POST,
             body: body,
             responseType: AuthResponse.self
         )
-        
-        // ✅ 성공 시 토큰 저장 및 Socket 연결
+
+        // ✅ 성공 시 토큰 저장
         if response.success, let authData = response.data {
             let token = authData.token
             await MainActor.run {
                 self.authToken = token
-                SocketManager.shared.connect(with: token)
             }
         }
-        
+
         return response
     }
-    
+
     func logout() {
         Task { @MainActor in
             self.authToken = nil
             self.isAuthenticated = false
         }
-        
-        // ✅ Socket 연결 해제
-        SocketManager.shared.disconnect()
-        
+
         // ✅ 캐시 정리 (스레드 안전)
         requestQueue.async(flags: .barrier) {
             self._requestCache.removeAll()

@@ -293,7 +293,7 @@ struct QuantityPopupContentView: View {
                 Button("-") {
                     if quantity > 1 { quantity -= 1 }
                 }
-                .font(.title2)
+                .font(.chosunH2)
                 .foregroundColor(.cyan)
                 .frame(width: 40, height: 40)
                 .background(Circle().stroke(Color.cyan, lineWidth: 1))
@@ -306,7 +306,7 @@ struct QuantityPopupContentView: View {
                 Button("+") {
                     if quantity < 99 { quantity += 1 }
                 }
-                .font(.title2)
+                .font(.chosunH2)
                 .foregroundColor(.cyan)
                 .frame(width: 40, height: 40)
                 .background(Circle().stroke(Color.cyan, lineWidth: 1))

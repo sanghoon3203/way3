@@ -96,7 +96,7 @@ struct EmptyPersonalItemsView: View {
     var body: some View {
         VStack(spacing: 16) {
             Image(systemName: "cube.box")
-                .font(.largeTitle)
+                .font(.chosunTitle)
                 .foregroundColor(.cyberpunkTextSecondary)
 
             Text("보유한 개인 아이템이 없습니다")
@@ -114,7 +114,7 @@ struct PersonalItemsErrorView: View {
     var body: some View {
         VStack(spacing: 16) {
             Image(systemName: "exclamationmark.triangle")
-                .font(.largeTitle)
+                .font(.chosunTitle)
                 .foregroundColor(.red)
 
             Text("개인 아이템 로딩 실패")
@@ -185,11 +185,11 @@ struct PersonalItemCard: View {
 
                     if let firstEffect = item.effects.first {
                         Image(systemName: firstEffect.type.icon)
-                            .font(.title2)
+                            .font(.chosunH2)
                             .foregroundColor(firstEffect.type.color)
                     } else {
                         Image(systemName: "cube.box.fill")
-                            .font(.title2)
+                            .font(.chosunH2)
                             .foregroundColor(.cyberpunkTextSecondary)
                     }
 
