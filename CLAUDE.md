@@ -5,7 +5,7 @@
 - **플랫폼**: iOS SwiftUI (Swift 5.9, iOS 17+, Xcode 15+)
 - **장르**: GPS 기반 위치 인증 트레이딩 RPG + Visual Novel
 - **배경**: 서울 25개 구 (네오 서울 세계관)
-- **서버**: Node.js/Express + SQLite3 + Socket.IO → Railway.app
+- **서버**: Node.js/Express + SQLite3 → Railway.app
 
 ## 소통 언어
 **한국어**로 소통합니다.
@@ -17,6 +17,8 @@ claudedocs/
   01_PROJECT_OVERVIEW.md ← 게임 컨셉, API, DB 스키마, 로드맵
   02_FIELD_GUIDE.md    ← iOS 코드 구조, 데이터 흐름, 빌드 방법
   03_GAME_SYSTEM.md    ← VNNode/퀘스트 JSON 스키마
+  04_UI_SYSTEM.md      ← 조선사이버펑크 디자인 시스템
+  05_AI_CHAT_SYSTEM.md ← AI 상인 채팅 시스템
   status/STORY_STATUS.md ← 스토리 노드 완성도 현황
   status/QUEST_STATUS.md ← 퀘스트 현황 + 버그 목록
 Story/
@@ -32,11 +34,11 @@ Managers/     — 오케스트레이터 (GameManager, StoryFlowManager...)
 Models/       — 데이터 구조체 + 서버 DTO
 ViewModels/   — 화면별 뷰모델
 Views/        — SwiftUI 화면
-Components/   — 사이버펑크 디자인 시스템
+Components/   — 조선사이버펑크 디자인 시스템 (CyberpunkChatComponents 포함)
 Utils/        — CyberpunkDesignSystem (색상/타이포 상수)
 GameData/     — 로컬 JSON (권위 데이터): districts.json, main_quests.json, story_main_chapters.json
 StoryData/    — VNNode JSON (~668개): Prologue/, Gangnam/, Seocho/, Songpa/, Gangdong/, Substories/
-Resources/    — 이미지, 영상, 사운드, ChosunCentennial 폰트
+Resources/    — 이미지, 영상, 사운드, font/ (ChosunCentennial + Pretendard)
 ```
 
 ## VNNode JSON 포맷
@@ -78,7 +80,7 @@ Resources/    — 이미지, 영상, 사운드, ChosunCentennial 폰트
 ## 알려진 버그 (우선순위순)
 1. **🔴** `Models/MainQuestDefinition.swift`: `requiredEpisodes`/`requiredSubQuests`가 `= []`로 하드코딩 — JSON 디코딩 안 됨
 2. **🔴** `StoryData/Gangdong/`: 018~063 번호 누락 (46개 노드 필요)
-3. **🟡** `Core/AuctionManager.swift` + `Core/SocketManager.swift`: 경매 Socket.IO 이벤트 미구현
+3. **🟡** `Core/AuctionManager.swift`: 경매 이벤트 미구현 (Socket.IO 제거됨, REST API 방식 재설계 필요)
 4. **🟡** `StoryData/Substories/`: 서북권 4명 서브스토리 JSON 없음
 
 ## 빌드
@@ -93,8 +95,12 @@ xcodebuild -scheme way3 -destination 'platform=iOS Simulator,name=iPhone 15' bui
 
 ## 코딩 컨벤션
 - SwiftUI + Combine 패턴 (MVVM)
-- 색상: `.cyberpunkYellow`, `.cyberpunkCyan` (Color+GameColors.swift)
-- 폰트: `.cyberpunkCaption()`, `defaultChosunFont()` (Font+ChosunSystem.swift)
+- **색상**: `.joseonCheong`, `.joseonJeok`, `.joseonHwang`, `.joseonBaek`, `.joseonHeuk` (오방색 네온)
+  - `Color(hex:)` 사용 금지 → `Color(red:green:blue:)` 또는 정의된 상수 사용
+- **폰트**:
+  - 타이틀/헤딩/버튼: `.chosunH1~H3`, `.chosunTitle`, `.chosunButton` (ChosunCentennial)
+  - 바디/캡션/기술: `.cyberpunkBody()`, `.cyberpunkCaption()`, `.cyberpunkTechnical()` (Pretendard)
+  - 시스템 폰트(`.title2`, `.body` 등) 직접 사용 금지
 - 로깅: `GameLogger` (os.Logger 기반)
 - 보안: `SecureStorage` (Keychain) — Access Token, Refresh Token, User ID
 

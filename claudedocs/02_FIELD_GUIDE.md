@@ -14,10 +14,10 @@ WAY3 iOS 클라이언트의 런타임 아키텍처와 코드 레벨 구조를 �
 | 지도 | MapboxMaps (3D Puck, 45° bearing, 65° pitch) |
 | 위치 | CoreLocation |
 | 네트워크 | URLSession (커스텀 NetworkManager) |
-| 실시간 | Socket.IO Swift 클라이언트 |
+| AI 채팅 | REST API → way-server → Gemini API |
 | 보안 | iOS Keychain (SecureStorage) |
 | 로컬 저장 | JSON 파일 (PlayerDataManager) + UserDefaults |
-| 폰트 | ChosunCentennial_otf.otf (커스텀 한글 폰트) |
+| 폰트 | ChosunCentennial (타이틀/헤딩/버튼) + Pretendard (바디/캡션) |
 | OCR | Vision framework (영수증 인증, 구현 예정) |
 | 오디오 | AVFoundation (SFXManager, LoopingVideoPlayer) |
 
@@ -31,7 +31,7 @@ way3App.swift (@main)
                     AuthManager, ProgressManager, QuestManager,
                     StoryFlowManager, MerchantDataManager,
                     DialogueDataManager, TradeManager, AuctionManager,
-                    SocketManager, PlayerDataManager
+                    PlayerDataManager
   - LocationManager (CLLocationDelegate) 초기화
 
 ContentView.swift
@@ -63,7 +63,6 @@ way3/
 │   ├── ReceiptVerifier.swift   — 영수증 OCR 검증 (Vision)
 │   ├── RewardProcessor.swift   — 퀘스트 보상 처리
 │   ├── TradeManager.swift      — 거래 로직, 가격 계산
-│   ├── SocketManager.swift     — Socket.IO (근처 플레이어, 가격 변동)
 │   ├── APIResponse.swift       — 서버 응답 래퍼
 │   ├── ErrorAlert.swift        — 에러 표시 헬퍼
 │   └── GameLogger.swift        — os.Logger 기반 구조적 로깅
@@ -77,7 +76,7 @@ way3/
 ├── Models/                     ← 데이터 구조
 │   ├── Player/
 │   │   ├── PlayerCore.swift        — 이름/레벨/돈/경험치
-│   │   ├── PlayerStats.swift       — 힘/지능/매력/행운 + 스킬
+│   │   ├── PlayerStats.swift       — 힘/지능/매력/행운
 │   │   ├── PlayerInventory.swift   — 인벤토리 + 창고
 │   │   ├── PlayerRelationships.swift — 상인 관계도
 │   │   ├── PlayerAchievements.swift  — 업적
@@ -102,8 +101,9 @@ way3/
 │   ├── Game/MainTabView.swift       — CyberpunkEnhancedTabView (5탭)
 │   ├── Map/MapView.swift            — Mapbox 3D 맵 + 상인 핀
 │   ├── Merchant/
-│   │   ├── MerchantDetailView.swift       — JRPG 스타일 상인 대화
-│   │   └── MerchantDetailViewExtensions.swift
+│   │   ├── MerchantDetailView.swift          — 상인 상세 (에피소드|거래|스토리|AI대화 탭)
+│   │   ├── MerchantDetailViewExtensions.swift
+│   │   └── MerchantAIChatView.swift          — AI 상인 채팅 뷰 + 뷰모델 ✨NEW
 │   ├── Quest/
 │   │   ├── QuestCenterView.swift    — 퀘스트 허브
 │   │   ├── QuestDetailView.swift    — 퀘스트 상세 + 실행
@@ -116,7 +116,7 @@ way3/
 │   │   ├── StartView.swift, LoginView.swift, RegisterView.swift
 │   │   ├── ProfileInputView.swift, ForgotPasswordView.swift
 │   ├── Player/
-│   │   ├── InventoryView.swift, SkillTreeView.swift
+│   │   └── InventoryView.swift
 │   ├── Profile/ProfileView.swift
 │   ├── Shop/ShopView.swift
 │   └── Components/
@@ -124,20 +124,21 @@ way3/
 │       ├── CharacterAnimationView.swift, LoadingView.swift
 │       ├── LoopingVideoPlayer.swift, VisualNovelDialogueBox.swift
 │
-├── Components/                 ← 사이버펑크 디자인 시스템
+├── Components/                 ← 조선사이버펑크 디자인 시스템
 │   ├── CyberpunkComponents.swift          — 버튼, 카드, 오버레이
+│   ├── CyberpunkChatComponents.swift      — AI 채팅 UI (말풍선, 타이핑, 언락배너) ✨NEW
 │   ├── CyberpunkInventoryComponents.swift — 인벤토리 그리드/카드
 │   ├── CyberpunkNavigationComponents.swift — 네비게이션 바
 │   ├── CyberpunkProfileComponents.swift   — 프로필 스탯 바
 │   └── CyberpunkQuestComponents.swift     — 퀘스트 카드
 │
 ├── Utils/
-│   ├── CyberpunkDesignSystem.swift  — 색상/타이포/간격 상수
+│   ├── CyberpunkDesignSystem.swift  — 색상/타이포/간격 상수 (오방색 팔레트)
 │   └── MerchantImageManager.swift   — 상인 이미지 로더
 │
 ├── Extensions/
-│   ├── Color+GameColors.swift       — .cyberpunkYellow, .cyberpunkCyan 등
-│   ├── Font+ChosunSystem.swift      — .cyberpunkCaption(), defaultChosunFont()
+│   ├── Color+GameColors.swift       — joseonCheong, joseonJeok, joseonHwang 등
+│   ├── Font+ChosunSystem.swift      — .chosunH1~H3, .chosunBody 등
 │   └── CLLocationCoordinate2D+Codable.swift
 │
 └── Security/
@@ -188,6 +189,20 @@ MapView (상인 핀 탭)
       → TradeManager.executeTrade()
         → NetworkManager POST /api/trade/execute
         → PlayerInventory 업데이트
+```
+
+### 4.4 AI 상인 채팅 흐름 ✨NEW
+
+```
+MerchantDetailView (.chat 탭)
+  → MerchantAIChatView
+    → MerchantChatViewModel.sendMessage()
+      → POST /api/merchant-chat
+           { merchantId, message, history }
+        → way-server → Gemini API
+        → { reply, unlockedEpisode }
+      → 언락 발생 시 EpisodeUnlockBanner 표시 (8초 자동 닫힘)
+      → 배너 탭 → StoryView 에피소드 즉시 재생
 ```
 
 ---
@@ -252,9 +267,8 @@ struct PlayerProgress: Codable {
 |---------|------|------|
 | 🔴 높음 | `MainQuestDefinition`의 `requiredEpisodes`/`requiredSubQuests`가 JSON 디코딩 안 됨 (항상 `[]`) | `Models/MainQuestDefinition.swift` |
 | 🔴 높음 | 강동 스토리 노드 018–063 누락 | `StoryData/Gangdong/` |
-| 🟡 중간 | 경매 Socket.IO 이벤트 미구현 (`get_auctions`, `create_auction`, `cancel_bid`) | `Core/AuctionManager.swift`, `Core/SocketManager.swift` |
+| 🟡 중간 | 경매 기능 미구현 (Socket.IO 제거됨 → REST API 방식 재설계 필요) | `Core/AuctionManager.swift` |
 | 🟡 중간 | 서북권 서브스토리 JSON 없음 (기주리, 카타리나 최, 마리, 김세휘) | `StoryData/Substories/` |
-| 🟢 낮음 | `theway_server/` 소스가 리포에 없음 → 외부 저장소 연동 필요 | 리포 루트 |
 | 🟢 낮음 | MapboxMaps `@_spi(Experimental)` import 사용 → SDK 업데이트 시 빌드 이슈 가능 | `Views/Map/MapView.swift` |
 | 🟢 낮음 | 대형 에셋 (영상/사운드) Git LFS 전략 미수립 | `Resources/` |
 
@@ -294,8 +308,9 @@ xcodebuild test -scheme way3 \
 | 배경 이미지 | `Resources/images/backgrounds/` | 강남/서예나/프롤로그 |
 | 캐릭터 이미지 | `Resources/images/characters/` | kijuri.png, seoyena.png |
 | 사운드 | `Resources/Sound/` | BGM + SFX |
+| 폰트 | `Resources/font/` | ChosunCentennial_otf.otf + Pretendard-*.otf |
 
 ---
 
-**버전**: 2.0.0
-**최종 업데이트**: 2026-02-12
+**버전**: 2.1.0
+**최종 업데이트**: 2026-02-20
