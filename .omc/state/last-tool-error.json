@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"docker --version && docker compose version 2>/dev/null || docker-compose --version 2>/dev/null\"}",
+  "error": "Exit code 127\n(eval):1: command not found: docker\n\n(eval):1: command not found: docker",
+  "timestamp": "2026-02-21T07:27:23.766Z",
+  "retry_count": 1
+}

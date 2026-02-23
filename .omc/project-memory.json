@@ -1,0 +1,150 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1771657733595,
+  "projectRoot": "/Users/kimsanghoon/Documents/GitHub/way3",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "Story": {
+      "path": "Story",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1771657733581,
+      "keyFiles": [
+        "mushoku_style_notes.md"
+      ]
+    },
+    "claudedocs": {
+      "path": "claudedocs",
+      "purpose": null,
+      "fileCount": 8,
+      "lastAccessed": 1771657733581,
+      "keyFiles": [
+        "00_INDEX.md",
+        "01_PROJECT_OVERVIEW.md",
+        "02_FIELD_GUIDE.md",
+        "03_GAME_SYSTEM.md",
+        "04_UI_SYSTEM.md"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 0,
+      "lastAccessed": 1771657733581,
+      "keyFiles": []
+    },
+    "way3": {
+      "path": "way3",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1771657733581,
+      "keyFiles": [
+        "ContentView.swift",
+        "Info.plist",
+        "way3.entitlements",
+        "way3App.swift"
+      ]
+    },
+    "way3.xcodeproj": {
+      "path": "way3.xcodeproj",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1771657733582,
+      "keyFiles": [
+        "project.pbxproj"
+      ]
+    },
+    "way3Tests": {
+      "path": "way3Tests",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1771657733582,
+      "keyFiles": [
+        "way3Tests.swift"
+      ]
+    },
+    "way3UITests": {
+      "path": "way3UITests",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1771657733582,
+      "keyFiles": [
+        "way3UITests.swift",
+        "way3UITestsLaunchTests.swift"
+      ]
+    },
+    "way3/Components": {
+      "path": "way3/Components",
+      "purpose": "UI components",
+      "fileCount": 6,
+      "lastAccessed": 1771657733583,
+      "keyFiles": [
+        "CyberpunkChatComponents.swift",
+        "CyberpunkComponents.swift",
+        "CyberpunkInventoryComponents.swift"
+      ]
+    },
+    "way3/Models": {
+      "path": "way3/Models",
+      "purpose": "Data models",
+      "fileCount": 12,
+      "lastAccessed": 1771657733583,
+      "keyFiles": [
+        "Achievement.swift",
+        "CharacterState.swift",
+        "District.swift"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "way3/way3App.swift",
+      "accessCount": 2,
+      "lastAccessed": 1771658612042,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 2,
+      "lastAccessed": 1771819712253,
+      "type": "file"
+    },
+    {
+      "path": "way3/Info.plist",
+      "accessCount": 2,
+      "lastAccessed": 1771819729154,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
