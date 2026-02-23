@@ -22,11 +22,25 @@ struct MainQuestDefinition: Codable, Identifiable, Hashable {
     var id: String { questId }
 }
 
-struct MainQuestRequirements: Codable, Hashable {
-    let requiredEpisodes: [String] = []
-    let requiredItems: [String] = []
+struct MainQuestRequirements: Hashable {
+    let requiredEpisodes: [String]
+    let requiredItems: [String]
     let requiredLevel: Int
-    let requiredSubQuests: [String] = []
+    let requiredSubQuests: [String]
+}
+
+extension MainQuestRequirements: Codable {
+    enum CodingKeys: String, CodingKey {
+        case requiredEpisodes, requiredItems, requiredLevel, requiredSubQuests
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        requiredEpisodes   = (try? c.decode([String].self, forKey: .requiredEpisodes))   ?? []
+        requiredItems      = (try? c.decode([String].self, forKey: .requiredItems))      ?? []
+        requiredLevel      = try c.decode(Int.self, forKey: .requiredLevel)
+        requiredSubQuests  = (try? c.decode([String].self, forKey: .requiredSubQuests))  ?? []
+    }
 }
 
 enum MainQuestObjectiveType: String, Codable, Hashable {
@@ -46,13 +60,29 @@ struct MainQuestObjective: Codable, Hashable {
     let storyNodeId: String?
 }
 
-struct MainQuestRewards: Codable, Hashable {
+struct MainQuestRewards: Hashable {
     let money: Int?
     let exp: Int?
-    let inventoryItems: [String] = []
-    let storyPieceIds: [String] = []
-    let keyItems: [String] = []
+    let inventoryItems: [String]
+    let storyPieceIds: [String]
+    let keyItems: [String]
     let relationshipChange: RelationshipChange?
+}
+
+extension MainQuestRewards: Codable {
+    enum CodingKeys: String, CodingKey {
+        case money, exp, inventoryItems, storyPieceIds, keyItems, relationshipChange
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        money              = try? c.decode(Int.self,    forKey: .money)
+        exp                = try? c.decode(Int.self,    forKey: .exp)
+        inventoryItems     = (try? c.decode([String].self, forKey: .inventoryItems))  ?? []
+        storyPieceIds      = (try? c.decode([String].self, forKey: .storyPieceIds))   ?? []
+        keyItems           = (try? c.decode([String].self, forKey: .keyItems))         ?? []
+        relationshipChange = try? c.decode(RelationshipChange.self, forKey: .relationshipChange)
+    }
 }
 
 private struct MainQuestContainer: Codable {

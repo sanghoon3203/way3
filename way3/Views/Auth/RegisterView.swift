@@ -1,9 +1,8 @@
 //
 //  RegisterView.swift
-//  way3 - Way Trading Game
+//  way3 - connect:seoul
 //
-//  네오-서울 테마 회원가입 화면
-//  실시간 유효성 검사 + 서버 중복 체크 + 개인정보 약관
+//  조선사이버펑크 회원가입 화면 (Pretendard 전면 적용)
 //
 
 import SwiftUI
@@ -13,7 +12,6 @@ struct RegisterView: View {
     @Binding var isPresented: Bool
     @EnvironmentObject private var authManager: AuthManager
 
-    // 폼 데이터
     @State private var name = ""
     @State private var username = ""
     @State private var password = ""
@@ -21,7 +19,6 @@ struct RegisterView: View {
     @State private var email = ""
     @State private var termsAccepted = false
 
-    // 유효성 검사 상태
     @State private var nameValid = false
     @State private var usernameValid = false
     @State private var usernameAvailable: Bool? = nil
@@ -29,7 +26,6 @@ struct RegisterView: View {
     @State private var passwordsMatch = false
     @State private var emailValid = false
 
-    // UI 상태
     @State private var showPassword = false
     @State private var showPasswordConfirm = false
     @State private var isCheckingUsername = false
@@ -40,472 +36,491 @@ struct RegisterView: View {
 
     var body: some View {
         ZStack {
-            // 배경 영상 + 블러 (LoginView와 동일)
             BackgroundVideoLayer()
             BlurOverlayLayer()
-
-            // 컨텐츠
-            ContentLayer2
-
-            // 성공 모달
-            if showSuccessModal {
-                SuccessModal
-            }
-
-            // 로딩 오버레이
-            if isRegistering {
-                LoadingOverlay
-            }
+            contentLayer
+            if showSuccessModal { successModal }
+            if isRegistering { loadingOverlay }
         }
         .navigationBarHidden(true)
-        .sheet(isPresented: $showTermsModal) {
-            TermsModal
-        }
+        .sheet(isPresented: $showTermsModal) { termsSheet }
     }
 }
 
-// MARK: - Content Layer
-extension RegisterView {
-    var ContentLayer2: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 30) {
-                // 뒤로가기 + 헤더
-                HeaderComponent
+// MARK: - Content
 
-                // 회원가입 폼
-                RegisterFormComponent
+extension RegisterView {
+    var contentLayer: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 0) {
+                headerBar
+                    .padding(.top, 56)
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 32)
+
+                formCard
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 48)
             }
             .frame(maxWidth: 420)
-            .padding(.horizontal, 24)
-            .padding(.vertical, 48)
             .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 
-    // MARK: - Header Component
-    var HeaderComponent: some View {
-        HStack {
-            // 뒤로가기 버튼
-            Button(action: {
-                isPresented = false
-            }) {
-                HStack(spacing: 8) {
+    // MARK: - Header
+    var headerBar: some View {
+        HStack(alignment: .center) {
+            Button(action: { isPresented = false }) {
+                HStack(spacing: 6) {
                     Image(systemName: "chevron.left")
-                        .font(.chosunH2)
-
+                        .font(.system(size: 14, weight: .medium))
                     Text("로그인")
-                        .font(.chosunOrFallback(size: 16))
+                        .font(.custom("Pretendard-Medium", size: 14))
                 }
-                .foregroundColor(.cyan)
+                .foregroundColor(.joseonCheong)
             }
 
             Spacer()
 
-            // 제목
-            Text("회원가입")
-                .font(.chosunOrFallback(size: 20, weight: .bold))
-                .foregroundColor(.white)
+            VStack(spacing: 2) {
+                Text("회원가입")
+                    .font(.custom("Pretendard-SemiBold", size: 18))
+                    .foregroundColor(.white)
+                Text("NEW ACCOUNT")
+                    .font(.custom("Pretendard-Light", size: 10))
+                    .tracking(3)
+                    .foregroundColor(Color.joseonBaek.opacity(0.4))
+            }
 
             Spacer()
 
-            // 빈 공간 (대칭을 위해)
-            Color.clear.frame(width: 80)
+            // 스텝 인디케이터
+            HStack(spacing: 4) {
+                ForEach(0..<3) { i in
+                    Capsule()
+                        .fill(i == 0 ? Color.joseonHwang : Color.joseonBaek.opacity(0.2))
+                        .frame(width: i == 0 ? 20 : 6, height: 6)
+                }
+            }
         }
-        .padding(.horizontal, 20)
     }
 
-    // MARK: - Register Form Component
-    var RegisterFormComponent: some View {
-        VStack(spacing: 20) {
-            // 이름 필드
-            NameField
+    // MARK: - Form Card
+    var formCard: some View {
+        VStack(spacing: 26) {
+            // 이름
+            regField(
+                text: $name,
+                labelEn: "NAME",
+                placeholder: "이름",
+                icon: "person",
+                isValid: name.isEmpty ? nil : nameValid,
+                errorText: "2~20자 한글 또는 영문"
+            )
+            .onChange(of: name) { _ in validateName() }
 
-            // 아이디 필드 + 중복 확인
-            UsernameField
+            // 아이디 (중복 확인 포함)
+            usernameRow
 
-            // 비밀번호 필드
-            PasswordField
+            // 비밀번호
+            regSecureField(
+                text: $password,
+                labelEn: "PASSWORD",
+                placeholder: "비밀번호",
+                showPassword: $showPassword,
+                isValid: password.isEmpty ? nil : passwordValid,
+                errorText: "8자 이상, 영문+숫자+특수문자"
+            )
+            .onChange(of: password) { _ in validatePassword(); validatePasswordMatch() }
 
-            // 비밀번호 확인 필드
-            PasswordConfirmField
+            // 비밀번호 확인
+            regSecureField(
+                text: $passwordConfirm,
+                labelEn: "CONFIRM",
+                placeholder: "비밀번호 확인",
+                showPassword: $showPasswordConfirm,
+                isValid: passwordConfirm.isEmpty ? nil : passwordsMatch,
+                successText: "비밀번호 일치",
+                errorText: "비밀번호가 일치하지 않습니다"
+            )
+            .onChange(of: passwordConfirm) { _ in validatePasswordMatch() }
 
-            // 복구 이메일 필드
-            EmailField
+            // 이메일
+            regField(
+                text: $email,
+                labelEn: "EMAIL",
+                placeholder: "이메일",
+                icon: "envelope",
+                keyboardType: .emailAddress,
+                isValid: email.isEmpty ? nil : emailValid,
+                errorText: "올바른 이메일 형식을 입력해주세요"
+            )
+            .onChange(of: email) { _ in validateEmail() }
 
-            // 개인정보 약관 체크박스
-            TermsCheckbox
+            // 구분선
+            Rectangle()
+                .fill(Color.joseonBorderDim)
+                .frame(height: 1)
+
+            // 약관 동의
+            termsRow
 
             // 에러 메시지
             if !errorMessage.isEmpty {
-                Text(errorMessage)
-                    .font(.chosunOrFallback(size: 14))
-                    .foregroundColor(.red)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 20)
+                HStack(spacing: 6) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: 12))
+                    Text(errorMessage)
+                        .font(.custom("Pretendard-Regular", size: 13))
+                }
+                .foregroundColor(.joseonJeok)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            // 회원가입 버튼
-            RegisterButton
+            // 가입 버튼
+            registerButton
         }
-        .padding(.horizontal, 30)
-        .padding(.vertical, 25)
+        .padding(24)
         .background(
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color.black.opacity(0.7))
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.joseonCard.opacity(0.92))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 16)
+                        .strokeBorder(
+                            LinearGradient(
+                                colors: [
+                                    Color.joseonHwang.opacity(0.3),
+                                    Color.joseonBorderDim,
+                                    Color.joseonCheong.opacity(0.3)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1
+                        )
                 )
         )
-        .padding(.horizontal, 20)
     }
 
-    // MARK: - Name Field
-    var NameField: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            IDTextField(
-                text: $name,
-                placeholder: "이름",
-                icon: "person.fill"
-            )
-            .onChange(of: name) { _ in
-                validateName()
-            }
+    // MARK: - Username Row
+    var usernameRow: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("ACCOUNT ID")
+                .font(.custom("Pretendard-Medium", size: 10))
+                .tracking(2.5)
+                .foregroundColor(Color.joseonBaek.opacity(0.4))
 
-            if !name.isEmpty && !nameValid {
-                Text("이름은 2-10자의 한글 또는 영문이어야 합니다")
-                    .font(.chosunOrFallback(size: 12))
-                    .foregroundColor(.red)
-                    .padding(.leading, 16)
-            }
-        }
-    }
-
-    // MARK: - Username Field
-    var UsernameField: some View {
-        VStack(alignment: .leading, spacing: 5) {
             HStack(spacing: 12) {
-                IDTextField(
-                    text: $username,
-                    placeholder: "아이디",
-                    icon: "at"
-                )
-                .onChange(of: username) { _ in
-                    validateUsername()
-                    usernameAvailable = nil // 입력 변경 시 중복 확인 상태 초기화
-                }
+                Image(systemName: "at")
+                    .font(.system(size: 14))
+                    .foregroundColor(Color.joseonBaek.opacity(0.4))
+                    .frame(width: 20)
+
+                TextField("아이디", text: $username)
+                    .font(.custom("Pretendard-Regular", size: 15))
+                    .foregroundColor(.white)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .accentColor(.joseonCheong)
+                    .onChange(of: username) { _ in
+                        validateUsername()
+                        usernameAvailable = nil
+                    }
 
                 // 중복 확인 버튼
                 Button(action: {
-                    Task {
-                        await checkUsernameAvailability()
-                    }
+                    Task { await checkUsernameAvailability() }
                 }) {
-                    HStack {
+                    Group {
                         if isCheckingUsername {
                             ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                .scaleEffect(0.8)
-                        } else if let available = usernameAvailable {
-                            Image(systemName: available ? "checkmark.circle.fill" : "xmark.circle.fill")
-                                .foregroundColor(available ? .green : .red)
+                                .progressViewStyle(CircularProgressViewStyle(tint: .joseonCheong))
+                                .scaleEffect(0.7)
+                        } else if let avail = usernameAvailable {
+                            Image(systemName: avail ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                .font(.system(size: 16))
+                                .foregroundColor(avail ? .joseonCheong : .joseonJeok)
                         } else {
-                            Text("중복확인")
-                                .font(.chosunOrFallback(size: 12))
+                            Text("확인")
+                                .font(.custom("Pretendard-Medium", size: 12))
+                                .foregroundColor(usernameValid ? .joseonCheong : Color.joseonBaek.opacity(0.3))
                         }
                     }
-                    .foregroundColor(usernameValid ? .cyan : .gray)
-                    .frame(width: 70, height: 35)
+                    .frame(width: 44, height: 28)
                     .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.cyan.opacity(0.5), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 6)
+                            .stroke(
+                                usernameValid ? Color.joseonCheong.opacity(0.5) : Color.joseonBaek.opacity(0.15),
+                                lineWidth: 1
+                            )
                     )
                 }
                 .disabled(!usernameValid || isCheckingUsername)
             }
+            .padding(.bottom, 10)
+            .overlay(alignment: .bottom) {
+                Rectangle()
+                    .fill(Color.joseonBaek.opacity(0.2))
+                    .frame(height: 1)
+            }
 
-            // 아이디 유효성 메시지
             if !username.isEmpty && !usernameValid {
-                Text("아이디는 4-20자의 영문과 숫자 조합이어야 합니다")
-                    .font(.chosunOrFallback(size: 12))
-                    .foregroundColor(.red)
-                    .padding(.leading, 16)
-            } else if let available = usernameAvailable, !available {
-                Text("이미 사용 중인 아이디입니다")
-                    .font(.chosunOrFallback(size: 12))
-                    .foregroundColor(.red)
-                    .padding(.leading, 16)
+                validLabel("4~20자 영문+숫자 조합", ok: false)
+            } else if let avail = usernameAvailable {
+                validLabel(avail ? "사용 가능한 아이디입니다" : "이미 사용 중인 아이디입니다", ok: avail)
             }
         }
     }
 
-    // MARK: - Password Field
-    var PasswordField: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            NeoSeoulSecureField(
-                text: $password,
-                placeholder: "비밀번호",
-                showPassword: $showPassword
-            )
-            .onChange(of: password) { _ in
-                validatePassword()
-                validatePasswordMatch()
-            }
-
-            if !password.isEmpty && !passwordValid {
-                Text("비밀번호는 8자 이상, 영문+숫자+특수문자 조합이어야 합니다")
-                    .font(.chosunOrFallback(size: 12))
-                    .foregroundColor(.red)
-                    .padding(.leading, 16)
-            }
-        }
-    }
-
-    // MARK: - Password Confirm Field
-    var PasswordConfirmField: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            NeoSeoulSecureField(
-                text: $passwordConfirm,
-                placeholder: "비밀번호 확인",
-                showPassword: $showPasswordConfirm
-            )
-            .onChange(of: passwordConfirm) { _ in
-                validatePasswordMatch()
-            }
-
-            if !passwordConfirm.isEmpty {
-                HStack(spacing: 8) {
-                    Image(systemName: passwordsMatch ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundColor(passwordsMatch ? .green : .red)
-
-                    Text(passwordsMatch ? "비밀번호가 일치합니다" : "비밀번호가 일치하지 않습니다")
-                        .font(.chosunOrFallback(size: 12))
-                        .foregroundColor(passwordsMatch ? .green : .red)
-                }
-                .padding(.leading, 16)
-            }
-        }
-    }
-
-    // MARK: - Email Field
-    var EmailField: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            IDTextField(
-                text: $email,
-                placeholder: "이메일",
-                icon: "envelope.fill"
-            )
-            .onChange(of: email) { _ in
-                validateEmail()
-            }
-
-            if !email.isEmpty && !emailValid {
-                Text("올바른 이메일 형식을 입력해주세요")
-                    .font(.chosunOrFallback(size: 12))
-                    .foregroundColor(.red)
-                    .padding(.leading, 16)
-            }
-        }
-    }
-
-    // MARK: - Terms Checkbox
-    var TermsCheckbox: some View {
+    // MARK: - Terms Row
+    var termsRow: some View {
         HStack {
-            Button(action: {
-                termsAccepted.toggle()
-            }) {
+            Button(action: { termsAccepted.toggle() }) {
                 HStack(spacing: 8) {
                     ZStack {
-                        RoundedRectangle(cornerRadius: 4)
-                            .stroke(Color.cyan.opacity(0.6), lineWidth: 1)
-                            .frame(width: 20, height: 20)
-
+                        RoundedRectangle(cornerRadius: 3)
+                            .stroke(
+                                termsAccepted ? Color.joseonHwang : Color.joseonBaek.opacity(0.3),
+                                lineWidth: 1.5
+                            )
+                            .frame(width: 18, height: 18)
+                            .background(
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(termsAccepted ? Color.joseonHwang.opacity(0.12) : .clear)
+                            )
                         if termsAccepted {
                             Image(systemName: "checkmark")
-                                .font(.system(size: 12, weight: .bold))
-                                .foregroundColor(.cyan)
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundColor(.joseonHwang)
                         }
                     }
-
                     Text("개인정보 이용약관에 동의합니다")
-                        .font(.chosunOrFallback(size: 14))
-                        .foregroundColor(.white.opacity(0.8))
+                        .font(.custom("Pretendard-Regular", size: 13))
+                        .foregroundColor(Color.joseonBaek.opacity(0.7))
                 }
             }
 
             Spacer()
 
-            Button("보기") {
-                showTermsModal = true
-            }
-            .font(.chosunOrFallback(size: 12))
-            .foregroundColor(.cyan)
-            .underline()
+            Button("약관 보기") { showTermsModal = true }
+                .font(.custom("Pretendard-Medium", size: 12))
+                .foregroundColor(.joseonCheong)
         }
     }
 
     // MARK: - Register Button
-    var RegisterButton: some View {
-        Button(action: {
-            Task {
-                await performRegistration()
-            }
-        }) {
-            HStack {
+    var registerButton: some View {
+        Button(action: { Task { await performRegistration() } }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(
+                        isFormValid
+                            ? LinearGradient(colors: [.joseonHwang, .cyberpunkGold],
+                                             startPoint: .leading, endPoint: .trailing)
+                            : LinearGradient(colors: [Color.white.opacity(0.07), Color.white.opacity(0.03)],
+                                             startPoint: .leading, endPoint: .trailing)
+                    )
                 if isRegistering {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .black))
-                        .scaleEffect(0.8)
+                        .scaleEffect(0.85)
                 } else {
-                    Image(systemName: "person.badge.plus")
-                        .font(.chosunH2)
+                    HStack(spacing: 8) {
+                        Text("계정 생성")
+                            .font(.custom("Pretendard-SemiBold", size: 16))
+                        Image(systemName: "person.badge.plus")
+                            .font(.system(size: 14, weight: .medium))
+                    }
+                    .foregroundColor(isFormValid ? .black : Color.joseonBaek.opacity(0.3))
                 }
-
-                Text(isRegistering ? "계정 생성 중..." : "회원가입")
-                    .font(.chosunOrFallback(size: 16, weight: .semibold))
             }
-            .foregroundColor(isFormValid ? .black : .gray)
             .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(
-                RoundedRectangle(cornerRadius: 25)
-                    .fill(isFormValid ? Color.cyan : Color.gray.opacity(0.3))
-            )
+            .frame(height: 52)
         }
         .disabled(!isFormValid || isRegistering)
-        .padding(.top, 10)
-    }
-}
-
-// MARK: - Validation Logic
-extension RegisterView {
-    private var isFormValid: Bool {
-        return nameValid &&
-               passwordValid &&
-               passwordsMatch &&
-               emailValid &&
-               termsAccepted
     }
 
-    private func validateName() {
-        let nameRegex = "^[가-힣a-zA-Z]{2,20}$"
-        nameValid = NSPredicate(format: "SELF MATCHES %@", nameRegex).evaluate(with: name)
-    }
-
-    private func validateUsername() {
-        let usernameRegex = "^[a-zA-Z0-9]{4,20}$"
-        usernameValid = NSPredicate(format: "SELF MATCHES %@", usernameRegex).evaluate(with: username)
-    }
-
-    private func validatePassword() {
-        let passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$"
-        passwordValid = NSPredicate(format: "SELF MATCHES %@", passwordRegex).evaluate(with: password)
-    }
-
-    private func validatePasswordMatch() {
-        passwordsMatch = !password.isEmpty && !passwordConfirm.isEmpty && password == passwordConfirm
-    }
-
-    private func validateEmail() {
-        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        emailValid = NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
-    }
-
-    private func checkUsernameAvailability() async {
-        isCheckingUsername = true
-
-        // TODO: 실제 서버 API 호출
-        // 임시로 딜레이 추가
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-
-        // 임시 로직: "test"는 이미 사용 중으로 처리
-        usernameAvailable = username != "test"
-        isCheckingUsername = false
-    }
-
-    private func performRegistration() async {
-        guard !isRegistering else { return }
-
-        await MainActor.run {
-            isRegistering = true
-            errorMessage = ""
+    // MARK: - Helpers
+    func validLabel(_ text: String, ok: Bool) -> some View {
+        HStack(spacing: 4) {
+            Image(systemName: ok ? "checkmark.circle.fill" : "xmark.circle.fill")
+                .font(.system(size: 11))
+            Text(text)
+                .font(.custom("Pretendard-Regular", size: 12))
         }
+        .foregroundColor(ok ? .joseonCheong : .joseonJeok)
+    }
 
-        await authManager.register(email: email.trimmingCharacters(in: .whitespacesAndNewlines),
-                                    password: password,
-                                    playerName: name.trimmingCharacters(in: .whitespacesAndNewlines))
+    // 일반 텍스트 필드 (라인 스타일)
+    func regField(
+        text: Binding<String>,
+        labelEn: String,
+        placeholder: String,
+        icon: String,
+        keyboardType: UIKeyboardType = .default,
+        isValid: Bool?,
+        successText: String? = nil,
+        errorText: String
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(labelEn)
+                .font(.custom("Pretendard-Medium", size: 10))
+                .tracking(2.5)
+                .foregroundColor(Color.joseonBaek.opacity(0.4))
 
-        await MainActor.run {
-            isRegistering = false
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .font(.system(size: 14))
+                    .foregroundColor(Color.joseonBaek.opacity(0.4))
+                    .frame(width: 20)
 
-            if authManager.isAuthenticated {
-                errorMessage = ""
-                showSuccessModal = true
-            } else {
-                errorMessage = authManager.errorMessage.isEmpty
-                    ? "회원가입에 실패했습니다. 잠시 후 다시 시도해주세요."
-                    : authManager.errorMessage
+                TextField(placeholder, text: text)
+                    .font(.custom("Pretendard-Regular", size: 15))
+                    .foregroundColor(.white)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .keyboardType(keyboardType)
+                    .accentColor(.joseonCheong)
+            }
+            .padding(.bottom, 10)
+            .overlay(alignment: .bottom) {
+                Rectangle()
+                    .fill(
+                        isValid == false
+                            ? Color.joseonJeok.opacity(0.8)
+                            : Color.joseonBaek.opacity(0.2)
+                    )
+                    .frame(height: 1)
+            }
+
+            if let valid = isValid {
+                validLabel(valid ? (successText ?? placeholder) : errorText, ok: valid)
+            }
+        }
+    }
+
+    // 보안 텍스트 필드 (라인 스타일)
+    func regSecureField(
+        text: Binding<String>,
+        labelEn: String,
+        placeholder: String,
+        showPassword: Binding<Bool>,
+        isValid: Bool?,
+        successText: String? = nil,
+        errorText: String
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(labelEn)
+                .font(.custom("Pretendard-Medium", size: 10))
+                .tracking(2.5)
+                .foregroundColor(Color.joseonBaek.opacity(0.4))
+
+            HStack(spacing: 12) {
+                Image(systemName: "lock")
+                    .font(.system(size: 14))
+                    .foregroundColor(Color.joseonBaek.opacity(0.4))
+                    .frame(width: 20)
+
+                Group {
+                    if showPassword.wrappedValue {
+                        TextField(placeholder, text: text)
+                            .autocorrectionDisabled()
+                            .autocapitalization(.none)
+                    } else {
+                        SecureField(placeholder, text: text)
+                    }
+                }
+                .font(.custom("Pretendard-Regular", size: 15))
+                .foregroundColor(.white)
+                .accentColor(.joseonCheong)
+
+                Button(action: { showPassword.wrappedValue.toggle() }) {
+                    Image(systemName: showPassword.wrappedValue ? "eye.slash" : "eye")
+                        .font(.system(size: 14))
+                        .foregroundColor(Color.joseonBaek.opacity(0.4))
+                }
+            }
+            .padding(.bottom, 10)
+            .overlay(alignment: .bottom) {
+                Rectangle()
+                    .fill(
+                        isValid == false
+                            ? Color.joseonJeok.opacity(0.8)
+                            : Color.joseonBaek.opacity(0.2)
+                    )
+                    .frame(height: 1)
+            }
+
+            if let valid = isValid {
+                validLabel(valid ? (successText ?? placeholder) : errorText, ok: valid)
             }
         }
     }
 }
 
 // MARK: - Modals
+
 extension RegisterView {
-    var SuccessModal: some View {
+    var successModal: some View {
         ZStack {
-            Color.black.opacity(0.8)
-                .ignoresSafeArea()
+            Color.black.opacity(0.75).ignoresSafeArea()
 
-            VStack(spacing: 20) {
-                // 성공 아이콘
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 60))
-                    .foregroundColor(.green)
-                    .scaleEffect(1.0)
-                    .onAppear {
-                        withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                            // 애니메이션 효과
-                        }
-                    }
+            VStack(spacing: 24) {
+                ZStack {
+                    Circle()
+                        .fill(Color.joseonCheong.opacity(0.1))
+                        .frame(width: 80, height: 80)
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 44))
+                        .foregroundColor(.joseonCheong)
+                }
 
-                Text("성공적으로 회원가입이 완료되었습니다")
-                    .font(.chosunOrFallback(size: 16))
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
+                VStack(spacing: 6) {
+                    Text("가입 완료")
+                        .font(.custom("Pretendard-Bold", size: 20))
+                        .foregroundColor(.white)
+                    Text("네오-서울에 오신 것을 환영합니다")
+                        .font(.custom("Pretendard-Regular", size: 14))
+                        .foregroundColor(Color.joseonBaek.opacity(0.6))
+                }
 
-                Button("확인") {
+                Button(action: {
                     showSuccessModal = false
                     isPresented = false
+                }) {
+                    Text("게임 시작")
+                        .font(.custom("Pretendard-SemiBold", size: 16))
+                        .foregroundColor(.black)
+                        .frame(width: 160, height: 48)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(LinearGradient(
+                                    colors: [.joseonHwang, .cyberpunkGold],
+                                    startPoint: .leading, endPoint: .trailing
+                                ))
+                        )
                 }
-                .font(.chosunOrFallback(size: 16, weight: .semibold))
-                .foregroundColor(.black)
-                .frame(width: 120, height: 45)
-                .background(
-                    RoundedRectangle(cornerRadius: 22.5)
-                        .fill(Color.cyan)
-                )
             }
-            .padding(30)
+            .padding(36)
             .background(
-                RoundedRectangle(cornerRadius: 15)
-                    .fill(Color.black.opacity(0.9))
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.joseonPanel)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 15)
-                            .stroke(Color.cyan.opacity(0.5), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.joseonBorderGlow, lineWidth: 1)
                     )
             )
             .padding(.horizontal, 40)
         }
     }
 
-    var TermsModal: some View {
+    var termsSheet: some View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     Text("개인정보 이용약관")
-                        .font(.chosunOrFallback(size: 20, weight: .bold))
-                        .padding(.bottom, 10)
+                        .font(.custom("Pretendard-Bold", size: 20))
+                        .padding(.bottom, 8)
 
                     Text("""
                     1. 개인정보의 수집 및 이용 목적
@@ -521,18 +536,15 @@ extension RegisterView {
                     - 회원 탈퇴 시까지
                     - 법령에서 정한 보존 기간이 있는 경우 해당 기간
 
-                    4. 개인정보 처리 위탁
-                    - 서버 운영 및 관리: AWS Korea
-                    - 데이터 분석: 내부 처리
-
-                    5. 개인정보의 제3자 제공
+                    4. 개인정보의 제3자 제공
                     - 원칙적으로 제공하지 않음
                     - 법령에 의한 경우 예외
 
                     본 약관에 동의하지 않으실 경우 회원가입이 제한될 수 있습니다.
                     """)
-                        .font(.chosunOrFallback(size: 14))
-                        .lineSpacing(4)
+                        .font(.custom("Pretendard-Regular", size: 14))
+                        .foregroundColor(.primary)
+                        .lineSpacing(5)
                 }
                 .padding()
             }
@@ -540,40 +552,102 @@ extension RegisterView {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("닫기") {
-                        showTermsModal = false
-                    }
+                    Button("닫기") { showTermsModal = false }
+                        .font(.custom("Pretendard-Medium", size: 14))
                 }
             }
         }
     }
 
-    var LoadingOverlay: some View {
+    var loadingOverlay: some View {
         ZStack {
-            Color.black.opacity(0.7)
-                .ignoresSafeArea()
+            Color.black.opacity(0.65).ignoresSafeArea()
 
-            VStack(spacing: 20) {
+            VStack(spacing: 16) {
                 ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .cyan))
-                    .scaleEffect(1.5)
-
+                    .progressViewStyle(CircularProgressViewStyle(tint: .joseonCheong))
+                    .scaleEffect(1.4)
                 Text("계정 생성 중...")
-                    .font(.chosunOrFallback(size: 16))
+                    .font(.custom("Pretendard-Medium", size: 15))
                     .foregroundColor(.white)
             }
-            .padding(30)
+            .padding(32)
             .background(
-                RoundedRectangle(cornerRadius: 15)
-                    .fill(Color.black.opacity(0.8))
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.joseonPanel)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 15)
-                            .stroke(Color.cyan.opacity(0.5), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color.joseonBorderGlow, lineWidth: 1)
                     )
             )
         }
     }
 }
+
+// MARK: - Validation Logic
+
+extension RegisterView {
+    private var isFormValid: Bool {
+        nameValid && passwordValid && passwordsMatch && emailValid && termsAccepted
+    }
+
+    private func validateName() {
+        nameValid = NSPredicate(format: "SELF MATCHES %@", "^[가-힣a-zA-Z]{2,20}$").evaluate(with: name)
+    }
+
+    private func validateUsername() {
+        usernameValid = NSPredicate(format: "SELF MATCHES %@", "^[a-zA-Z0-9]{4,20}$").evaluate(with: username)
+    }
+
+    private func validatePassword() {
+        passwordValid = NSPredicate(
+            format: "SELF MATCHES %@",
+            "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$"
+        ).evaluate(with: password)
+    }
+
+    private func validatePasswordMatch() {
+        passwordsMatch = !password.isEmpty && !passwordConfirm.isEmpty && password == passwordConfirm
+    }
+
+    private func validateEmail() {
+        emailValid = NSPredicate(
+            format: "SELF MATCHES %@",
+            "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        ).evaluate(with: email)
+    }
+
+    private func checkUsernameAvailability() async {
+        isCheckingUsername = true
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        usernameAvailable = username != "test"
+        isCheckingUsername = false
+    }
+
+    private func performRegistration() async {
+        guard !isRegistering else { return }
+        await MainActor.run { isRegistering = true; errorMessage = "" }
+
+        await authManager.register(
+            email: email.trimmingCharacters(in: .whitespacesAndNewlines),
+            password: password,
+            playerName: name.trimmingCharacters(in: .whitespacesAndNewlines)
+        )
+
+        await MainActor.run {
+            isRegistering = false
+            if authManager.isAuthenticated {
+                showSuccessModal = true
+            } else {
+                errorMessage = authManager.errorMessage.isEmpty
+                    ? "회원가입에 실패했습니다. 잠시 후 다시 시도해주세요."
+                    : authManager.errorMessage
+            }
+        }
+    }
+}
+
+// MARK: - Preview
 
 #Preview {
     RegisterView(isPresented: .constant(true))

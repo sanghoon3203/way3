@@ -5,7 +5,7 @@
 	<key>MBXAccessToken</key>
 	<string>pk.eyJ1IjoicmVhbGlzaG9vbnNhbmciLCJhIjoiY21kY21yczI0MTh3MzJtcHp0NGE3MWk5YSJ9.00GBYK0KsKv-hETMITcWzw</string>
 	<key>API_BASE_URL</key>
-	<string>https://way3-production.up.railway.app</string>
+	<string>http://localhost:3000</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoadsInWebContent</key>

@@ -170,17 +170,19 @@ extension ForgotPasswordView {
             // 폼
             VStack(spacing: 20) {
                 // 아이디 입력
-                IDTextField(
+                AuthLineTextField(
                     text: $username,
                     placeholder: "아이디",
-                    icon: "person.fill"
+                    labelEn: "ACCOUNT ID",
+                    icon: "person"
                 )
 
                 // 복구 이메일 입력
-                IDTextField(
+                AuthLineTextField(
                     text: $email,
                     placeholder: "가입 시 등록한 복구 이메일",
-                    icon: "envelope.fill",
+                    labelEn: "EMAIL",
+                    icon: "envelope",
                     keyboardType: .emailAddress
                 )
 
@@ -333,9 +335,10 @@ extension ForgotPasswordView {
     // MARK: - New Password Field
     var NewPasswordField: some View {
         VStack(alignment: .leading, spacing: 5) {
-            NeoSeoulSecureField(
+            AuthLineSecureField(
                 text: $newPassword,
                 placeholder: "새 비밀번호",
+                labelEn: "NEW PASSWORD",
                 showPassword: $showPassword
             )
             .onChange(of: newPassword) { _ in
@@ -355,9 +358,10 @@ extension ForgotPasswordView {
     // MARK: - Confirm Password Field
     var ConfirmPasswordField: some View {
         VStack(alignment: .leading, spacing: 5) {
-            NeoSeoulSecureField(
+            AuthLineSecureField(
                 text: $confirmPassword,
                 placeholder: "새 비밀번호 확인",
+                labelEn: "CONFIRM",
                 showPassword: $showConfirmPassword
             )
             .onChange(of: confirmPassword) { _ in

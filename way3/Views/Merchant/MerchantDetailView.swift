@@ -1991,6 +1991,8 @@ extension MerchantDetailView {
             viewModel.selectedTradeType = .buy
         case .story:
             break
+        case .chat:
+            break
         }
     }
 
@@ -2012,6 +2014,8 @@ extension MerchantDetailView {
                 case .trade:
                     viewModel.selectedTradeType = .buy
                 case .story:
+                    break
+                case .chat:
                     break
                 }
             }

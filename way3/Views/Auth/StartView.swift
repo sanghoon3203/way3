@@ -79,16 +79,11 @@ struct LogoComponent: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            // 게임 로고 텍스트 (실제 로고 이미지로 교체 가능)
-            Text("네오-서울")
-                .font(.chosunOrFallback(size: 36, weight: .bold))
-                .foregroundColor(.white)
-                .shadow(color: .cyan.opacity(0.5), radius: 10, x: 0, y: 0)
+          Image("Title")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 360, height: 360)
 
-            Text("트레이딩 게임")
-                .font(.chosunOrFallback(size: 18, weight: .medium))
-                .foregroundColor(.cyan)
-                .shadow(color: .cyan.opacity(0.3), radius: 5, x: 0, y: 0)
         }
         .scaleEffect(logoScale)
         .opacity(logoOpacity)
@@ -108,7 +103,7 @@ struct TypingAnimationComponent: View {
     @State private var isTyping = true
     @State private var showCursor = true
 
-    private let fullText = "터치하여 로그인하기"
+    private let fullText = "PLEASE TOUCH TO LOGIN "
     private let typingSpeed = 0.1
     private let pauseDuration = 2.0
     private let deletingSpeed = 0.05

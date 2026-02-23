@@ -100,7 +100,7 @@ class MerchantChatViewModel: ObservableObject {
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
         // 인증 토큰 추가
-        if let token = SecureStorage.shared.getAccessToken() {
+        if let token = try? SecureStorage.shared.loadAuthToken() {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
 
