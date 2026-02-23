@@ -5,7 +5,7 @@
 	<key>MBXAccessToken</key>
 	<string>pk.eyJ1IjoicmVhbGlzaG9vbnNhbmciLCJhIjoiY21kY21yczI0MTh3MzJtcHp0NGE3MWk5YSJ9.00GBYK0KsKv-hETMITcWzw</string>
 	<key>API_BASE_URL</key>
-	<string>http://localhost:3000</string>
+	<string>http://52.91.55.153:3000</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
@@ -24,6 +24,17 @@
 				</array>
 			</dict>
 			<key>127.0.0.1</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSExceptionMinimumTLSVersion</key>
+				<string>TLSv1.0</string>
+				<key>NSExceptionPortsIncluded</key>
+				<array>
+					<integer>3000</integer>
+				</array>
+			</dict>
+			<key>52.91.55.153</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
