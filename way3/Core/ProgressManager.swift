@@ -206,6 +206,9 @@ class ProgressManager: ObservableObject {
             self.progress = PlayerProgress()
             logger.info("🆕 새 진행 상태 생성")
         }
+
+        // 앱 시작 시 서버에서 진행 상태 복구
+        Task { await syncFromServer() }
     }
 
     // MARK: - Save/Load
@@ -239,6 +242,7 @@ class ProgressManager: ObservableObject {
         progress.completedChapters.append(chapterId)
         save()
         logger.info("✅ 챕터 '\(chapterId)' 완료 처리")
+        Task { await syncToServer() }
     }
 
     func setCurrentChapter(_ chapterId: String) {
@@ -280,6 +284,7 @@ class ProgressManager: ObservableObject {
                 await recordRelationshipProgress(merchantId: merchantId, questId: questId)
             }
         }
+        Task { await syncToServer() }
     }
 
     /// 기존 코드 호환용 (서브 퀘스트 전용)
@@ -412,6 +417,7 @@ class ProgressManager: ObservableObject {
 
         save()
         logger.info("✅ 에피소드 '\(episodeId)' 완료 처리")
+        Task { await syncToServer() }
     }
 
     // MARK: - Story Piece Management
@@ -472,20 +478,47 @@ class ProgressManager: ObservableObject {
         return districts.allSatisfy { progress.completedDistricts.contains($0) }
     }
 
-    // MARK: - Sync (Optional - 서버 동기화용)
+    // MARK: - Sync (서버 동기화)
 
-    func syncToServer() async throws {
-        // TODO: 서버 API 연동 시 구현
-        // POST /api/progress/sync
+    func syncToServer() async {
+        await NetworkManager.shared.syncStoryProgress(
+            completedChapters: progress.completedChapters,
+            completedEpisodes: progress.completedEpisodes,
+            completedSubQuests: progress.completedSubQuests,
+            unlockedEpisodes: progress.unlockedEpisodes,
+            keyItems: progress.keyItems
+        )
         progress.lastSyncedAt = Date()
         save()
         logger.info("☁️ 서버 동기화 완료")
     }
 
-    func syncFromServer() async throws {
-        // TODO: 서버 API 연동 시 구현
-        // GET /api/progress
-        logger.info("☁️ 서버에서 진행 상태 복구")
+    func syncFromServer() async {
+        guard let payload = await NetworkManager.shared.fetchStoryProgress() else {
+            logger.warning("☁️ 서버에서 진행 상태 복구 실패 또는 데이터 없음")
+            return
+        }
+
+        // 서버 데이터를 로컬에 머지 (누락된 항목만 추가, 로컬 우선)
+        for id in payload.completedChapters where !progress.completedChapters.contains(id) {
+            progress.completedChapters.append(id)
+        }
+        for id in payload.completedEpisodes where !progress.completedEpisodes.contains(id) {
+            progress.completedEpisodes.append(id)
+        }
+        for id in payload.completedSubQuests where !progress.completedSubQuests.contains(id) {
+            progress.completedSubQuests.append(id)
+        }
+        for id in payload.unlockedEpisodes where !progress.unlockedEpisodes.contains(id) {
+            progress.unlockedEpisodes.append(id)
+        }
+        for id in payload.keyItems where !progress.keyItems.contains(id) {
+            progress.keyItems.append(id)
+        }
+
+        progress.lastSyncedAt = Date()
+        save()
+        logger.info("☁️ 서버에서 진행 상태 복구 완료")
     }
 
     // MARK: - Debug

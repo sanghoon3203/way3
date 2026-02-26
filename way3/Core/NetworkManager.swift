@@ -950,6 +950,69 @@ extension NetworkManager {
             useCache: true
         )
     }
+
+    // MARK: - Story Progress Sync API
+
+    func fetchStoryProgress() async -> PlayerStoryProgressPayload? {
+        do {
+            let response: PlayerStoryProgressResponse = try await makeRequest(
+                endpoint: "/story/progress",
+                method: .GET,
+                requiresAuth: true,
+                responseType: PlayerStoryProgressResponse.self
+            )
+            return response.data
+        } catch {
+            GameLogger.shared.logError("스토리 진행도 fetch 실패: \(error.localizedDescription)", category: .network)
+            return nil
+        }
+    }
+
+    func syncStoryProgress(
+        completedChapters: [String],
+        completedEpisodes: [String],
+        completedSubQuests: [String],
+        unlockedEpisodes: [String],
+        keyItems: [String]
+    ) async {
+        let payload = PlayerStoryProgressPayload(
+            completedChapters: completedChapters,
+            completedEpisodes: completedEpisodes,
+            completedSubQuests: completedSubQuests,
+            unlockedEpisodes: unlockedEpisodes,
+            keyItems: keyItems
+        )
+        do {
+            let body = try JSONSerialization.jsonObject(
+                with: JSONEncoder().encode(payload)
+            ) as? [String: Any] ?? [:]
+            let _: PlayerStoryProgressResponse = try await makeRequest(
+                endpoint: "/story/sync",
+                method: .POST,
+                body: body,
+                requiresAuth: true,
+                responseType: PlayerStoryProgressResponse.self
+            )
+            GameLogger.shared.logInfo("스토리 진행도 서버 동기화 완료", category: .network)
+        } catch {
+            GameLogger.shared.logError("스토리 동기화 실패: \(error.localizedDescription)", category: .network)
+        }
+    }
+}
+
+// MARK: - 스토리 진행도 동기화
+
+struct PlayerStoryProgressPayload: Codable {
+    let completedChapters: [String]
+    let completedEpisodes: [String]
+    let completedSubQuests: [String]
+    let unlockedEpisodes: [String]
+    let keyItems: [String]
+}
+
+struct PlayerStoryProgressResponse: Codable {
+    let success: Bool
+    let data: PlayerStoryProgressPayload?
 }
 
 // MARK: - HTTP Method Enum
