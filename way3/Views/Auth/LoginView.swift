@@ -71,21 +71,11 @@ extension LoginView {
     // MARK: - Brand Section
     var brandSection: some View {
         VStack(spacing: 10) {
-            Text("접속:서울")
-                .font(.chosunTitle)
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [.joseonCheong, .joseonHwang],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
+            Image("Title")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 280)
                 .shadow(color: Color.joseonCheong.opacity(0.6), radius: 12)
-
-            Text("connect:seoul")
-                .font(.custom("Pretendard-Light", size: 13))
-                .tracking(6)
-                .foregroundColor(Color.joseonBaek.opacity(0.45))
 
             HStack(spacing: 12) {
                 Rectangle()
@@ -95,7 +85,7 @@ extension LoginView {
                     ))
                     .frame(height: 1)
 
-                Text("경성 2087")
+                Text("네오서울")
                     .font(.custom("Pretendard-Medium", size: 11))
                     .tracking(3)
                     .foregroundColor(Color.joseonHwang.opacity(0.7))

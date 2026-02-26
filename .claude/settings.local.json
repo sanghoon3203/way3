@@ -60,7 +60,9 @@
       "Bash(sort -k2)",
       "Bash(wc:*)",
       "Bash(echo not installed:*)",
-      "Bash(tail:*)"
+      "Bash(tail:*)",
+      "Bash(sqlite3:*)",
+      "Bash(cd /Users/kimsanghoon/Documents/GitHub/way-server && npm uninstall moment express-session 2>&1)"
     ],
     "deny": [],
     "ask": []

@@ -1,4 +1,6 @@
-# WAY3 — CLAUDE.md
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## 프로젝트 개요
 - **이름**: connect:seoul (구 WAY3)
@@ -19,6 +21,7 @@ claudedocs/
   03_GAME_SYSTEM.md    ← VNNode/퀘스트 JSON 스키마
   04_UI_SYSTEM.md      ← 조선사이버펑크 디자인 시스템
   05_AI_CHAT_SYSTEM.md ← AI 상인 채팅 시스템
+  06_WORKFLOW.md       ← 전체 워크플로우 (앱 진입·게임 루프·스토리·거래·AI채팅·퀘스트)
   status/STORY_STATUS.md ← 스토리 노드 완성도 현황
   status/QUEST_STATUS.md ← 퀘스트 현황 + 버그 목록
 Story/
@@ -53,6 +56,8 @@ Resources/    — 이미지, 영상, 사운드, font/ (ChosunCentennial + Preten
 ```
 타입: `dialogue` / `decision` (choices 배열) / `conditional` / `quest_gate`
 
+TypewriterEngine 속도 태그: `<s>` 느리게 / `<n>` 보통 / `<f>` 빠르게 / `<t>` 순간 표시
+
 ## 스토리 데이터 현황
 | 챕터 | 노드 수 | 상태 |
 |------|--------|------|
@@ -83,15 +88,20 @@ Resources/    — 이미지, 영상, 사운드, font/ (ChosunCentennial + Preten
 3. **🟡** `Views/Shop/ShopView.swift`: 상점 시스템 미구현 (stub 상태)
 4. **🟡** `StoryData/Substories/`: 서북권 4명 서브스토리 JSON 없음
 
-## 빌드
+## 빌드 및 테스트
 ```bash
-# iOS
+# iOS (Xcode)
 open way3.xcodeproj
 # Xcode → Signing → Cmd+R
 
-# CLI
+# CLI 빌드
 xcodebuild -scheme way3 -destination 'platform=iOS Simulator,name=iPhone 15' build
+
+# 테스트
+xcodebuild test -scheme way3 -destination 'platform=iOS Simulator,name=iPhone 15'
 ```
+
+> 스토리 데이터(JSON) 변경 후 앱 재실행 시 ProgressManager가 자동 갱신됩니다.
 
 ## 코딩 컨벤션
 - SwiftUI + Combine 패턴 (MVVM)

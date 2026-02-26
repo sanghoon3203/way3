@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"ls /Users/kimsanghoon/Documents/GitHub/way-server/src/middleware/ && cat /Users/kimsanghoon/Documents/GitHub/way-server/src/config/\"}",
+  "error": "Exit code 1\nadminAuth.js\nauth.js\nerrorHandler.js\nuploadMiddleware.js\ncat: /Users/kimsanghoon/Documents/GitHub/way-server/src/config/: Is a directory\n\nadminAuth.js\nauth.js\nerrorHandler.js\nuploadMiddleware.js\ncat: /Users/kimsanghoon/Documents/GitHub/way-server/src/config/: Is a directory",
+  "timestamp": "2026-02-26T03:23:36.118Z",
+  "retry_count": 1
+}

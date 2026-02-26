@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1771657733595,
+  "lastScanned": 1772074541970,
   "projectRoot": "/Users/kimsanghoon/Documents/GitHub/way3",
   "techStack": {
     "languages": [],
@@ -38,7 +38,7 @@
       "path": "Story",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1771657733581,
+      "lastAccessed": 1772074541950,
       "keyFiles": [
         "mushoku_style_notes.md"
       ]
@@ -47,7 +47,7 @@
       "path": "claudedocs",
       "purpose": null,
       "fileCount": 8,
-      "lastAccessed": 1771657733581,
+      "lastAccessed": 1772074541951,
       "keyFiles": [
         "00_INDEX.md",
         "01_PROJECT_OVERVIEW.md",
@@ -60,14 +60,14 @@
       "path": "docs",
       "purpose": "Documentation",
       "fileCount": 0,
-      "lastAccessed": 1771657733581,
+      "lastAccessed": 1772074541951,
       "keyFiles": []
     },
     "way3": {
       "path": "way3",
       "purpose": null,
       "fileCount": 4,
-      "lastAccessed": 1771657733581,
+      "lastAccessed": 1772074541953,
       "keyFiles": [
         "ContentView.swift",
         "Info.plist",
@@ -79,7 +79,7 @@
       "path": "way3.xcodeproj",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1771657733582,
+      "lastAccessed": 1772074541953,
       "keyFiles": [
         "project.pbxproj"
       ]
@@ -88,7 +88,7 @@
       "path": "way3Tests",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1771657733582,
+      "lastAccessed": 1772074541954,
       "keyFiles": [
         "way3Tests.swift"
       ]
@@ -97,7 +97,7 @@
       "path": "way3UITests",
       "purpose": null,
       "fileCount": 2,
-      "lastAccessed": 1771657733582,
+      "lastAccessed": 1772074541955,
       "keyFiles": [
         "way3UITests.swift",
         "way3UITestsLaunchTests.swift"
@@ -107,7 +107,7 @@
       "path": "way3/Components",
       "purpose": "UI components",
       "fileCount": 6,
-      "lastAccessed": 1771657733583,
+      "lastAccessed": 1772074541958,
       "keyFiles": [
         "CyberpunkChatComponents.swift",
         "CyberpunkComponents.swift",
@@ -118,7 +118,7 @@
       "path": "way3/Models",
       "purpose": "Data models",
       "fileCount": 12,
-      "lastAccessed": 1771657733583,
+      "lastAccessed": 1772074541958,
       "keyFiles": [
         "Achievement.swift",
         "CharacterState.swift",
@@ -128,21 +128,81 @@
   },
   "hotPaths": [
     {
-      "path": "way3/way3App.swift",
-      "accessCount": 2,
-      "lastAccessed": 1771658612042,
+      "path": "way3/Core/ProgressManager.swift",
+      "accessCount": 6,
+      "lastAccessed": 1772077935549,
       "type": "file"
     },
     {
-      "path": "README.md",
-      "accessCount": 2,
-      "lastAccessed": 1771819712253,
+      "path": "way3/Core/NetworkManager.swift",
+      "accessCount": 6,
+      "lastAccessed": 1772077990440,
       "type": "file"
     },
     {
-      "path": "way3/Info.plist",
+      "path": "CLAUDE.md",
+      "accessCount": 5,
+      "lastAccessed": 1772074594850,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 4,
+      "lastAccessed": 1772075389895,
+      "type": "directory"
+    },
+    {
+      "path": "way3/Assets.xcassets/Title.imageset/Contents.json",
       "accessCount": 2,
-      "lastAccessed": 1771819729154,
+      "lastAccessed": 1772074895429,
+      "type": "file"
+    },
+    {
+      "path": "way3/Views/Auth/LoginView.swift",
+      "accessCount": 2,
+      "lastAccessed": 1772074906538,
+      "type": "file"
+    },
+    {
+      "path": "claudedocs/00_INDEX.md",
+      "accessCount": 1,
+      "lastAccessed": 1772074561744,
+      "type": "file"
+    },
+    {
+      "path": "claudedocs/02_FIELD_GUIDE.md",
+      "accessCount": 1,
+      "lastAccessed": 1772074561916,
+      "type": "file"
+    },
+    {
+      "path": "way3",
+      "accessCount": 1,
+      "lastAccessed": 1772074839610,
+      "type": "directory"
+    },
+    {
+      "path": "way3/Assets.xcassets/TItle.imageset/Contents.json",
+      "accessCount": 1,
+      "lastAccessed": 1772074844889,
+      "type": "file"
+    },
+    {
+      "path": "way3/Core/AuthManager.swift",
+      "accessCount": 1,
+      "lastAccessed": 1772075388403,
+      "type": "file"
+    },
+    {
+      "path": "start_server.sh",
+      "accessCount": 1,
+      "lastAccessed": 1772075399748,
+      "type": "file"
+    },
+    {
+      "path": "claudedocs/01_PROJECT_OVERVIEW.md",
+      "accessCount": 1,
+      "lastAccessed": 1772075399806,
       "type": "file"
     }
   ],
